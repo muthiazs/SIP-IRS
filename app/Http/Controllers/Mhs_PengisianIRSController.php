@@ -58,11 +58,13 @@ class Mhs_PengisianIRSController extends Controller
         )
         ->get();
 
+
         // Mengambil data mahasiswa yang sedang login
         $mahasiswa = DB::table('mahasiswa')
             ->join('users', 'mahasiswa.id_user', '=', 'users.id')
             ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
             ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+            ->join('progress_mahasiswa', 'mahasiswa.id_mahasiswa', '=', 'progress_mahasiswa.id_mahasiswa')
             ->crossJoin('periode_akademik')
             ->where('mahasiswa.id_user', auth()->id())
             ->select(
@@ -72,7 +74,9 @@ class Mhs_PengisianIRSController extends Controller
                 'dosen.nama as nama_doswal',
                 'dosen.nip',
                 'users.username',
-                'periode_akademik.nama_periode'
+                'periode_akademik.nama_periode',
+                'progress_mahasiswa.semester_studi',
+                'progress_mahasiswa.IPs_lalu'
             )
             ->first();
 
@@ -81,11 +85,25 @@ class Mhs_PengisianIRSController extends Controller
             return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
         }
 
+        // Hitung maksimal SKS berdasarkan IPS
+        $maksimalSKS = $this->hitungMaksimalSKS(
+            $mahasiswa->semester_studi, 
+            $mahasiswa->IPs_lalu
+        );
+
+        // Hitung total SKS yang sudah dipilih
+        $totalSKSTerpilih = DB::table('irs')
+        ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->where('irs.nim', $mahasiswa->nim)
+        ->where('irs.status', 'draft')
+        ->sum('matakuliah.sks');
+
         // Menambahkan pengecekan status untuk setiap jadwal kuliah
-    $jadwalStatus = [];
-    foreach ($jadwalKuliah as $jadwal) {
-        // Cek apakah jadwal ini sudah diambil dengan status draft
-        $sudahDiambilJadwal = $this->cekStatusPengambilan($jadwal->id_jadwal);
+        $jadwalStatus = [];
+        foreach ($jadwalKuliah as $jadwal) {
+            // Cek apakah jadwal ini sudah diambil dengan status draft
+            $sudahDiambilJadwal = $this->cekStatusPengambilan($jadwal->id_jadwal);
 
         // Cek apakah mata kuliah ini sudah ada di IRS dengan status draft
         $sudahDiambilMatkul = DB::table('irs')
@@ -95,7 +113,6 @@ class Mhs_PengisianIRSController extends Controller
             ->where('irs.status', 'draft')
             ->exists();
 
-
             // Simpan status
             $jadwalStatus[$jadwal->id_jadwal] = [
                 'sudah_diambil_jadwal' => $sudahDiambilJadwal,
@@ -103,7 +120,7 @@ class Mhs_PengisianIRSController extends Controller
             ];
         }
 
-        return view('mhs_pengisianIRS', compact('Periode_sekarang', 'jadwalKuliah', 'mahasiswa', 'jadwalStatus'));
+        return view('mhs_pengisianIRS', compact('Periode_sekarang', 'jadwalKuliah', 'mahasiswa', 'jadwalStatus','maksimalSKS','totalSKSTerpilih'));
     }
 
     public function konfirmasiIRS(Request $request)
@@ -342,9 +359,7 @@ class Mhs_PengisianIRSController extends Controller
     //     return redirect()->route('mhs_pengisianIRS')->with('success', 'Jadwal berhasil diambil.');
     // }
 
-
-
-    public function cekStatusPengambilan($id_jadwal)
+public function cekStatusPengambilan($id_jadwal)
 {
     $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
 
@@ -357,6 +372,7 @@ class Mhs_PengisianIRSController extends Controller
 
     return false;
 }
+
 
 
 
@@ -410,7 +426,7 @@ class Mhs_PengisianIRSController extends Controller
     }
 }
 
-// Method to check if the student's schedule conflicts with an existing one
+//Method to check if the student's schedule conflicts with an existing one
 private function cekJadwalBertabrakan($nim, $id_jadwal)
 {
     $selectedJadwal = DB::table('jadwal_kuliah')
@@ -421,11 +437,20 @@ private function cekJadwalBertabrakan($nim, $id_jadwal)
         return false; // Jadwal tidak ditemukan
     }
 
-    // ... (other checks for capacity and quota)
+    // Ambil semester mahasiswa saat ini berdasarkan NIM
+    $semesterMahasiswa = DB::table('mahasiswa')
+        ->where('nim', $nim)
+        ->value('semester');
 
+    if (!$semesterMahasiswa) {
+        return false; // Mahasiswa tidak ditemukan
+    }
+
+    // Ambil jadwal IRS yang hanya semester sama dengan mahasiswa saat ini
     $existingJadwal = DB::table('irs')
         ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
         ->where('irs.nim', $nim)
+        ->where('irs.semester', $semesterMahasiswa) // Hanya IRS semester saat ini
         ->where('jadwal_kuliah.hari', $selectedJadwal->hari)
         ->select('jadwal_kuliah.jam_mulai', 'jadwal_kuliah.jam_selesai')
         ->get();
@@ -451,7 +476,7 @@ private function cekJadwalBertabrakan($nim, $id_jadwal)
 
 
 
-private function hitungMaxSks($ipsLalu)
+private function hitungMaksimalSKS($semesterStudi, $ipsLalu)
 {
     if ($ipsLalu >= 0 && $ipsLalu <= 1) {
         return 15;  // Maksimal 15 SKS
@@ -515,11 +540,13 @@ public function batalkanJadwal(Request $request)
 
         public function draftIRS()
 {
-    // Fetch mahasiswa data
-    $mahasiswa = DB::table('mahasiswa')
+        // Fetch mahasiswa data
+        $mahasiswa = DB::table('mahasiswa')
         ->join('users', 'mahasiswa.id_user', '=', 'users.id')
         ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
         ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+        ->join('progress_mahasiswa', 'mahasiswa.id_mahasiswa', '=', 'progress_mahasiswa.id_mahasiswa')
+        ->crossJoin('periode_akademik')
         ->where('mahasiswa.id_user', auth()->id())
         ->select(
             'mahasiswa.nim',
@@ -527,9 +554,30 @@ public function batalkanJadwal(Request $request)
             'program_studi.nama as prodi_nama',
             'dosen.nama as nama_doswal',
             'dosen.nip',
-            'users.username'
+            'users.username',
+            'periode_akademik.nama_periode',
+            'progress_mahasiswa.semester_studi',
+            'progress_mahasiswa.IPs_lalu'
         )
         ->first();
+
+        if (!$mahasiswa) {
+            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+
+        //Hitung maksimal SKS berdasarkan IPS
+        $maksimalSKS = $this->hitungMaksimalSKS(
+            $mahasiswa->semester_studi, 
+            $mahasiswa->IPs_lalu
+        );
+
+        // Hitung total SKS yang sudah dipilih
+        $totalSKSTerpilih = DB::table('irs')
+        ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->where('irs.nim', $mahasiswa->nim)
+        ->where('irs.status', 'draft')
+        ->sum('matakuliah.sks');
 
         $rancanganIRSSementara = DB::table('irs')
         ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
@@ -554,7 +602,7 @@ public function batalkanJadwal(Request $request)
         )
         ->get();
 
-    return view('mhs_draftIRS', compact('mahasiswa', 'rancanganIRSSementara'));
+    return view('mhs_draftIRS', compact('mahasiswa', 'rancanganIRSSementara','maksimalSKS','totalSKSTerpilih'));
 }
         public function newIRS()
         {

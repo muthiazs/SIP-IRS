@@ -42,14 +42,15 @@ class BAK_PembagianruangController extends Controller
     {
         // Ambil ruangan yang belum dialokasikan
         $statusRuang = DB::table('ruangan')
-                        ->join('alokasi_ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
-                        ->where('ruangan.status', '=', 'tersedia')  // Perbaiki penggunaan '=='
-                        ->where('ruangan.id_ruang', '=', DB::raw('alokasi_ruangan.id_ruang'))  // Pastikan kondisi kedua terpisah
-                        ->select(
-                            'ruangan.nama',
-                            'ruangan.kapasitas'
-                        )
-                        ->get();
+            ->join('alokasi_ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
+            ->join('program_studi', 'program_studi.id_prodi', '=', 'alokasi_ruangan.id_prodi') // Ganti 'id' menjadi 'id_prodi'
+            ->where('ruangan.status', '=', 'tersedia')
+            ->select(
+                'ruangan.nama',
+                'ruangan.kapasitas',
+                'program_studi.nama as nama_prodi' // Ambil dari tabel program_studi
+            )
+            ->get();
 
         $akademik = DB::table('pegawai')
             ->join('users', 'pegawai.id_user', '=', 'users.id')
@@ -63,7 +64,7 @@ class BAK_PembagianruangController extends Controller
             )
             ->first();
 
-        return view('bak_pembagianRuang', compact('statusRuang', 'akademik'));
+        return view('bak_CekStatusRuang', compact('statusRuang', 'akademik'));
     }
 
     // Controller untuk Alokasi Pembagian Ruang
@@ -91,7 +92,7 @@ class BAK_PembagianruangController extends Controller
         ]);
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('toast_success', 'Ruangan berhasil dialokasikan.');
+        return redirect()->back()->with('success', 'Ruangan berhasil dialokasikan.');
     }
     
 
@@ -132,7 +133,7 @@ class BAK_PembagianruangController extends Controller
             ->first();
 
         if ($cekRuangan) {
-            return redirect()->back()->with('toast_error', 'Ruangan dengan nama tersebut sudah ada.');
+            return redirect()->back()->with('error', 'Ruangan dengan nama tersebut sudah ada.');
         }
 
         $lastRuangan = DB::table('ruangan')
@@ -151,12 +152,11 @@ class BAK_PembagianruangController extends Controller
         ]);
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('toast_success', 'Ruangan baru berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Ruangan baru berhasil ditambahkan.');
     }
 
     public function indexUpdateDeleteRuang()
     {
-
         $tabelRuang = DB::table('ruangan')
             ->select(
                 'ruangan.nama',
@@ -207,4 +207,34 @@ class BAK_PembagianruangController extends Controller
         ;
         return view('bak_NextUpdateDeleteRuang', compact('tabelRuang', 'akademik'));
     }
+
+    public function updateRuang(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'id_ruang' => 'required|exists:ruangan,id_ruang',
+            'nama' => 'required|string|max:255',
+            'kapasitas' => 'required|integer|min:1',
+        ]);
+
+        // Update data ruangan
+        DB::table('ruangan')
+            ->where('id_ruang', $request->id_ruang)
+            ->update([
+                'nama' => $request->nama,
+                'kapasitas' => $request->kapasitas,
+                'updated_at' => now(),
+            ]);
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Data ruangan berhasil diperbarui.');
+    }
+
+    public function deleteRuang(Request $request)
+    {
+        DB::table('ruangan')->where('id_ruang', $request->id_ruang)->delete();
+        return response()->json(['message' => 'Ruangan berhasil dihapus'], 200);
+    }
+
+
 }

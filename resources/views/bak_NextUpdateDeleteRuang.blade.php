@@ -58,16 +58,6 @@
         <div class="main-content flex-grow-1 p-4">
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang 👋</h1>
-                    <p class="text-muted">Semester Akademik Sekarang</p>
-                </div>
-                <div class="position-relative">
-                    <button class="btn btn-teal rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="notification-badge"></span>
-                </div>
             </div>
 
             <!-- Progress Cards -->
@@ -76,20 +66,20 @@
                 <div class="card-body d-flex flex-column">
                     <!-- Form Input Ruang -->
                     <div class="mt-4">
-                        <form id="formInputRuang">
-                            <div class="mb-3">
-                                <label for="inputIdRuang" class="form-label">ID Ruang</label>
-                                <input type="number" class="form-control" id="inputIdRuang" placeholder="Masukkan ID Ruang">
-                            </div>
+                        <form id="formInputRuang" action="{{ route('update.ruang') }}" method="POST">
+                            @csrf <!-- Token CSRF untuk keamanan -->
+                            <input type="hidden" name="id_ruang" id="inputIdRuang" value=""> <!-- Tambahkan input ID hidden -->
+                            
                             <div class="mb-3">
                                 <label for="inputNamaRuang" class="form-label">Nama Ruang</label>
-                                <input type="text" class="form-control" id="inputNamaRuang" placeholder="Masukkan Nama Ruang">
+                                <input type="text" class="form-control" name="nama" id="inputNamaRuang" placeholder="Masukkan Nama Ruang">
                             </div>
                             <div class="mb-3">
                                 <label for="inputKapasitasRuang" class="form-label">Kapasitas Ruang</label>
-                                <input type="number" class="form-control" id="inputKapasitasRuang" placeholder="Masukkan Kapasitas Ruang">
+                                <input type="number" class="form-control" name="kapasitas" id="inputKapasitasRuang" placeholder="Masukkan Kapasitas Ruang">
                             </div>
                             <button type="submit" class="btn btn-cyan w-100">Simpan</button>
+                            <button type="button" class="btn btn-danger w-100 mt-2" onclick="hapusRuang('{{ $data->id_ruang }}')">Hapus Ruang</button>
                         </form>
                     </div>
                 </div>
@@ -106,18 +96,10 @@
             $('#formInputRuang').on('submit', function(e) {
                 e.preventDefault(); // Prevent form submission
 
-                // Get input values
-                const idRuang = parseInt($('#inputIdRuang').val().trim(), 10);
-                const namaRuang = $('#inputNamaRuang').val().trim();
-                const kapasitasRuang = parseInt($('#inputKapasitasRuang').val().trim(), 10);
-
-                // Validation
                 let errors = [];
-
-                // Validate ID Ruang
-                if (isNaN(idRuang) || idRuang <= 0) {
-                    errors.push('ID Ruang harus berupa angka positif.');
-                }
+                const idRuang = $('#inputIdRuang').val().trim(); // Ambil ID Ruang
+                const namaRuang = $('#inputNamaRuang').val().trim(); // Ambil Nama Ruang
+                const kapasitasRuang = parseInt($('#inputKapasitasRuang').val().trim()); // Ambil Kapasitas Ruang
 
                 // Validate Nama Ruang
                 const namaRuangRegex = /^[a-k][0-9]{3}$/;
@@ -130,15 +112,47 @@
                     errors.push('Kapasitas Ruang harus berupa angka antara 1 hingga 100.');
                 }
 
-                // Display errors or success
+                // Display errors or submit
                 if (errors.length > 0) {
                     alert('Error:\n' + errors.join('\n'));
                 } else {
-                    alert(`Data berhasil disimpan:\nID Ruang: ${idRuang}\nNama Ruang: ${namaRuang}\nKapasitas Ruang: ${kapasitasRuang}`);
-                    $(this)[0].reset(); // Reset the form
+                    // Submit the form if no errors
+                    this.submit();
                 }
             });
         });
     </script>
+
+    <script>
+        // Simpan data ke form untuk update
+        function editRuang(id, nama, kapasitas) {
+            $('#inputIdRuang').val(id); // Masukkan ID ruangan
+            $('#inputNamaRuang').val(nama); // Masukkan nama ruangan
+            $('#inputKapasitasRuang').val(kapasitas); // Masukkan kapasitas ruangan
+        }
+    </script>
+
+    <script>
+        function hapusRuang(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus ruangan ini?')) {
+                $.ajax({
+                    url: '/ruang/delete',
+                    type: 'POST',
+                    data: {
+                        id_ruang: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        alert('Ruangan berhasil dihapus!');
+                        location.reload();
+                    },
+                    error: function() {
+                        alert('Terjadi kesalahan, coba lagi!');
+                    }
+                });
+            }
+        }
+    </script>
+
 </body>
 </html>

@@ -95,10 +95,23 @@ Route::group([], function () {
 });
 
 // Role Selection Page for Dosen
+// Route::post('/roleSelection', [AuthController::class, 'roleSelection'])->name('roleSelection');
+// Route::get('/not-page', [AuthController::class, 'notPage'])->name('notPage');
+// Route::post('/handleRoleSelection', [AuthController::class, 'handleRoleSelection'])->name('handleRoleSelection');
+// Route::post('/submit-role-selection', [AuthController::class, 'submitRoleSelection'])->name('submitRoleSelection');
+
+// Route to display the role selection page
 Route::get('/roleSelection', [AuthController::class, 'roleSelection'])->name('roleSelection');
-Route::get('/not-page', [AuthController::class, 'notPage'])->name('notPage');
+
+// Route for handling the form submission of role selection
 Route::post('/handleRoleSelection', [AuthController::class, 'handleRoleSelection'])->name('handleRoleSelection');
+
+// Route for a "not page" (optional)
+Route::get('/not-page', [AuthController::class, 'notPage'])->name('notPage');
+
+// Submit role selection (if needed for another action)
 Route::post('/submit-role-selection', [AuthController::class, 'submitRoleSelection'])->name('submitRoleSelection');
+
 
 // Protected Routes with Authentication
 Route::middleware('auth')->group(function () {
@@ -129,6 +142,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/ruang/create', [BAK_PembagianruangController::class, 'createRuang'])->name('create.store');
     Route::get('/bak_UpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexUpdateDeleteRuang'])->name('bak_UpdateDeleteRuang');
     Route::get('/bak_NextUpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexNextUpdateDeleteRuang'])->name('bak_NextUpdateDeleteRuang');
+    Route::post('/ruang/update', [BAK_PembagianruangController::class, 'updateRuang'])->name('update.ruang');
+    Route::post('/ruang/delete', [BAK_PembagianruangController::class, 'deleteRuang'])->name('delete.ruang');
     Route::post('/konfirmasi-irs', [Mhs_PengisianIRSController::class, 'konfirmasiIRS'])->name('konfirmasi_irs');
     Route::get('/dosen_irsMahasiswa', [DosenController::class, 'usulanIRSMahasiswa'])->name('dosen_irsMahasiswa');
     // Rute untuk menampilkan detail IRS mahasiswa
