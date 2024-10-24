@@ -25,6 +25,6 @@ class DashboardController extends Controller
             ]
         ];
 
-        return view('dashboard', compact('data'));
+        return view('dashboardDosen', compact('data'));
     }
 }
