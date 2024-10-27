@@ -36,8 +36,8 @@ class AuthController extends Controller
                     return redirect()->route('dashboardDosen');
                 // case 'dekan':
                 //     return redirect()->route('dekan.dashboard');
-                // case 'kaprodi':
-                //     return redirect()->route('kaprodi.dashboard');
+                case 'kaprodi':
+                    return redirect()->route('dashboardKaprodi');
                 // case 'akademik':
                 //     return redirect()->route('akademik.dashboard');
                 default:

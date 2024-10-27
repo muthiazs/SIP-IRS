@@ -16,7 +16,10 @@ Route::get('/dashboardDosen', function(){
     return view('dashboardDosen');
 });
 Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
-
+Route::get('/dashboardKaprodi', function(){
+    return view('dashboardKaprodi');
+});
+Route::get('/dashboardKaprodi', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
 
 
 // Protected Routes
