@@ -35,6 +35,17 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(100) // Generate a random remember token
         ]);
 
+        // K
+        User::create([
+            'id'=>'246000000000',
+            'username' => 'Kaprodi Test',
+            'email' => 'kaprodi@test.com',
+            'password' => Hash::make('password'),
+            'role' => 'kaprodi',
+            'created_at' => now(), // Set created_at to current timestamp
+            'remember_token' => Str::random(100) // Generate a random remember token
+        ]);
+
         // Tambahkan user lain sesuai kebutuhan
     }
 }
