@@ -27,11 +27,7 @@ class AuthController extends Controller
             //mengarahkan ke role masing2 
             switch($user->role) {
                 case 'mahasiswa':
-                    return redirect()->route('dashboardMahasiswa')->with([
-                        'semester' => 5,
-                        'ipk' => '3.6/4.0',
-                        'sksk' => 86
-                    ]);
+                    return redirect()->route('dashboardMahasiswa');
                 case 'dosen':
                     return redirect()->route('dashboardDosen');
                 // case 'dekan':

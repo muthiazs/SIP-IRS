@@ -24,7 +24,6 @@ class DashboardController extends Controller
                 'pending' => ['count' => 11, 'total' => 56]
             ]
         ];
-
         return view('dashboardDosen', compact('data'));
     }
 }
