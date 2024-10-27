@@ -18,10 +18,16 @@ Route::get('/dashboardDosen', function(){
     return view('dashboardDosen');
 });
 Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
+
 Route::get('/dashboardMahasiswa', function(){
     return view('dashboardMahasiswa');
 });
 Route::get('/dashboardMahasiswa', [DashboardMahasiswaController::class, 'index'])->name('dashboardMahasiswa');
+
+Route::get('/dashboardKaprodi', function(){
+    return view('dashboardKaprodi');
+});
+Route::get('/dashboardKaprodi', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
 
 
 
