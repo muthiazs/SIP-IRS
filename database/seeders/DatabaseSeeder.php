@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'Mahasiswa Test',
             'email' => 'mahasiswa@test.com',
             'password' => Hash::make('password'),
-            'role' => 'mahasiswa',
+            'roles1' => 'mahasiswa',
+            'roles2' => '',
             'created_at' => now(), // Set created_at to current timestamp
             'remember_token' => Str::random(100) // Generate a random remember token
         ]);
@@ -30,7 +31,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'Dosen Test',
             'email' => 'dosen@test.com',
             'password' => Hash::make('password'),
-            'role' => 'dosen',
+            'roles1' => 'dosen',
+            'roles2' => '',
             'created_at' => now(), // Set created_at to current timestamp
             'remember_token' => Str::random(100) // Generate a random remember token
         ]);
@@ -41,7 +43,20 @@ class DatabaseSeeder extends Seeder
             'username' => 'Kaprodi Test',
             'email' => 'kaprodi@test.com',
             'password' => Hash::make('password'),
-            'role' => 'kaprodi',
+            'roles1' => 'dosen',
+            'roles2' => 'kaprodi',
+            'created_at' => now(), // Set created_at to current timestamp
+            'remember_token' => Str::random(100) // Generate a random remember token
+        ]);
+
+        //Dekan
+        User::create([
+            'id'=>'123456789012',
+            'username' => 'Dekan Test',
+            'email' => 'dekan@test.com',
+            'password' => Hash::make('password'),
+            'roles1' => 'dosen',
+            'roles2' => 'dekan',
             'created_at' => now(), // Set created_at to current timestamp
             'remember_token' => Str::random(100) // Generate a random remember token
         ]);

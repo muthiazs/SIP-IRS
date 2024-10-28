@@ -55,7 +55,33 @@ class DashboardController extends Controller
                 'belumKonfirmasi' => ['count' => 5, 'total' => 46]
             ]
         ];
+        
 
         return view('dashboardKaprodi', compact('data'));
+    }
+
+    //Method untuk Dasboard Dekan
+    public function indexDekan()
+    {
+        //Data dummy untuk dekan
+        $data = [
+            'dekan' => [
+                'name' => 'Sherlock Holmes',
+                'nip' => '194577123475985',
+                'program_studi' => 'S1-Informatika',
+                'roles1' => 'dosen',
+                'roles2' => 'dekan'
+            ],
+            'semester' => [
+                'current' => '2024/2025 Ganjil',
+                'period' => '1 Mar - 2 April'
+            ],
+            'progress' => [
+                'belum_mengusulkan' => ['count' => 1, 'total' => 6],
+                'telah_dikonfirmasi' => ['count' => 4, 'total' => 6],
+                'belum_dikonfirmasi' => ['count' => 1, 'total' => 6]
+            ]
+            ];
+            return view('dashboardDekan', compact('data'));
     }
 }
