@@ -58,4 +58,36 @@ class DashboardController extends Controller
 
         return view('dashboardKaprodi', compact('data'));
     }
+
+    // Method untuk Dashboard Mahasiswa
+    public function indexMahasiswa()
+    {
+        // Data dummy untuk kaprodi
+        $data = [
+           'mahasiswa' => [
+                'name' => 'Draco Lucius Malfoy',
+                'nim' => '24060122130071',
+                'program_studi' => 'S1 Informatika'
+            ],
+            'user' => [
+                'name' => 'Bill Gates',
+                'nip' => '198203092006041002'
+            ],
+            'semester' => [
+                'current' => '2024/2025 Ganjil',
+                'period' => '1 Mar - 2 April'
+            ],
+            'stats' => [
+                'semester' => 5,
+                'ipk' => '3.6/4.0',
+                'sksk' => 86
+            ],
+            'status' => [
+                'irs' => 'ditolak', // or 'disetujui', 'pending'
+                'registrasi' => true
+            ]
+        ];
+
+        return view('dashboardKaprodi', compact('data'));
+    }
 }
