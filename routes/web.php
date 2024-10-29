@@ -2,14 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DashboardMahasiswaController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
+
 
 // Redirect root to login
 Route::get('/', function () {
@@ -17,6 +12,7 @@ Route::get('/', function () {
 });
 
 // Authentication Routes
+
 Route::controller(AuthController::class)->group(function () {
     Route::get('login', 'index')->name('login');
     Route::post('login', 'postLogin')->name('login.post');
@@ -60,3 +56,23 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 */
+
+Route::get('login', [AuthController::class, 'index'])->name('login');
+Route::post('login', [AuthController::class, 'postLogin'])->name('login.post');
+Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+// Role Selection Page for Dosen
+Route::get('/roleSelection', [AuthController::class, 'roleSelection'])->name('roleSelection');
+Route::post('/handleRoleSelection', [AuthController::class, 'handleRoleSelection'])->name('handleRoleSelection');
+Route::post('/submit-role-selection', [AuthController::class, 'submitRoleSelection'])->name('submitRoleSelection');
+
+
+// Protected Routes with Authentication
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboardMahasiswa', [DashboardController::class, 'dashboardMahasiswa'])->name('dashboardMahasiswa');
+    Route::get('/dashboardAkademik', [DashboardController::class, 'dashboardAkademik'])->name('dashboardAkademik');
+    Route::get('/dashboardDekan', [DashboardController::class, 'indexDekan'])->name('dashboardDekan');
+    Route::get('/dashboardKaprodi', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
+    Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
+});
+
