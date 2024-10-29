@@ -8,7 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Buat ubah font jadi poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
         /* Buat Side bar */
         .sidebar {
@@ -109,22 +111,27 @@
                 <div class="profile-img rounded-circle mx-auto mb-3">
                     <!-- Profile image placeholder -->
                 </div>
-                <h2 class="fs-4 fw-bold">{{ $data['user']['name'] }}</h2>
-                <p class="small opacity-75">NIP. {{ $data['user']['nip'] }}</p>
-                <p class="small opacity-75">{{ $data['user']['program_studi'] }}</p>
+                <h2 class="fs-4 fw-bold">{{ $data['dekan']['name'] }}</h2>
+                <p class="small opacity-75">NIP. {{ $data['dekan']['nip'] }}</p>
+                <p class="small opacity-75">{{ $data['dekan']['program_studi'] }}</p>
             </div>
 
-            <!-- Navigation -->
-            <nav class="nav flex-column gap-2">
-                <a href="#" class="nav-link active rounded d-flex align-items-center p-3">
-                    <span class="material-icons me-2">home</span>
-                    Beranda
-                </a>
-                <a href="#" class="nav-link rounded d-flex align-items-center p-3">
-                    <span class="material-icons me-2">description</span>
-                    IRS Mahasiswa
-                </a>
-            </nav>
+        <!-- Navigation -->
+        <nav class="nav flex-column gap-2">
+            <a href="#" class="nav-link active rounded d-flex align-items-center p-3">
+                <span class="material-icons me-2">home</span>
+                Beranda
+            </a>
+            <a href="#" class="nav-link rounded d-flex align-items-center p-3">
+                <span class="material-icons me-2">check_circle</span>
+                Persetujuan Ruang
+            </a>
+            <a href="#" class="nav-link rounded d-flex align-items-center p-3">
+                <span class="material-icons me-2">event</span>
+                Persetujuan Jadwal Kuliah
+            </a>
+        </nav>
+
 
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
@@ -137,89 +144,85 @@
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $data['user']['name'] }} 👋</h1>
+                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $data['dekan']['name'] }} 👋</h1>
                     <p class="text-muted">Semester Akademik Sekarang {{ $data['semester']['current'] }}</p>
                 </div>
                 <div class="position-relative">
-                    <button class="btn btn-teal rounded-circle p-2">
+                    <!-- Button Notifikasi -->
+                    <button class="btn btn-notification rounded-circle p-2">
                         <span class="material-icons text-white">notifications</span>
                     </button>
-                    <span class="notification-badge"></span>
+                    <span class="notification-badge"></span> <!-- Bulatan merah notifikasi -->
                 </div>
             </div>
+
 
             <!-- Period Banner -->
             <div class="period-banner p-3 rounded-3 mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="text-teal">Periode Penyetujuan IRS</span>
-                    <span class="text-teal fw-bold">{{ $data['semester']['period'] }}</span>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-column">
+                        <span class="text-teal">Periode Penyetujuan Jadwal Kuliah</span>
+                        <span class="text-teal">Periode Penyetujuan Ruang Kelas</span>
+                    </div>
+                    <div class="d-flex flex-column align-items-end">
+                        <span class="text-teal fw-bold">{{ $data['semester']['period'] }}</span> <!-- Tanggal periode jadwal kuliah -->
+                        <span class="text-teal fw-bold">{{ $data['semester']['period'] }}</span> <!-- Tanggal periode ruang kelas -->
+                    </div>
                 </div>
             </div>
 
-            <!-- Progress Cards -->
+            <!-- Progress Cards Jadwal Kuliah-->
             <div class="row g-4 mb-4">
                 <!-- Progress Card -->
                 <div class="col-md-6">
                     <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h3 class="fs-5 fw-semibold mb-4">Progress persetujuan IRS Mahasiswa</h3>
+                        <div class="card-body text-center">
+                            <h3 class="fs-5 fw-semibold mb-4">Progress persetujuan Jadwal Kuliah</h3>
                             <div class="d-flex justify-content-between text-center">
                                 <div>
-                                    <div class="fs-4 fw-bold text-teal">
-                                        {{ $data['progress']['disetujui']['count'] }}/{{ $data['progress']['disetujui']['total'] }}
+                                    <div class="fs-4 fw-bold text-danger">
+                                        {{ $data['progress']['belum_mengusulkan']['count'] }}/{{ $data['progress']['belum_mengusulkan']['total'] }}
                                     </div>
-                                    <div class="small text-muted">IRS Disetujui</div>
+                                    <div class="small text-muted">Belum<br>Mengusulkan</div>
                                 </div>
                                 <div>
-                                    <div class="fs-4 fw-bold text-danger">
-                                        {{ $data['progress']['ditolak']['count'] }}/{{ $data['progress']['ditolak']['total'] }}
+                                    <div class="fs-4 fw-bold text-konfirmasi">
+                                        {{ $data['progress']['telah_dikonfirmasi']['count'] }}/{{ $data['progress']['telah_dikonfirmasi']['total'] }}
                                     </div>
-                                    <div class="small text-muted">IRS Ditolak</div>
+                                    <div class="small text-">Telah<br>Dikonfirmasi</div>
                                 </div>
                                 <div>
                                     <div class="fs-4 fw-bold text-muted">
-                                        {{ $data['progress']['pending']['count'] }}/{{ $data['progress']['pending']['total'] }}
+                                        {{ $data['progress']['belum_dikonfirmasi']['count'] }}/{{ $data['progress']['belum_dikonfirmasi']['total'] }}
                                     </div>
-                                    <div class="small text-muted">Belum Ditinjau</div>
+                                    <div class="small text-muted">Belum<br>Dikonfirmasi</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Status Card -->
+                <!-- Proggress Persetujuan Ruang Kuliah -->
                 <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h3 class="fs-5 fw-semibold">Persetujuan IRS Mahasiswa</h3>
-                                <span class="fs-4 text-danger">⚠️</span>
+                        <div class="card shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <h3 class="fs-5 fw-semibold text-center">Persetujuan Ruang Kuliah</h3>
+                                </div>
+                                <p class="fs-6 fw-semibold mb-2">Anda belum mendapat usulan ruang kuliah</p>
+                                <p class="text-muted mb-3">Silahkan kembali beberapa saat kedepan</p>
+                                <button class="btn btn-danger">
+                                    Lihat Detail
+                                </button>
+                                </div>
                             </div>
-                            <p class="fs-6 fw-semibold mb-2">Anda belum selesai meninjau semua rencana studi</p>
-                            <p class="text-muted mb-3">Silahkan lanjutkan peninjauan</p>
-                            <button class="btn btn-primary">
-                                Lihat Detail
-                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Calendar Section -->
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <span class="material-icons text-teal me-2">calendar_today</span>
-                            <h3 class="fs-5 fw-semibold mb-0">Kalender Akademik</h3>
-                        </div>
-                        <button class="btn text-teal">
-                            <span class="material-icons">arrow_forward</span>
-                        </button>
-                    </div>
                 </div>
-            </div>
-        </div>
+            </div> 
+            
+
     </div>
 
     <!-- Bootstrap JS -->

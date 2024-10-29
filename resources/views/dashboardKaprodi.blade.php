@@ -8,48 +8,96 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* Buat Side bar */
         .sidebar {
-            background-color: #0d9488;
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            background-color: #027683;
             min-height: 100vh;
             width: 280px;
-            color: white;
         }
         .profile-img {
             width: 96px;
             height: 96px;
             background-color: #fef3c7;
-            border-radius: 50%;
         }
+
+        /* Buat tulisan di side bar nya */
         .nav-link {
             color: white !important;
+            font-family: 'Poppins';
+            border-radius: 30px; /* Menambahkan kelengkungan pada navigasi */
+            padding: 10px 15px;
+            transition: background-color 0.3s ease; /* Transisi halus saat dihover */
         }
+
+        /* Buat saat whilehover */
         .nav-link:hover {
-            background-color: rgba(254, 243, 199, 0.1);
+            background-color: #359ca7;
+            border-radius: 30px; /* Agar saat dihover, tetap rounded */
         }
+
+        /* Buat saaat onclick */
         .nav-link.active {
-            background-color: rgba(254, 243, 199, 0.2) !important;
+            color: black !important;
+            background-color: #F6DCAC !important;
+            border-radius: 30px; /* Menjaga navigasi tetap rounded saat aktif */
         }
+
+        /* Button Lonceng Notifikasi */
+        .btn-notification {
+            position: relative; /* Posisi relative untuk badge */
+            background-color: #359ca7;
+            border: 2px solid #027683; /* Warna border sesuai sidebar */
+            border-radius: 50%; /* Membuatnya bulat */
+            padding: 10px; /* Menambahkan padding untuk ukuran button */
+            transition: background-color 0.3s ease; /* Transisi saat hover */
+        }
+
+        .btn-notification:hover {
+            background-color: #5db0b9; /* Warna saat dihover */
+        }
+
+        /* Warna bulatan merah untuk notifikasi */
         .notification-badge {
-            width: 8px;
-            height: 8px;
-            background-color: #dc3545;
+            width: 15px; 
+            height: 15px;
+            background-color: #dc3545; /* Warna merah untuk notifikasi */
             border-radius: 50%;
             position: absolute;
-            top: 0;
-            right: 0;
+            top: 0; /* Atur posisi vertikal */
+            right: 0; /* Atur posisi horizontal */
+            transform: translate(5%, -5%); /* Untuk memindahkan badge ke sudut tombol */
         }
+
+        /* Buat pengumuman periode */
         .period-banner {
-            background-color: #99f6e4;
-            color: #0d9488;
+            background-color: #67C3CC;
         }
+
         .btn-logout {
-            background-color: #fef3c7;
-            color: #0d9488;
+            font-family: 'Poppins';
+            background-color: #FED488;
+            color: black;
         }
+        
         .text-teal {
-            color: #0d9488;
+            color: white;
         }
+
+        .text-konfirmasi{
+            color: #028391;
+        }
+
+        .card{
+            background: #FFF2E5;
+            border-radius: 30px;
+        }
+
     </style>
 </head>
 <body class="bg-light">
