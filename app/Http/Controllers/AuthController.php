@@ -4,52 +4,78 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Hash;
-use Session;
 
 class AuthController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return view('auth.login');
     }
 
     public function postLogin(Request $request)
     {
+        // Validate input
         $request->validate([
-                'email' => 'required|email',
-                'password' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
 
-        $credentials = $request->only('email','password');
-        if (Auth::attempt($credentials)){
-                $user = Auth::user();  
-            //mengarahkan ke role masing2 
-            switch($user->role) {
-                case 'mahasiswa':
-                    return redirect()->route('dashboardMahasiswa');
-                case 'dosen':
-                    return redirect()->route('dashboardDosen');
-                // case 'dekan':
-                //     return redirect()->route('dekan.dashboard');
-                case 'kaprodi':
-                    return redirect()->route('dashboardKaprodi');
-                // case 'akademik':
-                //     return redirect()->route('akademik.dashboard');
-                default:
-                    return redirect()->route('login')
-                        ->withErrors('tidak valid.');
-                }
+        $credentials = $request->only('email', 'password');
+
+        // Check credentials
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            // Role-based redirection
+            if ($user->roles1 === 'mahasiswa') {
+                return redirect()->route('dashboardMahasiswa');
+            } elseif ($user->roles1 === 'bagian akademik') {
+                return redirect()->route('dashboardAkademik');
+            } elseif ($user->roles1 === 'dosen') {
+                return redirect()->route('roleSelection');
+            } else {
+                return redirect()->route('login')->withErrors(['role' => 'Role tidak valid.']);
+            }
         }
 
-        return redirect()->route('login')
-            ->withErrors("Email atau password salah");
+        // If login fails
+        return redirect()->route('login')->withErrors(['email' => 'Email atau password salah.']);
     }
 
-    public function logout(){
-        Auth::logout();
+    // Display role selection page for Dosen
+    public function roleSelection()
+    {
+        return view('auth.roleSelection');
+    }
 
-        return redirect()->route('login')
-            ->withSuccess('berhasil logout');
+    // Handle role selection and redirect to the appropriate dashboard
+    public function handleRoleSelection(Request $request)
+    {
+        $request->validate([
+            'roles2' => 'required|string|in:Dosen Wali,Kepala Prodi,Dekan, ',
+        ]);
+    
+        $role = $request->input('roles2');
+    
+        // Redirect berdasarkan role yang dipilih
+        switch ($role) {
+            case 'Dosen Wali':
+                return redirect()->route('dashboardDosen');
+            case 'Kepala Prodi':
+                return redirect()->route('dashboardKaprodi');
+            case 'Dekan':
+                return redirect()->route('dashboardDekan');
+            default:
+                return redirect()->back()->withErrors('Role tidak valid.');
+        }
+    }
+    
+    
+        
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login')->with('success', 'Berhasil logout.');
     }
 }

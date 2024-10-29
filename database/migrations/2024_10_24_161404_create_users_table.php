@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('username');
             $table->string('password');
             $table->string('email')->unique();
-            $table->enum('role', ['mahasiswa', 'dosen', 'dekan', 'kaprodi', 'akademik']);
-            $table->timestamps(); // This will create created_at and updated_at columns
+            $table->enum('roles1', ['mahasiswa', 'dosen', 'akademik']);
+            $table->enum('roles2', ['dekan', 'kaprodi', '', 'Dosen Wali']);
+            $table->timestamps();
             $table->rememberToken();
         });
     }
