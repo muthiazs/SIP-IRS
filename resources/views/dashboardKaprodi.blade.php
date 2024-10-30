@@ -131,7 +131,7 @@
             </nav>
 
             <!-- Logout Button -->
-            <button class="btn btn-logout mt-4 w-100 rounded-3">
+            <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
                 Keluar
             </button>
         </div>
@@ -182,15 +182,15 @@
                                     <p class="small text-muted">Belum Konfirmasi</p>
                                 </div>
                                 <div>
-                                    <span class="fs-4 fw-bold text-teal">{{ $data['progressIRSMahasiswaKaprodi']['sudahKonfirmasi']['count'] }}</span>
+                                    <span class="fs-4 fw-bold text-konfirmasi">{{ $data['progressIRSMahasiswaKaprodi']['sudahKonfirmasi']['count'] }}</span>
                                     <p class="small text-muted">Telah Konfirmasi</p>
                                 </div>
                                 <div>
-                                    <span class="fs-4 fw-bold text-muted">{{ $data['progressIRSMahasiswaKaprodi']['belumIsiIRS']['count'] }}</span>
+                                    <span class="fs-4 fw-bold text-danger">{{ $data['progressIRSMahasiswaKaprodi']['belumIsiIRS']['count'] }}</span>
                                     <p class="small text-muted">Belum Mengisi IRS</p>
                                 </div>
                                 <div>
-                                    <span class="fs-4 fw-bold text-muted">{{ $data['progressIRSMahasiswaKaprodi']['sudahIsiIRS']['count'] }}</span>
+                                    <span class="fs-4 fw-bold text-konfirmasi">{{ $data['progressIRSMahasiswaKaprodi']['sudahIsiIRS']['count'] }}</span>
                                     <p class="small text-muted">Telah Mengisi IRS</p>
                                 </div>
                             </div>

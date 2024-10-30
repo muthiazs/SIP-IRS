@@ -62,5 +62,16 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Tambahkan user lain sesuai kebutuhan
+        //Dekan
+        User::create([
+            'id'=>'1234567890100',
+            'username' => 'Akademik Test',
+            'email' => 'akademik@test.com',
+            'password' => Hash::make('password'),
+            'roles1' => 'akademik',
+            'roles2' => '',
+            'created_at' => now(), // Set created_at to current timestamp
+            'remember_token' => Str::random(100) // Generate a random remember token
+        ]);
     }
 }
