@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->unsignedBigInteger('prodi_id');
             $table->timestamps();
-
          });
     }
 

@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('status');
             $table->unsignedBigInteger('dosen_pembimbing_id')->nullable();
             $table->timestamps();
-
         });
     }
 

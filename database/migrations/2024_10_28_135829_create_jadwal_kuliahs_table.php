@@ -23,9 +23,7 @@ return new class extends Migration
             $table->string('semester');
             $table->string('tahun_ajaran');
             $table->string('status');
-            $table->timestamps();
-
-           
+            $table->timestamps();           
         });
     }
 

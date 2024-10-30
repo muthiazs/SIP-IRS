@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedBigInteger('prodi_id')->constrained('program_studi')->onDelete('cascade');
             $table->string('status');
             $table->timestamps();
-
        });
     }
 

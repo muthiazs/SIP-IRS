@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('irs_id');
             $table->unsignedBigInteger('jadwal_kuliah_id');
-            $table->timestamps();
-
-            
+            $table->timestamps();    
         });
     }
 
