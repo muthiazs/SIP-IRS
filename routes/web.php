@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BAK_PembagianruangController;
 
 
 
@@ -76,3 +77,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
 });
 
+// Route::get('/dashboardAkademik', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
+// Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');;
