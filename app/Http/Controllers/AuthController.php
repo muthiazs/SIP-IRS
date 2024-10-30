@@ -29,7 +29,7 @@ class AuthController extends Controller
             // Role-based redirection
             if ($user->roles1 === 'mahasiswa') {
                 return redirect()->route('dashboardMahasiswa');
-            } elseif ($user->roles1 === 'bagian akademik') {
+            } elseif ($user->roles1 === 'akademik') {
                 return redirect()->route('dashboardAkademik');
             } elseif ($user->roles1 === 'dosen') {
                 return redirect()->route('roleSelection');
