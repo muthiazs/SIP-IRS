@@ -141,9 +141,9 @@
 
         .btn-notification {
             position: relative; /* Posisi relative untuk badge */
-            background-color: #359ca7;
+            background-color: #027683;
             border: 2px solid #027683; /* Warna border sesuai sidebar */
-            border-radius: 50%; /* Membuatnya bulat */
+            border-radius: 100%; /* Membuatnya bulat */
             padding: 10px; /* Menambahkan padding untuk ukuran button */
             transition: background-color 0.3s ease; /* Transisi saat hover */
         }
