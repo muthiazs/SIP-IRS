@@ -17,6 +17,19 @@ return new class extends Migration
         Schema::table('mahasiswa', function (Blueprint $table) {
             // Foreign key for 'dosen_pembimbing_id'
             $table->foreign('dosen_pembimbing_id')->references('id')->on('dosen')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+        Schema::table('mata_kuliah', function (Blueprint $table) {
+            // Foreign key for 'dosen_pembimbing_id'
+            $table->foreign('prodi_id')->references('id')->on('program_studi')->onDelete('cascade');
+        });
+
+        // Add foreign key for 'mahasiswa' table
+        Schema::table('dosen', function (Blueprint $table) {
+            // Foreign key for 'dosen_pembimbing_id'
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('prodi_id')->references('id')->on('program_studi')->onDelete('cascade');
         });
 
         // Add foreign key for 'dosen' table
@@ -31,6 +44,11 @@ return new class extends Migration
             $table->foreign('mata_kuliah_id')->references('id')->on('mata_kuliah')->onDelete('cascade');
             $table->foreign('dosen_id')->references('id')->on('dosen')->onDelete('cascade');
             $table->foreign('ruangan_id')->references('id')->on('ruangan')->onDelete('cascade');
+        });
+
+        Schema::table('irs', function (Blueprint $table) {
+            // Foreign key for 'kaprodi_id'
+            $table->foreign('mahasiswa_id')->references('id')->on('mahasiswa');
         });
 
         // Add foreign key for 'irs_detail' table

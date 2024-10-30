@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('status');
             $table->timestamps();
 
-            $table->foreign('mahasiswa_id')->references('id')->on('mahasiswa');
+                    
         });
     }
 

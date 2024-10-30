@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('status');
             $table->timestamps();
 
-            $table->foreign('prodi_id')->references('id')->on('program_studi')->onDelete('cascade');
-        });
+       });
     }
 
     public function down()
