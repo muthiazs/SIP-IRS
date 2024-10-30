@@ -22,8 +22,8 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="password" class="form-label">Password:</label>
-                            <input type="password" class="form-control" id="password"
-                                   placeholder="****" name="password" required>
+                            <input type="password" class="form-control" id="password" placeholder="****" 
+                                name="password" required autocomplete="current-password">
                             @if ($errors->has('password'))
                                 <span class="text-danger">
                                     {{$errors->first('password')}}

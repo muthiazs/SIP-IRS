@@ -36,31 +36,14 @@ Route::group([], function () {
     Route::prefix('dashboardKaprodi')->group(function () {
         Route::get('/', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
     });
-});
 
-// When you're ready to add authentication middleware, you can modify the protected routes like this:
-/*
-Route::middleware(['auth'])->group(function () {
-    // Dosen Dashboard Routes
-    Route::prefix('dashboardDosen')->group(function () {
-        Route::get('/', [DashboardController::class, 'index'])->name('dashboardDosen');
-    });
-
-    // Mahasiswa Dashboard Routes
-    Route::prefix('dashboardMahasiswa')->group(function () {
-        Route::get('/', [DashboardMahasiswaController::class, 'indexMahasiswa'])->name('dashboardMahasiswa');
-    });
-
-    // Kaprodi Dashboard Routes
-    Route::prefix('dashboardKaprodi')->group(function () {
-        Route::get('/', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
+    // Akademk Dashboard Routes
+    Route::prefix('dashboardAkademik')->group(function () {
+        Route::get('/', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
     });
 });
-*/
 
-Route::get('login', [AuthController::class, 'index'])->name('login');
-Route::post('login', [AuthController::class, 'postLogin'])->name('login.post');
-Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
 
 // Role Selection Page for Dosen
 Route::get('/roleSelection', [AuthController::class, 'roleSelection'])->name('roleSelection');
@@ -70,8 +53,8 @@ Route::post('/submit-role-selection', [AuthController::class, 'submitRoleSelecti
 
 // Protected Routes with Authentication
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboardMahasiswa', [DashboardController::class, 'dashboardMahasiswa'])->name('dashboardMahasiswa');
-    Route::get('/dashboardAkademik', [DashboardController::class, 'dashboardAkademik'])->name('dashboardAkademik');
+    Route::get('/dashboardMahasiswa', [DashboardController::class, 'indexMahasiswa'])->name('dashboardMahasiswa');
+    Route::get('/dashboardAkademik', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
     Route::get('/dashboardDekan', [DashboardController::class, 'indexDekan'])->name('dashboardDekan');
     Route::get('/dashboardKaprodi', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
     Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
