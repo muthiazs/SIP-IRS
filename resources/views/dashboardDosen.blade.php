@@ -10,6 +10,95 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #0d9488;
+            --secondary-color: #99f6e4;
+            --accent-color: #fef3c7;
+        }
+
+        .sidebar {
+            background-color: var(--primary-color);
+            min-height: 100vh;
+            width: 280px;
+            color: white;
+        }
+
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .nav-link {
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .status-card {
+            background-color: var(--accent-color);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stats-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .period-banner {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            border-radius: 10px;
+            padding: 15px 20px;
+        }
+
+        .btn-logout {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            opacity: 0.9;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .wave-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0.1;
+        }
+    </style> <style>
         /* Buat Side bar */
         .sidebar {
             border-top-right-radius: 30px;
@@ -49,6 +138,7 @@
         }
 
         /* Button Lonceng Notifikasi */
+
         .btn-notification {
             position: relative; /* Posisi relative untuk badge */
             background-color: #359ca7;
@@ -58,8 +148,9 @@
             transition: background-color 0.3s ease; /* Transisi saat hover */
         }
 
+
         .btn-notification:hover {
-            background-color: #5db0b9; /* Warna saat dihover */
+            background-color: #5db0b9;
         }
 
         /* Warna bulatan merah untuk notifikasi */
@@ -83,6 +174,7 @@
             font-family: 'Poppins';
             background-color: #FED488;
             color: black;
+            right: 50px;
         }
         
         .text-teal {
@@ -126,10 +218,20 @@
                 </a>
             </nav>
 
+        
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
                 Keluar
             </button>
+
+             <!-- Wave decoration -->
+             <div class="wave-decoration">
+                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+                </svg>
+            </div>
+
+            
         </div>
 
         <!-- Main Content -->
@@ -141,7 +243,8 @@
                     <p class="text-muted">Semester Akademik Sekarang {{ $data['semester']['current'] }}</p>
                 </div>
                 <div class="position-relative">
-                    <button class="btn btn-teal rounded-circle p-2">
+                    <!-- Button Notifikasi -->
+                    <button class="btn btn-notification rounded-circle p-2">
                         <span class="material-icons text-white">notifications</span>
                     </button>
                     <span class="notification-badge"></span>
@@ -165,7 +268,7 @@
                             <h3 class="fs-5 fw-semibold mb-4">Progress persetujuan IRS Mahasiswa</h3>
                             <div class="d-flex justify-content-between text-center">
                                 <div>
-                                    <div class="fs-4 fw-bold text-teal">
+                                    <div class="fs-4 fw-bold text-konfirmasi">
                                         {{ $data['progress']['disetujui']['count'] }}/{{ $data['progress']['disetujui']['total'] }}
                                     </div>
                                     <div class="small text-muted">IRS Disetujui</div>
@@ -177,7 +280,7 @@
                                     <div class="small text-muted">IRS Ditolak</div>
                                 </div>
                                 <div>
-                                    <div class="fs-4 fw-bold text-muted">
+                                    <div class="fs-4 fw-bold text-black">
                                         {{ $data['progress']['pending']['count'] }}/{{ $data['progress']['pending']['total'] }}
                                     </div>
                                     <div class="small text-muted">Belum Ditinjau</div>

@@ -162,8 +162,8 @@
             transform: translate(5%, -5%); /* Untuk memindahkan badge ke sudut tombol */
         }
 
-        /* Buat pengumuman periode */
-        .period-banner {
+         /* Buat pengumuman periode */
+         .period-banner {
             background-color: #67C3CC;
         }
 
@@ -218,15 +218,16 @@
                 </a>
             </nav>
 
-            <button class="btn btn-logout w-100">
+            <!-- Logout Button -->
+            <button class="btn btn-logout">
                 <span class="material-icons align-middle me-2">logout</span>
                 Keluar
             </button>
 
-            <!-- Wave decoration -->
-            <div class="wave-decoration">
-                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
-                    <path d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+             <!-- Wave decoration -->
+             <div class="wave-decoration">
+                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 200%; width: 175%;">
+                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
                 </svg>
             </div>
         </div>
