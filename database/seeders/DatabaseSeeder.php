@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Tambahkan user lain sesuai kebutuhan
-        //Dekan
+        //Akademik
         User::create([
             'id'=>'1234567890100',
             'username' => 'Akademik Test',
