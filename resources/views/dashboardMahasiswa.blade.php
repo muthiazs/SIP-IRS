@@ -54,7 +54,7 @@
         }
 
         .stats-card {
-            background-color: white;
+            background-color: #FFF2E5;
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
@@ -171,6 +171,7 @@
             font-family: 'Poppins';
             background-color: #FED488;
             color: black;
+            transform: translate(63%, 0%);
         }
         
         .text-teal {
@@ -219,10 +220,11 @@
             </nav>
 
             <!-- Logout Button -->
-            <button class="btn btn-logout">
+            <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
                 <span class="material-icons align-middle me-2">logout</span>
                 Keluar
             </button>
+
 
              <!-- Wave decoration -->
              <div class="wave-decoration">
