@@ -52,8 +52,9 @@
         .btn-logout {
             font-family: 'Poppins';
             background-color: #FED488;
-            color: #000000;
-            justify-content: flex-end;
+            color: black;
+            right: 50px;
+            /* justify-content: flex-end; */
         }
         .text-teal {
             color: #028391;

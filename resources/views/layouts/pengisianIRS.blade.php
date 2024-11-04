@@ -1,10 +1,9 @@
-<!-- resources/views/dashboard/mahasiswa.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Mahasiswa - SIP-IRS</title>
+    <title>Pengisian IRS Mahasiswa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -206,7 +205,7 @@
             </div>
 
             <nav class="nav flex-column gap-2 mb-4">
-                <a href="#" class="nav-link active rounded d-flex align-items-center">
+                <a href="{{ route('pengisianIRS') }}" class="nav-link active rounded d-flex align-items-center">
                     <span class="material-icons me-3">home</span>
                     Beranda
                 </a>
@@ -236,92 +235,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-grow-1 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h1 class="h3 mb-1">Selamat Datang {{ $data['mahasiswa']['name'] }} 👋</h1>
-                    <p class="text-muted mb-0">Semester Akademik {{ $data['semester']['current'] }}</p>
-                </div>
-                <div class="position-relative">
-                    <button class="btn btn-primary rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                        <span class="visually-hidden">Notifikasi baru</span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Period Banner -->
-            <div class="period-banner mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-medium">Periode Pengisian IRS</span>
-                    <span class="fw-medium">{{ $data['semester']['period'] }}</span>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div class="row g-4 mb-4">
-                <div class="col-md-4">
-                    <div class="stats-card text-center">
-                        <h6 class="text-muted mb-2">Semester Studi</h6>
-                        <h2 class="mb-0">{{ $data['stats']['semester'] }}</h2>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="stats-card text-center">
-                        <h6 class="text-muted mb-2">IPK</h6>
-                        <h2 class="mb-0">{{ $data['stats']['ipk'] }}</h2>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="stats-card text-center">
-                        <h6 class="text-muted mb-2">SKSk</h6>
-                        <h2 class="mb-0">{{ $data['stats']['sksk'] }}</h2>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Status Cards -->
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="stats-card">
-                        <div class="d-flex align-items-center mb-3">
-                            <span class="material-icons text-primary me-2">calendar_today</span>
-                            <h5 class="mb-0">Kalender Akademik</h5>
-                        </div>
-                        <a href="#" class="btn btn-outline-primary">Lihat Kalender</a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="stats-card">
-                        <h5 class="mb-3">Status IRS</h5>
-                        @if($data['status']['irs'] === 'ditolak')
-                            <div class="alert alert-danger mb-0">
-                                Isian Rencana Studi Ditolak
-                                <a href="#" class="btn btn-danger mt-2">Lihat Detail</a>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
-            <!-- Registration Status -->
-            <div class="stats-card mt-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                        <span class="material-icons text-primary me-2">how_to_reg</span>
-                        <h5 class="mb-0">Registrasi</h5>
-                    </div>
-                    @if($data['status']['registrasi'])
-                        <span class="badge bg-success">Sudah Registrasi</span>
-                    @else
-                        <span class="badge bg-danger">Belum Registrasi</span>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
+        
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

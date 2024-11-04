@@ -4,8 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BAK_PembagianruangController;
-
-
+use App\Http\Controllers\pengisianIRSController;
 
 // Redirect root to login
 Route::get('/', function () {
@@ -41,7 +40,13 @@ Route::group([], function () {
     Route::prefix('dashboardAkademik')->group(function () {
         Route::get('/', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
     });
+    // Pengisian IRS 
+    Route::prefix('pengisianIRS')->group(function () {
+        Route::get('/', [pengisianIRSController::class, 'indexIRS'])->name('pengisianIRS');
+    });
 });
+
+
 
 
 
@@ -58,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboardDekan', [DashboardController::class, 'indexDekan'])->name('dashboardDekan');
     Route::get('/dashboardKaprodi', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
     Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
+    Route::get('/pengisianIRS', [pengisianIRSController::class, 'indexIRS'])->name('pengisianIRS');
 });
 
 // Route::get('/dashboardAkademik', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');

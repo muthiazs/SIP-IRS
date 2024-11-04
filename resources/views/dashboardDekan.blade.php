@@ -71,12 +71,10 @@
         }
 
         .btn-logout {
-            background-color: var(--accent-color);
-            color: var(--primary-color);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            font-family: 'Poppins';
+            background-color: #FED488;
+            color: black;
+            right: 50px;
         }
 
         .btn-logout:hover {
@@ -228,7 +226,7 @@
 
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
-                <span class="material-icons align-middle me-2">logout</span>
+                {{-- <span class="material-icons align-middle me-2">logout</span> --}}
                 Keluar
             </button>
         </div>

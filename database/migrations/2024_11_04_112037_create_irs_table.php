@@ -9,21 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('irs', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('mahasiswa_id');
-            $table->string('semester');
+            $table->bigIncrements('id_irs');
+            $table->string('nim');
+            $table->integer('semester');
             $table->string('tahun_ajaran');
-            $table->string('status');
-            $table->timestamps();      
+            $table->string('status')->default('belum disetujui');
+            $table->timestamp('created_at');
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::dropIfExists('irs');
     }
-
 };

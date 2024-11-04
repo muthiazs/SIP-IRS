@@ -9,20 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('dosen', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('nip')->unique();
+            $table->bigIncrements('id_dosen');
+            $table->foreignId('id_user')->constrained('users', 'id');
+            $table->string('nip');
             $table->string('nama');
-            $table->string('email')->unique();
-            $table->unsignedBigInteger('prodi_id');
-            $table->timestamps();
-         });
+            $table->string('prodi_id');
+            $table->timestamp('created_at');
+        });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::dropIfExists('dosen');
     }

@@ -9,17 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('program_studi', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id_prodi');
             $table->string('nama');
-            $table->unsignedBigInteger('kaprodi_id')->nullable();
-            $table->timestamps();
+            $table->bigInteger('kaprodi_id');
+            $table->foreignId('id_fak')->constrained('fakultas', 'id_fak');
+            $table->timestamp('created_at');
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::dropIfExists('program_studi');
     }

@@ -84,9 +84,10 @@
             font-family: 'Poppins';
             background-color: #FED488;
             color: black;
-            transform: translate(63%, 0%);
+            right: 50px;
+            /* transform: translate(63%, 0%);
             padding: 9px 19px;
-            border-radius: 8px;
+            border-radius: 8px; */
         }
         
         .text-teal {
@@ -144,7 +145,7 @@
 
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
-                <span class="material-icons align-middle me-2">logout</span>
+                {{-- <span class="material-icons align-middle me-2">logout</span> --}}
                 Keluar
             </button>
 
