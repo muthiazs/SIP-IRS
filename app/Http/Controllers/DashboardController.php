@@ -11,7 +11,6 @@ class DashboardController extends Controller
     // Method untuk Dashboard Dosen
     public function index()
     {
-        // Data dummy untuk dosen
         $dosen = DB::table('dosen')
                     ->join('users', 'dosen.id_user', '=', 'users.id')
                     ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
@@ -32,18 +31,12 @@ class DashboardController extends Controller
     // Method untuk Dashboard Kaprodi
     public function indexKaprodi()
     {
-        $user = Auth::user();
-
-        // Cek jika peran adalah Dekan
-        if ($user->roles2 === 'Dekan') {
-            return redirect()->route('notPage')->withErrors(['message' => 'Anda bukan role ini.']);
-        }
 
         $kaprodi = DB::table('dosen')
                         ->join('users', 'dosen.id_user', '=', 'users.id')
                         ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
                         ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
-                        ->where('users.roles2', '=', 'Kepala Prodi') // Pastikan ini juga sesuai
+                        ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
                         ->where('dosen.id_user', '=', auth()->id())
                         ->select(
                             'dosen.nip',
@@ -83,12 +76,6 @@ class DashboardController extends Controller
     //Method untuk Dasboard Dekan
     public function indexDekan()
     {
-        $user = Auth::user();
-    
-        // Cek jika peran adalah Kepala Prodi
-        if ($user->roles2 === 'Kepala Prodi') {
-            return redirect()->route('notPage')->withErrors(['message' => 'Anda bukan role ini.']);
-        }
     
         // Data dummy untuk dekan
         $data = [
