@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        
         :root {
             --primary-color: #0d9488;
             --secondary-color: #99f6e4;
@@ -22,6 +23,11 @@
             min-height: 100vh;
             width: 280px;
             color: white;
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
         }
 
         .profile-img {
@@ -246,91 +252,93 @@
 </head>
 
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar p-4 text-white position-relative">
-        <!-- Profile Section -->
-        <div class="text-center mb-4">
-            <div class="profile-img rounded-circle mx-auto mb-3">
-                <!-- Profile image placeholder -->
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar p-4 text-white position-relative">
+            <!-- Profile Section -->
+            <div class="text-center mb-4">
+                <div class="profile-img rounded-circle mx-auto mb-3">
+                    <!-- Profile image placeholder -->
+                </div>
+                <h2 class="fs-4 fw-bold">Bill Gates</h2>
+                <p class="small opacity-75">NIP.198203092006041002</p>
+                <p class="small opacity-75">Program Studi S1 Informatika</p>
             </div>
-            <h2 class="fs-4 fw-bold">Bill Gates</h2>
-            <p class="small opacity-75">NIP.198203092006041002</p>
-            <p class="small opacity-75">Program Studi S1 Informatika</p>
+
+            <!-- Navigation -->
+            <nav class="nav flex-column gap-2">
+                <a href="#" class="nav-link active rounded d-flex align-items-center p-3">
+                    <span class="material-icons me-2">home</span>
+                    Beranda
+                </a>
+                <a href="{{ route('irsMahasiswa') }}" class="nav-link rounded d-flex align-items-center p-3">
+                    <span class="material-icons me-2">description</span>
+                    IRS Mahasiswa
+                </a>
+            </nav>
+
+            <!-- Logout Button -->
+            <button class="btn btn-danger position-absolute bottom-0 mb-4 rounded-3" onclick="logout()">
+                Keluar
+            </button>
+
+            <!-- Wave decoration -->
+            <div class="wave-decoration">
+                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"
+                        style="stroke: none; fill: #fff;"></path>
+                </svg>
+            </div>
         </div>
 
-        <!-- Navigation -->
-        <nav class="nav flex-column gap-2">
-            <a href="#" class="nav-link active rounded d-flex align-items-center p-3">
-                <span class="material-icons me-2">home</span>
-                Beranda
-            </a>
-            <a href="{{ route('irsMahasiswa') }}" class="nav-link rounded d-flex align-items-center p-3">
-                <span class="material-icons me-2">description</span>
-                IRS Mahasiswa
-            </a>
-        </nav>
+        <!-- Main Content -->
+        <div class="flex-grow-1 p-4">
+            <header class="header">
+                    <h1>IRS Mahasiswa</h1>
+                    <p>Semester Akademik Sekarang 2024/2025 Ganjil</p>
+                    <h2>Periode Penyetujuan IRS</h2>
+            </header>
 
-        <!-- Logout Button -->
-        <button class="btn btn-danger position-absolute bottom-0 mb-4 rounded-3" onclick="logout()">
-            Keluar
-        </button>
+            <!-- Filter and Search -->
+            <section class="filter-search">
+                <div>
+                    <button class="btn btn-primary" data-filter="all">Semua</button>
+                    <button class="btn btn-outline-primary" data-filter="pending">Belum Disetujui</button>
+                    <button class="btn btn-outline-primary" data-filter="approved">Sudah Disetujui</button>
+                    <button class="btn btn-outline-primary" data-filter="rejected">Ditolak</button>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Cari Nama" id="search-input">
+                    <button class="btn btn-primary" type="button" id="search-button">
+                        <span class="material-icons">search</span>
+                    </button>
+                </div>
+            </section>
 
-        <!-- Wave decoration -->
-        <div class="wave-decoration">
-            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
-                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"
-                    style="stroke: none; fill: #fff;"></path>
-            </svg>
+            <!-- Student List -->
+            <section class="student-list">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Mahasiswa</th>
+                            <th>Angkatan</th>
+                            <th>NIM</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-list">
+                        <!-- Student data will be rendered here -->
+                    </tbody>
+                </table>
+            </section>
         </div>
     </div>
-
-    <!-- Main Content -->
-    <div class="content">
-        <header class="header">
-            <h1>IRS Mahasiswa</h1>
-            <p>Semester Akademik Sekarang 2024/2025 Ganjil</p>
-            <h2>Periode Penyetujuan IRS</h2>
-        </header>
-
-        <!-- Filter and Search -->
-        <section class="filter-search">
-            <div>
-                <button class="btn btn-primary" data-filter="all">Semua</button>
-                <button class="btn btn-outline-primary" data-filter="pending">Belum Disetujui</button>
-                <button class="btn btn-outline-primary" data-filter="approved">Sudah Disetujui</button>
-                <button class="btn btn-outline-primary" data-filter="rejected">Ditolak</button>
-            </div>
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Cari Nama" id="search-input">
-                <button class="btn btn-primary" type="button" id="search-button">
-                    <span class="material-icons">search</span>
-                </button>
-            </div>
-        </section>
-
-        <!-- Student List -->
-        <section class="student-list">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Mahasiswa</th>
-                        <th>Angkatan</th>
-                        <th>NIM</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="student-list">
-                    <!-- Student data will be rendered here -->
-                </tbody>
-            </table>
-        </section>
-
         <!-- Footer -->
         <footer>
             <p>&copy; 2024 IRS Mahasiswa</p>
         </footer>
-    </div>
+    
 
     <script>
         const studentList = document.getElementById('student-list');
@@ -340,7 +348,7 @@
         // Sample data
         const students = [
             { no: 1, nama: 'Muthia Zhafira Sahnah', angkatan: 2022, nim: '24060122130071', status: 'Disetujui' },
-            { no: 2, nama: 'Alya Safina', angkatan: 2022, nim: '24060122140123', status: 'Belum Disetujui' },
+            { no: 2, nama: 'Alya Safina', angkatan: 2022, nim: '2406012213002', status: 'Belum Disetujui' },
             // Add more students here
         ];
 
