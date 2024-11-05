@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIP-IRS Dashboard</title>
+    <title>IRS Mahasiswa</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        
         :root {
             --primary-color: #0d9488;
             --secondary-color: #99f6e4;
@@ -21,6 +23,11 @@
             min-height: 100vh;
             width: 280px;
             color: white;
+        }
+
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
         }
 
         .profile-img {
@@ -50,7 +57,7 @@
         .status-card {
             background-color: var(--accent-color);
             border-radius: 15px;
-            padding: 20px;
+            padding: 20 px;
             margin-bottom: 20px;
         }
 
@@ -189,11 +196,63 @@
             background: #FFF2E5;
             border-radius: 30px;
         }
+        .table {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+            font-family: 'Poppins', sans-serif;
+        }
 
+        .table th, .table td {
+            padding: 10px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .table tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e9e9e9;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .table .btn {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .table .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+        }
+
+        .table .btn-outline-primary {
+            border: 1px solid #007bff;
+            color: #007bff;
+        }
+
+        .table .btn-outline-primary:hover {
+            background-color: #007bff;
+        }
     </style>
 </head>
-<body class="bg-light">
-    <div class="d-flex">
+
+<body>
+    <div class="wrapper">
         <!-- Sidebar -->
         <div class="sidebar p-4 text-white position-relative">
             <!-- Profile Section -->
@@ -201,14 +260,14 @@
                 <div class="profile-img rounded-circle mx-auto mb-3">
                     <!-- Profile image placeholder -->
                 </div>
-                <h2 class="fs-4 fw-bold">{{ $data['user']['name'] }}</h2>
-                <p class="small opacity-75">NIP. {{ $data['user']['nip'] }}</p>
-                <p class="small opacity-75">{{ $data['user']['program_studi'] }}</p>
+                <h2 class="fs-4 fw-bold">Bill Gates</h2>
+                <p class="small opacity-75">NIP.198203092006041002</p>
+                <p class="small opacity-75">Program Studi S1 Informatika</p>
             </div>
 
             <!-- Navigation -->
             <nav class="nav flex-column gap-2">
-                <a href="#" class="nav-link active rounded d-flex align-items-center p-3">
+                <a href="{{ route('dashboardDosen') }}" class="nav-link active rounded d-flex align-items-center p-3">
                     <span class="material-icons me-2">home</span>
                     Beranda
                 </a>
@@ -218,114 +277,134 @@
                 </a>
             </nav>
 
-        
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
                 Keluar
             </button>
 
-             <!-- Wave decoration -->
-             <div class="wave-decoration">
+            <!-- Wave decoration -->
+            <div class="wave-decoration">
                 <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
-                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"
+                        style="stroke: none; fill: #fff;"></path>
                 </svg>
             </div>
-
-            
         </div>
 
         <!-- Main Content -->
         <div class="flex-grow-1 p-4">
-            <!-- Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <header class="header">
+                    <h1>IRS Mahasiswa</h1>
+                    <p>Semester Akademik Sekarang 2024/2025 Ganjil</p>
+                    <h2>Periode Penyetujuan IRS</h2>
+            </header>
+
+            <!-- Filter and Search -->
+            <section class="filter-search">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $data['user']['name'] }} 👋</h1>
-                    <p class="text-muted">Semester Akademik Sekarang {{ $data['semester']['current'] }}</p>
+                    <button class="btn btn-primary" data-filter="all">Semua</button>
+                    <button class="btn btn-outline-primary" data-filter="pending">Belum Disetujui</button>
+                    <button class="btn btn-outline-primary" data-filter="approved">Sudah Disetujui</button>
+                    <button class="btn btn-outline-primary" data-filter="rejected">Ditolak</button>
                 </div>
-                <div class="position-relative">
-                    <!-- Button Notifikasi -->
-                    <button class="btn btn-notification rounded-circle p-2">
-                        <span class="material-icons text-white">notifications</span>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Cari Nama" id="search-input">
+                    <button class="btn btn-primary" type="button" id="search-button">
+                        <span class="material-icons">search</span>
                     </button>
-                    <span class="notification-badge"></span>
                 </div>
-            </div>
+            </section>
 
-            <!-- Period Banner -->
-            <div class="period-banner p-3 rounded-3 mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="text-teal">Periode Penyetujuan IRS</span>
-                    <span class="text-teal fw-bold">{{ $data['semester']['period'] }}</span>
-                </div>
-            </div>
-
-            <!-- Progress Cards -->
-            <div class="row g-4 mb-4">
-                <!-- Progress Card -->
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h3 class="fs-5 fw-semibold mb-4">Progress persetujuan IRS Mahasiswa</h3>
-                            <div class="d-flex justify-content-between text-center">
-                                <div>
-                                    <div class="fs-4 fw-bold text-konfirmasi">
-                                        {{ $data['progress']['disetujui']['count'] }}/{{ $data['progress']['disetujui']['total'] }}
-                                    </div>
-                                    <div class="small text-muted">IRS Disetujui</div>
-                                </div>
-                                <div>
-                                    <div class="fs-4 fw-bold text-danger">
-                                        {{ $data['progress']['ditolak']['count'] }}/{{ $data['progress']['ditolak']['total'] }}
-                                    </div>
-                                    <div class="small text-muted">IRS Ditolak</div>
-                                </div>
-                                <div>
-                                    <div class="fs-4 fw-bold text-black">
-                                        {{ $data['progress']['pending']['count'] }}/{{ $data['progress']['pending']['total'] }}
-                                    </div>
-                                    <div class="small text-muted">Belum Ditinjau</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Status Card -->
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h3 class="fs-5 fw-semibold">Persetujuan IRS Mahasiswa</h3>
-                                <span class="fs-4 text-danger">⚠️</span>
-                            </div>
-                            <p class="fs-6 fw-semibold mb-2">Anda belum selesai meninjau semua rencana studi</p>
-                            <p class="text-muted mb-3">Silahkan lanjutkan peninjauan</p>
-                            <button class="btn btn-primary">
-                                Lihat Detail
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Calendar Section -->
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <span class="material-icons text-teal me-2">calendar_today</span>
-                            <h3 class="fs-5 fw-semibold mb-0">Kalender Akademik</h3>
-                        </div>
-                        <button class="btn text-teal">
-                            <span class="material-icons">arrow_forward</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <!-- Student List -->
+            <section class="student-list">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Mahasiswa</th>
+                            <th>Angkatan</th>
+                            <th>NIM</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="student-list">
+                        <!-- Student data will be rendered here -->
+                    </tbody>
+                </table>
+            </section>
         </div>
     </div>
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2024 IRS Mahasiswa</p>
+        </footer>
+    
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const studentList = document.getElementById('student-list');
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+
+        // Sample data
+        const students = [
+            { no: 1, nama: 'Muthia Zhafira Sahnah', angkatan: 2022, nim: '24060122130071', status: 'Disetujui' },
+            { no: 2, nama: 'Alya Safina', angkatan: 2022, nim: '2406012213002', status: 'Belum Disetujui' },
+            // Add more students here
+        ];
+
+        // Render student data
+        function renderStudents(filteredStudents) {
+            studentList.innerHTML = ''; // Clear existing rows
+            filteredStudents.forEach((student) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.no}</td>
+                    <td>${student.nama}</td>
+                    <td>${student.angkatan}</td>
+                    <td>${student.nim}</td>
+                    <td>${student.status}</td>
+                `;
+                studentList.appendChild(row);
+            });
+        }
+
+        renderStudents(students); // Initial render
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('[data-filter]');
+        filterButtons.forEach((button) => {
+            button.addEventListener('click', (e) => {
+                const filterValue = e.target.dataset.filter;
+                const filteredStudents = students.filter(student =>
+                    filterValue === 'all' || student.status === filterValue
+                );
+                renderStudents(filteredStudents);
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active'); // Add active class to the selected button
+            });
+        });
+
+        // Search functionality
+        searchButton.addEventListener('click', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredStudents = students.filter(student =>
+                student.nama.toLowerCase().includes(searchTerm)
+            );
+            renderStudents(filteredStudents);
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchButton.click(); // Trigger search on Enter key
+            }
+        });
+
+        // Logout function
+        function logout() {
+            alert('Logout button clicked!');
+            // Add your logout logic here
+        }
+    </script>
 </body>
+
 </html>

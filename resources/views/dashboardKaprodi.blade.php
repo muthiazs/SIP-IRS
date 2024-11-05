@@ -21,9 +21,10 @@
             width: 280px;
         }
         .profile-img {
-            width: 96px;
-            height: 96px;
+            width: 95px;
+            height: 95px;
             background-color: #fef3c7;
+            border-radius: 70px;
         }
 
         /* Buat tulisan di side bar nya */
@@ -83,6 +84,10 @@
             font-family: 'Poppins';
             background-color: #FED488;
             color: black;
+            right: 50px;
+            /* transform: translate(63%, 0%);
+            padding: 9px 19px;
+            border-radius: 8px; */
         }
         
         .text-teal {
@@ -98,12 +103,20 @@
             border-radius: 30px;
         }
 
+        .wave-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0.1;
+        }
+
     </style>
 </head>
 <body class="bg-light">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar p-4">
+        <div class="sidebar p-4 text-white position-relative">
             <!-- Profile Section -->
             <div class="text-center mb-4">
                 <div class="profile-img mb-3 mx-auto">
@@ -132,8 +145,16 @@
 
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
+                {{-- <span class="material-icons align-middle me-2">logout</span> --}}
                 Keluar
             </button>
+
+             <!-- Wave decoration -->
+             <div class="wave-decoration">
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 40%; width: 200%;">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+            </svg>
+        </div>
         </div>
 
         <!-- Main Content -->
