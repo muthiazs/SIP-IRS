@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class DashboardController extends Controller
 {
@@ -26,25 +28,35 @@ class DashboardController extends Controller
 
     }
 
+
     // Method untuk Dashboard Kaprodi
     public function indexKaprodi()
     {
+        $user = Auth::user();
+
+        // Cek jika peran adalah Dekan
+        if ($user->roles2 === 'Dekan') {
+            return redirect()->route('notPage')->withErrors(['message' => 'Anda bukan role ini.']);
+        }
+
         $kaprodi = DB::table('dosen')
-                        ->join('users', 'dosen.id_user', '=', 'users.id') // Corrected 'user' to 'users'
+                        ->join('users', 'dosen.id_user', '=', 'users.id')
                         ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                        ->where('users.roles2', '=', 'kaprodi') // Filtering by 'kaprodi' role
-                        ->where('dosen.id_user', '=', auth()->id()) // Ensuring data for logged-in user
+                        ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
+                        ->where('users.roles2', '=', 'Kepala Prodi') // Pastikan ini juga sesuai
+                        ->where('dosen.id_user', '=', auth()->id())
                         ->select(
                             'dosen.nip',
-                            'dosen.nama as dosen_nama',         // Alias to avoid conflict
-                            'program_studi.nama as prodi_nama', // Alias for program_studi's nama
+                            'dosen.nama as dosen_nama',
+                            'program_studi.nama as prodi_nama',
                             'dosen.prodi_id',
                             'users.username'
                         )
                         ->first();
-    
+
         return view('dashboardKaprodi', compact('kaprodi'));
     }
+
     
 
 
@@ -63,8 +75,7 @@ class DashboardController extends Controller
                     'dosen.nama as nama_doswal',
                     'dosen.nip',
                     'users.username'
-                )
-                
+                ) 
                 ->first();
     
     return view('dashboardMahasiswa', compact('mahasiswa'));  // Gunakan dot notation
@@ -72,7 +83,14 @@ class DashboardController extends Controller
     //Method untuk Dasboard Dekan
     public function indexDekan()
     {
-        //Data dummy untuk dekan
+        $user = Auth::user();
+    
+        // Cek jika peran adalah Kepala Prodi
+        if ($user->roles2 === 'Kepala Prodi') {
+            return redirect()->route('notPage')->withErrors(['message' => 'Anda bukan role ini.']);
+        }
+    
+        // Data dummy untuk dekan
         $data = [
             'dekan' => [
                 'name' => 'Sherlock Holmes',
@@ -100,8 +118,10 @@ class DashboardController extends Controller
                 'belum_dikonfirmasi' => ['count' => 1, 'total' => 6]
             ]
         ];
-            return view('dashboardDekan', compact('data'));
+    
+        return view('dashboardDekan', compact('data'));
     }
+    
     public function indexAkademik()
     {
         // Contoh data dummy, nantinya bisa diambil dari database

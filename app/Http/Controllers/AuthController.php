@@ -57,10 +57,21 @@ class AuthController extends Controller
     public function handleRoleSelection(Request $request)
     {
         $request->validate([
-            'roles2' => 'required|string|in:Dosen Wali,Kepala Prodi,Dekan, ',
+            'roles2' => 'required|string|in:Dosen Wali,Kepala Prodi,Dekan',
         ]);
     
         $role = $request->input('roles2');
+    
+        // Cek apakah pengguna sesuai dengan role yang dipilih
+        $user = Auth::user();
+    
+        if ($role === 'Dekan' && $user->roles2 !== 'Dekan') {
+            return redirect()->route('notPage')->withErrors(['message' => 'Anda bukan role ini.']);
+        } elseif ($role === 'Kepala Prodi' && $user->roles2 !== 'Kepala Prodi') {
+            return redirect()->route('notPage')->withErrors(['message' => 'Anda bukan role ini.']);
+        } elseif ($role === 'Dosen Wali' && $user->roles2 !== 'dosen_wali') {
+            return redirect()->route('notPage')->withErrors(['message' => 'Anda bukan role ini.']);
+        }
     
         // Redirect berdasarkan role yang dipilih
         switch ($role) {
@@ -73,6 +84,12 @@ class AuthController extends Controller
             default:
                 return redirect()->back()->withErrors('Role tidak valid.');
         }
+    }
+    
+
+    public function notPage()
+    {
+        return view('auth.notPage'); // Pastikan ini mengarah ke view yang benar
     }
     
     

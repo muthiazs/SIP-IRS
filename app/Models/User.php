@@ -13,8 +13,10 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'role',
+        'roles1', // Pastikan ini sesuai dengan nama kolom di database
+        'roles2', // Pastikan ini sesuai dengan nama kolom di database
     ];
+    
 
     protected $hidden = [
         'password',
