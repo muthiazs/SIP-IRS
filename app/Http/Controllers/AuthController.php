@@ -31,8 +31,13 @@ class AuthController extends Controller
                 return redirect()->route('dashboardMahasiswa');
             } elseif ($user->roles1 === 'akademik') {
                 return redirect()->route('dashboardAkademik');
-            } elseif ($user->roles1 === 'dosen') {
-                return redirect()->route('roleSelection');
+            } elseif ($user->roles1 === 'dosen' ) {
+                if ($user->roles2 == '' || $user->roles2 == 'dosen_wali' ) {
+                    return redirect()->route('dashboardDosen');
+                }
+                else{
+                    return redirect()->route('roleSelection');
+                }
             } else {
                 return redirect()->route('login')->withErrors(['role' => 'Role tidak valid.']);
             }

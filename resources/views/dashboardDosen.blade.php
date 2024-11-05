@@ -201,9 +201,9 @@
                 <div class="profile-img rounded-circle mx-auto mb-3">
                     <!-- Profile image placeholder -->
                 </div>
-                <h2 class="fs-4 fw-bold">{{ $data['user']['name'] }}</h2>
-                <p class="small opacity-75">NIP. {{ $data['user']['nip'] }}</p>
-                <p class="small opacity-75">{{ $data['user']['program_studi'] }}</p>
+                <h2 class="fs-4 fw-bold" style="font-size: 18px !important;">{{ $dosen->dosen_nama }}</h2>
+                <p class="small opacity-75">NIP. {{ $dosen->nip }}</p>
+                <p class="small opacity-75">{{ $dosen->prodi_nama }}</p> <!-- Use prodi_nama -->
             </div>
 
             <!-- Navigation -->
@@ -239,8 +239,8 @@
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $data['user']['name'] }} 👋</h1>
-                    <p class="text-muted">Semester Akademik Sekarang {{ $data['semester']['current'] }}</p>
+                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $dosen->username }} 👋</h1>
+                    <p class="text-muted">Semester Akademik Sekarang </p>
                 </div>
                 <div class="position-relative">
                     <!-- Button Notifikasi -->
@@ -255,7 +255,7 @@
             <div class="period-banner p-3 rounded-3 mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="text-teal">Periode Penyetujuan IRS</span>
-                    <span class="text-teal fw-bold">{{ $data['semester']['period'] }}</span>
+                    <span class="text-teal fw-bold">bla</span>
                 </div>
             </div>
 
@@ -269,19 +269,19 @@
                             <div class="d-flex justify-content-between text-center">
                                 <div>
                                     <div class="fs-4 fw-bold text-konfirmasi">
-                                        {{ $data['progress']['disetujui']['count'] }}/{{ $data['progress']['disetujui']['total'] }}
+                                        ['progress']['disetujui']['count'] / $data['progress']['disetujui']['total'] 
                                     </div>
                                     <div class="small text-muted">IRS Disetujui</div>
                                 </div>
                                 <div>
                                     <div class="fs-4 fw-bold text-danger">
-                                        {{ $data['progress']['ditolak']['count'] }}/{{ $data['progress']['ditolak']['total'] }}
+                                        ['progress']['ditolak']['count']/ $data['progress']['ditolak']['total']
                                     </div>
                                     <div class="small text-muted">IRS Ditolak</div>
                                 </div>
                                 <div>
                                     <div class="fs-4 fw-bold text-black">
-                                        {{ $data['progress']['pending']['count'] }}/{{ $data['progress']['pending']['total'] }}
+                                        ['progress']['pending']['count']/ $data['progress']['pending']['total'] 
                                     </div>
                                     <div class="small text-muted">Belum Ditinjau</div>
                                 </div>
