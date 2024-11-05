@@ -4,7 +4,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BAK_PembagianruangController;
+<<<<<<< HEAD
+=======
 use App\Http\Controllers\IRSController;
+>>>>>>> a34a343b43b8063289787131033b21208040a614
 
 // Redirect root to login
 Route::get('/', function () {
@@ -62,5 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/IRSMahasiswa', [IRSController::class, 'index'])->name('irsMahasiswa');
 });
 
+<<<<<<< HEAD
+//Pembagian Ruang
+Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
 // Route::get('/dashboardAkademik', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
-// Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');;

@@ -48,7 +48,12 @@
         }
         .btn-logout {
             background-color: #FED488;
-            color: #000000;
+            color: #028391;
+            justify-content: flex-end;
+        }
+        .btn-logout:hover {
+            background-color: #FED488;
+            color: #028391;
             justify-content: flex-end;
         }
         .text-teal {
@@ -134,7 +139,9 @@
 
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
-                Keluar
+                <a href="/login" class="nav-link active">
+                    Keluar
+                </a> 
             </button>
         </div>
 
@@ -164,7 +171,7 @@
 
             <!-- Progress Cards -->
                     <div class="card shadow-sm">
-                        <h5 class="card-header bg-teal text-white text-c">Pembagian Ruang Kelas</h5>
+                        <h5 class="card-header bg-teal text-white text-center">Pembagian Ruang Kelas</h5>
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex text-center">
                                 <div class="margincard">

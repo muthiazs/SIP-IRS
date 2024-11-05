@@ -113,7 +113,9 @@
 
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
-                Keluar
+                <a href="/login" class="nav-link active">
+                    Keluar
+                </a> 
             </button>
         </div>
 
