@@ -267,7 +267,7 @@
 
             <!-- Navigation -->
             <nav class="nav flex-column gap-2">
-                <a href="#" class="nav-link active rounded d-flex align-items-center p-3">
+                <a href="{{ route('dashboardDosen') }}" class="nav-link active rounded d-flex align-items-center p-3">
                     <span class="material-icons me-2">home</span>
                     Beranda
                 </a>
