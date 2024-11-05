@@ -278,7 +278,7 @@
             </nav>
 
             <!-- Logout Button -->
-            <button class="btn btn-danger position-absolute bottom-0 mb-4 rounded-3" onclick="logout()">
+            <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
                 Keluar
             </button>
 
