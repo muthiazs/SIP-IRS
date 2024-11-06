@@ -4,7 +4,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BAK_PembagianruangController;
+
 use App\Http\Controllers\IRSController;
+use App\Http\Controllers\Mhs_PengisianIRSController;
+
 
 // Redirect root to login
 Route::get('/', function () {
@@ -43,8 +46,17 @@ Route::group([], function () {
     // Pengisian IRS 
     Route::prefix('irsMahasiswa')->group(function () {
         Route::get('/', [IRSController::class, 'index'])->name('irsMahasiswa');
-
     });
+
+    // Pengisian IRS oleh Mahasiswa
+    Route::prefix('pengisianIRS')->group(function () {
+        Route::get('/', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('pengisianIRS');
+    });
+
+    // Pengambilan Matkul oleh Mahasiswa
+    // Route::prefix('pengambilanMatkul')->group(function () {
+    //     Route::get('/', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
+    // });
 });
 
 // Role Selection Page for Dosen
@@ -60,8 +72,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboardDekan', [DashboardController::class, 'indexDekan'])->name('dashboardDekan');
     Route::get('/dashboardKaprodi', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
     Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
+    Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
     Route::get('/IRSMahasiswa', [IRSController::class, 'index'])->name('irsMahasiswa');
+    Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('pengisianIRS');
+    // Route::get('/pengambilanMatkul', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
 });
 
+//Pembagian Ruang
+// Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
+
+// // Pengisian IRS
+// Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'index'])->name('pengisianIRS');
+
 // Route::get('/dashboardAkademik', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
-// Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');;

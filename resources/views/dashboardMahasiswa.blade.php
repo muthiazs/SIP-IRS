@@ -212,7 +212,7 @@
                     <span class="material-icons me-3">home</span>
                     Beranda
                 </a>
-                <a href="#" class="nav-link rounded d-flex align-items-center">
+                <a href="/pengisianIRS" class="nav-link rounded d-flex align-items-center">
                     <span class="material-icons me-3">description</span>
                     Rencana Studi
                 </a>
@@ -301,7 +301,7 @@
                         @if(isset($data['status']) && $data['status']['irs'] === 'ditolak')
                             <div class="alert alert-danger mb-0">
                                 Isian Rencana Studi Ditolak
-                                <a href="#" class="btn btn-danger mt-2">Lihat Detail</a>
+                                <a href="/pengisianIRS" class="btn btn-danger mt-2">Lihat Detail</a>
                             </div>
                         @endif
                     </div>
