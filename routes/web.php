@@ -4,7 +4,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BAK_PembagianruangController;
+
+
 use App\Http\Controllers\IRSController;
+
 
 // Redirect root to login
 Route::get('/', function () {
@@ -49,6 +52,7 @@ Route::group([], function () {
 
 // Role Selection Page for Dosen
 Route::get('/roleSelection', [AuthController::class, 'roleSelection'])->name('roleSelection');
+Route::get('/not-page', [AuthController::class, 'notPage'])->name('notPage');
 Route::post('/handleRoleSelection', [AuthController::class, 'handleRoleSelection'])->name('handleRoleSelection');
 Route::post('/submit-role-selection', [AuthController::class, 'submitRoleSelection'])->name('submitRoleSelection');
 
@@ -62,5 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/IRSMahasiswa', [IRSController::class, 'index'])->name('irsMahasiswa');
 });
 
+
+//Pembagian Ruang
+Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
 // Route::get('/dashboardAkademik', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
-// Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');;

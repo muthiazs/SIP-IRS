@@ -202,9 +202,9 @@
                 <div class="profile-img rounded-circle mx-auto mb-3">
                     <!-- Profile image placeholder -->
                 </div>
-                <h2 class="fs-4 fw-bold">{{ $data['dekan']['name'] }}</h2>
-                <p class="small opacity-75">NIP. {{ $data['dekan']['nip'] }}</p>
-                <p class="small opacity-75">{{ $data['dekan']['program_studi'] }}</p>
+                <h2 class="fs-4 fw-bold">{{ $dosen->dosen_nama }}</h2>
+                <p class="small opacity-75">"small opacity-75">NIP. {{ $dosen->nip }}</p>
+                <p class="small opacity-75">{{ $dosen->prodi_nama }}</p>
             </div>
 
         <!-- Navigation -->
@@ -243,7 +243,7 @@
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $data['dekan']['name'] }} 👋</h1>
+                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $dosen->username }}👋</h1>
                     <p class="text-muted">Semester Akademik Sekarang {{ $data['semester']['current'] }}</p>
                 </div>
                 <div class="position-relative">
