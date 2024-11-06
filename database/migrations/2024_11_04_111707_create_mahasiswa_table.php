@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('id_user')->constrained('users', 'id');
             $table->string('nim');
             $table->string('nama');
-            $table->foreignId('id_prodi')->constrained('program_studi', 'id_prodi');
-            $table->foreignId('id_dosen')->constrained('dosen', 'id_dosen');
+            $table->unsignedBigInteger('id_prodi');
+            $table->unsignedBigInteger('id_dosen');            
             $table->string('angkatan');
             $table->timestamp('created_at');
         });

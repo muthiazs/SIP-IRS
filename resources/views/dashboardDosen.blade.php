@@ -9,7 +9,10 @@
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
+    <!-- CSS dan JS dari public -->
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
+    <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+    <!-- <style>
         :root {
             --primary-color: #0d9488;
             --secondary-color: #99f6e4;
@@ -190,24 +193,25 @@
             border-radius: 30px;
         }
 
-    </style>
+    </style> -->
 </head>
 <body class="bg-light">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar p-4 text-white position-relative">
+        @include ('sidebar')
+        <!-- <div class="sidebar p-4 text-white position-relative"> -->
             <!-- Profile Section -->
-            <div class="text-center mb-4">
-                <div class="profile-img rounded-circle mx-auto mb-3">
+            <!-- <div class="text-center mb-4">
+                <div class="profile-img rounded-circle mx-auto mb-3"> -->
                     <!-- Profile image placeholder -->
-                </div>
+                <!-- </div>
                 <h2 class="fs-4 fw-bold" style="font-size: 18px !important;">{{ $dosen->dosen_nama }}</h2>
                 <p class="small opacity-75">NIP. {{ $dosen->nip }}</p>
-                <p class="small opacity-75">{{ $dosen->prodi_nama }}</p> <!-- Use prodi_nama -->
-            </div>
+                <p class="small opacity-75">{{ $dosen->prodi_nama }}</p> 
+            </div> -->
 
             <!-- Navigation -->
-            <nav class="nav flex-column gap-2">
+            <!-- <nav class="nav flex-column gap-2">
                 <a href="#" class="nav-link active rounded d-flex align-items-center p-3">
                     <span class="material-icons me-2">home</span>
                     Beranda
@@ -216,22 +220,19 @@
                     <span class="material-icons me-2">description</span>
                     IRS Mahasiswa
                 </a>
-            </nav>
+            </nav> -->
 
         
             <!-- Logout Button -->
-            <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
+            <!-- <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
                 Keluar
-            </button>
+            </button> -->
 
-             <!-- Wave decoration -->
-             <div class="wave-decoration">
-                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
-                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-                </svg>
-            </div>
-
-            
+        <!-- Wave decoration -->
+        <div class="wave-decoration"> 
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+            </svg>
         </div>
 
         <!-- Main Content -->

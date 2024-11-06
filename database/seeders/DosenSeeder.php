@@ -11,6 +11,14 @@ class DosenSeeder extends Seeder
     {
         $dosens = [
             [
+                'id_dosen' => 2,
+                'id_user' => 2, // id_user mulai dari angka 9
+                'nip' => '197108111997021004',
+                'nama' => 'Dr. Aris Sugiharto, S.Si., M.Kom.',
+                'prodi_id' => '1',
+                'created_at' => now(),
+            ],
+            [
                 'id_dosen' => 5,
                 'id_user' => 9, // id_user mulai dari angka 9
                 'nip' => '197308291998022001',
@@ -112,6 +120,14 @@ class DosenSeeder extends Seeder
                 'nip' => '199307302018031001',
                 'nama' => 'Arief Rachman Hakim, S.SI., M.Si.',
                 'prodi_id' => '4',
+                'created_at' => now(),
+            ],
+            [
+                'id_dosen' => 20, // plss ternyata ak error krn gk ad dosen yg id ny 20 ini dummy dulu aja adjkshfhjk
+                'id_user' => 22,
+                'nip' => '200405242406012214',
+                'nama' => 'Dewi Suwako Moriya',
+                'prodi_id' => '1',
                 'created_at' => now(),
             ],
         ];
