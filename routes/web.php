@@ -4,10 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BAK_PembagianruangController;
-<<<<<<< HEAD
-=======
 use App\Http\Controllers\IRSController;
->>>>>>> a34a343b43b8063289787131033b21208040a614
+use App\Http\Controllers\Mhs_PengisianIRSController;
 
 // Redirect root to login
 Route::get('/', function () {
@@ -48,6 +46,12 @@ Route::group([], function () {
         Route::get('/', [IRSController::class, 'index'])->name('irsMahasiswa');
 
     });
+
+    // Pengisian IRS oleh Mahasiswa
+    Route::prefix('pengisianIRS')->group(function () {
+        Route::get('/', [Mhs_PengisianIRSController::class, 'index'])->name('pengisianIRS');
+
+    });
 });
 
 // Role Selection Page for Dosen
@@ -63,10 +67,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboardDekan', [DashboardController::class, 'indexDekan'])->name('dashboardDekan');
     Route::get('/dashboardKaprodi', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
     Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
+    Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
     Route::get('/IRSMahasiswa', [IRSController::class, 'index'])->name('irsMahasiswa');
+    Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'index'])->name('pengisianIRS');
 });
 
-<<<<<<< HEAD
 //Pembagian Ruang
-Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
+// Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
+
+// // Pengisian IRS
+// Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'index'])->name('pengisianIRS');
+
 // Route::get('/dashboardAkademik', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
