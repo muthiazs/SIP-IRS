@@ -78,35 +78,24 @@ class DashboardController extends Controller
     {
     
         // Data dummy untuk dekan
-        $data = [
-            'dekan' => [
-                'name' => 'Sherlock Holmes',
-                'nip' => '194577123475985',
-                'program_studi' => 'S1-Informatika',
-                'roles1' => 'dosen',
-                'roles2' => 'dekan'
-            ],
-            'semester' => [
-                'current' => '2024/2025 Ganjil',
-                'period' => '1 Mar - 2 April'
-            ],
-            'stats' => [
-                'semester' => 5,
-                'ipk' => '3.6/4.0',
-                'sksk' => 86
-            ],
-            'status' => [
-                'irs' => 'ditolak', // or 'disetujui', 'pending'
-                'registrasi' => true
-            ],
-            'progress' => [
-                'belum_mengusulkan' => ['count' => 1, 'total' => 6],
-                'telah_dikonfirmasi' => ['count' => 4, 'total' => 6],
-                'belum_dikonfirmasi' => ['count' => 1, 'total' => 6]
-            ]
-        ];
+        $dekan = DB::table('dosen')
+                ->join('users', 'dosen.id_user', '=', 'users.id')
+                ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+                ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
+                ->where('users.roles2', '=', 'dekan') // Pastikan ini juga sesuai
+                ->where('dosen.id_user', '=', auth()->id())
+                ->select(
+                    'dosen.nip',
+                    'dosen.nama as dosen_nama',
+                    'program_studi.nama as prodi_nama',
+                    'dosen.prodi_id',
+                    'users.username'
+                )
+                ->first();
+
+        ;
     
-        return view('dashboardDekan', compact('data'));
+        return view('dashboardDekan', compact('dekan'));
     }
     
     public function indexAkademik()
