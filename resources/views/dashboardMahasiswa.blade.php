@@ -212,7 +212,7 @@
                     <span class="material-icons me-3">home</span>
                     Beranda
                 </a>
-                <a href="/pengisianIRS" class="nav-link rounded d-flex align-items-center">
+                <a href="/rencanaStudi" class="nav-link rounded d-flex align-items-center">
                     <span class="material-icons me-3">description</span>
                     Rencana Studi
                 </a>

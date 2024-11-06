@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 class DashboardController extends Controller
@@ -11,6 +12,7 @@ class DashboardController extends Controller
     // Method untuk Dashboard Dosen
     public function index()
     {
+
         $dosen = DB::table('dosen')
                     ->join('users', 'dosen.id_user', '=', 'users.id')
                     ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
@@ -81,8 +83,8 @@ class DashboardController extends Controller
         $dekan = DB::table('dosen')
                 ->join('users', 'dosen.id_user', '=', 'users.id')
                 ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
-                ->where('users.roles2', '=', 'dekan') // Pastikan ini juga sesuai
+                ->where('users.roles1', '=', 'dosen')
+                ->where('users.roles2', '=', 'dekan')
                 ->where('dosen.id_user', '=', auth()->id())
                 ->select(
                     'dosen.nip',
@@ -92,8 +94,6 @@ class DashboardController extends Controller
                     'users.username'
                 )
                 ->first();
-
-        ;
     
         return view('dashboardDekan', compact('dekan'));
     }
