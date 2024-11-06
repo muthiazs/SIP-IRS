@@ -52,6 +52,7 @@ Route::group([], function () {
 
 // Role Selection Page for Dosen
 Route::get('/roleSelection', [AuthController::class, 'roleSelection'])->name('roleSelection');
+Route::get('/not-page', [AuthController::class, 'notPage'])->name('notPage');
 Route::post('/handleRoleSelection', [AuthController::class, 'handleRoleSelection'])->name('handleRoleSelection');
 Route::post('/submit-role-selection', [AuthController::class, 'submitRoleSelection'])->name('submitRoleSelection');
 

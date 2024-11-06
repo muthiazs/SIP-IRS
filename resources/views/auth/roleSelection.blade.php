@@ -17,25 +17,30 @@
                         </div>
                     @endif
                     
-                    <form action="{{ route('handleRoleSelection') }}" method="POST">
+                    <form method="POST" action="{{ route('handleRoleSelection') }}">
                         @csrf
                         <div>
-                            <input type="radio" id="Doswal" name="roles2" value="Dosen Wali" />
-                            <label for="Doswal">Dosen Wali</label>
+                            <label>
+                                <input type="radio" name="role" value="dekan" required>
+                                Dekan
+                            </label>
                         </div>
                         <div>
-                            <input type="radio" id="Kaprodi" name="roles2" value="Kepala Prodi" />
-                            <label for="Kaprodi">Kepala Prodi</label>
+                            <label>
+                                <input type="radio" name="role" value="kaprodi" required>
+                                Kaprodi
+                            </label>
                         </div>
                         <div>
-                            <input type="radio" id="Dekan" name="roles2" value="Dekan" />
-                            <label for="Dekan">Dekan</label>
+                            <label>
+                                <input type="radio" name="role" value="dosen_wali" required>
+                                Dosen Wali
+                            </label>
                         </div>
-                        
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-primary">OK</button>
-                        </div>
+                        <button class='btn-primary text-white' type="submit">Pilih Role</button>
                     </form>
+
+
                 </div>
             </div>
         </div>

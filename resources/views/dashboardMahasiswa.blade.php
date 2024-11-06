@@ -198,11 +198,13 @@
                 <div class="profile-img mb-3">
                     <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
                 </div>
-                <h5 class="mb-1">{{ $data['mahasiswa']['name'] }}</h5>
-                <p class="small mb-1">NIM. {{ $data['mahasiswa']['nim'] }}</p>
-                <p class="small mb-1">{{ $data['mahasiswa']['program_studi'] }}</p>
-                <p class="small mb-1">{{ $data['user']['name'] }}</p>
-                <p class="small">NIP. {{ $data['user']['nip'] }}</p>
+                <h5 class="mb-1">{{$mahasiswa->nama_mhs}}</h5>
+                <p class="small mb-1">NIM. {{ $mahasiswa->nim }}</p>
+                <p class="small mb-1"> S1 {{$mahasiswa->prodi_nama}}</p>
+                <br>
+                <p class="small mb-1"> Dosen Wali</p>
+                <p class="small mb-1"> {{$mahasiswa->nama_doswal}}</p>
+                <p class="small">NIP. {{$mahasiswa->nip}}</p>
             </div>
 
             <nav class="nav flex-column gap-2 mb-4">
@@ -239,8 +241,8 @@
         <div class="flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="h3 mb-1">Selamat Datang {{ $data['mahasiswa']['name'] }} 👋</h1>
-                    <p class="text-muted mb-0">Semester Akademik {{ $data['semester']['current'] }}</p>
+                    <h1 class="h3 mb-1">Selamat Datang {{$mahasiswa->username }} 👋</h1>
+                    <p class="text-muted mb-0">Semester Akademik Sekarang</p>
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-primary rounded-circle p-2">
@@ -256,7 +258,7 @@
             <div class="period-banner mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="fw-medium">Periode Pengisian IRS</span>
-                    <span class="fw-medium">{{ $data['semester']['period'] }}</span>
+                    <!-- <span class="fw-medium"> $data['semester']['period'] </span> -->
                 </div>
             </div>
 
@@ -265,19 +267,19 @@
                 <div class="col-md-4">
                     <div class="stats-card text-center">
                         <h6 class="text-muted mb-2">Semester Studi</h6>
-                        <h2 class="mb-0">{{ $data['stats']['semester'] }}</h2>
+                        <!-- <h2 class="mb-0"> $data['stats']['semester']</h2> -->
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stats-card text-center">
                         <h6 class="text-muted mb-2">IPK</h6>
-                        <h2 class="mb-0">{{ $data['stats']['ipk'] }}</h2>
+                        <!-- <h2 class="mb-0"> $data['stats']['ipk'] </h2> -->
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stats-card text-center">
                         <h6 class="text-muted mb-2">SKSk</h6>
-                        <h2 class="mb-0">{{ $data['stats']['sksk'] }}</h2>
+                        <!-- <h2 class="mb-0"> $data['stats']['sksk'] </h2> -->
                     </div>
                 </div>
             </div>
@@ -296,7 +298,7 @@
                 <div class="col-md-6">
                     <div class="stats-card">
                         <h5 class="mb-3">Status IRS</h5>
-                        @if($data['status']['irs'] === 'ditolak')
+                        @if(isset($data['status']) && $data['status']['irs'] === 'ditolak')
                             <div class="alert alert-danger mb-0">
                                 Isian Rencana Studi Ditolak
                                 <a href="#" class="btn btn-danger mt-2">Lihat Detail</a>
@@ -313,7 +315,7 @@
                         <span class="material-icons text-primary me-2">how_to_reg</span>
                         <h5 class="mb-0">Registrasi</h5>
                     </div>
-                    @if($data['status']['registrasi'])
+                    @if(isset($data['status']['registrasi']))
                         <span class="badge bg-success">Sudah Registrasi</span>
                     @else
                         <span class="badge bg-danger">Belum Registrasi</span>
