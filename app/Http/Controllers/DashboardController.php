@@ -2,99 +2,82 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class DashboardController extends Controller
 {
     // Method untuk Dashboard Dosen
     public function index()
     {
-        // Data dummy untuk dosen
-        $data = [
-            'user' => [
-                'name' => 'Bill Gates',
-                'nip' => '198203092006041002',
-                'program_studi' => 'S1 Informatika'
-            ],
-            'semester' => [
-                'current' => '2024/2025 Ganjil',
-                'period' => '1 Mar - 2 April'
-            ],
-            'progress' => [
-                'disetujui' => ['count' => 40, 'total' => 56],
-                'ditolak' => ['count' => 5, 'total' => 46],
-                'pending' => ['count' => 11, 'total' => 56]
-            ]
-        ];
-        return view('dashboardDosen', compact('data'));
+        $dosen = DB::table('dosen')
+                    ->join('users', 'dosen.id_user', '=', 'users.id')
+                    ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+                    ->select(
+                        'dosen.nip',
+                        'dosen.nama as dosen_nama',         // Alias to avoid conflict
+                        'program_studi.nama as prodi_nama', // Alias for program_studi's nama
+                        'dosen.prodi_id',
+                        'users.username'
+                    )
+                    ->where ('dosen.id_user', '=', auth()->id())
+                    ->first(); 
+        return view('dashboardDosen', compact('dosen'));
+
     }
+
 
     // Method untuk Dashboard Kaprodi
     public function indexKaprodi()
     {
-        // Data dummy untuk kaprodi
-        $data = [
-            'kaprodi' => [
-                'name' => 'Dewi Suwako Moriya',
-                'nip' => '198203092006041002',
-                'program_studi' => 'S1 Informatika'
-            ],
-            'semester' => [
-                'current' => '2024/2025 Ganjil',
-                'period' => '1 Mar - 2 April'
-            ],
-            'progressIRSMahasiswaKaprodi' => [
-                'sudahKonfirmasi' => ['count' => 40, 'total' => 56],
-                'belumKonfirmasi' => ['count' => 5, 'total' => 46],
-                'sudahIsiIRS' => ['count' => 11, 'total' => 56],
-                'belumIsiIRS' => ['count' => 11, 'total' => 56]
-            ],
-            'progressMahasiswaProdiKaprodi' => [
-                'mangkir' => ['count' => 11, 'total' => 56],
-                'cuti' => ['count' => 11, 'total' => 56],
-                'sudahKonfirmasi' => ['count' => 40, 'total' => 56],
-                'belumKonfirmasi' => ['count' => 5, 'total' => 46]
-            ]
-        ];
-        
 
-        return view('dashboardKaprodi', compact('data'));
+        $kaprodi = DB::table('dosen')
+                        ->join('users', 'dosen.id_user', '=', 'users.id')
+                        ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+                        ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
+                        ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
+                        ->where('dosen.id_user', '=', auth()->id())
+                        ->select(
+                            'dosen.nip',
+                            'dosen.nama as dosen_nama',
+                            'program_studi.nama as prodi_nama',
+                            'dosen.prodi_id',
+                            'users.username'
+                        )
+                        ->first();
+
+        return view('dashboardKaprodi', compact('kaprodi'));
     }
+
+    
 
 
     // Method untuk Dashboard Mahasiswa
     public function indexMahasiswa()
 {
-    $data = [
-        'mahasiswa' => [
-            'name' => 'Draco Lucius Malfoy',
-            'nim' => '24060122130071',
-            'program_studi' => 'S1 Informatika'
-        ],
-        'user' => [
-            'name' => 'Bill Gates',
-            'nip' => '198203092006041002'
-        ],
-        'semester' => [
-            'current' => '2024/2025 Ganjil',
-            'period' => '1 Mar - 2 April'
-        ],
-        'stats' => [
-            'semester' => 5,
-            'ipk' => '3.6/4.0',
-            'sksk' => 86
-        ],
-        'status' => [
-            'irs' => 'ditolak',
-            'registrasi' => true
-        ]
-    ];
+    $mahasiswa = DB::table('mahasiswa')
+                ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+                ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+                ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+                ->where('mahasiswa.id_user', auth()->id())
+                ->select(
+                    'mahasiswa.nim',
+                    'mahasiswa.nama as nama_mhs',
+                    'program_studi.nama as prodi_nama',
+                    'dosen.nama as nama_doswal',
+                    'dosen.nip',
+                    'users.username'
+                ) 
+                ->first();
     
-    return view('dashboardMahasiswa', compact('data'));  // Gunakan dot notation
+    return view('dashboardMahasiswa', compact('mahasiswa'));  // Gunakan dot notation
 }
     //Method untuk Dasboard Dekan
     public function indexDekan()
     {
-        //Data dummy untuk dekan
+    
+        // Data dummy untuk dekan
         $data = [
             'dekan' => [
                 'name' => 'Sherlock Holmes',
@@ -122,8 +105,10 @@ class DashboardController extends Controller
                 'belum_dikonfirmasi' => ['count' => 1, 'total' => 6]
             ]
         ];
-            return view('dashboardDekan', compact('data'));
+    
+        return view('dashboardDekan', compact('data'));
     }
+    
     public function indexAkademik()
     {
         // Contoh data dummy, nantinya bisa diambil dari database

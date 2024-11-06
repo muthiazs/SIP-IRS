@@ -122,9 +122,9 @@
                 <div class="profile-img mb-3 mx-auto">
                     <!-- Placeholder for Profile Image -->
                 </div>
-                <h2 class="fs-5 fw-bold">{{ $data['kaprodi']['name'] }}</h2>
-                <p class="small opacity-75">NIP. {{ $data['kaprodi']['nip'] }}</p>
-                <p class="small opacity-75">{{ $data['kaprodi']['program_studi'] }}</p>
+                <h2 class="fs-5 fw-bold">{{ $kaprodi->dosen_nama }}</h2>
+                <p class="small opacity-75">NIP. {{ $kaprodi->nip }}</p>
+                <p class="small opacity-75">{{ $kaprodi->prodi_nama }}</p>
             </div>
 
             <!-- Navigation -->
@@ -162,8 +162,8 @@
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $data['kaprodi']['name'] }} 👋</h1>
-                    <p class="text-muted">Semester Akademik {{ $data['semester']['current'] }}</p>
+                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $kaprodi->username }} 👋</h1>
+                    <p class="text-muted">Semester Akademik sekarang</p>
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-teal rounded-circle p-2">
@@ -176,7 +176,7 @@
             <!-- Period Banner -->
             <div class="period-banner p-3 rounded-3 mb-4 d-flex justify-content-between">
                 <span>Periode Persetujuan Ruang Kelas</span>
-                <span>{{ $data['semester']['period'] }}</span>
+                <span> $data['semester']['period'] </span>
             </div>
 
             <!-- Cards Section -->
@@ -199,19 +199,19 @@
                             <h5 class="fw-bold">Progress Mahasiswa</h5>
                             <div class="d-flex justify-content-around mt-3">
                                 <div>
-                                    <span class="fs-4 fw-bold text-danger">{{ $data['progressIRSMahasiswaKaprodi']['belumKonfirmasi']['count'] }}</span>
+                                    <span class="fs-4 fw-bold text-danger">$data['progressIRSMahasiswaKaprodi']['belumKonfirmasi']['count'] </span>
                                     <p class="small text-muted">Belum Konfirmasi</p>
                                 </div>
                                 <div>
-                                    <span class="fs-4 fw-bold text-konfirmasi">{{ $data['progressIRSMahasiswaKaprodi']['sudahKonfirmasi']['count'] }}</span>
+                                    <span class="fs-4 fw-bold text-konfirmasi">$data['progressIRSMahasiswaKaprodi']['sudahKonfirmasi']['count']</span>
                                     <p class="small text-muted">Telah Konfirmasi</p>
                                 </div>
                                 <div>
-                                    <span class="fs-4 fw-bold text-danger">{{ $data['progressIRSMahasiswaKaprodi']['belumIsiIRS']['count'] }}</span>
+                                    <span class="fs-4 fw-bold text-danger">$data['progressIRSMahasiswaKaprodi']['belumIsiIRS']['count'] </span>
                                     <p class="small text-muted">Belum Mengisi IRS</p>
                                 </div>
                                 <div>
-                                    <span class="fs-4 fw-bold text-konfirmasi">{{ $data['progressIRSMahasiswaKaprodi']['sudahIsiIRS']['count'] }}</span>
+                                    <span class="fs-4 fw-bold text-konfirmasi"> $data['progressIRSMahasiswaKaprodi']['sudahIsiIRS']['count']</span>
                                     <p class="small text-muted">Telah Mengisi IRS</p>
                                 </div>
                             </div>
