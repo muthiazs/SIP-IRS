@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 
 class DashboardController extends Controller
@@ -12,7 +11,6 @@ class DashboardController extends Controller
     // Method untuk Dashboard Dosen
     public function index()
     {
-
         $dosen = DB::table('dosen')
                     ->join('users', 'dosen.id_user', '=', 'users.id')
                     ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
@@ -80,22 +78,35 @@ class DashboardController extends Controller
     {
     
         // Data dummy untuk dekan
-        $dekan = DB::table('dosen')
-                ->join('users', 'dosen.id_user', '=', 'users.id')
-                ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                ->where('users.roles1', '=', 'dosen')
-                ->where('users.roles2', '=', 'dekan')
-                ->where('dosen.id_user', '=', auth()->id())
-                ->select(
-                    'dosen.nip',
-                    'dosen.nama as dosen_nama',
-                    'program_studi.nama as prodi_nama',
-                    'dosen.prodi_id',
-                    'users.username'
-                )
-                ->first();
+        $data = [
+            'dekan' => [
+                'name' => 'Sherlock Holmes',
+                'nip' => '194577123475985',
+                'program_studi' => 'S1-Informatika',
+                'roles1' => 'dosen',
+                'roles2' => 'dekan'
+            ],
+            'semester' => [
+                'current' => '2024/2025 Ganjil',
+                'period' => '1 Mar - 2 April'
+            ],
+            'stats' => [
+                'semester' => 5,
+                'ipk' => '3.6/4.0',
+                'sksk' => 86
+            ],
+            'status' => [
+                'irs' => 'ditolak', // or 'disetujui', 'pending'
+                'registrasi' => true
+            ],
+            'progress' => [
+                'belum_mengusulkan' => ['count' => 1, 'total' => 6],
+                'telah_dikonfirmasi' => ['count' => 4, 'total' => 6],
+                'belum_dikonfirmasi' => ['count' => 1, 'total' => 6]
+            ]
+        ];
     
-        return view('dashboardDekan', compact('dekan'));
+        return view('dashboardDekan', compact('data'));
     }
     
     public function indexAkademik()
