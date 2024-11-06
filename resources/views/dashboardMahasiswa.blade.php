@@ -299,7 +299,7 @@
                         @if($data['status']['irs'] === 'ditolak')
                             <div class="alert alert-danger mb-0">
                                 Isian Rencana Studi Ditolak
-                                <a href="#" class="btn btn-danger mt-2">Lihat Detail</a>
+                                <a href="/pengisianIRS" class="btn btn-danger mt-2">Lihat Detail</a>
                             </div>
                         @endif
                     </div>
