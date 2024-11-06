@@ -1,0 +1,40 @@
+[33m1d4ebdf[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #10 from nadivaulia/nadiva_branch
+[33m8bbaa3b[m Pengisian IRS oleh Mhs
+[33md72105e[m Pengisian IRS oleh Mhs
+[33ma34a343[m benerin tampilan list usulan irs
+[33mafa307a[m benerin tampilan list usulan irs
+[33mbf7be56[m benerin tampilan list usulan irs
+[33m03eeaeb[m ui list usulan irsMahasiswa di dosen (v1) masi jelek bgt berantakan tp udah bisa search yh jd yauda besok lanjutin lagi mksh
+[33m3a158fd[m database migration & seeder fak,prodi,user,mhs,dosen
+[33m2fcb012[m Merge pull request #9 from aurelliatirza/main
+[33m3b0003d[m Perubahan posisi button keluar dan wave decoration
+[33me2fcc85[m Merge pull request #8 from capinowo/main
+[33m3cbe9e6[m Update: Database (Struktur Tabel, Fixed)
+[33m76303e3[m Merge branch 'main' of https://github.com/capinowo/SIP-IRS-1
+[33m79dbba2[m Update: Database
+[33mfd83028[m Merge branch 'muthiazs:main' into main
+[33m631aee6[m merge nadiva dan cek
+[33m0e6713b[m Merge pull request #6 from nadivaulia/nadiva_branch
+[33m3389dde[m Merge branch 'muthiazs:main' into main
+[33m2d03fdd[m Dashboard Bagian Akademik ralat
+[33m44a76e1[m dashboard mahasiswa
+[33mad5b4b8[m dashboard mahasiswa
+[33m27c1d8d[m Merge branch 'muthiazs:main' into main
+[33mb4ae198[m Merge pull request #5 from nadivaulia/nadiva_branch
+[33m49ffeab[m Dashboard Bagian Akademik
+[33me2dd4a4[m Merge branch 'muthiazs:main' into main
+[33mfb26025[m perbarui font dashboard jadi poppins
+[33m7ef80bd[m solve conflict merge tirza, perbarui style dashboard
+[33m72a3b70[m mege tirza
+[33m3430fa0[m Merge pull request #2 from aurelliatirza/main
+[33mb4d0a8b[m Merge branch 'main' of https://github.com/capinowo/SIP-IRS-1
+[33m2a1559b[m Update: Database (Struktur Tabel)
+[33mbe71dee[m pull Tirza
+[33m5dfbb9f[m 27 okt resolve conflict abis merge
+[33m917fa15[m Resolve merge conflict in routes/web.php
+[33ma019401[m Save changes
+[33m203ed48[m Merge pull request #1 from capinowo/main
+[33mdb833ea[m Update: Add Login Kaprodi
+[33m33c1f61[m login 1 role dosen
+[33m1604fc5[m Dashoar Pembimbing Akademik
+[33m1ab5e6d[m first commit
