@@ -8,7 +8,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
+    <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+
+    <!-- <style>
         :root {
             --primary-color: #0d9488;
             --secondary-color: #99f6e4;
@@ -188,12 +191,20 @@
             border-radius: 30px;
         }
 
-    </style>
+    </style> -->
 </head>
 <body class="bg-light">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar p-4 position-relative">
+        @include ('sidebar')
+
+        <!-- Wave decoration -->
+        <div class="wave-decoration"> 
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+            </svg>
+        </div>
+        <!-- <div class="sidebar p-4 position-relative">
             <div class="text-center mb-4">
                 <div class="profile-img mb-3">
                     <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
@@ -220,22 +231,22 @@
                     <span class="material-icons me-3">assessment</span>
                     Hasil Studi
                 </a>
-            </nav>
+            </nav> -->
 
             <!-- Logout Button -->
-            <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
+            <!-- <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3"> -->
                 {{-- <span class="material-icons align-middle me-2">logout</span> --}}
-                Keluar
-            </button>
+                <!-- Keluar
+            </button> -->
 
 
-             <!-- Wave decoration -->
+             <!-- Wave decoration
              <div class="wave-decoration">
                 <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 200%; width: 175%;">
                     <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
                 </svg>
             </div>
-        </div>
+        </div> -->
 
         <!-- Main Content -->
         <div class="flex-grow-1 p-4">
