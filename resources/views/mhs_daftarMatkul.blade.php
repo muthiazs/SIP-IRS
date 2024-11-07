@@ -253,11 +253,11 @@
                 <div class="profile-img mb-3">
                     <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
                 </div>
-                <h5 class="mb-1">{{ $data['mahasiswa']['name'] }}</h5>
-                <p class="small mb-1">NIM. {{ $data['mahasiswa']['nim'] }}</p>
-                <p class="small mb-1">{{ $data['mahasiswa']['program_studi'] }}</p>
-                <p class="small mb-1">{{ $data['user']['name'] }}</p>
-                <p class="small">NIP. {{ $data['user']['nip'] }}</p>
+                <h5 class="mb-1">{{ $mahasiswa->nama_mhs }}</h5>
+                <p class="small mb-1">NIM. {{ $mahasiswa->nim }}</p>
+                <p class="small mb-1">{{ $mahasiswa->prodi_nama}}</p>
+                <p class="small mb-1">{{ $mahasiswa->nama_doswal }}</p>
+                <p class="small">NIP. {{ $mahasiswa->nip }}</p>
             </div>
 
             <nav class="nav flex-column gap-2 mb-4">
@@ -295,8 +295,8 @@
         <div class="flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="h3 mb-1">Selamat Datang {{ $data['mahasiswa']['name'] }} 👋</h1>
-                    <p class="text-muted mb-0">Semester Akademik {{ $data['semester']['current'] }}</p>
+                    <h1 class="h3 mb-1">Selamat Datang {{ $mahasiswa->username }} 👋</h1>
+                    <p class="text-muted mb-0">Semester Akademik Sekarang</p>
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-primary rounded-circle p-2">
@@ -312,7 +312,7 @@
             <div class="period-banner mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="fw-medium">Periode Pengisian IRS</span>
-                    <span class="fw-medium">{{ $data['semester']['period'] }}</span>
+                    <span class="fw-medium">$data['semester']['period'] </span>
                 </div>
             </div>
 
@@ -334,11 +334,22 @@
                     </tr>
                 </thead>
                 <tbody id="irsTable">
-                    </tbody>
+                    @foreach($daftarMk as $index => $daftarM)  <!-- Gunakan nama yang sama, 'daftarMk' -->
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $daftarM->kode_matkul }}</td>
+                        <td>{{ $daftarM->nama_matkul }}</td>
+                        <td>{{ $daftarM->semester }}</td>
+                        <td>{{ $daftarM->sks }}</td>
+                        <td><input type="checkbox" name="selected_matkul[]" value="{{ $daftarM->kode_matkul }}"></td>
+                    </tr>
+                    @endforeach
+                </tbody>
             </table>
 
+
         <!-- Pengisian IRS Cards -->
-        {{-- <div class="col-12">
+        <div class="col-12">
             <div class="card shadow-sm h-100">
               <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi</h5>
             <div class="card-body d-flex flex-column">
@@ -346,25 +357,25 @@
                     <div class="d-flex">
                         <div class="margincard">
                             <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">{{ $data['pengisianirs']['maxbeban'] }} SKS</span>
+                            <span class="badge irs-badge" style="background-color: #67C3CC;">$data['pengisianirs']['maxbeban'] SKS</span>
                         </div>
                         <div class="margincard" style="margin-left: 10px;">
                             <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">{{ $data['pengisianirs']['total'] }} SKS</span>
+                            <span class="badge irs-badge" style="background-color: #67C3CC;"> $data['pengisianirs']['total'] SKS</span>
                         </div>
                     </div>
                     <div>
-                        {{-- <div class="margincard">
+                        <div class="margincard">
                             <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
                             <button class="btn btn-pilihmk">
                                 <a href="/pengambilanMatkul" class="nav-link active">
                                     Pilih Mata Kuliah
                                 </a> 
                             </button>
-                        </div> --}}
-                    {{-- </div>
+                        </div>
+                    </div>
                 </div>
-            </div> --}}
+            </div> 
 
             
 
