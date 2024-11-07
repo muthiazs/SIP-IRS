@@ -52,7 +52,8 @@
             </div>
             <h2 class="fs-4 fw-bold">{{ $user->username }}</h2>
             <p class="small opacity-75">NIP. {{ $user->nip }}</p>
-            <p class="small opacity-75">{{ $dosen->program_studi }}</p>
+            {{-- <p class="small opacity-75">{{ $dosen->program_studi }}</p> --}}
+            <p class="small opacity-75">Fisika</p>
         </div>
 
         <nav class="nav flex-column gap-2 mb-4">
