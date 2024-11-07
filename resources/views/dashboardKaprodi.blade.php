@@ -9,7 +9,11 @@
     <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <style>
+    <!-- CSS dan JS dari public -->
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
+    <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+
+    <!-- <style>
         /* Buat Side bar */
         .sidebar {
             border-top-right-radius: 30px;
@@ -111,24 +115,25 @@
             opacity: 0.1;
         }
 
-    </style>
+    </style> -->
 </head>
 <body class="bg-light">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar p-4 text-white position-relative">
+        @include ('sidebar')
+        <!-- <div class="sidebar p-4 text-white position-relative"> -->
             <!-- Profile Section -->
-            <div class="text-center mb-4">
-                <div class="profile-img mb-3 mx-auto">
+            <!-- <div class="text-center mb-4">
+                <div class="profile-img mb-3 mx-auto"> -->
                     <!-- Placeholder for Profile Image -->
-                </div>
+                <!-- </div>
                 <h2 class="fs-5 fw-bold">{{ $kaprodi->dosen_nama }}</h2>
                 <p class="small opacity-75">NIP. {{ $kaprodi->nip }}</p>
                 <p class="small opacity-75">{{ $kaprodi->prodi_nama }}</p>
-            </div>
+            </div>  -->
 
             <!-- Navigation -->
-            <nav class="nav flex-column gap-2">
+            <!-- <nav class="nav flex-column gap-2">
                 <a href="#" class="nav-link active rounded d-flex align-items-center p-3">
                     <span class="material-icons me-2">home</span>
                     Beranda
@@ -141,21 +146,20 @@
                     <span class="material-icons me-2">assessment</span>
                     Hasil Studi
                 </a>
-            </nav>
+            </nav> -->
 
             <!-- Logout Button -->
-            <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
+            <!-- <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
                 {{-- <span class="material-icons align-middle me-2">logout</span> --}}
                 Keluar
-            </button>
+            </button> -->
 
-             <!-- Wave decoration -->
-             <div class="wave-decoration">
-            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 40%; width: 200%;">
-                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-            </svg>
-        </div>
-        </div>
+            <!-- Wave decoration -->
+            <div class="wave-decoration"> 
+                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+                </svg>
+            </div>
 
         <!-- Main Content -->
         <div class="flex-grow-1 p-4">
