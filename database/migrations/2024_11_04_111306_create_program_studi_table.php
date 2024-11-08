@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id_prodi');
             $table->string('nama');
             $table->bigInteger('kaprodi_id');
-            $table->foreignId('id_fak')->constrained('fakultas', 'id_fak');
+            $table->unsignedBigInteger('id_fak');
             $table->timestamp('created_at');
         });
     }
