@@ -216,7 +216,7 @@
                     <span class="material-icons me-2">home</span>
                     Beranda
                 </a>
-                <a href="{{ route('irsMahasiswa') }}" class="nav-link rounded d-flex align-items-center p-3">
+                <a href="{{ route('dosen_irsMahasiswa') }}" class="nav-link rounded d-flex align-items-center p-3">
                     <span class="material-icons me-2">description</span>
                     IRS Mahasiswa
                 </a>
