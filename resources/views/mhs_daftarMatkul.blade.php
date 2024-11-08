@@ -248,7 +248,8 @@
 <body class="bg-light">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar p-4 position-relative">
+        @include ('sidebar')
+        {{-- <div class="sidebar p-4 position-relative">
             <div class="text-center mb-4">
                 <div class="profile-img mb-3">
                     <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
@@ -289,9 +290,10 @@
                     <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
                 </svg>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Main Content -->
+        
         <div class="flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
@@ -307,6 +309,35 @@
                     </span>
                 </div>
             </div>
+
+             <!-- Pengisian IRS Cards -->
+        <div class="col-12">
+            <div class="card shadow-sm h-100">
+              <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi</h5>
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex">
+                        <div class="margincard">
+                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
+                            <span class="badge irs-badge" style="background-color: #67C3CC;">$data['pengisianirs']['maxbeban'] SKS</span>
+                        </div>
+                        <div class="margincard" style="margin-left: 10px;">
+                            <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
+                            <span class="badge irs-badge" style="background-color: #67C3CC;"> $data['pengisianirs']['total'] SKS</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="margincard">
+                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
+                            <button class="btn btn-pilihmk">
+                                <a href="/pengambilanMatkul" class="nav-link active">
+                                    Pilih Mata Kuliah
+                                </a> 
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div> 
 
             <!-- Period Banner -->
             <div class="period-banner mb-4">
@@ -348,34 +379,7 @@
             </table>
 
 
-        <!-- Pengisian IRS Cards -->
-        <div class="col-12">
-            <div class="card shadow-sm h-100">
-              <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi</h5>
-            <div class="card-body d-flex flex-column">
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex">
-                        <div class="margincard">
-                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">$data['pengisianirs']['maxbeban'] SKS</span>
-                        </div>
-                        <div class="margincard" style="margin-left: 10px;">
-                            <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;"> $data['pengisianirs']['total'] SKS</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="margincard">
-                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            <button class="btn btn-pilihmk">
-                                <a href="/pengambilanMatkul" class="nav-link active">
-                                    Pilih Mata Kuliah
-                                </a> 
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div> 
+       
 
             
 
