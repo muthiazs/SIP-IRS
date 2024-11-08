@@ -215,9 +215,9 @@
                 <div class="profile-img rounded-circle mx-auto mb-3"> -->
                     <!-- Profile image placeholder -->
                 <!-- </div>
-                <h2 class="fs-4 fw-bold">{{ $dosen->dosen_nama }}</h2>
+                {{-- <h2 class="fs-4 fw-bold">{{ $dosen->dosen_nama }}</h2>
                 <p class="small opacity-75">"small opacity-75">NIP. {{ $dosen->nip }}</p>
-                <p class="small opacity-75">{{ $dosen->prodi_nama }}</p>
+                <p class="small opacity-75">{{ $dosen->prodi_nama }}</p> --}}
             </div> -->
 
         <!-- Navigation -->
