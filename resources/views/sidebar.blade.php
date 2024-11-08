@@ -15,10 +15,11 @@
         <!-- SIDEBAR AKADEMIK -->
         <div class="text-center mb-4">
             <div class="profile-img rounded-circle mx-auto mb-3">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
                 <!-- Profile image placeholder -->
             </div>
             <h2 class="fs-4 fw-bold">{{ $user->username }}</h2>
-            <p class="small opacity-75">NIP. {{ $user->dosen->nip }}</p>
+            <p class="small opacity-75">NIP. {{ $user->nip }}</p>
             <p class="small opacity-75">{{ "Tenaga Kependidikan" }}</p>
             <p class="small opacity-75">{{ "Periode" }}</p>
         </div>
@@ -34,54 +35,44 @@
             </a>
         </nav>
 
-        <nav class="nav flex-column gap-2">
-            <a href="/dashboardAkademik" class="nav-link active rounded d-flex align-items-center p-3">
-                <span class="material-icons me-2">home</span>
-                Beranda
-            </a>
-            <a href="/pembagianruang" class="nav-link rounded d-flex align-items-center p-3">
-                <span class="material-icons me-2">class</span>
-                Pembagian Ruang
-            </a>
-        </nav>
-
-        @elseif ($userRole2 == 'dekan')
-        <!-- SIDEBAR DEKAN -->
-        <div class="text-center mb-4">
-            <div class="profile-img rounded-circle mx-auto mb-3">
-                <!-- Profile image placeholder -->
-            </div>
-            <h2 class="fs-4 fw-bold">{{ $dekan->dosen_nama }}</h2>
-            <p class="small opacity-75">NIP. {{ $dekan->nip }}</p>
-            {{-- <p class="small opacity-75">{{ $dekan->prodi_nama }}</p> --}}
-            <p class="small opacity-75">Fisika</p>
+    @elseif ($userRole2 == 'dekan')
+    <!-- SIDEBAR DEKAN -->
+    <div class="text-center mb-4">
+        <div class="profile-img rounded-circle mx-auto mb-3">
+            <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
+            <!-- Profile image placeholder -->
         </div>
+        <h2 class="fs-4 fw-bold">{{ $dekan->dosen_nama }}</h2>
+        <p class="small opacity-75">NIP. {{ $dekan->nip }}</p>
+        <p class="small opacity-75">Dekan<br>Fakultas Sains dan Matematika</p>
+        <p class="small opacity-75">Program Studi S1 {{ $dekan->prodi_nama }} <br> Fakultas Sains dan Matematika</p>
+    </div>
 
-        <nav class="nav flex-column gap-2 mb-4">
-            <a href="#" class="nav-link active rounded d-flex align-items-center">
-                <span class="material-icons me-3">home</span>
-                Beranda
-            </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
-                <span class="material-icons me-3">description</span>
-                Persetujuan Ruang
-            </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
-                <span class="material-icons me-3">assessment</span>
-                Persetujuan Jadwal Kuliah
-            </a>
-        </nav>
-
+    <nav class="nav flex-column gap-2 mb-4">
+        <a href="#" class="nav-link active rounded d-flex align-items-center">
+            <span class="material-icons me-3">home</span>
+            Beranda
+        </a>
+        <a href="#" class="nav-link rounded d-flex align-items-center">
+            <span class="material-icons me-3">description</span>
+            Persetujuan Ruang
+        </a>
+        <a href="#" class="nav-link rounded d-flex align-items-center">
+            <span class="material-icons me-3">assessment</span>
+            Persetujuan Jadwal Kuliah
+        </a>
+    </nav>
 
     @elseif ($userRole == 'dosen' && $userRole2 == '')
         <!-- SIDEBAR DOSEN -->
         <div class="text-center mb-4">
             <div class="profile-img rounded-circle mx-auto mb-3">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
                 <!-- Profile image placeholder -->
             </div>
             <h2 class="fs-4 fw-bold">{{ $user->username }}</h2>
-            <p class="small opacity-75">NIP. {{ $user->nip }}</p>
-            <p class="small opacity-75">{{ $user->prodi_nama }}</p>
+            <p class="small opacity-75">NIP. {{ $dosen->nip }}</p>
+            <p class="small opacity-75">Dosen<br>Program Studi S1 {{ $dosen->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
         </div>
 
         <nav class="nav flex-column gap-2 mb-4">
@@ -103,8 +94,8 @@
                 <!-- Profile image placeholder -->
             </div>
             <h2 class="fs-4 fw-bold">{{ $user->username }}</h2>
-            <p class="small opacity-75">NIP. {{ $user->nip }}</p>
-            <p class="small opacity-75">{{ $user->prodi_nama }}</p>
+            <p class="small opacity-75">NIP. {{ $kaprodi->nip }}</p>
+            <p class="small opacity-75">Ketua Program Studi<br>Program Studi S1 {{ $kaprodi->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
         </div>
 
         <nav class="nav flex-column gap-2 mb-4">
@@ -130,9 +121,8 @@
             </div>
             <h2 class="fs-4 fw-bold">{{ $mahasiswa->nama_mhs }}</h2>
             <p class="small opacity-75">NIM. {{ $mahasiswa->nim }}</p>
-            <p class="small opacity-75">S1 {{ $mahasiswa->prodi_nama }}</p>
-            <p class="small opacity-75">Dosen Wali: {{ $mahasiswa->nama_doswal }}</p>
-            <p class="small opacity-75">NIP. {{ $mahasiswa->nip }}</p>
+            <p class="small opacity-75">Mahasiswa<br>Program Studi S1 {{ $mahasiswa->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
+            <p class="small opacity-75">Dosen Wali: {{ $mahasiswa->nama_doswal }}<br>NIP. {{ $mahasiswa->nip }}</p>
         </div>
 
         <nav class="nav flex-column gap-2 mb-4">
