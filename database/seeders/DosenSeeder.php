@@ -11,6 +11,23 @@ class DosenSeeder extends Seeder
     {
         $dosens = [
             [
+                'id_dosen' => 1, // Kusworo Adi
+                'id_user' =>1,
+                'nip' => '197203171998021001',
+                'nama' => 'Prof. Dr. Kusworo Adi, S.Si., M.T.',
+                'prodi_id' => '4', // Departemen Fisika
+                'created_at' => now(),
+            ],
+            [
+                'id_dosen' => 3,
+                'id_user'=>3,
+                'nip' => '197601102009122002',
+                'nama' => 'Dinar Mutiara Kusumo Nugraheni, S.T., M.InfoTech.(Comp)., Ph.D.',
+                'prodi_id' => '1',
+                'created_at' => now(),
+            ],
+
+            [
                 'id_dosen' => 2,
                 'id_user' => 2, // id_user mulai dari angka 9
                 'nip' => '197108111997021004',

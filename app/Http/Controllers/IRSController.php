@@ -8,7 +8,7 @@ class IRSController extends Controller
 {
     public function index()
     {
-        return view('layouts.irsMahasiswa'); // Sesuaikan dengan nama view yang kamu buat
+        return view('layouts.dosen_irsMahasiswa'); // Sesuaikan dengan nama view yang kamu buat
 
     }
 }

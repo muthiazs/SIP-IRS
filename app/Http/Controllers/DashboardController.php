@@ -78,25 +78,26 @@ class DashboardController extends Controller
     //Method untuk Dasboard Dekan
     public function indexDekan()
     {
-    
-        // Data dummy untuk dekan
+        // Debugging query langsung
         $dekan = DB::table('dosen')
-                ->join('users', 'dosen.id_user', '=', 'users.id')
-                ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                ->where('users.roles1', '=', 'dosen')
-                ->where('users.roles2', '=', 'dekan')
-                ->where('dosen.id_user', '=', auth()->id())
-                ->select(
-                    'dosen.nip',
-                    'dosen.nama as dosen_nama',
-                    'program_studi.nama as prodi_nama',
-                    'dosen.prodi_id',
-                    'users.username'
-                )
-                ->first();
-    
+                    ->join('users', 'dosen.id_user', '=', 'users.id')
+                    ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+                    ->where('users.roles1', '=', 'dosen')
+                    ->where('users.roles2', '=', 'dekan')
+                    ->where('dosen.id_user', '=', auth()->id())
+                    ->select(
+                        'dosen.nip',
+                        'dosen.nama as dosen_nama',
+                        'program_studi.nama as prodi_nama',
+                        'dosen.prodi_id',
+                        'users.username'
+                    )
+                    ->first();
         return view('dashboardDekan', compact('dekan'));
+
     }
+
+    
     
     public function indexAkademik()
     {
