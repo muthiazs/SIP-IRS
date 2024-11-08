@@ -220,6 +220,14 @@
             text-align: center; /* Menengahkan teks */
             font-size: 12px;
         }
+
+        .table tbody td {
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
+
         
         /* Menambahkan roundness pada tabel */
         .table {
@@ -377,117 +385,6 @@
                     @endforeach
                 </tbody>
             </table>
-
-
-       
-
-            
-
-            {{-- <nav class="navbar bg-body-tertiary">
-                <div class="container-fluid">
-                  <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Cari Mata Kuliah" aria-label="Search">
-                    <button class="btn btn-outline-blue" type="submit" style="background-color: #6878B1; color: white">Cari</button>
-                  </form>
-                </div>
-            </nav> --}}
-
-            {{-- <div class="card-body">
-                <table class="table table-borderless" style="background-color: #fef3c7">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Senin</th>
-                            <th>Selasa</th>
-                            <th>Rabu</th>
-                            <th>Kamis</th>
-                            <th>Jumat</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>06.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>07.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>08.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>09.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>10.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>11.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>12.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>13.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>14.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>15.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>16.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>17.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                        <tr>
-                            <td>18.00</td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td> <td><div class="slot"></div></td>
-                            <td><div class="slot"></div></td>
-                        </tr>
-                    </tbody>
-                </table>
-              </div>
-            </div> --}}
-        {{-- </div> --}}
     </div>
   </div>
         </div>
