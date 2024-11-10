@@ -64,6 +64,9 @@ class AuthController extends Controller
         \Log::info('User roles1: ' . $user->roles1);
         \Log::info('User roles2: ' . $user->roles2);
         \Log::info('Role selected: ' . $roleSelected);
+
+        // Simpan peran yang dipilih ke dalam session
+        session(['roleSelected' => $roleSelected]);
     
         // Cek kondisi berdasarkan roles1 dan roles2
         if ($user->roles1 === 'dosen' && $user->roles2 === 'kaprodi') {
