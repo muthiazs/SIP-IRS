@@ -58,8 +58,10 @@ class JadwalKuliahSeeder extends Seeder
 
         // Insert jadwal kuliah
         foreach ($matkul as $mat) {
-            // Randomly select a periode
-            $selectedPeriode = $periodes[array_rand($periodes)];
+            // Pilih periode berdasarkan semester
+            $selectedPeriode = $mat['semester'] % 2 == 0
+                ? $periodes[0] // Semester Genap (Periode 23242)
+                : $periodes[1]; // Semester Ganjil (Periode 24251)
 
             // Randomly select jam mulai dan jam selesai sesuai dengan pola yang diinginkan
             $indexJam = array_rand($jam_mulai);
