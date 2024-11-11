@@ -136,11 +136,11 @@
         </div>
 
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="#" class="nav-link active rounded d-flex align-items-center">
+            <a href="/dashboardMahasiswa" class="nav-link active rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
+            <a href="/rencanaStudi" class="nav-link rounded d-flex align-items-center">
                 <span class="material-icons me-3">description</span>
                 Rencana Studi
             </a>
@@ -152,7 +152,9 @@
     @endif
 
     <!-- Logout Button -->
-    <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">Keluar</button>
+    <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
+        <a href="/login">Keluar</a>
+    </button>
 
     <!-- Wave decoration -->
     <div class="wave-decoration"> 

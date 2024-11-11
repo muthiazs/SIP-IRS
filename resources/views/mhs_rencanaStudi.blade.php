@@ -8,6 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
+    <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+
     <style>
         :root {
             --primary-color: #027683;
@@ -15,11 +18,31 @@
             --accent-color: #fef3c7;
         }
 
+        /* Atur html dan body ke 100% */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh; /* Mengatur tinggi container sesuai viewport */
+        }
+
         .sidebar {
-            background-color: var(--primary-color);
-            min-height: 100vh;
-            width: 280px;
+            position: fixed; /* Sidebar tetap di posisi kiri saat scroll */
+            width: 280px; /* Lebar tetap untuk sidebar */
+            height: 100vh; /* Sidebar mengikuti tinggi viewport */
+            background-color: #027683;
             color: white;
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .main-content {
+            flex-grow: 1; /* Memastikan konten utama mengisi sisa ruang */
+            overflow-y: auto; /* Agar konten utama bisa di-scroll */
+            height: 100vh; /* Membatasi tinggi konten utama sesuai viewport */
         }
 
         .profile-img {
@@ -226,7 +249,19 @@
             border-radius: 10px; /* Sesuaikan besar roundness */
             overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
         }
+
+        .table tbody td {
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
         
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
         /* Roundness untuk header */
         .table thead th:first-child {
             border-top-left-radius: 10px;
@@ -328,22 +363,25 @@
                 </div>
             </div>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode</th>
-                        <th>Mata Kuliah</th>
-                        <th>Kelas</th>
-                        <th>SKS</th>
-                        <th>Ruang</th>
-                        <th>Status</th>
-                        <th>Dosen</th>
-                    </tr>
-                </thead>
-                <tbody id="irsTable">
-                    </tbody>
-            </table>
+            <section class="irs-list">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode</th>
+                            <th>Mata Kuliah</th>
+                            <th>Kelas</th>
+                            <th>SKS</th>
+                            <th>Ruang</th>
+                            <th>Status</th>
+                            <th>Dosen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="irs-list">
+                        </tbody>
+                </table>
+            </section>
+            
 
         <!-- Pengisian IRS Cards -->
         {{-- <div class="col-12">
@@ -485,6 +523,73 @@
   </div>
         </div>
     </div>
+
+    <script>
+        const irsList = document.getElementById('irs-list');
+        // const searchInput = document.getElementById('search-input');
+        // const searchButton = document.getElementById('search-button');
+
+        // Sample data
+        const irs = [
+            
+        ];
+
+        // Render student data
+        function renderIRS(filteredIRS) {
+            irsList.innerHTML = ''; // Clear existing rows
+            filteredIRS.forEach((irs) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${irs.no}</td>
+                    <td>${irs.kode}</td>
+                    <td>${student.nama}</td>
+                    <td>${student.kelas}</td>
+                    <td>${student.sks}</td>
+                    <td>${student.ruang}</td>
+                    <td>${student.status}</td>
+                    <td>${student.dosen}</td>
+                `;
+                studentList.appendChild(row);
+            });
+        }
+
+        renderStudents(students); // Initial render
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('[data-filter]');
+        filterButtons.forEach((button) => {
+            button.addEventListener('click', (e) => {
+                const filterValue = e.target.dataset.filter;
+                const filteredStudents = students.filter(student =>
+                    filterValue === 'all' || student.status === filterValue
+                );
+                renderStudents(filteredStudents);
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active'); // Add active class to the selected button
+            });
+        });
+
+        // Search functionality
+        searchButton.addEventListener('click', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredStudents = students.filter(student =>
+                student.nama.toLowerCase().includes(searchTerm)
+            );
+            renderStudents(filteredStudents);
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchButton.click(); // Trigger search on Enter key
+            }
+        });
+
+        // Logout function
+        function logout() {
+            alert('Logout button clicked!');
+            // Add your logout logic here
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

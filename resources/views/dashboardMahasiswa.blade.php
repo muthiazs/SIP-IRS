@@ -11,6 +11,36 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
 
+    {{-- <style>
+        /* Atur html dan body ke 100% */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh; /* Mengatur tinggi container sesuai viewport */
+        }
+
+        .sidebar {
+            position: fixed; /* Sidebar tetap di posisi kiri saat scroll */
+            width: 280px; /* Lebar tetap untuk sidebar */
+            height: 100vh; /* Sidebar mengikuti tinggi viewport */
+            background-color: #027683;
+            color: white;
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        .main-content {
+            flex-grow: 1; /* Memastikan konten utama mengisi sisa ruang */
+            overflow-y: auto; /* Agar konten utama bisa di-scroll */
+            height: 100vh; /* Membatasi tinggi konten utama sesuai viewport */
+        }
+
+    </style> --}}
+
     <!-- <style>
         :root {
             --primary-color: #0d9488;
@@ -249,7 +279,7 @@
         </div> -->
 
         <!-- Main Content -->
-        <div class="flex-grow-1 p-4">
+        <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h1 class="h3 mb-1">Selamat Datang {{$mahasiswa->username }} 👋</h1>
