@@ -141,7 +141,7 @@
                     <span class="material-icons me-3">description</span>
                     Persetujuan Ruang
                 </a>
-                <a href="#" class="nav-link rounded d-flex align-items-center">
+                <a href="{{ route('mhs_rencanaStudi') }}" class="nav-link rounded d-flex align-items-center">
                     <span class="material-icons me-3">assessment</span>
                     Persetujuan Jadwal Kuliah
                 </a>
