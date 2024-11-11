@@ -58,48 +58,6 @@
     <div class="d-flex">
         <!-- Sidebar -->
         @include ('sidebar')
-        {{-- <div class="sidebar p-4 position-relative">
-            <div class="text-center mb-4">
-                <div class="profile-img mb-3">
-                    <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
-                </div>
-                <h5 class="mb-1">{{ $mahasiswa->nama_mhs }}</h5>
-                <p class="small mb-1">NIM. {{ $mahasiswa->nim }}</p>
-                <p class="small mb-1">{{ $mahasiswa->prodi_nama}}</p>
-                <p class="small mb-1">{{ $mahasiswa->nama_doswal }}</p>
-                <p class="small">NIP. {{ $mahasiswa->nip }}</p>
-            </div>
-
-            <nav class="nav flex-column gap-2 mb-4">
-                <a href="/dashboardMahasiswa" class="nav-link rounded d-flex align-items-center">
-                    <span class="material-icons me-3">home</span>
-                    Beranda
-                </a>
-                <a href="/rencanaStudi" class="nav-link active rounded d-flex align-items-center">
-                    <span class="material-icons me-3">description</span>
-                    Rencana Studi
-                </a>
-                <a href="#" class="nav-link rounded d-flex align-items-center">
-                    <span class="material-icons me-3">assessment</span>
-                    Hasil Studi
-                </a>
-            </nav>
-
-            <!-- Logout Button -->
-            <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
-                <a href="/login">
-                    <span class="material-icons align-middle me-2">logout</span>
-                    Keluar
-                </a>
-            </button>
-
-             <!-- Wave decoration -->
-             <div class="wave-decoration">
-                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 200%; width: 175%;">
-                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-                </svg>
-            </div>
-        </div> --}}
 
         <!-- Main Content -->
         
@@ -148,13 +106,7 @@
                 </div>
             </div> 
 
-            <!-- Period Banner -->
-            <div class="period-banner mb-4">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-medium">Periode Pengisian IRS</span>
-                    <span class="fw-medium">$data['semester']['period'] </span>
-                </div>
-            </div>
+            
 
             <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
                 <div class="d-flex justify-content-center align-items-center">
