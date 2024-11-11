@@ -9,17 +9,25 @@ class PeriodeAkademikSeeder extends Seeder
 {
     public function run()
     {
-        $periodes = [
-            ['id_periode' => '24252', 'nama_periode' => 'Semester Akademik 2023/2024 Genap'],
-            ['id_periode' => '24251', 'nama_periode' => 'Semester Akademik 2024/2025 Ganjil']
+        // Data periode akademik
+        $periode = [
+            [
+                'id_periode' => '23242',
+                'nama_periode' => 'Semester Akademik 2023/2024 Genap',
+                'tahun_mulai' => '2023',
+                'tahun_selesai' => '2024',
+                'jenis' => 'genap',
+            ],
+            [
+                'id_periode' => '24251',
+                'nama_periode' => 'Semester Akademik 2024/2025 Ganjil',
+                'tahun_mulai' => '2024',
+                'tahun_selesai' => '2025',
+                'jenis' => 'ganjil',
+            ]
         ];
 
-        foreach ($periodes as $periode) {
-            DB::table('periode_akademik')->insert([
-                'id_periode' => $periode['id_periode'],
-                'nama_periode' => $periode['nama_periode'],
-                'created_at' => DB::raw('CURRENT_TIMESTAMP'),
-            ]);
-        }
+        // Insert data periode akademik
+        DB::table('periode_akademik')->insert($periode);
     }
 }
