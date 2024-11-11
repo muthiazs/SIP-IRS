@@ -50,12 +50,12 @@ Route::group([], function () {
 
     // Pengisian IRS oleh Mahasiswa
     Route::prefix('pengisianIRS')->group(function () {
-        Route::get('/', [Mhs_PengisianIRSController::class, 'indexPengisianIRS'])->name('pengisianIRS');
+        Route::get('/', [Mhs_PengisianIRSController::class, 'indexPilihJadwal'])->name('mhs_pengisianIRS');
     });
 
     // Hasil Pengisian IRS oleh Mahasiswa
     Route::prefix('rencanaStudi')->group(function () {
-        Route::get('/', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('rencanaStudi');
+        Route::get('/', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('mhs_rencanaStudi');
     });
 
     // Pemilihan Matkul oleh Mahasiswa
@@ -84,8 +84,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
     Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
     Route::get('/dosen_IRSMahasiswa', [IRSController::class, 'index'])->name('dosen_irsMahasiswa');
-    Route::get('/rencanaStudi', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('rencanaStudi');
-    Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'indexPengisianIRS'])->name('pengisianIRS');
+    Route::get('/rencanaStudi', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('mhs_rencanaStudi');
+    Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'indexPilihJadwal'])->name('mhs_pengisianIRS');
     Route::get('/daftarMatkul', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('mhs_daftarMatkul');
     // Route::get('/pengambilanMatkul', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
 });
