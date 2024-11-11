@@ -12,28 +12,25 @@ class DashboardController extends Controller
     // Method untuk Dashboard Dosen
     public function index()
     {
-
         $dosen = DB::table('dosen')
                     ->join('users', 'dosen.id_user', '=', 'users.id')
                     ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
                     ->select(
-                        'dosen.nip',
-                        'dosen.nama as dosen_nama',         // Alias to avoid conflict
-                        'program_studi.nama as prodi_nama', // Alias for program_studi's nama
+                        'dosen.nip',                    // Pastikan NIP sudah dipilih
+                        'dosen.nama as dosen_nama',
+                        'program_studi.nama as prodi_nama',
                         'dosen.prodi_id',
                         'users.username'
                     )
-                    ->where ('dosen.id_user', '=', auth()->id())
+                    ->where('dosen.id_user', '=', auth()->id())
                     ->first(); 
         return view('dashboardDosen', compact('dosen'));
-
     }
 
 
     // Method untuk Dashboard Kaprodi
     public function indexKaprodi()
     {
-
         $kaprodi = DB::table('dosen')
                         ->join('users', 'dosen.id_user', '=', 'users.id')
                         ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
@@ -48,16 +45,12 @@ class DashboardController extends Controller
                             'users.username'
                         )
                         ->first();
-
         return view('dashboardKaprodi', compact('kaprodi'));
     }
 
-    
-
-
     // Method untuk Dashboard Mahasiswa
     public function indexMahasiswa()
-{
+    {
     $mahasiswa = DB::table('mahasiswa')
                 ->join('users', 'mahasiswa.id_user', '=', 'users.id')
                 ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
@@ -71,10 +64,10 @@ class DashboardController extends Controller
                     'dosen.nip',
                     'users.username'
                 ) 
-                ->first();
-    
+                ->first();  
     return view('dashboardMahasiswa', compact('mahasiswa'));  // Gunakan dot notation
-}
+    }
+
     //Method untuk Dasboard Dekan
     public function indexDekan()
     {
@@ -93,8 +86,12 @@ class DashboardController extends Controller
                         'users.username'
                     )
                     ->first();
-        return view('dashboardDekan', compact('dekan'));
+        Log::debug('Kaprodi Data:', (array) $dekan);  // Log data yang diambil untuk diperiksa
 
+        if (!$dekan) {
+            return redirect()->back()->with('error', 'Kaprodi tidak ditemukan.');
+        }
+        return view('dashboardDekan', compact('dekan'));
     }
 
     
@@ -125,4 +122,6 @@ class DashboardController extends Controller
 
         return view('dashboardAkademik', compact('data'));
     }
+    
+    
 }
