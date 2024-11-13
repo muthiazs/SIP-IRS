@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- resources/views/sidebar.blade.php -->
 @php
     use Illuminate\Support\Facades\Auth;
@@ -48,3 +49,8 @@
         </svg>
     </div>
 </div>
+=======
+<div>
+    <!-- People find pleasure in different ways. I find it in keeping my mind clear. - Marcus Aurelius -->
+</div>
+>>>>>>> 17c21c2baba16b05bc793df7f89949cb911bc190

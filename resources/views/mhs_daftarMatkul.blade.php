@@ -61,7 +61,7 @@
 
         <!-- Main Content -->
         
-        <div class="main-content flex-grow-1 p-4">
+        <div class="flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h1 class="h3 mb-1">Selamat Datang {{ $mahasiswa->username }} 👋</h1>
@@ -93,7 +93,7 @@
                             <span class="badge irs-badge" style="background-color: #67C3CC;"> $data['pengisianirs']['total'] SKS</span>
                         </div>
                     </div>
-                    {{-- <div>
+                    <div>
                         <div class="margincard">
                             <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
                             <button class="btn btn-pilihmk">
@@ -102,105 +102,46 @@
                                 </a> 
                             </button>
                         </div>
-                    </div> --}}
-                </div>
-
-                <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <span class="fw-medium">Daftar Mata Kuliah</span>
                     </div>
                 </div>
-
-                <section class="filter-search">
-                    {{-- <div>
-                        <button class="btn btn-primary" data-filter="all">Semua</button>
-                        <button class="btn btn-outline-primary" data-filter="pending">Belum Disetujui</button>
-                        <button class="btn btn-outline-primary" data-filter="approved">Sudah Disetujui</button>
-                        <button class="btn btn-outline-primary" data-filter="rejected">Ditolak</button>
-                    </div> --}}
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Cari Mata Kuliah" id="search-input">
-                        <button class="btn btn-primary" type="button" id="search-button">
-                            <span class="material-icons">search</span>
-                        </button>
-                    </div>
-                </section>
-    
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Kode</th>
-                            <th>Mata Kuliah</th>
-                            <th>Semester</th>
-                            <th>SKS</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="irsTable">
-                        @foreach($daftarMk as $index => $daftarM)  <!-- Gunakan nama yang sama, 'daftarMk' -->
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $daftarM->kode_matkul }}</td>
-                            <td>{{ $daftarM->nama_matkul }}</td>
-                            <td>{{ $daftarM->semester }}</td>
-                            <td>{{ $daftarM->sks }}</td>
-                            <td><input type="checkbox" name="selected_matkul[]" value="{{ $daftarM->kode_matkul }}"></td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
             </div> 
+
+            
+
+            <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
+                <div class="d-flex justify-content-center align-items-center">
+                    <span class="fw-medium">Daftar Mata Kuliah</span>
+                </div>
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Mata Kuliah</th>
+                        <th>Semester</th>
+                        <th>SKS</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="irsTable">
+                    @foreach($daftarMk as $index => $daftarM)  <!-- Gunakan nama yang sama, 'daftarMk' -->
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $daftarM->kode_matkul }}</td>
+                        <td>{{ $daftarM->nama_matkul }}</td>
+                        <td>{{ $daftarM->semester }}</td>
+                        <td>{{ $daftarM->sks }}</td>
+                        <td><input type="checkbox" name="selected_matkul[]" value="{{ $daftarM->kode_matkul }}"></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+    </div>
+  </div>
         </div>
     </div>
-
-    <script>
-        const searchInput = document.getElementById('search-input');
-        const searchButton = document.getElementById('search-button');
-        const irsTable = document.getElementById('irsTable');
-    
-        // Render Mata Kuliah
-        function renderMatkul(data) {
-            irsTable.innerHTML = '';
-            data.forEach((mk, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${mk.kode_matkul}</td>
-                    <td>${mk.nama_matkul}</td>
-                    <td>${mk.semester}</td>
-                    <td>${mk.sks}</td>
-                    <td><input type="checkbox" name="selected_matkul[]" value="${mk.kode_matkul}"></td>
-                `;
-                irsTable.appendChild(row);
-            });
-        }
-    
-        // AJAX request for search
-        function searchMatkul() {
-            const searchTerm = searchInput.value.toLowerCase();
-
-            // Kirim permintaan ke server (misalnya, menggunakan AJAX)
-            fetch(`/search-matkul?keyword=${searchTerm}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Update tabel dengan data hasil pencarian
-                    renderMatkul(data);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-    
-        // Event listeners
-        searchButton.addEventListener('click', searchMatkul);
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                searchMatkul();
-            }
-        });
-    </script>    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

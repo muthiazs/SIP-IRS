@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- resources/views/sidebar.blade.php -->
 @php
     use Illuminate\Support\Facades\Auth;
@@ -46,3 +47,8 @@
         </svg>
     </div>
 </div>
+=======
+<div>
+    <!-- It is not the man who has too little, but the man who craves more, that is poor. - Seneca -->
+</div>
+>>>>>>> 17c21c2baba16b05bc793df7f89949cb911bc190

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!-- resources/views/sidebar.blade.php -->
 @php
     use Illuminate\Support\Facades\Auth;
@@ -58,3 +59,8 @@
         </svg>
     </div>
 </div>
+=======
+<div>
+    <!-- Act only according to that maxim whereby you can, at the same time, will that it should become a universal law. - Immanuel Kant -->
+</div>
+>>>>>>> 17c21c2baba16b05bc793df7f89949cb911bc190

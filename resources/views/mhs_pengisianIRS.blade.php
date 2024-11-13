@@ -11,6 +11,8 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+<<<<<<< HEAD
+=======
     <style>
         /* Tabel IRS */
         /* Mengubah warna header tabel */
@@ -53,6 +55,7 @@
         }
 
     </style> 
+>>>>>>> 72633a4977e08032a284a8a3498531ae3504d898
 </head>
 <body class="bg-light">
     <div class="d-flex">
@@ -62,7 +65,7 @@
 
         <!-- Main Content -->
         
-        <div class="main-content flex-grow-1 p-4">
+        <div class="flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     {{-- <h1 class="h3 mb-1">Selamat Datang {{ $mahasiswa->name }} 👋</h1> --}}
