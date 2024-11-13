@@ -225,6 +225,7 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
+    <x-side-bar-mhs :Mahasiswa="$Mahasiswa"></x-side-bar-mhs>
         <!-- Sidebar -->
         @include ('sidebar')
 
