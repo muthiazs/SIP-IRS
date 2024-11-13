@@ -132,6 +132,7 @@
                 <p class="small opacity-75">Program Studi S1 {{ $dekan->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
             </div>
 
+<<<<<<< HEAD
             <nav class="nav flex-column gap-2 mb-4">
                 <a href="#" class="nav-link active rounded d-flex align-items-center">
                     <span class="material-icons me-3">home</span>
@@ -147,6 +148,50 @@
                 </a>
             </nav>
         @endif
+=======
+        <nav class="nav flex-column gap-2 mb-4">
+            <a href="#" class="nav-link active rounded d-flex align-items-center">
+                <span class="material-icons me-3">home</span>
+                Beranda
+            </a>
+            <a href="#" class="nav-link rounded d-flex align-items-center">
+                <span class="material-icons me-3">description</span>
+                Daftar Prodi
+            </a>
+            <a href="#" class="nav-link rounded d-flex align-items-center p-3">
+                <span class="material-icons me-3">assessment</span>
+                Hasil Studi
+            </a>
+        </nav>
+
+    @elseif ($userRole == 'mahasiswa')
+        <!-- SIDEBAR MAHASISWA -->
+        <div class="text-center mb-4">
+            <div class="profile-img mb-3">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
+            </div>
+            <h2 class="fs-4 fw-bold">{{ $mahasiswa->nama_mhs }}</h2>
+            <p class="small opacity-75">NIM. {{ $mahasiswa->nim }}</p>
+            <p class="small opacity-75">S1 {{ $mahasiswa->prodi_nama }}</p>
+            <p class="small opacity-75">Dosen Wali: {{ $mahasiswa->nama_doswal }}</p>
+            <p class="small opacity-75">NIP. {{ $mahasiswa->nip }}</p>
+        </div>
+
+        <nav class="nav flex-column gap-2 mb-4">
+            <a href="#" class="nav-link active rounded d-flex align-items-center">
+                <span class="material-icons me-3">home</span>
+                Beranda
+            </a>
+            <a href="{{ route('mhs_rencanaStudi') }}" class="nav-link rounded d-flex align-items-center">
+                <span class="material-icons me-3">description</span>
+                Rencana Studi
+            </a>
+            <a href="#" class="nav-link rounded d-flex align-items-center">
+                <span class="material-icons me-3">assessment</span>
+                Hasil Studi
+            </a>
+        </nav>
+>>>>>>> 72633a4977e08032a284a8a3498531ae3504d898
     @endif
 
     <!-- Logout Button -->
