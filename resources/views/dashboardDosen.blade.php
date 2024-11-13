@@ -16,8 +16,7 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-        <!-- Sidebar -->
-        @include ('sidebar')
+    <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
 
         <!-- Wave decoration -->
         <div class="wave-decoration"> 

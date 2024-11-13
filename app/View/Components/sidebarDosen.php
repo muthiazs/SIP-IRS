@@ -11,10 +11,10 @@ class sidebarDosen extends Component
     /**
      * Create a new component instance.
      */
-    public $Dosen;
-    public function __construct($Dosen)
+    public $dosen;
+    public function __construct($dosen)
     {
-        $this->Dosen = $Dosen;
+        $this->dosen = $dosen;
     }
 
     /**

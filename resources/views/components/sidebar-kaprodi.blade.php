@@ -1,45 +1,27 @@
-<!-- resources/views/sidebar.blade.php -->
-@php
-    use Illuminate\Support\Facades\Auth;
-
-    // Mendapatkan user yang terautentikasi
-    $user = Auth::user();
-
-    // Memastikan user ada sebelum mencoba mengakses roles
-    $userRole = $user ? ($user->roles1 ?? '') : '';
-    $userRole2 = $user ? ($user->roles2 ?? '') : '';
-    $roleSelected = session('roleSelected');
-@endphp
-
-    @eif ($userRole == 'dosen' && $userRole2 == 'kaprodi' && $roleSelected == 'kaprodi')
-        <!-- SIDEBAR KAPRODI -->
-        @if (isset($kaprodi_side))
-            <a href="{{ route('sidebar.kaprodi') }}" class="nav-link">Kaprodi</a>
-            <div class="text-center mb-4">
-                <div class="profile-img mb-3">
-                    <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
-                    <!-- Profile image placeholder -->
-                </div>
-                <h2 class="fs-4 fw-bold">{{ $user->username }}</h2>
-                <p class="small opacity-75">NIP. {{ $kaprodi_side->nip }}</p>
-                <p class="small opacity-75">Ketua Program Studi<br>Program Studi S1 {{ $kaprodi_side->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
+<div class="sidebar p-4 text-white position-relative">
+    <div class="text-center mb-4">
+        <div class="profile-img mb-3">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
             </div>
+            <h2 class="fs-4 fw-bold">{{ $kaprodi->dosen_nama }}</h2>
+            <p class="small opacity-75">NIP. {{ $kaprodi->nip }}</p>
+            <p class="small opacity-75">Ketua Program Studi<br>Program Studi S1 {{ $kaprodi->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
+    </div>
 
-            <nav class="nav flex-column gap-2 mb-4">
-                <a href="#" class="nav-link active rounded d-flex align-items-center">
-                    <span class="material-icons me-3">home</span>
-                    Beranda
-                </a>
-                <a href="#" class="nav-link rounded d-flex align-items-center">
-                    <span class="material-icons me-3">description</span>
-                    Daftar Prodi
-                </a>
-                <a href="#" class="nav-link rounded d-flex align-items-center">
-                    <span class="material-icons me-3">assessment</span>
-                    Hasil Studi
-                </a>
-        </nav>
-        @endif
+    <nav class="nav flex-column gap-2 mb-4">
+        <a href="#" class="nav-link active rounded d-flex align-items-center">
+            <span class="material-icons me-3">home</span>
+            Beranda
+        </a>
+        <a href="#" class="nav-link rounded d-flex align-items-center">
+            <span class="material-icons me-3">description</span>
+            Daftar Prodi
+        </a>
+        <a href="#" class="nav-link rounded d-flex align-items-center">
+            <span class="material-icons me-3">assessment</span>
+            Hasil Studi
+        </a>
+    </nav>
 
     <!-- Logout Button -->
     <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">Keluar</button>

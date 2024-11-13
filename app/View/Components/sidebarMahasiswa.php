@@ -11,10 +11,10 @@ class sidebarMahasiswa extends Component
     /**
      * Create a new component instance.
      */
-    public $Mahasiswa;
-    public function __construct($Mahasiswa)
+    public $mahasiswa;
+    public function __construct($mahasiswa)
     {
-        $this->Mahasiswa = $Mahasiswa;
+        $this->mahasiswa = $mahasiswa;
     }
 
     /**

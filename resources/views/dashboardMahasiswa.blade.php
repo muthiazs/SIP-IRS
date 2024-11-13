@@ -13,10 +13,8 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-    <x-side-bar-mhs :Mahasiswa="$Mahasiswa"></x-side-bar-mhs>
-        <!-- Sidebar -->
-        @include ('sidebar')
-
+    <!-- untuk manggil komponen sidebar -->
+    <x-sidebar-mahasiswa :mahasiswa="$mahasiswa"></x-sidebar-mahasiswa>
         <!-- Wave decoration -->
         <div class="wave-decoration"> 
             <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">

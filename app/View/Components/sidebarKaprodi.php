@@ -11,10 +11,10 @@ class sidebarKaprodi extends Component
     /**
      * Create a new component instance.
      */
-    public $Kaprodi;
-    public function __construct($Kaprodi)
+    public $kaprodi;
+    public function __construct($kaprodi)
     {
-        $this->Kaprodi = $Kaprodi;
+        $this->kaprodi = $kaprodi;
     }
 
     /**

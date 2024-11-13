@@ -23,7 +23,8 @@ class DashboardController extends Controller
                         'users.username'
                     )
                     ->where('dosen.id_user', '=', auth()->id())
-                    ->first(); 
+                    ->first();
+        // dd($dosen);
         return view('dashboardDosen', compact('dosen'));
     }
 

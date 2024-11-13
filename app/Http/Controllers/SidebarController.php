@@ -70,7 +70,7 @@ class SidebarController extends Controller
                     'users.username'
                 ) 
                 ->first();  
-    return view('sidebar', ['Mahasiswa' => $Mahasiswa]);
+    return view('dashboardMahasiswa', compact('Mahasiswa'));
     }
 
     //Method untuk Dasboard Dekan

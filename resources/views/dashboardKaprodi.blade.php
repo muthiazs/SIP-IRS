@@ -16,9 +16,7 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-        <!-- Sidebar -->
-        @include ('sidebar')
-
+    <x-sidebar-kaprodi :kaprodi="$kaprodi"></x-sidebar-kaprodi>
             <!-- Wave decoration -->
             <div class="wave-decoration"> 
                 <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">

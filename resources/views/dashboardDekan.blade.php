@@ -17,10 +17,7 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-        <!-- Sidebar -->
-                 <!-- Sidebar -->
-        @include ('sidebar')
-
+    <x-sidebar-dekan :dekan="$dekan"></x-sidebar-dekan>
         <!-- Wave decoration -->
         <div class="wave-decoration"> 
             <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">

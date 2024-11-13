@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <!-- resources/views/sidebar.blade.php -->
 @php
     use Illuminate\Support\Facades\Auth;
@@ -134,7 +132,6 @@
                 <p class="small opacity-75">Program Studi S1 {{ $dekan->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
             </div>
 
-<<<<<<< HEAD
             <nav class="nav flex-column gap-2 mb-4">
                 <a href="#" class="nav-link active rounded d-flex align-items-center">
                     <span class="material-icons me-3">home</span>
@@ -150,21 +147,6 @@
                 </a>
             </nav>
         @endif
-=======
-        <nav class="nav flex-column gap-2 mb-4">
-            <a href="#" class="nav-link active rounded d-flex align-items-center">
-                <span class="material-icons me-3">home</span>
-                Beranda
-            </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
-                <span class="material-icons me-3">description</span>
-                Daftar Prodi
-            </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center p-3">
-                <span class="material-icons me-3">assessment</span>
-                Hasil Studi
-            </a>
-        </nav>
 
     @elseif ($userRole == 'mahasiswa')
         <!-- SIDEBAR MAHASISWA -->
@@ -193,7 +175,6 @@
                 Hasil Studi
             </a>
         </nav>
->>>>>>> 72633a4977e08032a284a8a3498531ae3504d898
     @endif
 
     <!-- Logout Button -->
@@ -206,4 +187,3 @@
         </svg>
     </div>
 </div>
->>>>>>> 17c21c2baba16b05bc793df7f89949cb911bc190

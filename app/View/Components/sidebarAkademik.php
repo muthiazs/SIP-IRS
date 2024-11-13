@@ -11,10 +11,10 @@ class sidebarAkademik extends Component
     /**
      * Create a new component instance.
      */
-    public $Akademik;
-    public function __construct($Akademik)
+    public $akademik;
+    public function __construct($akademik)
     {
-        $this->Akademik = $Akademik;
+        $this->akademik = $akademik;
     }
 
     /**

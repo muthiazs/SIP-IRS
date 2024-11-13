@@ -13,123 +13,18 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
-   <!-- <style>
-        .sidebar {
-            background-color: #028391;
-            min-height: 100vh;
-            width: 280px;
-            border-top-right-radius: 30px;
-            border-bottom-right-radius: 30px;
-        }
-        .profile-img {
-            width: 96px;
-            height: 96px;
-            background-color: #fef3c7;
-        }
-        .nav-link {
-            font-family: 'Poppins';
-            color: white !important;
-        }
-        .nav-link:hover {
-            font-family: 'Poppins';
-            background-color: rgba(254, 243, 199, 0.1);
-        }
-        .nav-link.active {
-            font-family: 'Poppins';
-            background-color: #FED488 !important;
-            color: #000000 !important; 
-        }
-        .notification-badge {
-            width: 15px;
-            height: 15px;
-            background-color: #dc3545;
-            border-radius: 50%;
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
-        .period-banner {
-            background-color: #67C3CC;
-        }
-        .btn-logout {
-            font-family: 'Poppins';
-            background-color: #FED488;
-            color: black;
-            right: 50px;
-            /* justify-content: flex-end; */
-        }
-        .text-teal {
-            color: #028391;
-        }
-        .btn-blue {
-            background-color: #6878B1;
-            color: #ffffff;
-        }
-        /* .material-icons {
-            color: #ffffff;
-        }
-        .material-icons.active {
-            color: #000000 !important;
-        } */
-        .btn-teal {
-            width: 45px;
-            height: 45px;
-            background-color: #028391;
-            color: #ffffff;
-        }
-        .text-blue {
-            font-family: 'Poppins';
-            color: #456DDB;
-        }
-        .card-body {
-            background-color: #FFF2E5;
-        }
-    </style> -->
+
 </head>
 <body class="bg-light">
     <div class="d-flex">
-        <!-- Sidebar -->
-                 <!-- Sidebar -->
-        @include ('sidebar')
-
+    <x-sidebar-mahasiswa :mahasiswa="$mahasiswa"></x-sidebar-mahasiswa>
         <!-- Wave decoration -->
         <div class="wave-decoration"> 
             <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
                 <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
             </svg>
         </div>
-        <!-- <div class="sidebar p-4 text-white position-relative"> -->
-            <!-- Profile Section -->
-            <!-- <div class="text-center mb-4">
-                <div class="profile-img rounded-circle mx-auto mb-3"> -->
-                    <!-- Profile image placeholder -->
-                <!-- </div>
-                <h2 class="fs-4 fw-bold">{{ $data['user']['name'] }}</h2>
-                <p class="small opacity-75">NIP. {{ $data['user']['nip'] }}</p>
-                <p class="small opacity-75">{{ $data['user']['role'] }}</p>
-                <p class="small opacity-75">{{ $data['user']['periode'] }}</p>
-            </div> -->
-
-            <!-- Navigation -->
-            <!-- <nav class="nav flex-column gap-2">
-                <a href="/dashboardAkademik" class="nav-link active rounded d-flex align-items-center p-3">
-                    <span class="material-icons me-2">home</span>
-                    Beranda
-                </a>
-                <a href="/pembagianruang" class="nav-link rounded d-flex align-items-center p-3">
-                    <span class="material-icons me-2">class</span>
-                    Pembagian Ruang
-                </a>
-            </nav> -->
-
-            <!-- Logout Button -->
-            <!-- <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
-                <a href="/login" class="nav-link active">
-                    Keluar
-                </a> 
-            </button>
-        </div> -->
-
+    
         <!-- Main Content -->
         <div class="flex-grow-1 p-4">
             <!-- Header -->

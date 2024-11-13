@@ -11,10 +11,10 @@ class sidebarDekan extends Component
     /**
      * Create a new component instance.
      */
-    public $Dekan;
-    public function __construct($Dekan)
+    public $dekan;
+    public function __construct($dekan)
     {
-        $this->Dekan = $Dekan;
+        $this->dekan = $dekan;
     }
 
     /**

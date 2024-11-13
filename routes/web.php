@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SidebarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BAK_PembagianruangController;
 
