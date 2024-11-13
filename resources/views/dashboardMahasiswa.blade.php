@@ -13,17 +13,9 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-<<<<<<< HEAD
     <x-side-bar-mhs :Mahasiswa="$Mahasiswa"></x-side-bar-mhs>
         <!-- Sidebar -->
         @include ('sidebar')
-=======
-        <div>
-            <!-- Sidebar -->
-            @include ('sidebar')
-        </div>
-        
->>>>>>> 17c21c2baba16b05bc793df7f89949cb911bc190
 
         <!-- Wave decoration -->
         <div class="wave-decoration"> 

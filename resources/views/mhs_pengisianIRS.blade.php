@@ -11,51 +11,6 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
-<<<<<<< HEAD
-=======
-    <style>
-        /* Tabel IRS */
-        /* Mengubah warna header tabel */
-        .table thead th {
-            background-color: #FED488; /* Sesuaikan warna header */
-            color: black; /* Teks putih */
-            font-family: 'Poppins';
-            text-align: center; /* Menengahkan teks */
-            font-size: 12px;
-        }
-
-        .table tbody td {
-            color: black; /* Teks putih */
-            font-family: 'Poppins';
-            text-align: center; /* Menengahkan teks */
-            font-size: 12px;
-        }
-
-        
-        /* Menambahkan roundness pada tabel */
-        .table {
-            border-radius: 10px; /* Sesuaikan besar roundness */
-            overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
-        }
-        
-        /* Roundness untuk header */
-        .table thead th:first-child {
-            border-top-left-radius: 10px;
-        }
-        .table thead th:last-child {
-            border-top-right-radius: 10px;
-        }
-        
-        /* Roundness untuk footer jika dibutuhkan */
-        .table tfoot td:first-child {
-            border-bottom-left-radius: 10px;
-        }
-        .table tfoot td:last-child {
-            border-bottom-right-radius: 10px;
-        }
-
-    </style> 
->>>>>>> 72633a4977e08032a284a8a3498531ae3504d898
 </head>
 <body class="bg-light">
     <div class="d-flex">
