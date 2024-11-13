@@ -54,7 +54,7 @@ class Mhs_PengisianIRSController extends Controller
         ->first();
         
         
-        return view('mhs_rencanaStudi', compact('data'));  // Gunakan dot notation
+        return view('mhs_rencanaStudi', compact('mahasiswa'));  // Gunakan dot notation
     }
 
     public function indexPilihJadwal()
@@ -166,11 +166,19 @@ class Mhs_PengisianIRSController extends Controller
         
             // Pass both daftarMk and mahasiswa data to the view
         return view('mhs_daftarMatkul', compact('daftarMk', 'mahasiswa'));
-        }
-        
-        
+    }
 
-        
-        
+    public function searchMatkul(Request $request)
+    {
+        $keyword = $request->input('keyword'); // Mendapatkan input pencarian dari request
+            $daftarMk = DB::table('matakuliah')
+                ->where('nama_matkul', 'like', '%' . $keyword . '%')
+                ->orWhere('kode_matkul', 'like', '%' . $keyword . '%')
+                ->select('kode_matkul', 'nama_matkul', 'semester', 'sks')
+                ->get();
+            
+        return view('mhs_daftarMatkul', compact('daftarMk'));
+    }
+            
 
 }

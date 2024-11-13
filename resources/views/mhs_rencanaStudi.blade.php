@@ -283,32 +283,32 @@
 <body class="bg-light">
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar p-4 position-relative">
-            <div class="text-center mb-4">
-                <div class="profile-img mb-3">
-                    <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
-                </div>
-                <h5 class="mb-1">{{ $data['mahasiswa']['name'] }}</h5>
-                <p class="small mb-1">NIM. {{ $data['mahasiswa']['nim'] }}</p>
-                <p class="small mb-1">{{ $data['mahasiswa']['program_studi'] }}</p>
-                <p class="small mb-1">{{ $data['user']['name'] }}</p>
-                <p class="small">NIP. {{ $data['user']['nip'] }}</p>
+        @include ('sidebar')
+        {{-- <div class="text-center mb-4">
+            <div class="profile-img mb-3">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
             </div>
+            <h2 class="fs-4 fw-bold">{{ $mahasiswa->nama_mhs }}</h2>
+            <p class="small opacity-75">NIM. {{ $mahasiswa->nim }}</p>
+            <p class="small opacity-75">S1 {{ $mahasiswa->prodi_nama }}</p>
+            <p class="small opacity-75">Dosen Wali: {{ $mahasiswa->nama_doswal }}</p>
+            <p class="small opacity-75">NIP. {{ $mahasiswa->nip }}</p>
+        </div>
 
-            <nav class="nav flex-column gap-2 mb-4">
-                <a href="/dashboardMahasiswa" class="nav-link rounded d-flex align-items-center">
-                    <span class="material-icons me-3">home</span>
-                    Beranda
-                </a>
-                <a href="/rencanaStudi" class="nav-link active rounded d-flex align-items-center">
-                    <span class="material-icons me-3">description</span>
-                    Rencana Studi
-                </a>
-                <a href="#" class="nav-link rounded d-flex align-items-center">
-                    <span class="material-icons me-3">assessment</span>
-                    Hasil Studi
-                </a>
-            </nav>
+        <nav class="nav flex-column gap-2 mb-4">
+            <a href="#" class="nav-link active rounded d-flex align-items-center">
+                <span class="material-icons me-3">home</span>
+                Beranda
+            </a>
+            <a href="{{ route('mhs_rencanaStudi') }}" class="nav-link rounded d-flex align-items-center">
+                <span class="material-icons me-3">description</span>
+                Rencana Studi
+            </a>
+            <a href="#" class="nav-link rounded d-flex align-items-center">
+                <span class="material-icons me-3">assessment</span>
+                Hasil Studi
+            </a>
+        </nav>
 
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
@@ -324,14 +324,14 @@
                     <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
                 </svg>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Main Content -->
-        <div class="flex-grow-1 p-4">
+        <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="h3 mb-1">Selamat Datang {{ $data['mahasiswa']['name'] }} 👋</h1>
-                    <p class="text-muted mb-0">Semester Akademik {{ $data['semester']['current'] }}</p>
+                    <h1 class="h3 mb-1">Selamat Datang {{$mahasiswa->username }} 👋</h1>
+                    <p class="text-muted mb-0">Semester Akademik Sekarang</p>
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-primary rounded-circle p-2">
@@ -342,12 +342,11 @@
                     </span>
                 </div>
             </div>
-
             <!-- Period Banner -->
             <div class="period-banner mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="fw-medium">Periode Pengisian IRS</span>
-                    <span class="fw-medium">{{ $data['semester']['period'] }}</span>
+                    <!-- <span class="fw-medium"> $data['semester']['period'] </span> -->
                 </div>
             </div>
 
@@ -381,7 +380,8 @@
                         </tbody>
                 </table>
             </section>
-            
+        </div>
+        
 
         <!-- Pengisian IRS Cards -->
         {{-- <div class="col-12">
