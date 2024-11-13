@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!-- resources/views/sidebar.blade.php -->
 @php
     use Illuminate\Support\Facades\Auth;
@@ -52,8 +51,3 @@
         </svg>
     </div>
 </div>
-=======
-<div>
-    <!-- Let all your things have their places; let each part of your business have its time. - Benjamin Franklin -->
-</div>
->>>>>>> 17c21c2baba16b05bc793df7f89949cb911bc190

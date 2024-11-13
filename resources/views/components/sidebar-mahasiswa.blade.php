@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!-- resources/views/sidebar.blade.php -->
 @php
     use Illuminate\Support\Facades\Auth;
@@ -27,7 +26,7 @@
                 <p class="small opacity-75">Dosen Wali: {{ $Mahasiswa->nama_doswal }}<br>NIP. {{ $Mahasiswa->nip }}</p>
             </div>
 
-            <nav class="nav flex-column gap-2 mb-4">
+            <nav class="nav flex-column gap-2 mb-4">`
                 <a href="#" class="nav-link active rounded d-flex align-items-center">
                     <span class="material-icons me-3">home</span>
                     Beranda
@@ -59,8 +58,3 @@
         </svg>
     </div>
 </div>
-=======
-<div>
-    <!-- Act only according to that maxim whereby you can, at the same time, will that it should become a universal law. - Immanuel Kant -->
-</div>
->>>>>>> 17c21c2baba16b05bc793df7f89949cb911bc190
