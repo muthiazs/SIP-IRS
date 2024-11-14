@@ -64,10 +64,8 @@
 
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
-        @include ('sidebar')
-
-
+         <!-- untuk manggil komponen sidebar -->
+      <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
         <!-- Main Content -->
         <div class="flex-grow-1 p-4">
             <header class="header">

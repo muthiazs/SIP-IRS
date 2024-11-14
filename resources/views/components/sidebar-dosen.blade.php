@@ -14,7 +14,7 @@
             <span class="material-icons me-3">home</span>
             Beranda
         </a>
-        <a href="{{ route('dosen_irsMahasiswa') }}" class="nav-link rounded d-flex align-items-center">
+        <a href="{{ route('dosen_irsMahasiswa') }}" class="nav-link {{ Route::is('dosen_irsMahasiswa') ? 'active' : '' }} rounded d-flex align-items-center">
             <span class="material-icons me-3">description</span>
             IRS Mahasiswa
         </a>

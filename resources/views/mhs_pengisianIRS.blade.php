@@ -11,12 +11,54 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+    <style>
+        /* Tabel IRS */
+        /* Mengubah warna header tabel */
+        .table thead th {
+            background-color: #FED488; /* Sesuaikan warna header */
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
+
+        .table tbody td {
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
+
+        
+        /* Menambahkan roundness pada tabel */
+        .table {
+            border-radius: 10px; /* Sesuaikan besar roundness */
+            overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
+        }
+        
+        /* Roundness untuk header */
+        .table thead th:first-child {
+            border-top-left-radius: 10px;
+        }
+        .table thead th:last-child {
+            border-top-right-radius: 10px;
+        }
+        
+        /* Roundness untuk footer jika dibutuhkan */
+        .table tfoot td:first-child {
+            border-bottom-left-radius: 10px;
+        }
+        .table tfoot td:last-child {
+            border-bottom-right-radius: 10px;
+        }
+
+    </style> 
 </head>
 <body class="bg-light">
     <div class="d-flex">
-        {{-- <!-- Sidebar -->
-        @include ('sidebar') --}}
-        
+         <!-- untuk manggil komponen sidebar -->
+    <x-sidebar-mahasiswa :mahasiswa="$mahasiswa"></x-sidebar-mahasiswa>
+    <!-- Wave decoration -->
 
         <!-- Main Content -->
         

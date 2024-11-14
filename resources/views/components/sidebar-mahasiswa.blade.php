@@ -10,11 +10,11 @@
     </div>
 
     <nav class="nav flex-column gap-2 mb-4">
-        <a href="#" class="nav-link active rounded d-flex align-items-center">
+        <a href="{{ route('dashboardMahasiswa') }}" class="nav-link {{ Route::is('dashboardMahasiswa') ? 'active' : '' }} rounded d-flex align-items-center">
             <span class="material-icons me-3">home</span>
             Beranda
         </a>
-        <a href="#" class="nav-link rounded d-flex align-items-center">
+        <a href="{{ route('mhs_pengisianIRS') }}" class="nav-link {{ Route::is('mhs_pengisianIRS') ? 'active' : '' }} rounded d-flex align-items-center">
             <span class="material-icons me-3">description</span>
             Rencana Studi
         </a>
