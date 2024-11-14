@@ -1,11 +1,10 @@
 <div class="sidebar p-4 text-white position-relative">
-    <a href="{{ route('sidebar.akademik') }}" class="nav-link">Akademik</a>
     <div class="text-center mb-4">
         <div class="profile-img rounded-circle mx-auto mb-3">
             <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
         </div>
-        <h2 class="fs-4 fw-bold">{{ $user->username }}</h2>
-        <p class="small opacity-75">NIP. {{ $user->nip }}</p>
+        <h2 class="fs-4 fw-bold">{{ $akademik->nama }}</h2>
+        <p class="small opacity-75">NIP. {{ $akademik->nip }}</p>
         <p class="small opacity-75">Tenaga Kependidikan</p>
         <p class="small opacity-75">Periode</p>
     </div>
