@@ -13,7 +13,6 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
-
 </head>
 <body class="bg-light">
     <div class="d-flex">
@@ -24,14 +23,13 @@
                 <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
             </svg>
         </div>
-    
         <!-- Main Content -->
         <div class="flex-grow-1 p-4">
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{$akademik->nama }} 👋</h1>
-                    <p class="text-muted">Semester Akademik Sekarang </p>
+                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $akademik->nama }} 👋</h1>
+                    <p class="text-muted">Semester Akademik Sekarang</p>
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-teal rounded-circle p-2">
