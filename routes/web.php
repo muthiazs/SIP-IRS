@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SidebarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BAK_PembagianruangController;
 
@@ -63,16 +64,7 @@ Route::group([], function () {
         Route::get('/', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('daftarMatkul');
     });
 
-    // Pemilihan Matkul oleh Mahasiswa
-    Route::prefix('daftarMatkul')->group(function () {
-        Route::get('/', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('daftarMatkul');
-    });
-
-    // Pencarian Matkul oleh Mahasiswa
-    Route::prefix('searchMatkul')->group(function () {
-        Route::get('/', [Mhs_PengisianIRSController::class, 'searchMatkul'])->name('searchMatkul');
-    });
-
+    // Pengambilan Matkul oleh Mahasiswa
     // Route::prefix('pengambilanMatkul')->group(function () {
     //     Route::get('/', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
     // });
@@ -96,8 +88,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/rencanaStudi', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('mhs_rencanaStudi');
     Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'indexPilihJadwal'])->name('mhs_pengisianIRS');
     Route::get('/daftarMatkul', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('mhs_daftarMatkul');
-    Route::get('/searchMatkul', [Mhs_PengisianIRSController::class, 'searchMatkul'])->name('searchMatkul');
-
     // Route::get('/pengambilanMatkul', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
 });
 

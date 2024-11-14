@@ -17,10 +17,7 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-        <!-- Sidebar -->
-                 <!-- Sidebar -->
-        @include ('sidebar')
-
+    <x-sidebar-dekan :dekan="$dekan"></x-sidebar-dekan>
         <!-- Wave decoration -->
         <div class="wave-decoration"> 
             <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
@@ -29,11 +26,11 @@
         </div>
 
         <!-- Main Content -->
-        <div class="main-content flex-grow-1 p-4">
+        <div class="flex-grow-1 p-4">
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{  $dekan->dosen_nama }} 👋</h1>
+                    <h1 class="fs-3 fw-bold">Selamat datang, {{  $dekan->dosen_nama }} 👋</h1>
                     <p class="text-muted">Semester Akademik Sekarang </p>
                 </div>
                 <div class="position-relative">
@@ -68,7 +65,26 @@
                         <div class="card-body text-center">
                             <h3 class="fs-5 fw-semibold mb-4">Progress persetujuan Jadwal Kuliah</h3>
                             <div class="d-flex justify-content-between text-center">
+                                <!-- ini aku buat biar kita bisa liat tampilan klo datanya udah ada, aku ngecek side bar pake iniiii -->
                                 <div>
+                                    <div class="fs-4 fw-bold text-danger">
+                                        1 / 1  
+                                    </div>
+                                    <div class="small text-muted">Belum<br>Mengusulkan</div>
+                                </div>
+                                <div>
+                                    <div class="fs-4 fw-bold text-konfirmasi">
+                                        1 / 1  
+                                    </div>
+                                    <div class="small text-">Telah<br>Dikonfirmasi</div>
+                                </div>
+                                <div>
+                                    <div class="fs-4 fw-bold text-muted">
+                                        1 / 1 
+                                    </div>
+                                    <div class="small text-muted">Belum<br>Dikonfirmasi</div>
+                                </div>
+                                <!-- <div>
                                     <div class="fs-4 fw-bold text-danger">
                                         $data['progress']['belum_mengusulkan']['count'] / $data['progress']['belum_mengusulkan']['total'] 
                                     </div>
@@ -85,7 +101,7 @@
                                          $data['progress']['belum_dikonfirmasi']['count'] / $data['progress']['belum_dikonfirmasi']['total'] 
                                     </div>
                                     <div class="small text-muted">Belum<br>Dikonfirmasi</div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
