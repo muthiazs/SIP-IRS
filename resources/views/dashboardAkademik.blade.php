@@ -17,7 +17,7 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-    <x-sidebar-mahasiswa :mahasiswa="$mahasiswa"></x-sidebar-mahasiswa>
+    <x-sidebar-akademik :akademik="$akademik"></x-sidebar-akademik>
         <!-- Wave decoration -->
         <div class="wave-decoration"> 
             <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
@@ -30,8 +30,8 @@
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $data['user']['name'] }} 👋</h1>
-                    <p class="text-muted">Semester Akademik Sekarang {{ $data['semester']['current'] }}</p>
+                    <h1 class="fs-3 fw-bold">Selamat Datang {{$akademik->nama }} 👋</h1>
+                    <p class="text-muted">Semester Akademik Sekarang </p>
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-teal rounded-circle p-2">
@@ -45,7 +45,7 @@
             <div class="period-banner p-3 rounded-3 mb-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="text-white">Periode Pemeagian Ruang Kelas</span>
-                    <span class="text-white fw-bold">{{ $data['semester']['period'] }}</span>
+                    <span class="text-white fw-bold">$data['semester']['period']</span>
                 </div>
             </div>
 
@@ -59,19 +59,19 @@
                             <div class="d-flex justify-content-between text-center">
                                 <div>
                                     <div class="fs-4 fw-bold text-danger">
-                                        {{ $data['progress']['belum_usul']['count'] }}/{{ $data['progress']['belum_usul']['total'] }}
+                                        $data['progress']['belum_usul']['count'] / $data['progress']['belum_usul']['total'] 
                                     </div>
                                     <div class="small text-muted">Belum Mengusulkan</div>
                                 </div>
                                 <div>
                                     <div class="fs-4 fw-bold text-teal">
-                                        {{ $data['progress']['dikonfirmasi']['count'] }}/{{ $data['progress']['dikonfirmasi']['total'] }}
+                                        $data['progress']['dikonfirmasi']['count'] /$data['progress']['dikonfirmasi']['total'] 
                                     </div>
                                     <div class="small text-muted">Telah Dikonfirmasi</div>
                                 </div>
                                 <div>
                                     <div class="fs-4 fw-bold text-blue">
-                                        {{ $data['progress']['belum_dikonfirmasi']['count'] }}/{{ $data['progress']['belum_dikonfirmasi']['total'] }}
+                                        $data['progress']['belum_dikonfirmasi']['count'] / $data['progress']['belum_dikonfirmasi']['total'] 
                                     </div>
                                     <div class="small text-muted">Belum Dikonfirmasi</div>
                                 </div>
@@ -92,7 +92,7 @@
                                 <span class="fs-4 text-danger">⚠️</span>
                             </div>
                             <p class="fs-3 fw-bold">
-                                {{ $data['status']['bagiruang'] }}
+                                $data['status']['bagiruang']
                             </p>
                             <button class="btn btn-blue">
                                 Selengkapnya
