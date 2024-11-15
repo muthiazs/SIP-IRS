@@ -29,7 +29,6 @@
             font-size: 12px;
         }
 
-        
         /* Menambahkan roundness pada tabel */
         .table {
             border-radius: 10px; /* Sesuaikan besar roundness */
@@ -69,9 +68,7 @@
         <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    {{-- <h1 class="h3 mb-1">Selamat Datang {{ $mahasiswa->name }} 👋</h1> --}}
-                    <h1 class="fs-3 fw-bold">Selamat datang, {{  $mahasiswa->username }} 👋</h1>
-                    <p class="text-muted mb-0">Semester Akademik Sekarang</p>
+                    <h1>{{$Periode_sekarang->jenis}}</h1>
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-primary rounded-circle p-2">
@@ -92,11 +89,11 @@
                     <div class="d-flex">
                         <div class="margincard">
                             <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">$data['pengisianirs']['maxbeban'] SKS</span>
+                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
                         </div>
                         <div class="margincard" style="margin-left: 10px;">
                             <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;"> $data['pengisianirs']['total'] SKS</span>
+                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
                         </div>
                     </div>
                     <div>
@@ -109,34 +106,53 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Cari Jadwal Kuliah" aria-label="Search" aria-describedby="button-addon2">
                 <button class="btn btn-outline-secondary" type="button" id="button-addon2">Cari</button>
-                </div>
+            </div>
                 
             <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
                 <div class="d-flex justify-content-center align-items-center">
                     <span class="fw-medium">Daftar Jadwal Kuliah</span>
                 </div>
             </div>
-
             <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kode MK</th>
-                        <th>Mata Kuliah</th>
-                        <th>Kelas</th>
-                        <th>Semester</th>
-                        <th>SKS</th>
-                        <th>Ruang</th>
-                        <th>Hari</th>
-                        <th>Jam Mulai</th>
-                        <th>Jam Selesai</th>
-                        <th>Kuota</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="Table">
-                </tbody>
-            </table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Kode MK</th>
+                    <th>Mata Kuliah</th>
+                    <th>Kelas</th>
+                    <th>Semester</th>
+                    <th>SKS</th>
+                    <th>Ruang</th>
+                    <th>Hari</th>
+                    <th>Jam Mulai</th>
+                    <th>Jam Selesai</th>
+                    <th>Kuota</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="irsTable">
+                @foreach($jadwalKuliah as $index => $jadwal)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $jadwal->kode_matkul }}</td>
+                    <td>{{ $jadwal->nama_matkul }}</td>
+                    <td>{{ $jadwal->kelas }}</td>
+                    <td>{{ $jadwal->semester }}</td>
+                    <td>{{ $jadwal->sks }}</td>
+                    <td>{{ $jadwal->namaruang }}</td>
+                    <td>{{ $jadwal->hari }}</td>
+                    <td>{{ $jadwal->jam_mulai }}</td>
+                    <td>{{ $jadwal->jam_selesai }}</td>
+                    <td>{{ $jadwal->kuota }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary mb-2 rounded-3">Ambil</button>
+                        <button type="button" class="btn btn-danger">Batalkan</button>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
     </div>
   </div>
         </div>
