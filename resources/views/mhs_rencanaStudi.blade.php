@@ -247,48 +247,13 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-        <!-- Sidebar -->
-        <div class="sidebar p-4 position-relative">
-            <div class="text-center mb-4">
-                <div class="profile-img mb-3">
-                    <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
-                </div>
-                <h5 class="mb-1">{{ $data['mahasiswa']['name'] }}</h5>
-                <p class="small mb-1">NIM. {{ $data['mahasiswa']['nim'] }}</p>
-                <p class="small mb-1">{{ $data['mahasiswa']['program_studi'] }}</p>
-                <p class="small mb-1">{{ $data['user']['name'] }}</p>
-                <p class="small">NIP. {{ $data['user']['nip'] }}</p>
-            </div>
-
-            <nav class="nav flex-column gap-2 mb-4">
-                <a href="/dashboardMahasiswa" class="nav-link rounded d-flex align-items-center">
-                    <span class="material-icons me-3">home</span>
-                    Beranda
-                </a>
-                <a href="/rencanaStudi" class="nav-link active rounded d-flex align-items-center">
-                    <span class="material-icons me-3">description</span>
-                    Rencana Studi
-                </a>
-                <a href="#" class="nav-link rounded d-flex align-items-center">
-                    <span class="material-icons me-3">assessment</span>
-                    Hasil Studi
-                </a>
-            </nav>
-
-            <!-- Logout Button -->
-            <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3">
-                <a href="/login">
-                    <span class="material-icons align-middle me-2">logout</span>
-                    Keluar
-                </a>
-            </button>
-
-             <!-- Wave decoration -->
-             <div class="wave-decoration">
-                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 200%; width: 175%;">
-                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-                </svg>
-            </div>
+        <!-- untuk manggil komponen sidebar -->
+        <x-sidebar-mahasiswa :mahasiswa="$mahasiswa"></x-sidebar-mahasiswa>
+        <!-- Wave decoration -->
+        <div class="wave-decoration"> 
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+            </svg>
         </div>
 
         <!-- Main Content -->

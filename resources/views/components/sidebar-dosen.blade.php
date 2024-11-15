@@ -19,17 +19,19 @@
                 <span class="material-icons me-3">description</span>
                 IRS Mahasiswa
             </a>
-        </nav>
-      <!-- Logout Button -->
-      <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
 
-      <!-- Wave decoration -->
-      <div class="wave-decoration">
-          <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
-              <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-          </svg>
-      </div>
-  </div>
+    
+        <!-- Logout Button -->
+        <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
+
+        <!-- Wave decoration -->
+        <div class="wave-decoration">
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+            </svg>
+        </div>
+    </div>
+>>>>>>> 716c573b21e66386daf2d13db42ba2e252c35911
 </div>
 
 <!-- SweetAlert2 CDN -->
@@ -37,18 +39,18 @@
 
 <!-- Script to handle logout confirmation -->
 <script>
-  function confirmLogout() {
-      Swal.fire({
-          title: 'Yakin ingin keluar?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Keluar',
-          cancelButtonText: 'Batal',
-          reverseButtons: true
-      }).then((result) => {
-          if (result.isConfirmed) {
-              window.location.href = '/login';  // Redirect to the login page
-          }
-      });
-  }
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Yakin ingin keluar?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Keluar',
+            cancelButtonText: 'Batal',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/login';  // Redirect to the login page
+            }
+        });
+    }
 </script>
