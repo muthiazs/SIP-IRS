@@ -187,3 +187,21 @@
     background: #FFF2E5;
     border-radius: 30px;
 }
+
+    
+.sidebar-container {
+    position: relative;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px; /* Tentukan lebar sidebar */
+    height: 100vh; /* Pastikan tinggi sidebar menutupi seluruh tinggi layar */
+    overflow-y: auto; /* Untuk memberikan kemampuan scroll pada sidebar jika kontennya melebihi tinggi layar */
+}
+
+.main-content {
+    margin-left: 250px; /* Sesuaikan dengan lebar sidebar */
+}
