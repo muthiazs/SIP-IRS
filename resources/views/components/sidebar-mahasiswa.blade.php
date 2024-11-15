@@ -15,16 +15,19 @@
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
-            <a href="{{ route('mhs_pengisianIRS') }}" class="nav-link {{ Route::is('mhs_pengisianIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+            <a href="#" class="nav-link rounded d-flex align-items-center">
                 <span class="material-icons me-3">description</span>
                 Rencana Studi
+            </a>
+            <a href="{{ route('mhs_pengisianIRS') }}" class="nav-link {{ Route::is('mhs_pengisianIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+                <span class="material-icons me-3">edit</span>
+                Buat Rencana Studi
             </a>
             <a href="#" class="nav-link rounded d-flex align-items-center">
                 <span class="material-icons me-3">contract_edit</span>
                 Hasil Studi
             </a>
         </nav>
-
         <!-- Logout Button -->
         <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
 
@@ -58,3 +61,4 @@
         });
     }
 </script>
+

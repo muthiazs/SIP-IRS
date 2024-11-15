@@ -23,7 +23,6 @@
                 Hasil Studi
             </a>
         </nav>
-    
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
     
@@ -57,4 +56,5 @@
             });
         }
     </script>
+    
 </div>

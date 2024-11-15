@@ -24,9 +24,7 @@ class SidebarController extends Controller
                     )
                     ->where('dosen.id_user', '=', auth()->id())
                     ->first(); 
-
-        dd($Dosen);
-        return view('sidebar', ['Dosen' => $Dosen]);
+        return view('dashboardDosen', compact('Dosen'));
     }
 
 

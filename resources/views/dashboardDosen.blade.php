@@ -12,7 +12,6 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
-
 </head>
 <body class="bg-light">
     <div class="d-flex">
