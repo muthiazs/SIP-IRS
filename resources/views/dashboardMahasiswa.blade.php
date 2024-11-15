@@ -23,7 +23,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-grow-1 p-4">
+        <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                     <h1 class="fs-3 fw-bold">Selamat datang, {{  $mahasiswa->username }} 👋</h1>

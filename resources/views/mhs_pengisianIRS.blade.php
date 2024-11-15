@@ -56,17 +56,21 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-         <!-- untuk manggil komponen sidebar -->
-    <x-sidebar-mahasiswa :mahasiswa="$mahasiswa"></x-sidebar-mahasiswa>
-    <!-- Wave decoration -->
-
+        <!-- untuk manggil komponen sidebar -->
+        <x-sidebar-mahasiswa :mahasiswa="$mahasiswa"></x-sidebar-mahasiswa>
+        <!-- Wave decoration -->
+        <div class="wave-decoration"> 
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+            </svg>
+        </div>
         <!-- Main Content -->
         
-        <div class="flex-grow-1 p-4">
+        <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     {{-- <h1 class="h3 mb-1">Selamat Datang {{ $mahasiswa->name }} 👋</h1> --}}
-                    <h1 class="h3 mb-1">Selamat Datang👋</h1>
+                    <h1 class="fs-3 fw-bold">Selamat datang, {{  $mahasiswa->username }} 👋</h1>
                     <p class="text-muted mb-0">Semester Akademik Sekarang</p>
                 </div>
                 <div class="position-relative">
