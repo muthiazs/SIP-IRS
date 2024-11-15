@@ -4,13 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRS Mahasiswa</title>
-    <!-- Bootstrap CSS -->
+    <title>IRS Mahasiswa Perwalian - SIP-IRS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-        <!-- CSS dan JS dari public -->
+    <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
     <style>
@@ -27,22 +25,17 @@
             text-align: center; /* Menengahkan teks */
             font-size: 12px;
         }
-
-
         .table tbody td {
             color: black; /* Teks putih */
             font-family: 'Poppins';
             text-align: center; /* Menengahkan teks */
             font-size: 12px;
         }
-
-        
         /* Menambahkan roundness pada tabel */
         .table {
             border-radius: 10px; /* Sesuaikan besar roundness */
             overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
         }
-        
         /* Roundness untuk header */
         .table thead th:first-child {
             border-top-left-radius: 10px;
@@ -64,8 +57,11 @@
 
 <body>
     <div class="wrapper">
-         <!-- untuk manggil komponen sidebar -->
-      <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
+        @if(isset($dosen))
+            <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
+        @else
+            <p>Data dosen tidak ditemukan.</p>
+        @endif
         <!-- Main Content -->
         <div class="flex-grow-1 p-4">
             <header class="header">
@@ -73,7 +69,6 @@
                     <p>Semester Akademik Sekarang 2024/2025 Ganjil</p>
                     <h2>Periode Penyetujuan IRS</h2>
             </header>
-
             <!-- Filter and Search -->
             <section class="filter-search">
                 <div>

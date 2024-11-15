@@ -12,7 +12,6 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
-
 </head>
 <body class="bg-light">
     <div class="d-flex">
@@ -26,7 +25,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-grow-1 p-4">
+        <div class="main-content flex-grow-1 p-4">
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>

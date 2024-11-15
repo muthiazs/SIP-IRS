@@ -19,7 +19,7 @@ Route::get('/', function () {
 Route::controller(AuthController::class)->group(function () {
     Route::get('login', 'index')->name('login');
     Route::post('login', 'postLogin')->name('login.post');
-    Route::get('logout', 'logout')->name('logout');
+    Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 });
 
 // Protected Routes (should be wrapped in middleware later)
