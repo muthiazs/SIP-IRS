@@ -10,7 +10,7 @@
     </div>
 
     <nav class="nav flex-column gap-2 mb-4">
-        <a href="#" class="nav-link active rounded d-flex align-items-center">
+        <a href="/dashboardDekan" class="nav-link active rounded d-flex align-items-center">
             <span class="material-icons me-3">home</span>
             Beranda
         </a>

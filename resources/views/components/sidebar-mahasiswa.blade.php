@@ -39,26 +39,25 @@
             </svg>
         </div>
     </div>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Script to handle logout confirmation -->
+    <script>
+        function confirmLogout() {
+            Swal.fire({
+                title: 'Yakin ingin keluar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Keluar',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/login';  // Redirect to the login page
+                }
+            });
+        }
+    </script>
 </div>
-
-<!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- Script to handle logout confirmation -->
-<script>
-    function confirmLogout() {
-        Swal.fire({
-            title: 'Yakin ingin keluar?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Keluar',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/login';  // Redirect to the login page
-            }
-        });
-    }
-</script>
 

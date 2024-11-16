@@ -15,7 +15,7 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-    <x-sidebar-kaprodi :kaprodi="$kaprodi"></x-sidebar-kaprodi>
+    <x-sidebar-dekan :dekan="$dekan"></x-sidebar-dekan>
             <!-- Wave decoration -->
             <div class="wave-decoration"> 
                 <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
@@ -28,7 +28,7 @@
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat datang, {{ $kaprodi->username }} 👋</h1>
+                    <h1 class="fs-3 fw-bold">Selamat datang, {{ $dekan->username }} 👋</h1>
                     <p class="text-muted">Semester Akademik sekarang</p>
                 </div>
                 <div class="position-relative">
