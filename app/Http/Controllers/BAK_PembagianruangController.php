@@ -2,30 +2,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BAK_PembagianruangController extends Controller
 {
     public function index()
     {
-        // Contoh data dummy, nantinya bisa diambil dari database
-        $data = [
-            'user' => [
-                'name' => 'Albus Dumbledore',
-                'nip' => '198203092006041002',
-                'role' => 'Tenaga Kependidikan',
-                'periode' => 'Periode 2024-2029'
-            ],
-            'semester' => [
-                'current' => '2024/2025 Ganjil',
-                'period' => '19 Jan - 2 Mar'
-            ],
-            'progress' => [
-                'belum_usul' => ['count' => 1, 'total' => 6],
-                'dikonfirmasi' => ['count' => 4, 'total' => 6],
-                'belum_dikonfirmasi' => ['count' => 1, 'total' => 6]
-            ]
-        ];
+        $akademik = DB::table('pegawai')
+                        ->join('users', 'pegawai.id_user', '=', 'users.id')
+                        ->crossJoin('periode_akademik')
+                        ->where('pegawai.id_user', auth()->id())
+                        ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
+                        ->select(
+                            'pegawai.nama',
+                            'pegawai.nip',
+                            'periode_akademik.nama_periode'
+                        )
+                        ->first();
+        ;
 
-        return view('bak_pembagianruang', compact('data'));
+        return view('bak_PembagianRuang', compact('akademik'));
     }
 }

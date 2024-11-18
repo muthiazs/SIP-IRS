@@ -99,6 +99,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/kaprodi_StatusMahasiswa', [KaprodiControler::class, 'StatusMahasiswa'])->name('kaprodi_StatusMahasiswa');
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
+    Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'index'])->name('bak_PembagianRuang');
 });
 
 //Pembagian Ruang

@@ -1,16 +1,17 @@
-<div class="sidebar p-4 text-white position-relative">
-    <div class="text-center mb-4">
-        <div class="profile-img rounded-circle mx-auto mb-3">
-            <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
-        </div>
-        <h2 class="fs-4 fw-bold">{{ $akademik->nama }}</h2>
-        <p class="small opacity-75">NIP. {{ $akademik->nip }}</p>
-        <p class="small opacity-75">Tenaga Kependidikan</p>
-        <p class="small opacity-75">Periode</p>
+<div class="sidebar container">
+    <div class="sidebar p-4 text-white">
+        <div class="text-center mb-4">
+            <div class="profile-img rounded-circle mx-auto mb-3">
+                <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
+            </div>
+            <h2 class="fs-4 fw-bold">{{ $akademik->nama }}</h2>
+            <p class="small opacity-75">NIP. {{ $akademik->nip }}</p>
+            <p class="small opacity-75">Tenaga Kependidikan</p>
+            <p class="small opacity-75">Fakultas Sains dan Matematika</p>
     </div>
 
     <nav class="nav flex-column gap-2 mb-4">
-        <a href="/dashboardDekan" class="nav-link active rounded d-flex align-items-center">
+        <a href="/dashboardAkademik" class="nav-link active rounded d-flex align-items-center">
             <span class="material-icons me-3">home</span>
             Beranda
         </a>
@@ -22,7 +23,6 @@
 
         <!-- Logout Button -->
         <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
-
     
         <!-- Wave decoration -->
         <div class="wave-decoration">
@@ -53,4 +53,3 @@
         });
     }
 </script>
-
