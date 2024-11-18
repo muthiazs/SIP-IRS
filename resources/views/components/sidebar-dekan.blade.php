@@ -23,9 +23,10 @@
                 Persetujuan Jadwal Kuliah
             </a>
         </nav>
-            <!-- Logout Button -->
-            <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
-    
+
+        <!-- Logout Button -->
+        <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
+
         <!-- Wave decoration -->
         <div class="wave-decoration">
             <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
@@ -37,6 +38,7 @@
 
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!-- Script to handle logout confirmation -->
     <script>
@@ -55,3 +57,4 @@
             });
         }
     </script>
+

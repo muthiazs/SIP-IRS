@@ -125,12 +125,14 @@ class JadwalKuliahSeeder extends Seeder
           // Tambahkan id_periode dan timestamps ke setiap record
           foreach ($jadwal as $data) {
             $id_periode = $this->getPeriodeBySemester($data['semester']);
+        
 
             DB::table('jadwal_kuliah')->insert([
                 'kode_matkul' => $data['kode_matkul'],
                 'semester' => $data['semester'],
                 'kelas' => $data['kelas'],
                 'hari' => $data['hari'],
+                'kuota' => 50, // Tambahkan kuota di sini
                 'jam_mulai' => $data['jam_mulai'],
                 'jam_selesai' => $data['jam_selesai'],
                 'id_ruang' => $data['id_ruang'],
@@ -155,57 +157,5 @@ class JadwalKuliahSeeder extends Seeder
         }
     }
 
-    // Fungsi helper untuk verifikasi jadwal (opsional)
-    private function verifySchedule($jadwal)
-    {
-        $conflicts = [];
-        
-        foreach ($jadwal as $i => $jadwal1) {
-            foreach ($jadwal as $j => $jadwal2) {
-                if ($i !== $j) {
-                    // Cek konflik pada kelas yang sama
-                    if ($jadwal1['semester'] === $jadwal2['semester'] && 
-                        $jadwal1['kelas'] === $jadwal2['kelas'] &&
-                        $jadwal1['hari'] === $jadwal2['hari']) {
-                        
-                        if ($this->isTimeConflict($jadwal1, $jadwal2)) {
-                            $conflicts[] = "Konflik jadwal pada kelas {$jadwal1['kelas']} semester {$jadwal1['semester']}";
-                        }
-                    }
-                    
-                    // Cek konflik dosen
-                    if ($jadwal1['id_dosen'] === $jadwal2['id_dosen'] &&
-                        $jadwal1['hari'] === $jadwal2['hari']) {
-                        
-                        if ($this->isTimeConflict($jadwal1, $jadwal2)) {
-                            $conflicts[] = "Konflik jadwal dosen ID {$jadwal1['id_dosen']}";
-                        }
-                    }
-                    
-                    // Cek konflik ruangan (hanya untuk semester ganjil)
-                    if ($jadwal1['semester'] % 2 === 1 && 
-                        $jadwal1['id_ruang'] === $jadwal2['id_ruang'] &&
-                        $jadwal1['hari'] === $jadwal2['hari']) {
-                        
-                        if ($this->isTimeConflict($jadwal1, $jadwal2)) {
-                            $conflicts[] = "Konflik ruangan ID {$jadwal1['id_ruang']} pada semester ganjil";
-                        }
-                    }
-                }
-            }
-        }
-        
-        return $conflicts;
-    }
-
-    private function isTimeConflict($jadwal1, $jadwal2)
-    {
-        $start1 = strtotime($jadwal1['jam_mulai']);
-        $end1 = strtotime($jadwal1['jam_selesai']);
-        $start2 = strtotime($jadwal2['jam_mulai']);
-        $end2 = strtotime($jadwal2['jam_selesai']);
-        
-        return ($start1 < $end2 && $start2 < $end1);
-    }
 }
 
