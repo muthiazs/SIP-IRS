@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('jadwal_kuliah', function (Blueprint $table) {
             $table->bigIncrements('id_jadwal');
             $table->string('kode_matkul');
-            $table->integer('kuota');
+            $table->integer('kuota')->default(50)->change();
             $table->foreignId('id_dosen')->constrained('dosen', 'id_dosen');
             $table->foreignId('id_ruang')->constrained('ruangan', 'id_ruang');
             $table->string('hari');

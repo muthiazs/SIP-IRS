@@ -31,7 +31,6 @@
             </svg>
         </div>
     </div>
->>>>>>> 716c573b21e66386daf2d13db42ba2e252c35911
 </div>
 
 <!-- SweetAlert2 CDN -->

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('id_user')->constrained('users', 'id');
             $table->string('nim');
             $table->string('nama');
+            $table->integer('semester'); // Kolom semester ditambahkan di sini
             $table->unsignedBigInteger('id_prodi');
             $table->unsignedBigInteger('id_dosen');            
             $table->string('angkatan');
