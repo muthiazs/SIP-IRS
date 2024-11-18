@@ -19,7 +19,7 @@
                 <span class="material-icons me-3">description</span>
                 Rencana Studi
             </a>
-            <a href="{{ route('mhs_pengisianIRS') }}" class="nav-link {{ Route::is('mhs_pengisianIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+            <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">edit</span>
                 Buat Rencana Studi
             </a>

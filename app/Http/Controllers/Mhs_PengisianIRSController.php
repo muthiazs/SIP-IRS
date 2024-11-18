@@ -10,7 +10,7 @@ class Mhs_PengisianIRSController extends Controller
     {
         // Ngambil Periode 
         $Periode_sekarang = DB::table('periode_akademik')
-            ->orderByRaw('periode_akademik.created_at DESC')
+            ->orderByRaw('periode_akademik.created_at desc')
             ->select('periode_akademik.jenis')
             ->first();
     
@@ -129,6 +129,72 @@ class Mhs_PengisianIRSController extends Controller
             // Pass both daftarMk and mahasiswa data to the view
         return view('mhs_daftarMatkul', compact('daftarMk', 'mahasiswa'));
         }    
+
+        public function periodeHabis()
+        {
+                // Fetch mahasiswa data
+            $mahasiswa = DB::table('mahasiswa')
+            ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+            ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+            ->where('mahasiswa.id_user', auth()->id())
+            ->select(
+                'mahasiswa.nim',
+                'mahasiswa.nama as nama_mhs',
+                'program_studi.nama as prodi_nama',
+                'dosen.nama as nama_doswal',
+                'dosen.nip',
+                'users.username'
+            ) 
+            ->first();
+
+            // Pass both daftarMk and mahasiswa data to the view
+            return view('mhs_habisPeriodeIRS', compact('mahasiswa'));
+        }
+
+        public function draftIRS()
+        {
+                // Fetch mahasiswa data
+            $mahasiswa = DB::table('mahasiswa')
+            ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+            ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+            ->where('mahasiswa.id_user', auth()->id())
+            ->select(
+                'mahasiswa.nim',
+                'mahasiswa.nama as nama_mhs',
+                'program_studi.nama as prodi_nama',
+                'dosen.nama as nama_doswal',
+                'dosen.nip',
+                'users.username'
+            ) 
+            ->first();
+
+            // Pass both daftarMk and mahasiswa data to the view
+            return view('mhs_draftIRS', compact('mahasiswa'));
+        }
+
+        public function newIRS()
+        {
+                // Fetch mahasiswa data
+            $mahasiswa = DB::table('mahasiswa')
+            ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+            ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+            ->where('mahasiswa.id_user', auth()->id())
+            ->select(
+                'mahasiswa.nim',
+                'mahasiswa.nama as nama_mhs',
+                'program_studi.nama as prodi_nama',
+                'dosen.nama as nama_doswal',
+                'dosen.nip',
+                'users.username'
+            ) 
+            ->first();
+
+            // Pass both daftarMk and mahasiswa data to the view
+            return view('mhs_newIRS', compact('mahasiswa'));
+        }
 
         
         

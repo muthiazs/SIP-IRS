@@ -29,7 +29,6 @@
         <!-- Logout Button -->
         <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
 
-    
         <!-- Wave decoration -->
         <div class="wave-decoration">
             <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">

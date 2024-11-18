@@ -69,6 +69,18 @@ Route::group([], function () {
     Route::prefix('daftarMatkul')->group(function () {
         Route::get('/', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('daftarMatkul');
     });
+    // Halaman kalo periode isi irs Habis
+    Route::prefix('periodeIRSHabis')->group(function () {
+        Route::get('/', [Mhs_PengisianIRSController::class, 'periodeHabis'])->name('mhs_habisPeriodeIRS');
+    });
+    // Halaman pengisian IRS baru kayak jembatan buat pilih matkul gitu
+    Route::prefix('newIRS')->group(function () {
+        Route::get('/', [Mhs_PengisianIRSController::class, 'newIRS'])->name('mhs_newIRS');
+    });
+    // Halaman pengisian IRS kalo udah pernah ambil aka draft irs
+    Route::prefix('draftIRS')->group(function () {
+        Route::get('/', [Mhs_PengisianIRSController::class, 'draftIRS'])->name('mhs_draftIRS');
+    });
 
     // Pengambilan Matkul oleh Mahasiswa
     // Route::prefix('pengambilanMatkul')->group(function () {
@@ -94,6 +106,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/rencanaStudi', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('mhs_rencanaStudi');
     Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'indexPilihJadwal'])->name('mhs_pengisianIRS');
     Route::get('/daftarMatkul', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('mhs_daftarMatkul');
+    Route::get('/periodeIRSHabis', [Mhs_PengisianIRSController::class, 'periodeHabis'])->name('mhs_habisPeriodeIRS');
+    Route::get('/newIRS', [Mhs_PengisianIRSController::class, 'newIRS'])->name('mhs_newIRS');
+    Route::get('/draftIRS', [Mhs_PengisianIRSController::class, 'draftIRS'])->name('mhs_draftIRS');
     // Route::get('/pengambilanMatkul', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
     Route::get('/kaprodi_JadwalKuliah', [KaprodiControler::class, 'JadwalKuliah'])->name('kaprodi_JadwalKuliah');
     Route::get('/kaprodi_StatusMahasiswa', [KaprodiControler::class, 'StatusMahasiswa'])->name('kaprodi_StatusMahasiswa');
