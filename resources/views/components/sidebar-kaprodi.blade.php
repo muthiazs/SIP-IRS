@@ -10,17 +10,17 @@
         </div>
     
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="#" class="nav-link active rounded d-flex align-items-center">
+            <a href="/dashboardKaprodi" class="nav-link active rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
+            <a href="/kaprodi_JadwalKuliah" class="nav-link rounded d-flex align-items-center">
                 <span class="material-icons me-3">description</span>
-                Daftar Prodi
+                Jadwal Kuliah
             </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
+            <a href="/kaprodi_StatusMahasiswa" class="nav-link rounded d-flex align-items-center">
                 <span class="material-icons me-3">assessment</span>
-                Hasil Studi
+                Status Mahasiswa
             </a>
         </nav>
             <!-- Logout Button -->

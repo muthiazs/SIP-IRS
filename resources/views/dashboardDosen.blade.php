@@ -16,13 +16,12 @@
 <body class="bg-light">
     <div class="d-flex">
     <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
-
-        <!-- Wave decoration -->
-        <div class="wave-decoration"> 
-            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
-                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-            </svg>
-        </div>
+            <!-- Wave decoration -->
+            <div class="wave-decoration"> 
+                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+                </svg>
+            </div>
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
