@@ -1,4 +1,3 @@
-<!-- Sidebar Container -->
 <div class="sidebar-container">
     <div class="sidebar p-4 text-white">
         <div class="text-center mb-4">
@@ -7,8 +6,7 @@
             </div>
             <h2 class="fs-4 fw-bold">{{ $dekan->dosen_nama }}</h2>
             <p class="small opacity-75">NIP. {{ $dekan->nip }}</p>
-            <p class="small opacity-75">Dekan<br>Fakultas Sains dan Matematika</p>
-            <p class="small opacity-75">Program Studi S1 {{ $dekan->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
+            <p class="small opacity-75">Dekan<br>Program Studi S1 {{ $dekan->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
         </div>
 
         <nav class="nav flex-column gap-2 mb-4">
@@ -41,20 +39,22 @@
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Script to handle logout confirmation -->
-<script>
-    function confirmLogout() {
-        Swal.fire({
-            title: 'Yakin ingin keluar?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Keluar',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/login';  // Redirect to the login page
-            }
-        });
-    }
-</script>
+
+    <!-- Script to handle logout confirmation -->
+    <script>
+        function confirmLogout() {
+            Swal.fire({
+                title: 'Yakin ingin keluar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Keluar',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/login';  // Redirect to the login page
+                }
+            });
+        }
+    </script>
+

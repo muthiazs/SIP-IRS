@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             RuanganSeeder::class,
             PegawaiSeeder::class,
             JadwalKuliahSeeder::class,
+            IrsSeeder::class,
+            ProgressMhsSeeder::class
         ]);
     }
 }

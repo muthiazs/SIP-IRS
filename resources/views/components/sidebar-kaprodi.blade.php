@@ -1,7 +1,7 @@
 <div class="sidebar-container">
     <div class="sidebar p-4 text-white">
         <div class="text-center mb-4">
-            <div class="profile-img mb-3">
+            <div class="profile-img rounded-circle mx-auto mb-3">
                     <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
                 </div>
                 <h2 class="fs-4 fw-bold">{{ $kaprodi->dosen_nama }}</h2>
@@ -25,7 +25,6 @@
         </nav>
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
-    
         
             <!-- Wave decoration -->
             <div class="wave-decoration">
@@ -56,5 +55,3 @@
             });
         }
     </script>
-    
-</div>

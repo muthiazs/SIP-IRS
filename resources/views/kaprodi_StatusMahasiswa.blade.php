@@ -15,13 +15,14 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-    <x-sidebar-kaprodi :kaprodi="$kaprodi"></x-sidebar-kaprodi>
-            <!-- Wave decoration -->
-            <div class="wave-decoration"> 
-                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
-                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-                </svg>
-            </div>
+        <x-sidebar-kaprodi :kaprodi="$kaprodi"></x-sidebar-kaprodi>
+
+        <!-- Wave decoration -->
+        <div class="wave-decoration">
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+            </svg>
+        </div>
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
@@ -42,66 +43,56 @@
             <!-- Period Banner -->
             <div class="period-banner p-3 rounded-3 mb-4 d-flex justify-content-between">
                 <span>Periode Persetujuan Ruang Kelas</span>
-                <span> $data['semester']['period'] </span>
+                <span>a</span>
             </div>
 
-            <!-- Cards Section -->
-            <div class="row g-4 mb-4">
-                <!-- Buat Jadwal Kuliah Card -->
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body text-center">
-                            <h5 class="fw-bold">Buat Jadwal Kuliah</h5>
-                            <p class="text-muted mb-3">Anda belum mengajukan jadwal</p>
-                            <button class="btn btn-danger">Buat Jadwal</button>
-                        </div>
+            <!-- Progress Mahasiswa -->
+            <h3 class="fw-bold mb-4">Progress Mahasiswa</h3>
+            <div class="card mb-4 p-3">
+                <h5 class="fw-bold mb-3">Program Studi Informatika</h5>
+                <div class="row text-center">
+                    <div class="col-3">
+                        <h6 class="fw-bold text-danger">10</h6>
+                        <p class="text-muted">Mangkir</p>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="fw-bold text-dark">10</h6>
+                        <p class="text-muted">Cuti</p>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="fw-bold text-primary">50</h6>
+                        <p class="text-muted">Belum Konfirmasi</p>
+                    </div>
+                    <div class="col-3">
+                        <h6 class="fw-bold text-success">100</h6>
+                        <p class="text-muted">Telah Konfirmasi</p>
                     </div>
                 </div>
+                <div class="text-end">
+                    <button class="btn btn-primary rounded-pill px-4">Lihat Detail</button>
+                </div>
+            </div>
 
-                <!-- Progress Mahasiswa Card -->
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body text-center">
-                            <h5 class="fw-bold">Progress Mahasiswa</h5>
-                            <div class="d-flex justify-content-around mt-3">
-                                <!-- ini aku buat biar kita bisa liat tampilan klo datanya udah ada, aku ngecek side bar pake iniiii -->
-                                <div>
-                                        <span class="fs-4 fw-bold text-danger">1 / 1 </span>
-                                        <p class="small text-muted">Belum Konfirmasi</p>
-                                    </div>
-                                    <div>
-                                        <span class="fs-4 fw-bold text-konfirmasi">1 / 1</span>
-                                        <p class="small text-muted">Telah Konfirmasi</p>
-                                    </div>
-                                    <div>
-                                        <span class="fs-4 fw-bold text-danger">1 / 1 </span>
-                                        <p class="small text-muted">Belum Mengisi IRS</p>
-                                    </div>
-                                    <div>
-                                        <span class="fs-4 fw-bold text-konfirmasi"> 1 / 1</span>
-                                        <p class="small text-muted">Telah Mengisi IRS</p>
-                                    </div>
-                                </div>
-                                <!-- <div>
-                                    <span class="fs-4 fw-bold text-danger">$data['progressIRSMahasiswaKaprodi']['belumKonfirmasi']['count'] </span>
-                                    <p class="small text-muted">Belum Konfirmasi</p>
-                                </div>
-                                <div>
-                                    <span class="fs-4 fw-bold text-konfirmasi">$data['progressIRSMahasiswaKaprodi']['sudahKonfirmasi']['count']</span>
-                                    <p class="small text-muted">Telah Konfirmasi</p>
-                                </div>
-                                <div>
-                                    <span class="fs-4 fw-bold text-danger">$data['progressIRSMahasiswaKaprodi']['belumIsiIRS']['count'] </span>
-                                    <p class="small text-muted">Belum Mengisi IRS</p>
-                                </div>
-                                <div>
-                                    <span class="fs-4 fw-bold text-konfirmasi"> $data['progressIRSMahasiswaKaprodi']['sudahIsiIRS']['count']</span>
-                                    <p class="small text-muted">Telah Mengisi IRS</p>
-                                </div>
-                            </div> -->
-                            <button class="btn btn-primary mt-3">Lihat Detail</button>
-                        </div>
+            <!-- Status Pengisian IRS -->
+            <h3 class="fw-bold mb-4">Status Pengisian IRS</h3>
+            <div class="card p-3">
+                <h5 class="fw-bold mb-3">Status Pengisian IRS</h5>
+                <div class="row text-center">
+                    <div class="col-4">
+                        <h6 class="fw-bold text-danger">20</h6>
+                        <p class="text-muted">Belum Konfirmasi</p>
                     </div>
+                    <div class="col-4">
+                        <h6 class="fw-bold text-primary">30</h6>
+                        <p class="text-muted">Telah Konfirmasi</p>
+                    </div>
+                    <div class="col-4">
+                        <h6 class="fw-bold text-success">100</h6>
+                        <p class="text-muted">Telah Mengisi IRS</p>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <button class="btn btn-primary rounded-pill px-4">Lihat Detail</button>
                 </div>
             </div>
 
