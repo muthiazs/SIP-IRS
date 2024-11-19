@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <div class="sidebar-container">
+=======
+<div class="sidebar container">
+>>>>>>> 77933f2b882463f85210914068950efa79d4953e
     <div class="sidebar p-4 text-white">
         <div class="text-center mb-4">
             <div class="profile-img rounded-circle mx-auto mb-3">
@@ -7,6 +11,7 @@
             <h2 class="fs-4 fw-bold">{{ $akademik->nama }}</h2>
             <p class="small opacity-75">NIP. {{ $akademik->nip }}</p>
             <p class="small opacity-75">Tenaga Kependidikan</p>
+<<<<<<< HEAD
             <p class="small opacity-75">Periode</p>
         </div>
     
@@ -64,10 +69,13 @@
         <p class="small opacity-75">NIP. {{ $akademik->nip }}</p>
         <p class="small opacity-75">Tenaga Kependidikan</p>
         <p class="small opacity-75">Periode</p>
+=======
+            <p class="small opacity-75">Fakultas Sains dan Matematika</p>
+>>>>>>> 77933f2b882463f85210914068950efa79d4953e
     </div>
 
     <nav class="nav flex-column gap-2 mb-4">
-        <a href="#" class="nav-link active rounded d-flex align-items-center">
+        <a href="/dashboardAkademik" class="nav-link active rounded d-flex align-items-center">
             <span class="material-icons me-3">home</span>
             Beranda
         </a>
@@ -79,7 +87,6 @@
 
         <!-- Logout Button -->
         <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
-
     
         <!-- Wave decoration -->
         <div class="wave-decoration">
@@ -110,4 +117,3 @@
         });
     }
 </script>
-

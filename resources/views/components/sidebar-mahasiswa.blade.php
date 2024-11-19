@@ -11,7 +11,7 @@
         </div>
     
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="{{ route('dashboardMahasiswa') }}" class="nav-link {{ Route::is('dashboardMahasiswa') ? 'active' : '' }} rounded d-flex align-items-center">
+            <a href="/dashboardMahasiswa" class="nav-link rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
@@ -19,7 +19,7 @@
                 <span class="material-icons me-3">description</span>
                 Rencana Studi
             </a>
-            <a href="{{ route('mhs_pengisianIRS') }}" class="nav-link {{ Route::is('mhs_pengisianIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+            <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">edit</span>
                 Buat Rencana Studi
             </a>
@@ -40,8 +40,29 @@
             </svg>
         </div>
     </div>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Script to handle logout confirmation -->
+    <script>
+        function confirmLogout() {
+            Swal.fire({
+                title: 'Yakin ingin keluar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Keluar',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/login';  // Redirect to the login page
+                }
+            });
+        }
+    </script>
 </div>
 
+<<<<<<< HEAD
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -62,3 +83,5 @@
         });
     }
 </script>
+=======
+>>>>>>> 77933f2b882463f85210914068950efa79d4953e

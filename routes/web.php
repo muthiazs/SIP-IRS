@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DekanController;
 use App\Http\Controllers\SidebarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BAK_PembagianruangController;
-
+use App\Http\Controllers\Kaprodi_JadwalKuliahControler;
+use App\Http\Controllers\KaprodiControler;
 use App\Http\Controllers\IRSController;
 use App\Http\Controllers\Mhs_PengisianIRSController;
 
@@ -36,12 +38,16 @@ Route::group([], function () {
 
     // Kaprodi Dashboard Routes
     Route::prefix('dashboardKaprodi')->group(function () {
-        Route::get('/', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
+        Route::get('/', [KaprodiControler::class, 'DashboardKaprodi'])->name('dashboardKaprodi');
     });
 
     // Akademik Dashboard Routes
     Route::prefix('dashboardAkademik')->group(function () {
         Route::get('/', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
+    });
+
+    Route::prefix('dashboardDekan')->group(function () {
+        Route::get('/', [DekanController::class, 'indexDekan'])->name('dashboardDekan');
     });
 
     // Pengisian IRS 
@@ -68,6 +74,18 @@ Route::group([], function () {
     Route::prefix('rrencanaStudi')->group(function () {
         Route::get('/', [Mhs_PengisianIRSController::class, 'indexRRencanaStudi'])->name('mhs_rrencanaStudi');
     });
+    // Halaman kalo periode isi irs Habis
+    Route::prefix('periodeIRSHabis')->group(function () {
+        Route::get('/', [Mhs_PengisianIRSController::class, 'periodeHabis'])->name('mhs_habisPeriodeIRS');
+    });
+    // Halaman pengisian IRS baru kayak jembatan buat pilih matkul gitu
+    Route::prefix('newIRS')->group(function () {
+        Route::get('/', [Mhs_PengisianIRSController::class, 'newIRS'])->name('mhs_newIRS');
+    });
+    // Halaman pengisian IRS kalo udah pernah ambil aka draft irs
+    Route::prefix('draftIRS')->group(function () {
+        Route::get('/', [Mhs_PengisianIRSController::class, 'draftIRS'])->name('mhs_draftIRS');
+    });
 
     // Pengambilan Matkul oleh Mahasiswa
     // Route::prefix('pengambilanMatkul')->group(function () {
@@ -85,8 +103,8 @@ Route::post('/submit-role-selection', [AuthController::class, 'submitRoleSelecti
 Route::middleware('auth')->group(function () {
     Route::get('/dashboardMahasiswa', [DashboardController::class, 'indexMahasiswa'])->name('dashboardMahasiswa');
     Route::get('/dashboardAkademik', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
-    Route::get('/dashboardDekan', [DashboardController::class, 'indexDekan'])->name('dashboardDekan');
-    Route::get('/dashboardKaprodi', [DashboardController::class, 'indexKaprodi'])->name('dashboardKaprodi');
+    Route::get('/dashboardDekan', [DekanController::class, 'indexDekan'])->name('dashboardDekan');
+    Route::get('/dashboardKaprodi', [KaprodiControler::class, 'DashboardKaprodi'])->name('dashboardKaprodi');
     Route::get('/dashboardDosen', [DashboardController::class, 'index'])->name('dashboardDosen');
     Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
     Route::get('/dosen_IRSMahasiswa', [IRSController::class, 'index'])->name('dosen_irsMahasiswa');
@@ -94,7 +112,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'indexPilihJadwal'])->name('mhs_pengisianIRS');
     Route::get('/daftarMatkul', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('mhs_daftarMatkul');
     Route::get('/rrencanaStudi', [Mhs_PengisianIRSController::class, 'indexRRencanaStudi'])->name('mhs_rrencanaStudi');
+    Route::get('/periodeIRSHabis', [Mhs_PengisianIRSController::class, 'periodeHabis'])->name('mhs_habisPeriodeIRS');
+    Route::get('/newIRS', [Mhs_PengisianIRSController::class, 'newIRS'])->name('mhs_newIRS');
+    Route::get('/draftIRS', [Mhs_PengisianIRSController::class, 'draftIRS'])->name('mhs_draftIRS');
     // Route::get('/pengambilanMatkul', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
+    Route::get('/kaprodi_JadwalKuliah', [KaprodiControler::class, 'JadwalKuliah'])->name('kaprodi_JadwalKuliah');
+    Route::get('/kaprodi_StatusMahasiswa', [KaprodiControler::class, 'StatusMahasiswa'])->name('kaprodi_StatusMahasiswa');
+    Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
+    Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
+    Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'index'])->name('bak_PembagianRuang');
 });
 
 //Pembagian Ruang

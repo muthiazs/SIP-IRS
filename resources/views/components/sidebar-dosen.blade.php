@@ -3,7 +3,6 @@
         <div class="text-center mb-4">
             <div class="profile-img rounded-circle mx-auto mb-3">
                 <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
-                <!-- Profile image placeholder -->
             </div>
             <h2 class="fs-4 fw-bold">{{ $dosen->dosen_nama }}</h2>
             <p class="small opacity-75">NIP. {{ $dosen->nip }}</p>
@@ -11,11 +10,11 @@
         </div>
     
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="#" class="nav-link active rounded d-flex align-items-center">
+            <a href="/dashboardDosen" class="nav-link active rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
-            <a href="{{ route('dosen_irsMahasiswa') }}" class="nav-link {{ Route::is('dosen_irsMahasiswa') ? 'active' : '' }} rounded d-flex align-items-center">
+            <a href="/dosen_irsMahasiswa" class="nav-link rounded d-flex align-items-center">
                 <span class="material-icons me-3">description</span>
                 IRS Mahasiswa
             </a>
@@ -31,7 +30,6 @@
             </svg>
         </div>
     </div>
->>>>>>> 716c573b21e66386daf2d13db42ba2e252c35911
 </div>
 
 <!-- SweetAlert2 CDN -->

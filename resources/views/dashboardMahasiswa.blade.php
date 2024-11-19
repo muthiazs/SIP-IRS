@@ -87,17 +87,17 @@
                 <div class="col-md-6">
                     <div class="stats-card">
                         <h5 class="mb-3">Status IRS</h5>
-                        @if(isset($data['status']) && $data['status']['irs'] === 'ditolak')
-                            <div class="alert alert-danger mb-0">
-                                Isian Rencana Studi Ditolak
-                                <a href="/pengisianIRS" class="btn btn-danger mt-2">Lihat Detail</a>
+                        <p class="fs-6 fw-semibold mb-2">Periode pengisian irs dibuka dari ... - ... </p>
+                            <div class="button-group-right">
+                                <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('mhs_newIRS') }}'">Buat IRS</button>
                             </div>
-                        @endif
+                            </div>
+
                     </div>
                 </div>
             </div>
 
-            <!-- Registration Status -->
+            {{-- <!-- Registration Status -->
             <div class="stats-card mt-4">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center">
@@ -112,7 +112,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

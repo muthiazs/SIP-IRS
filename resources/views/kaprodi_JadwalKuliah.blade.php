@@ -15,7 +15,7 @@
 </head>
 <body class="bg-light">
     <div class="d-flex">
-    <x-sidebar-akademik :akademik="$akademik"></x-sidebar-akademik>
+    <x-sidebar-kaprodi :kaprodi="$kaprodi"></x-sidebar-kaprodi>
             <!-- Wave decoration -->
             <div class="wave-decoration"> 
                 <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
@@ -28,7 +28,7 @@
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                <h1 class="fs-3 fw-bold">Selamat Datang {{ $akademik->nama }} 👋</h1>
+                    <h1 class="fs-3 fw-bold">Selamat datang, {{ $kaprodi->username }} 👋</h1>
                     <p class="text-muted">Semester Akademik sekarang</p>
                 </div>
                 <div class="position-relative">
@@ -41,7 +41,7 @@
 
             <!-- Period Banner -->
             <div class="period-banner p-3 rounded-3 mb-4 d-flex justify-content-between">
-                <span>Periode Pembagian Ruang Kelas</span>
+                <span>Periode Persetujuan Ruang Kelas</span>
                 <span> $data['semester']['period'] </span>
             </div>
 
@@ -51,7 +51,7 @@
                 <div class="col-md-6">
                     <div class="card shadow-sm">
                         <div class="card-body text-center">
-                            <h5 class="fw-bold">Penyusunan Pembagian Ruang Kelas</h5>
+                            <h5 class="fw-bold">Buat Jadwal Kuliah</h5>
                             <p class="text-muted mb-3">Anda belum mengajukan jadwal</p>
                             <button class="btn btn-danger">Buat Jadwal</button>
                         </div>
@@ -62,7 +62,7 @@
                 <div class="col-md-6">
                     <div class="card shadow-sm">
                         <div class="card-body text-center">
-                            <h5 class="fw-bold">Status Pengusulan Pembagian Ruang Kelas</h5>
+                            <h5 class="fw-bold">Progress Mahasiswa</h5>
                             <div class="d-flex justify-content-around mt-3">
                                 <!-- ini aku buat biar kita bisa liat tampilan klo datanya udah ada, aku ngecek side bar pake iniiii -->
                                 <div>

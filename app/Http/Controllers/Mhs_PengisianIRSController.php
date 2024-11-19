@@ -187,10 +187,11 @@ class Mhs_PengisianIRSController extends Controller
                 'periode_akademik.nama_periode'
             )
             ->first();
+
+        
         
             // Pass both daftarMk and mahasiswa data to the view
             return view('mhs_rrencanaStudi', compact('Periode_sekarang','jadwalKuliah', 'mahasiswa'));  // Pass data to the view
         } 
-        
 
 }

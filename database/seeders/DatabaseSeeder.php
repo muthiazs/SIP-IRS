@@ -22,6 +22,10 @@ class DatabaseSeeder extends Seeder
             MatakuliahSeeder::class,
             PeriodeAkademikSeeder::class,
             RuanganSeeder::class,
+            PegawaiSeeder::class,
+            JadwalKuliahSeeder::class,
+            IrsSeeder::class,
+            ProgressMhsSeeder::class
         ]);
     }
 }

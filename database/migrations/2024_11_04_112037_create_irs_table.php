@@ -15,9 +15,10 @@ return new class extends Migration
             $table->bigIncrements('id_irs');
             $table->string('nim');
             $table->integer('semester');
-            $table->string('tahun_ajaran');
+            $table->foreignId('id_jadwal')->constrained('jadwal_kuliah', 'id_jadwal');
             $table->string('status')->default('belum disetujui');
             $table->timestamp('created_at');
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

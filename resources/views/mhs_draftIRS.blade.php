@@ -55,17 +55,8 @@
             justify-content: flex-end;
             gap: 10px; /* Jarak antar tombol */
             margin-top: 15px; /* Jarak dari elemen atas */
-            margin-bottom: 15px;
-            margin-right: 15px; 
         }
-        .button-group-tabel {
-            display: flex;
-            justify-content: center;
-            gap: 5px; /* Jarak antar tombol */
-            /* margin-top: 15px; /* Jarak dari elemen atas */
-            /* margin-bottom: 15px;
-            margin-right: 15px;  */ */
-        }
+
 
 
     </style> 
@@ -84,9 +75,6 @@
         
         <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h1>{{$Periode_sekarang->jenis}}</h1>
-                </div>
                 <div class="position-relative">
                     <button class="btn btn-primary rounded-circle p-2">
                         <span class="material-icons">notifications</span>
@@ -120,14 +108,9 @@
                     </div>
                 </div>
             </div> 
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Cari Jadwal Kuliah" aria-label="Search" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Cari</button>
-            </div>
-                
             <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
                 <div class="d-flex justify-content-center align-items-center">
-                    <span class="fw-medium">Daftar Jadwal Kuliah</span>
+                    <span class="fw-medium">Daftar Rencana Studi Sementara</span>
                 </div>
             </div>
             <table class="table table-bordered">
@@ -147,88 +130,39 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
-            <tbody id="irsTable">
-                @foreach($jadwalKuliah as $index => $jadwal)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $jadwal->kode_matkul }}</td>
-                    <td>{{ $jadwal->nama_matkul }}</td>
-                    <td>{{ $jadwal->semester }}</td>
-                    <td>{{ $jadwal->kelas }}</td>
-                    <td>{{ $jadwal->sks }}</td>
-                    <td>{{ $jadwal->namaruang }}</td>
-                    <td>{{ $jadwal->hari }}</td>
-                    <td>{{ $jadwal->jam_mulai }}</td>
-                    <td>{{ $jadwal->jam_selesai }}</td>
-                    <td>{{ $jadwal->kuota }}</td>
-                    <td>
-                        <div class="button-group-tabel">
-                            <div class="button-group-tabel">
-                                <a class="btn btn-primary mb-2 rounded-3" id="ambilBtn">Ambil</a>
-                            </div>
-                            <div class="button-group-tabel">
-                                <a class="btn btn-danger mb-2 rounded-3" id="batalkanBtn">Batal</a>
-                            </div>
-                        </div>
-                    </td>                    
-                </tr>
-                @endforeach
-            </tbody>
         </table>
         <div class="button-group-right">
-            <div class="button-group-right">
-                <a href="{{ route('mhs_newIRS') }}" class="btn btn-warning">Keluar</a>
-            </div>
-            <div class="button-group-right">
-                <a href="{{ route('mhs_draftIRS') }}" class="btn btn-info">Lanjutkan</a>
-            </div>
+            <a href="{{ route('mhs_pengisianIRS') }}" class="btn btn-primary">Kembali</a>
+            <a href="{{ route('mhs_draftIRS') }}" class="btn btn-warning">Draft IRS</a>
+            <button type="button" class="btn btn-info" id="konfirmasiBtn">Konfirmasi</button>
         </div>
-        </div>
+        
     </div>
   </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    // Menangani klik tombol Ambil
-    document.getElementById('ambilBtn').addEventListener('click', function() {
+    // Menangani klik tombol Konfirmasi
+    document.getElementById('konfirmasiBtn').addEventListener('click', function() {
         Swal.fire({
-            title: 'Konfirmasi Ambil Mata Kuliah',
-            text: 'Apakah Anda yakin ingin mengambil mata kuliah ini?',
-            icon: 'question',
+            title: 'Konfirmasi Pengisian IRS',
+            text: 'Apakah Anda yakin ingin mengonfirmasi pengisian IRS ini?',
+            icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, ambil!',
+            confirmButtonText: 'Ya, konfirmasi!',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Aksi yang terjadi setelah konfirmasi, bisa diarahkan ke route
-                window.location.href = '#'; // Ganti dengan route yang sesuai
-            }
-        });
-    });
-
-    // Menangani klik tombol Batalkan
-    document.getElementById('batalkanBtn').addEventListener('click', function() {
-        Swal.fire({
-            title: 'Konfirmasi Batalkan Mata Kuliah',
-            text: 'Apakah Anda yakin ingin membatalkan pengambilan mata kuliah ini?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, batalkan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Aksi yang terjadi setelah konfirmasi, bisa diarahkan ke route
-                window.location.href = '#'; // Ganti dengan route yang sesuai
+                // Jika konfirmasi sukses, redirect ke route yang diinginkan
+                window.location.href = '#';
             }
         });
     });
 </script>
+

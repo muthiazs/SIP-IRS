@@ -57,11 +57,11 @@
 
 <body>
     <div class="wrapper">
-        @if(isset($dosen))
+        {{-- @if(isset($dosen))
             <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
         @else
             <p>Data dosen tidak ditemukan.</p>
-        @endif
+        @endif --}}
         <!-- Main Content -->
         <div class="flex-grow-1 p-4">
             <header class="header">

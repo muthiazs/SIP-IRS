@@ -1,7 +1,7 @@
 <div class="sidebar-container">
     <div class="sidebar p-4 text-white">
         <div class="text-center mb-4">
-            <div class="profile-img mb-3">
+            <div class="profile-img rounded-circle mx-auto mb-3">
                     <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
                 </div>
                 <h2 class="fs-4 fw-bold">{{ $kaprodi->dosen_nama }}</h2>
@@ -10,22 +10,21 @@
         </div>
     
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="#" class="nav-link active rounded d-flex align-items-center">
+            <a href="/dashboardKaprodi" class="nav-link active rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
+            <a href="/kaprodi_JadwalKuliah" class="nav-link rounded d-flex align-items-center">
                 <span class="material-icons me-3">description</span>
-                Daftar Prodi
+                Jadwal Kuliah
             </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
+            <a href="/kaprodi_StatusMahasiswa" class="nav-link rounded d-flex align-items-center">
                 <span class="material-icons me-3">assessment</span>
-                Hasil Studi
+                Status Mahasiswa
             </a>
         </nav>
             <!-- Logout Button -->
             <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>
-    
         
             <!-- Wave decoration -->
             <div class="wave-decoration">
@@ -56,5 +55,3 @@
             });
         }
     </script>
-    
-</div>
