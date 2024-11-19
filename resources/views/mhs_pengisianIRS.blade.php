@@ -58,6 +58,14 @@
             margin-bottom: 15px;
             margin-right: 15px; 
         }
+        .button-group-tabel {
+            display: flex;
+            justify-content: center;
+            gap: 5px; /* Jarak antar tombol */
+            /* margin-top: 15px; /* Jarak dari elemen atas */
+            /* margin-bottom: 15px;
+            margin-right: 15px;  */ */
+        }
 
 
     </style> 
@@ -128,8 +136,8 @@
                     <th>No</th>
                     <th>Kode MK</th>
                     <th>Mata Kuliah</th>
-                    <th>Kelas</th>
                     <th>Semester</th>
+                    <th>Kelas</th>
                     <th>SKS</th>
                     <th>Ruang</th>
                     <th>Hari</th>
@@ -145,8 +153,8 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $jadwal->kode_matkul }}</td>
                     <td>{{ $jadwal->nama_matkul }}</td>
-                    <td>{{ $jadwal->kelas }}</td>
                     <td>{{ $jadwal->semester }}</td>
+                    <td>{{ $jadwal->kelas }}</td>
                     <td>{{ $jadwal->sks }}</td>
                     <td>{{ $jadwal->namaruang }}</td>
                     <td>{{ $jadwal->hari }}</td>
@@ -154,8 +162,14 @@
                     <td>{{ $jadwal->jam_selesai }}</td>
                     <td>{{ $jadwal->kuota }}</td>
                     <td>
-                        <button type="button" class="btn btn-primary mb-2 rounded-3" id="ambilBtn">Ambil</button>
-                        <button type="button" class="btn btn-danger" id="batalkanBtn">Batalkan</button>
+                        <div class="button-group-tabel">
+                            <div class="button-group-tabel">
+                                <a class="btn btn-primary mb-2 rounded-3" id="ambilBtn">Ambil</a>
+                            </div>
+                            <div class="button-group-tabel">
+                                <a class="btn btn-danger mb-2 rounded-3" id="batalkanBtn">Batal</a>
+                            </div>
+                        </div>
                     </td>                    
                 </tr>
                 @endforeach

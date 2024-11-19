@@ -10,7 +10,7 @@ class Mhs_PengisianIRSController extends Controller
     {
         // Ngambil Periode 
         $Periode_sekarang = DB::table('periode_akademik')
-            ->orderByRaw('periode_akademik.created_at desc')
+            ->orderByRaw('periode_akademik.id_periode DESC')
             ->select('periode_akademik.jenis')
             ->first();
     

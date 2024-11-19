@@ -119,8 +119,8 @@
                     <th>No</th>
                     <th>Kode MK</th>
                     <th>Mata Kuliah</th>
-                    <th>Kelas</th>
                     <th>Semester</th>
+                    <th>Kelas</th>
                     <th>SKS</th>
                     <th>Ruang</th>
                     <th>Hari</th>
