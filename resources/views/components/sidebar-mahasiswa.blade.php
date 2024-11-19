@@ -11,7 +11,7 @@
         </div>
     
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="/dashboardMahasiswa" class="nav-link rounded d-flex align-items-center">
+            <a href="/dashboardMahasiswa" class="nav-link {{ Route::is('dashboardMahasiswa') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
@@ -19,7 +19,7 @@
                 <span class="material-icons me-3">description</span>
                 Rencana Studi
             </a>
-            <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+            <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') || Route::is('mhs_pengisianIRS') || Route::is('mhs_draftIRS') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">edit</span>
                 Buat Rencana Studi
             </a>
@@ -62,7 +62,6 @@
     </script>
 </div>
 
-<<<<<<< HEAD
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -83,5 +82,3 @@
         });
     }
 </script>
-=======
->>>>>>> 77933f2b882463f85210914068950efa79d4953e

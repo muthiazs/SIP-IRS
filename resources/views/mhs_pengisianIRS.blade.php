@@ -33,8 +33,15 @@
         .table {
             border-radius: 10px; /* Sesuaikan besar roundness */
             overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
+            table-layout: fixed; /* Ukuran kolom tetap */
+            width: 100%; /* Pastikan tabel mengambil seluruh lebar kontainer */
         }
         
+        .table th, .table td {
+            word-wrap: break-word; /* Agar teks yang panjang tidak melar keluar kolom */
+            text-align: center; /* Pusatkan teks */
+        }
+
         /* Roundness untuk header */
         .table thead th:first-child {
             border-top-left-radius: 10px;
@@ -121,7 +128,7 @@
                 </div>
             </div> 
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Cari Jadwal Kuliah" aria-label="Search" aria-describedby="button-addon2">
+                <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2">
                 <button class="btn btn-outline-secondary" type="button" id="button-addon2">Cari</button>
             </div>
                 
@@ -131,22 +138,22 @@
                 </div>
             </div>
             <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Kode MK</th>
-                    <th>Mata Kuliah</th>
-                    <th>Semester</th>
-                    <th>Kelas</th>
-                    <th>SKS</th>
-                    <th>Ruang</th>
-                    <th>Hari</th>
-                    <th>Jam Mulai</th>
-                    <th>Jam Selesai</th>
-                    <th>Kuota</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th style="width: 3rem;">No</th>
+                        <th style="width: 5rem;">Kode MK</th>
+                        <th style="width: 6rem;">Mata Kuliah</th>
+                        <th style="width: 5rem;">Semester</th>
+                        <th style="width: 4rem;">Kelas</th>
+                        <th style="width: 4rem;">SKS</th>
+                        <th style="width: 4rem;">Ruang</th>
+                        <th style="width: 5rem;">Hari</th>
+                        <th style="width: 6rem;">Jam Mulai</th>
+                        <th style="width: 6rem;">Jam Selesai</th>
+                        <th style="width: 4rem;">Kuota</th>
+                        <th style="width: 10rem;">Aksi</th>
+                    </tr>
+                </thead>                
             <tbody id="irsTable">
                 @foreach($jadwalKuliah as $index => $jadwal)
                 <tr>
@@ -228,6 +235,30 @@
             if (result.isConfirmed) {
                 // Aksi yang terjadi setelah konfirmasi, bisa diarahkan ke route
                 window.location.href = '#'; // Ganti dengan route yang sesuai
+            }
+        });
+    });
+</script>
+
+{{-- Menangani searching --}}
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function () {
+        // Ambil nilai input dan ubah ke huruf kecil untuk pencarian tidak case-sensitive
+        const searchValue = this.value.toLowerCase();
+
+        // Ambil semua baris tabel di tbody
+        const rows = document.querySelectorAll('#irsTable tr');
+
+        // Loop melalui setiap baris untuk mencocokkan nilai
+        rows.forEach(row => {
+            // Ambil kolom "Mata Kuliah" (kolom ketiga, indeks ke-2)
+            const mataKuliah = row.cells[2].textContent.toLowerCase();
+
+            // Jika teks kolom mengandung nilai pencarian, tampilkan baris
+            if (mataKuliah.includes(searchValue)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
             }
         });
     });

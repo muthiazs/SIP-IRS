@@ -68,7 +68,7 @@
         <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1>{{$Periode_sekarang->jenis}}</h1>
+                    {{-- <h1>{{$Periode_sekarang->jenis}}</h1> --}}
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-primary rounded-circle p-2">
@@ -164,17 +164,79 @@
                     </button>
                   </h2>
                   <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                    <div class="accordion-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kode MK</th>
+                                    <th>Mata Kuliah</th>
+                                    <th>Kelas</th>
+                                    <th>SKS</th>
+                                    <th>Ruang</th>
+                                    <th>Nama Dosen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="irsTable">
+                                {{-- @foreach($jadwalKuliah as $index => $jadwal)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $jadwal->kode_matkul }}</td>
+                                    <td>{{ $jadwal->nama_matkul }}</td>
+                                    <td>{{ $jadwal->kelas }}</td>
+                                    <td>{{ $jadwal->semester }}</td>
+                                    <td>{{ $jadwal->sks }}</td>
+                                    <td>{{ $jadwal->namaruang }}</td>
+                                    <td>{{ $jadwal->hari }}</td>
+                                    <td>{{ $jadwal->jam_mulai }}</td>
+                                    <td>{{ $jadwal->jam_selesai }}</td>
+                                    <td>{{ $jadwal->kuota }}</td>
+                                </tr>
+                                @endforeach --}}
+                            </tbody>
+                        </table>
+                    </div>
                   </div>
                 </div>
                 <div class="accordion-item">
                   <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                      Accordion Item #3
+                      Semester 3
                     </button>
                   </h2>
                   <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                    <div class="accordion-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kode MK</th>
+                                    <th>Mata Kuliah</th>
+                                    <th>Kelas</th>
+                                    <th>SKS</th>
+                                    <th>Ruang</th>
+                                    <th>Nama Dosen</th>
+                                </tr>
+                            </thead>
+                            <tbody id="irsTable">
+                                {{-- @foreach($jadwalKuliah as $index => $jadwal)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $jadwal->kode_matkul }}</td>
+                                    <td>{{ $jadwal->nama_matkul }}</td>
+                                    <td>{{ $jadwal->kelas }}</td>
+                                    <td>{{ $jadwal->semester }}</td>
+                                    <td>{{ $jadwal->sks }}</td>
+                                    <td>{{ $jadwal->namaruang }}</td>
+                                    <td>{{ $jadwal->hari }}</td>
+                                    <td>{{ $jadwal->jam_mulai }}</td>
+                                    <td>{{ $jadwal->jam_selesai }}</td>
+                                    <td>{{ $jadwal->kuota }}</td>
+                                </tr>
+                                @endforeach --}}
+                            </tbody>
+                        </table>
+                    </div>
                   </div>
                 </div>
               </div>
