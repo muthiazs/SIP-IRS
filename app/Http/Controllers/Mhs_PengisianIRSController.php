@@ -196,7 +196,29 @@ class Mhs_PengisianIRSController extends Controller
             return view('mhs_newIRS', compact('mahasiswa'));
         }
 
-        
+        public function rrencanaStudi()
+        {
+            // Fetch mahasiswa data
+            $mahasiswa = DB::table('mahasiswa')
+            ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+            ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+            ->crossJoin('periode_akademik')
+            ->where('mahasiswa.id_user', auth()->id())
+            ->select(
+                'mahasiswa.nim',
+                'mahasiswa.nama as nama_mhs',
+                'program_studi.nama as prodi_nama',
+                'dosen.nama as nama_doswal',
+                'dosen.nip',
+                'users.username',
+                'periode_akademik.nama_periode'
+            )
+            ->first();
+
+            // Pass both daftarMk and mahasiswa data to the view
+            return view('mhs_rrencanaStudi', compact('mahasiswa'));
+        }
         
 
 }
