@@ -10,11 +10,11 @@
         </div>
     
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="/dashboardDosen" class="nav-link active rounded d-flex align-items-center">
+            <a href="/dashboardDosen" class="nav-link {{ Route::is('dashboardDosen') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
-            <a href="/dosen_irsMahasiswa" class="nav-link rounded d-flex align-items-center">
+            <a href="/dosen_irsMahasiswa" class="nav-link {{ Route::is('dosen_irsMahasiswa') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">description</span>
                 IRS Mahasiswa
             </a>

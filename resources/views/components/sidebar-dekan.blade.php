@@ -10,15 +10,15 @@
         </div>
 
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="/dashboardDekan" class="nav-link active rounded d-flex align-items-center">
+            <a href="/dashboardDekan" class="nav-link {{ Route::is('dashboardDekan') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
-            <a href="/dekan_PersetujuanRuang" class="nav-link rounded d-flex align-items-center">
+            <a href="/dekan_PersetujuanRuang" class="nav-link {{ Route::is('dekan_PersetujuanRuang') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">description</span>
                 Persetujuan Ruang
             </a>
-            <a href="/dekan_PersetujuanJadwal" class="nav-link rounded d-flex align-items-center">
+            <a href="/dekan_PersetujuanJadwal" class="nav-link {{ Route::is('dekan_PersetujuanJadwal') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">assessment</span>
                 Persetujuan Jadwal Kuliah
             </a>

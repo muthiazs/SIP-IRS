@@ -30,18 +30,18 @@
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h1 class="fs-3 fw-bold">Selamat datang, {{  $dekan->dosen_nama }} 👋</h1>
-                    <p class="text-muted">Semester Akademik Sekarang </p>
+                    <h1 class="fs-3 fw-bold">Selamat datang, {{ $dekan->dosen_nama }} 👋</h1>
+                    <p class="text-muted"> Semester Akademik </p>
                 </div>
                 <div class="position-relative">
-                    <!-- Button Notifikasi -->
-                    <button class="btn btn-notification rounded-circle p-2">
-                        <span class="material-icons text-white">notifications</span>
+                    <button class="btn btn-primary rounded-circle p-2">
+                        <span class="material-icons">notifications</span>
                     </button>
-                    <span class="notification-badge"></span> <!-- Bulatan merah notifikasi -->
+                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                        <span class="visually-hidden">Notifikasi baru</span>
+                    </span>
                 </div>
             </div>
-
 
             <!-- Period Banner -->
             <div class="period-banner p-3 rounded-3 mb-4">
@@ -65,20 +65,19 @@
                         <div class="card-body text-center">
                             <h3 class="fs-5 fw-semibold mb-4">Progress persetujuan Jadwal Kuliah</h3>
                             <div class="d-flex justify-content-between text-center">
-                                <!-- ini aku buat biar kita bisa liat tampilan klo datanya udah ada, aku ngecek side bar pake iniiii -->
-                                <div>
+                                <div class="text-center">
                                     <div class="fs-4 fw-bold text-danger">
-                                        1 / 1  
+                                        1 / 1 
                                     </div>
                                     <div class="small text-muted">Belum<br>Mengusulkan</div>
                                 </div>
-                                <div>
+                                <div class="text-center">
                                     <div class="fs-4 fw-bold text-konfirmasi">
-                                        1 / 1  
+                                        1 / 1 
                                     </div>
                                     <div class="small text-">Telah<br>Dikonfirmasi</div>
                                 </div>
-                                <div>
+                                <div class="text-center">
                                     <div class="fs-4 fw-bold text-muted">
                                         1 / 1 
                                     </div>
@@ -103,32 +102,28 @@
                                     <div class="small text-muted">Belum<br>Dikonfirmasi</div>
                                 </div> -->
                             </div>
+                            <button type="button" class="btn mt-3 btn-blue" onclick="window.location.href='{{ route('dekan_PersetujuanJadwal') }}'">Lihat Detail</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Proggress Persetujuan Ruang Kuliah -->
                 <div class="col-md-6">
-                        <div class="card shadow-sm">
-                            <div class="card-body text-center">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h3 class="fs-5 fw-semibold text-center">Persetujuan Ruang Kuliah</h3>
-                                </div>
-                                <p class="fs-6 fw-semibold mb-2">Anda belum mendapat usulan ruang kuliah</p>
-                                <p class="text-muted mb-3">Silahkan kembali beberapa saat kedepan</p>
-                                <button class="btn btn-danger">
-                                    Lihat Detail
-                                </button>
-                                </div>
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h3 class="fs-5 fw-semibold text-center">Persetujuan Ruang Kuliah</h3>
+                            </div>
+                            <p class="fs-6 fw-semibold mb-2">Anda belum mendapat usulan ruang kuliah</p>
+                            <p class="text-muted mb-3">Silahkan kembali beberapa saat kedepan</p>
+                            <button type="button" class="btn btn-blue" onclick="window.location.href='{{ route('dekan_PersetujuanRuang') }}'">Lihat Detail</button>
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </div> 
-            
 
-    </div>
+            </div> 
+        </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
