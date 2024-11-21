@@ -228,6 +228,74 @@
                     </div>
                 </div>
             </div> 
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Cari</button>
+            </div>
+                
+            <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
+                <div class="d-flex justify-content-center align-items-center">
+                    <span class="fw-medium">Daftar Jadwal Kuliah</span>
+                </div>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 3rem;">No</th>
+                        <th style="width: 5rem;">Kode MK</th>
+                        <th style="width: 6rem;">Mata Kuliah</th>
+                        <th style="width: 5rem;">Semester</th>
+                        <th style="width: 4rem;">Kelas</th>
+                        <th style="width: 4rem;">SKS</th>
+                        <th style="width: 4rem;">Ruang</th>
+                        <th style="width: 5rem;">Hari</th>
+                        <th style="width: 6rem;">Jam Mulai</th>
+                        <th style="width: 6rem;">Jam Selesai</th>
+                        <th style="width: 4rem;">Kuota</th>
+                        <th style="width: 10rem;">Aksi</th>
+                    </tr>
+                </thead>                
+            <tbody id="irsTable">
+                @foreach($jadwalKuliah as $index => $jadwal)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $jadwal->kode_matkul }}</td>
+                    <td>{{ $jadwal->nama_matkul }}</td>
+                    <td>{{ $jadwal->semester }}</td>
+                    <td>{{ $jadwal->kelas }}</td>
+                    <td>{{ $jadwal->sks }}</td>
+                    <td>{{ $jadwal->namaruang }}</td>
+                    <td>{{ $jadwal->hari }}</td>
+                    <td>{{ $jadwal->jam_mulai }}</td>
+                    <td>{{ $jadwal->jam_selesai }}</td>
+                    <td>{{ $jadwal->kuota }}</td>
+                    <td>
+                        <div class="button-group-tabel">
+                            <div class="button-group-tabel">
+                                <form action="{{ route('ambilJadwal') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
+                                <input type="hidden" name="status" value="draft"> <!-- Or other status value -->
+                                <button type="submit" class="btn btn-primary mb-2 rounded-3">Ambil</button>
+                                </form>
+                            </div>
+                            <div class="button-group-tabel">
+                                <a class="btn btn-danger mb-2 rounded-3" id="batalkanBtn">Batal</a>
+                            </div>
+                        </div>
+                    </td>                    
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="button-group-right">
+            <div class="button-group-right">
+                <a href="{{ route('mhs_newIRS') }}" class="btn btn-warning">Keluar</a>
+            </div>
+            <div class="button-group-right">
+                <a href="{{ route('mhs_draftIRS') }}" class="btn btn-info">Lanjutkan</a>
+            </div>
+        </div>
         </div>
     </div>
   </div>

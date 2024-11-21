@@ -3,6 +3,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; // Pastikan DB di-import
+use App\Models\IRS; // Model untuk tabel IRS
+use App\Models\JadwalKuliah; // Model untuk tabel jadwal kuliah
+use App\Models\PeriodeAkademik;  // Add this line to import the PeriodeAkademik model
+use App\Models\Mahasiswa;  // Add this line to import the PeriodeAkademik model
+
+
 
 class Mhs_PengisianIRSController extends Controller
 {
@@ -33,6 +39,7 @@ class Mhs_PengisianIRSController extends Controller
             ->orderBy('matakuliah.semester')
             ->orderBy('matakuliah.nama_matkul')
             ->select(
+                'jadwal_kuliah.id_jadwal',
                 'matakuliah.kode_matkul as kode_matkul',
                 'matakuliah.nama_matkul',
                 'jadwal_kuliah.kelas',
@@ -63,9 +70,41 @@ class Mhs_PengisianIRSController extends Controller
                 'periode_akademik.nama_periode'
             )
             ->first();
+
     
         return view('mhs_pengisianIRS', compact('Periode_sekarang','jadwalKuliah', 'mahasiswa'));  // Pass data to the view
     }
+
+
+    public function ambilJadwal(Request $request)
+    {
+        $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
+    
+        if (!$periodeAkademik) {
+            return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
+        }
+    
+        $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+        if (!$mahasiswa) {
+            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+    
+        $request->validate([
+            'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
+            'status' => 'required|string|max:255',
+        ]);
+    
+        IRS::create([
+            'nim' => $mahasiswa->nim,
+            'semester' => $mahasiswa->semester,
+            'id_jadwal' => $request->id_jadwal,
+            'status' => $request->status,
+        ]);
+    
+        return redirect()->route('mhs_draftIRS')->with('success', 'Jadwal berhasil diambil.');
+    }
+    
+    
     
 
     // public function indexPengisianIRS()
@@ -103,33 +142,6 @@ class Mhs_PengisianIRSController extends Controller
     // }
 
 
-    public function indexDaftarMatkul()
-    {
-        // Fetch daftar matkul (list of courses)
-        $daftarMk = DB::table('matakuliah')
-            ->select('kode_matkul', 'nama_matkul', 'semester', 'sks')
-            ->get();
-        
-        // Fetch mahasiswa data
-        $mahasiswa = DB::table('mahasiswa')
-                        ->join('users', 'mahasiswa.id_user', '=', 'users.id')
-                        ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
-                        ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
-                        ->where('mahasiswa.id_user', auth()->id())
-                        ->select(
-                            'mahasiswa.nim',
-                            'mahasiswa.nama as nama_mhs',
-                            'program_studi.nama as prodi_nama',
-                            'dosen.nama as nama_doswal',
-                            'dosen.nip',
-                            'users.username'
-        ) 
-        ->first();
-        
-            // Pass both daftarMk and mahasiswa data to the view
-        return view('mhs_daftarMatkul', compact('daftarMk', 'mahasiswa'));
-        }    
-
         public function periodeHabis()
         {
                 // Fetch mahasiswa data
@@ -154,7 +166,7 @@ class Mhs_PengisianIRSController extends Controller
 
         public function draftIRS()
         {
-                // Fetch mahasiswa data
+            // Fetch mahasiswa data
             $mahasiswa = DB::table('mahasiswa')
             ->join('users', 'mahasiswa.id_user', '=', 'users.id')
             ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
@@ -170,8 +182,29 @@ class Mhs_PengisianIRSController extends Controller
             ) 
             ->first();
 
+            //Method get untuk fetch data dr tabel IRS
+            $rancanganIRSSementara = DB::table('irs')
+            ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
+            ->join('matakuliah', 'jadwal_kuliah.kode_matkul','=','matakuliah.kode_matkul')
+            ->join('mahasiswa', 'mahasiswa.nim', '=', 'irs.nim')
+            ->join('ruangan','ruangan.id_ruang','=','jadwal_kuliah.id_ruang')
+            ->where('mahasiswa.id_user', auth()->id())
+            ->select(
+                'matakuliah.kode_matkul',
+                'matakuliah.nama_matkul',
+                'jadwal_kuliah.semester',
+                'jadwal_kuliah.kelas',
+                'matakuliah.sks',
+                'ruangan.nama as nama_ruang',
+                'jadwal_kuliah.hari',
+                'jadwal_kuliah.jam_mulai',
+                'jadwal_kuliah.jam_selesai',
+                'jadwal_kuliah.kuota',
+            )
+            ->get();
+
             // Pass both daftarMk and mahasiswa data to the view
-            return view('mhs_draftIRS', compact('mahasiswa'));
+            return view('mhs_draftIRS', compact('mahasiswa','rancanganIRSSementara'));
         }
 
         public function newIRS()

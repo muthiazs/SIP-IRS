@@ -58,6 +58,7 @@ Route::group([], function () {
     // Pengisian IRS oleh Mahasiswa
     Route::prefix('pengisianIRS')->group(function () {
         Route::get('/', [Mhs_PengisianIRSController::class, 'indexPilihJadwal'])->name('mhs_pengisianIRS');
+        Route::post('/ambilJadwal', [Mhs_PengisianIRSController::class, 'ambilJadwal'])->name('ambilJadwal');
     });
 
     // Hasil Pengisian IRS oleh Mahasiswa
@@ -65,10 +66,6 @@ Route::group([], function () {
         Route::get('/', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('mhs_rencanaStudi');
     });
 
-    // // Pemilihan Matkul oleh Mahasiswa
-    // Route::prefix('daftarMatkul')->group(function () {
-    //     Route::get('/', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('daftarMatkul');
-    // });
 
     // Pembuatan Rencana Studi oleh Mahasiswa
     Route::prefix('rrencanaStudi')->group(function () {
@@ -120,7 +117,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/kaprodi_StatusMahasiswa', [KaprodiControler::class, 'StatusMahasiswa'])->name('kaprodi_StatusMahasiswa');
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
-    Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'index'])->name('bak_PembagianRuang');
+    Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'indexPembagianRuang'])->name('bak_PembagianRuang');
 });
 
 //Pembagian Ruang
