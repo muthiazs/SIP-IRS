@@ -52,54 +52,90 @@
             border-bottom-right-radius: 10px;
         }
 
+        .filter-search {
+            gap: 10px; /* Jarak antara filter dropdown dan search bar */
+        }
+        .filter-search .form-select {
+            width: 200px; /* Lebar dropdown */
+        }
+
     </style>
 </head>
 
 <body>
     <div class="wrapper">
+        <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
         {{-- @if(isset($dosen))
             <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
         @else
             <p>Data dosen tidak ditemukan.</p>
         @endif --}}
+
         <!-- Main Content -->
-        <div class="flex-grow-1 p-4">
+        <div class="main-content flex-grow-1 p-4">
             <header class="header">
                     <h1>IRS Mahasiswa</h1>
                     <p>Semester Akademik Sekarang 2024/2025 Ganjil</p>
                     <h2>Periode Penyetujuan IRS</h2>
             </header>
+
             <!-- Filter and Search -->
-            <section class="filter-search">
-                <div>
-                    <button class="btn btn-primary" data-filter="all">Semua</button>
-                    <button class="btn btn-outline-primary" data-filter="pending">Belum Disetujui</button>
-                    <button class="btn btn-outline-primary" data-filter="approved">Sudah Disetujui</button>
-                    <button class="btn btn-outline-primary" data-filter="rejected">Ditolak</button>
+            <section class="filter-search mt-2 d-flex align-items-start">
+                <!-- Filter Dropdown -->
+                <div class="filter-group me-3">
+                    <label for="filter-dropdown" class="form-label fw-bold">Status</label>
+                    <select class="form-select" id="filter-dropdown">
+                        <option value="all">Semua</option>
+                        <option value="pending">Belum Disetujui</option>
+                        <option value="approved">Sudah Disetujui</option>
+                        <option value="rejected">Ditolak</option>
+                    </select>
                 </div>
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Cari Nama" id="search-input">
-                    <button class="btn btn-primary" type="button" id="search-button">
-                        <span class="material-icons">search</span>
-                    </button>
+            
+                <!-- Angkatan Dropdown -->
+                <div class="angkatan-group me-3">
+                    <label for="angkatan-dropdown" class="form-label fw-bold">Angkatan</label>
+                    <select class="form-select" id="angkatan-dropdown">
+                        <option value="all">Semua</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+            
+                <!-- Search Bar -->
+                <div class="search-group">
+                    <label for="search-input" class="form-label fw-bold">Cari</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Cari Nama" id="search-input">
+                        <button class="btn" style="background-color: #6878B1; color:#fff" type="button" id="search-button">
+                            <span class="material-icons">search</span>
+                        </button>
+                    </div>
                 </div>
             </section>
-
+           
             <!-- Student List -->
-            <section class="student-list">
+            <section class="student-list mt-2">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>
+                                <input type="checkbox" id="select-all">
+                            </th>
                             <th>No</th>
                             <th>Nama Mahasiswa</th>
                             <th>Angkatan</th>
                             <th>NIM</th>
                             <th>Status</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="student-list">
-                        <!-- Student data will be rendered here -->
-                    </tbody>
+                        <!-- Student data will be dynamically added here -->
+                    </tbody>                    
                 </table>
             </section>
         </div>
@@ -119,38 +155,87 @@
         const students = [
             { no: 1, nama: 'Muthia Zhafira Sahnah', angkatan: 2022, nim: '24060122130071', status: 'Disetujui' },
             { no: 2, nama: 'Alya Safina', angkatan: 2022, nim: '2406012213002', status: 'Belum Disetujui' },
-            // Add more students here
+            { no: 3, nama: 'Rizky Pratama', angkatan: 2023, nim: '2406012313001', status: 'Ditolak' }
         ];
 
-        // Render student data
+        // Render student data with reset numbering and checkboxes
         function renderStudents(filteredStudents) {
-            studentList.innerHTML = ''; // Clear existing rows
+            studentList.innerHTML = ''; // Kosongkan tabel lama
+            let nomor = 1; // Mulai nomor dari 1
             filteredStudents.forEach((student) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${student.no}</td>
+                    <td><input type="checkbox" class="form-check-input student-checkbox"></td>
+                    <td>${nomor++}</td>
                     <td>${student.nama}</td>
                     <td>${student.angkatan}</td>
                     <td>${student.nim}</td>
                     <td>${student.status}</td>
                 `;
+                const aksiCell = document.createElement('td');
+                const link = document.createElement('a');
+                link.href = `#`; // Replace '#' with actual route to rencana studi
+                link.classList.add('aksi-link');
+                link.textContent = 'Lihat Detail';
+                aksiCell.appendChild(link);
+
+                row.appendChild(aksiCell);
                 studentList.appendChild(row);
             });
         }
 
         renderStudents(students); // Initial render
 
+        // Mapping filter values to corresponding status
+        const filterDropdown = document.getElementById('filter-dropdown');
+
+        // Mapping filter values to corresponding status
+        const filterMap = {
+            all: null,
+            pending: "Belum Disetujui",
+            approved: "Disetujui",
+            rejected: "Ditolak"
+        };
+
+        // Event listener untuk filter dropdown
+        filterDropdown.addEventListener('change', () => {
+            const filterValue = filterDropdown.value;
+            const statusToFilter = filterMap[filterValue]; // Map ke status yang sesuai
+
+            // Filter data mahasiswa
+            const filteredStudents = students.filter(student =>
+                !statusToFilter || student.status === statusToFilter
+            );
+
+            renderStudents(filteredStudents); // Render data berdasarkan filter
+        });
+
         // Filter functionality
         const filterButtons = document.querySelectorAll('[data-filter]');
+
+        // Set default active button on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const defaultButton = document.querySelector('[data-filter="all"]');
+            defaultButton.classList.add('active'); // Set "Semua" as active by default
+        });
+
         filterButtons.forEach((button) => {
             button.addEventListener('click', (e) => {
                 const filterValue = e.target.dataset.filter;
+                const statusToFilter = filterMap[filterValue]; // Map to corresponding status
+
+                // Filter students based on the selected filter
                 const filteredStudents = students.filter(student =>
-                    filterValue === 'all' || student.status === filterValue
+                    !statusToFilter || student.status === statusToFilter
                 );
+
                 renderStudents(filteredStudents);
+
+                // Remove active class from all buttons
                 filterButtons.forEach(btn => btn.classList.remove('active'));
-                e.target.classList.add('active'); // Add active class to the selected button
+
+                // Add active class to the clicked button
+                e.target.classList.add('active');
             });
         });
 
@@ -168,6 +253,62 @@
                 searchButton.click(); // Trigger search on Enter key
             }
         });
+
+        // Select All Checkbox functionality
+        const selectAllCheckbox = document.getElementById('select-all');
+
+        selectAllCheckbox.addEventListener('change', () => {
+            const studentCheckboxes = document.querySelectorAll('.student-checkbox');
+            const isChecked = selectAllCheckbox.checked;
+
+            // Update all student checkboxes based on the header checkbox
+            studentCheckboxes.forEach((checkbox) => {
+                checkbox.checked = isChecked;
+            });
+        });
+
+        // Referensi ke dropdown Angkatan
+        const angkatanDropdown = document.getElementById('angkatan-dropdown');
+
+        // Perbarui filter map untuk memasukkan logika angkatan
+        let selectedAngkatan = "all"; // Default: Semua
+        let selectedStatus = null; // Default: Semua status
+
+        // Event Listener untuk Angkatan Dropdown
+        angkatanDropdown.addEventListener('change', () => {
+            selectedAngkatan = angkatanDropdown.value; // Dapatkan nilai angkatan terpilih
+            applyFilters(); // Terapkan filter setelah perubahan
+        });
+
+        // Event Listener untuk Filter Status
+        filterButtons.forEach((button) => {
+            button.addEventListener('click', (e) => {
+                selectedStatus = filterMap[e.target.dataset.filter]; // Pindahkan logika ke variabel global
+                applyFilters(); // Terapkan filter setelah perubahan
+            });
+        });
+
+        // Fungsi untuk memfilter berdasarkan Angkatan dan Status
+        function applyFilters() {
+            let filteredStudents = students;
+
+            // Filter berdasarkan angkatan (jika tidak "all")
+            if (selectedAngkatan !== "all") {
+                filteredStudents = filteredStudents.filter(student => 
+                    student.angkatan === parseInt(selectedAngkatan)
+                );
+            }
+
+            // Filter berdasarkan status (jika tidak null)
+            if (selectedStatus) {
+                filteredStudents = filteredStudents.filter(student => 
+                    student.status === selectedStatus
+                );
+            }
+
+            // Tampilkan hasil dengan nomor urut ulang
+            renderStudents(filteredStudents);
+        }
 
         // Logout function
         function logout() {

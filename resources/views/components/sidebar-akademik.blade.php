@@ -1,4 +1,4 @@
-<div class="sidebar-container">
+<div class="sidebar container">
     <div class="sidebar p-4 text-white">
         <div class="text-center mb-4">
             <div class="profile-img rounded-circle mx-auto mb-3">

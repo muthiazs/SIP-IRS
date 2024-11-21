@@ -25,9 +25,9 @@
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
+                <div>
                     <h1 class="fs-3 fw-bold">Selamat datang, {{  $mahasiswa->username }} 👋</h1>
-                    <p class="text-muted">Semester Akademik {{ $mahasiswa->nama_periode }} </p>
+                    <p class="text-muted"> {{ $mahasiswa->nama_periode }} </p>
                 </div>
                 <div class="position-relative">
                     <button class="btn btn-primary rounded-circle p-2">

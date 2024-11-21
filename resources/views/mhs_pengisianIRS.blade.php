@@ -31,7 +31,7 @@
 
         /* Menambahkan roundness pada tabel */
         .table {
-            border-radius: 10px; /* Sesuaikan besar roundness */
+            border-radius: 10px; Sesuaikan besar roundness
             overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
             table-layout: fixed; /* Ukuran kolom tetap */
             width: 100%; /* Pastikan tabel mengambil seluruh lebar kontainer */
@@ -43,12 +43,12 @@
         }
 
         /* Roundness untuk header */
-        .table thead th:first-child {
+        /* .table thead th:first-child {
             border-top-left-radius: 10px;
-        }
-        .table thead th:last-child {
+        } */
+        /* .table thead th:last-child {
             border-top-right-radius: 10px;
-        }
+        } */
         
         /* Roundness untuk footer jika dibutuhkan */
         .table tfoot td:first-child {
@@ -74,6 +74,29 @@
             margin-right: 15px;  */ */
         }
 
+        /* Adjust search bar size */
+        .searchInput {
+            max-width: 300px; /* Sesuaikan ukuran maksimal */
+        }
+
+        /* Optional: Add spacing between buttons */
+        .input-group .btn {
+            margin-left: 5px; /* Tambahkan jarak antar tombol */
+        }
+
+        .card-body {
+            overflow-x: auto; /* Agar tabel tidak keluar dari card */
+            padding: 15px; /* Tambahkan padding agar terlihat rapi */
+            width: auto; /* Sesuaikan lebar dengan konten */
+            max-width: 100%; /* Pastikan tidak melebihi layar */
+            box-sizing: border-box; /* Hitung padding dalam ukuran elemen */
+        }
+
+        .card {
+            width: auto; /* Sesuaikan ukuran card dengan kontennya */
+            max-width: 100%; /* Agar tidak melebihi layar */
+        }
+
 
     </style> 
 </head>
@@ -87,8 +110,8 @@
                 <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
             </svg>
         </div>
+
         <!-- Main Content -->
-        
         <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
@@ -104,26 +127,104 @@
                 </div>
             </div>
 
-             <!-- Pengisian IRS Cards -->
-        <div class="col-12">
-            <div class="card shadow-sm h-100">
-              <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi</h5>
-            <div class="card-body d-flex flex-column">
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex">
-                        <div class="margincard">
-                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
+            <!-- Pengisian IRS Cards -->
+            <div class="col-12">
+                <div class="card shadow-sm h-100">
+                <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi</h5>
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                            <div class="margincard">
+                                <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
+                                <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
+                            </div>
+                            <div class="margincard" style="margin-left: 10px;">
+                                <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
+                                <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
+                            </div>
                         </div>
-                        <div class="margincard" style="margin-left: 10px;">
-                            <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
+                        <div>
+                            <div class="margincard">
+                                <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="margincard">
-                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
+                    <div class="input-group mt-2">
+                        <!-- Search bar -->
+                        <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2" style="max-width: 300px;">
+                        <button class="btn" style="background-color: #6878B1; color:#fff" type="button" id="button-addon2">
+                            <span class="material-icons">search</span>
+                        </button>
+                        <!-- Filter buttons -->
+                        <div>
+                            <button class="btn custom-btn-primary" id="resetFilter">Semua</button>
+                            <button class="btn custom-btn-outline" id="filterGenap">Semester Genap</button>
+                            <button class="btn custom-btn-outline" id="filterGanjil">Semester Ganjil</button>
                         </div>
+                    </div>
+                                    
+                    <div class="banner text-center mt-2 rounded-top" 
+                        style="background-color: #027683; 
+                                color: white; 
+                                height: 40px; /* Tinggi banner */
+                                display: flex; /* Mengaktifkan Flexbox */
+                                justify-content: center; /* Pusat horizontal */
+                                align-items: center; /* Pusat vertikal */ 
+                                font-size: 18px;">
+                        <span class="fw-medium">Daftar Jadwal Kuliah</span>
+                    </div>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width: 3rem;">No</th>
+                                <th style="width: 5rem;">Kode MK</th>
+                                <th style="width: 6rem;">Mata Kuliah</th>
+                                <th style="width: 5rem;">Semester</th>
+                                <th style="width: 4rem;">Kelas</th>
+                                <th style="width: 4rem;">SKS</th>
+                                <th style="width: 4rem;">Ruang</th>
+                                <th style="width: 5rem;">Hari</th>
+                                <th style="width: 6rem;">Jam Mulai</th>
+                                <th style="width: 6rem;">Jam Selesai</th>
+                                <th style="width: 4rem;">Kuota</th>
+                                <th style="width: 7rem;">Aksi</th>
+                            </tr>
+                        </thead>                
+                    <tbody id="irsTable">
+                        @foreach($jadwalKuliah as $index => $jadwal)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $jadwal->kode_matkul }}</td>
+                            <td>{{ $jadwal->nama_matkul }}</td>
+                            <td>{{ $jadwal->semester }}</td>
+                            <td>{{ $jadwal->kelas }}</td>
+                            <td>{{ $jadwal->sks }}</td>
+                            <td>{{ $jadwal->namaruang }}</td>
+                            <td>{{ $jadwal->hari }}</td>
+                            <td>{{ $jadwal->jam_mulai }}</td>
+                            <td>{{ $jadwal->jam_selesai }}</td>
+                            <td>{{ $jadwal->kuota }}</td>
+                            <td>
+                                <div class="button-group-tabel">
+                                    <div class="button-group-tabel">
+                                        <a class="btn mb-2 rounded-3" style="color:white; background-color: #67C3CC; font-size: 10px; padding: 5px 10px;" id="ambilBtn">Ambil</a>
+                                    </div>
+                                    <div class="button-group-tabel">
+                                        <a class="btn btn-danger mb-2 rounded-3" style="font-size: 10px; padding: 5px 10px;" id="batalkanBtn">Batal</a>
+                                    </div>
+                                </div>
+                            </td>                    
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="button-group-right">
+                    <div class="button-group-right">
+                        <a href="{{ route('mhs_newIRS') }}" class="btn" style="color:white; background-color:#FFB939">Keluar</a>
+                    </div>
+                    <div class="button-group-right">
+                        <a href="{{ route('mhs_draftIRS') }}" class="btn" style="color: white; background-color: #6878B1">Lanjutkan</a>
                     </div>
                 </div>
             </div> 
@@ -262,6 +363,42 @@
             } else {
                 row.style.display = 'none';
             }
+        });
+    });
+</script>
+
+<script>
+    // Tombol untuk filter semester genap
+    document.getElementById('filterGenap').addEventListener('click', function () {
+        const rows = document.querySelectorAll('#irsTable tr');
+        rows.forEach(row => {
+            const semester = parseInt(row.cells[3].textContent.trim()); // Ambil nilai semester dari kolom ke-4
+            if (semester % 2 === 0) { // Jika semester genap
+                row.style.display = ''; // Tampilkan baris
+            } else {
+                row.style.display = 'none'; // Sembunyikan baris
+            }
+        });
+    });
+
+    // Tombol untuk filter semester ganjil
+    document.getElementById('filterGanjil').addEventListener('click', function () {
+        const rows = document.querySelectorAll('#irsTable tr');
+        rows.forEach(row => {
+            const semester = parseInt(row.cells[3].textContent.trim()); // Ambil nilai semester dari kolom ke-4
+            if (semester % 2 !== 0) { // Jika semester ganjil
+                row.style.display = ''; // Tampilkan baris
+            } else {
+                row.style.display = 'none'; // Sembunyikan baris
+            }
+        });
+    });
+
+    // Tombol untuk reset filter
+    document.getElementById('resetFilter').addEventListener('click', function () {
+        const rows = document.querySelectorAll('#irsTable tr');
+        rows.forEach(row => {
+            row.style.display = ''; // Tampilkan semua baris
         });
     });
 </script>
