@@ -101,7 +101,7 @@ class Mhs_PengisianIRSController extends Controller
             'status' => $request->status,
         ]);
     
-        return redirect()->route('mhs_draftIRS')->with('success', 'Jadwal berhasil diambil.');
+        return redirect()->route('mhs_pengisianIRS')->with('success', 'Jadwal berhasil diambil.');
     }
     
     

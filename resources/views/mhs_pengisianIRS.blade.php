@@ -178,9 +178,6 @@
                                 <button type="submit" class="btn btn-primary mb-2 rounded-3">Ambil</button>
                                 </form>
                             </div>
-                            <div class="button-group-tabel">
-                                <a class="btn btn-danger mb-2 rounded-3" id="batalkanBtn">Batal</a>
-                            </div>
                         </div>
                     </td>                    
                 </tr>
