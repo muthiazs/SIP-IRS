@@ -171,7 +171,12 @@
                     <td>
                         <div class="button-group-tabel">
                             <div class="button-group-tabel">
-                                <a class="btn btn-primary mb-2 rounded-3" id="ambilBtn">Ambil</a>
+                                <form action="{{ route('ambilJadwal') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
+                                <input type="hidden" name="status" value="draft"> <!-- Or other status value -->
+                                <button type="submit" class="btn btn-primary mb-2 rounded-3">Ambil</button>
+                                </form>
                             </div>
                             <div class="button-group-tabel">
                                 <a class="btn btn-danger mb-2 rounded-3" id="batalkanBtn">Batal</a>

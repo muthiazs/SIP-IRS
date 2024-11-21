@@ -130,6 +130,28 @@
                     <th>Aksi</th>
                 </tr>
             </thead>
+            <tbody id="draftIRS">
+                @foreach ($rancanganIRSSementara as $item => $rancanganSementara)
+                    <tr>
+                        <td>{{ $item + 1 }}</td>
+                        <td>{{ $rancanganSementara->kode_matkul }}</td>
+                        <td>{{ $rancanganSementara->nama_matkul }}</td>
+                        <td>{{ $rancanganSementara->semester }}</td>
+                        <td>{{ $rancanganSementara->kelas }}</td>
+                        <td>{{ $rancanganSementara->sks }}</td>
+                        <td>{{ $rancanganSementara->nama_ruang }}</td>
+                        <td>{{ $rancanganSementara->hari }}</td>
+                        <td>{{ $rancanganSementara->jam_mulai }}</td>
+                        <td>{{ $rancanganSementara->jam_selesai }}</td>
+                        <td>{{ $rancanganSementara->kuota}}</td>
+                        <td>
+                            <div class="button-group-tabel">
+                                <a class="btn btn-danger mb-2 rounded-3" id="batalkanBtn">Batal</a>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
         </table>
         <div class="button-group-right">
             <a href="{{ route('mhs_pengisianIRS') }}" class="btn btn-primary">Kembali</a>
