@@ -12,7 +12,50 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+
+    <style>
+    /* Mengubah warna header tabel */
+    .table thead th {
+            background-color: #FED488; /* Sesuaikan warna header */
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
+
+        .table tbody td {
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
+
+        /* Menambahkan roundness pada tabel */
+        .table {
+            border-radius: 10px; /* Sesuaikan besar roundness */
+            overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
+        }
+        
+        /* Roundness untuk header */
+        .table thead th:first-child {
+            border-top-left-radius: 10px;
+        }
+        .table thead th:last-child {
+            border-top-right-radius: 10px;
+        }
+        
+        /* Roundness untuk footer jika dibutuhkan */
+        .table tfoot td:first-child {
+            border-bottom-left-radius: 10px;
+        }
+        .table tfoot td:last-child {
+            border-bottom-right-radius: 10px;
+        }
+
+    </style> 
+
 </head>
+
 <body class="bg-light">
     <div class="d-flex">
     <x-sidebar-dekan :dekan="$dekan"></x-sidebar-dekan>
@@ -46,80 +89,40 @@
             </div>
 
             <!-- Cards Section -->
-            <div class="row g-4 mb-4">
-                <!-- Buat Jadwal Kuliah Card -->
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body text-center">
-                            <h5 class="fw-bold">Buat Jadwal Kuliah</h5>
-                            <p class="text-muted mb-3">Anda belum mengajukan jadwal</p>
-                            <button class="btn btn-danger">Buat Jadwal</button>
+            {{-- Rencana Studi untuk setiap semester --}}
+            <div class="accordion accordion-flush" id="accordionFlushExample">
+                @foreach ($programStudi as $prodi)
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-{{ $prodi->id_prodi }}" aria-expanded="false" aria-controls="flush-collapse-{{ $prodi->id_prodi }}">
+                                {{ $prodi->nama }}
+                            </button>
+                        </h2>
+                        <div id="flush-collapse-{{ $prodi->id_prodi }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode MK</th>
+                                            <th>Mata Kuliah</th>
+                                            <th>Kelas</th>
+                                            <th>SKS</th>
+                                            <th>Ruang</th>
+                                            <th>Nama Dosen</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{-- Tambahkan isi tabel sesuai kebutuhan --}}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Progress Mahasiswa Card -->
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body text-center">
-                            <h5 class="fw-bold">Progress Mahasiswa</h5>
-                            <div class="d-flex justify-content-around mt-3">
-                                <!-- ini aku buat biar kita bisa liat tampilan klo datanya udah ada, aku ngecek side bar pake iniiii -->
-                                <div>
-                                        <span class="fs-4 fw-bold text-danger">1 / 1 </span>
-                                        <p class="small text-muted">Belum Konfirmasi</p>
-                                    </div>
-                                    <div>
-                                        <span class="fs-4 fw-bold text-konfirmasi">1 / 1</span>
-                                        <p class="small text-muted">Telah Konfirmasi</p>
-                                    </div>
-                                    <div>
-                                        <span class="fs-4 fw-bold text-danger">1 / 1 </span>
-                                        <p class="small text-muted">Belum Mengisi IRS</p>
-                                    </div>
-                                    <div>
-                                        <span class="fs-4 fw-bold text-konfirmasi"> 1 / 1</span>
-                                        <p class="small text-muted">Telah Mengisi IRS</p>
-                                    </div>
-                                </div>
-                                <!-- <div>
-                                    <span class="fs-4 fw-bold text-danger">$data['progressIRSMahasiswaKaprodi']['belumKonfirmasi']['count'] </span>
-                                    <p class="small text-muted">Belum Konfirmasi</p>
-                                </div>
-                                <div>
-                                    <span class="fs-4 fw-bold text-konfirmasi">$data['progressIRSMahasiswaKaprodi']['sudahKonfirmasi']['count']</span>
-                                    <p class="small text-muted">Telah Konfirmasi</p>
-                                </div>
-                                <div>
-                                    <span class="fs-4 fw-bold text-danger">$data['progressIRSMahasiswaKaprodi']['belumIsiIRS']['count'] </span>
-                                    <p class="small text-muted">Belum Mengisi IRS</p>
-                                </div>
-                                <div>
-                                    <span class="fs-4 fw-bold text-konfirmasi"> $data['progressIRSMahasiswaKaprodi']['sudahIsiIRS']['count']</span>
-                                    <p class="small text-muted">Telah Mengisi IRS</p>
-                                </div>
-                            </div> -->
-                            <button class="btn btn-primary mt-3">Lihat Detail</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kalender Akademik -->
-            <div class="card shadow-sm">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center">
-                        <span class="material-icons text-teal me-2">calendar_today</span>
-                        <h5 class="fw-bold mb-0">Kalender Akademik</h5>
-                    </div>
-                    <button class="btn text-teal">
-                        <span class="material-icons">arrow_forward</span>
-                    </button>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
-
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

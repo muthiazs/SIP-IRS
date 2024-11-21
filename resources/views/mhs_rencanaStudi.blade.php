@@ -97,7 +97,6 @@
             width: 100%;
             opacity: 0.1;
         }
-    </style> <style>
         /* Buat Side bar */
         .sidebar {
             border-top-right-radius: 30px;

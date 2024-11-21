@@ -165,7 +165,6 @@
                 </thead>
                 <!-- Table body here -->
             </table>
-
         </div>
     </div>
 
