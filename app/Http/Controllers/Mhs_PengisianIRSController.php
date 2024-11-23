@@ -71,22 +71,71 @@ class Mhs_PengisianIRSController extends Controller
             )
             ->first();
 
+            // Tambahkan pengecekan status untuk setiap jadwal
+            $jadwalStatus = [];
+            foreach ($jadwalKuliah as $jadwal) {
+                $jadwalStatus[$jadwal->id_jadwal] = $this->cekStatusPengambilan($jadwal->id_jadwal);
+    }
+
     
-        return view('mhs_pengisianIRS', compact('Periode_sekarang','jadwalKuliah', 'mahasiswa'));  // Pass data to the view
+        return view('mhs_pengisianIRS', compact('Periode_sekarang','jadwalKuliah', 'mahasiswa', 'jadwalStatus'));  // Pass data to the view
     }
 
 
+    // public function ambilJadwal(Request $request)
+    // {
+    //     $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
+    
+    //     if (!$periodeAkademik) {
+    //         return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
+    //     }
+    
+    //     $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+    //     if (!$mahasiswa) {
+    //         return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+    //     }
+    
+    //     $request->validate([
+    //         'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
+    //         'status' => 'required|string|max:255',
+    //     ]);
+    
+    //     IRS::create([
+    //         'nim' => $mahasiswa->nim,
+    //         'semester' => $mahasiswa->semester,
+    //         'id_jadwal' => $request->id_jadwal,
+    //         'status' => $request->status,
+    //     ]);
+    
+    //     return redirect()->route('mhs_pengisianIRS')->with('success', 'Jadwal berhasil diambil.');
+    // }
+
+    public function cekStatusPengambilan($id_jadwal)
+{
+    $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+    return IRS::where('nim', $mahasiswa->nim)
+              ->where('id_jadwal', $id_jadwal)
+              ->exists();
+}
+
     public function ambilJadwal(Request $request)
-    {
+{
+    try {
         $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
     
         if (!$periodeAkademik) {
-            return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Periode akademik tidak ditemukan.'
+            ], 404);
         }
     
         $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
         if (!$mahasiswa) {
-            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+            return response()->json([
+                'success' => false,
+                'message' => 'Data mahasiswa tidak ditemukan.'
+            ], 404);
         }
     
         $request->validate([
@@ -101,8 +150,17 @@ class Mhs_PengisianIRSController extends Controller
             'status' => $request->status,
         ]);
     
-        return redirect()->route('mhs_pengisianIRS')->with('success', 'Jadwal berhasil diambil.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Jadwal berhasil diambil'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+        ], 500);
     }
+}
     
     
     

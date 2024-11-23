@@ -154,9 +154,9 @@
             </tbody>
         </table>
         <div class="button-group-right">
-            <a href="{{ route('mhs_pengisianIRS') }}" class="btn btn-primary">Kembali</a>
-            <a href="{{ route('mhs_draftIRS') }}" class="btn btn-warning">Draft IRS</a>
-            <button type="button" class="btn btn-info" id="konfirmasiBtn">Konfirmasi</button>
+            <a href="{{ route('mhs_pengisianIRS') }}" class="btn btn-warning" style=" margin-bottom:15px" >Kembali</a>
+            <a href="{{ route('mhs_draftIRS') }}" class="btn btn-warning" style=" background-color: #028391; border-color :#028391; color :#fff; margin-bottom:15px">Draft IRS</a>
+            <button type="button" class="btn btn-info" id="konfirmasiBtn" style="color: white; background-color: #6878B1;  margin-bottom:15px; margin-right:10px">Konfirmasi</button>
         </div>
         
     </div>

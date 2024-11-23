@@ -53,21 +53,21 @@
                     <div class="stats-card text-center">
                         <h6 class="text-muted mb-2">Semester Studi</h6>
                         <!-- ini aku isi sembarangan duluu aku mau coba bikin side bar nya ga berubah klo di-scroll -->
-                        <h2 class="mb-0"> 10 </h2>
+                        <h2 class="mb-0"> 3 </h2>
                         <!-- <h2 class="mb-0"> $data['stats']['semester']</h2> -->
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stats-card text-center">
                         <h6 class="text-muted mb-2">IPK</h6>
-                        <h2 class="mb-0"> 10 </h2>
+                        <h2 class="mb-0"> 3,92 </h2>
                         <!-- <h2 class="mb-0"> $data['stats']['ipk'] </h2> -->
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stats-card text-center">
                         <h6 class="text-muted mb-2">SKSk</h6>
-                        <h2 class="mb-0"> 10 </h2>
+                        <h2 class="mb-0"> 45 </h2>
                         <!-- <h2 class="mb-0"> $data['stats']['sksk'] </h2> -->
                     </div>
                 </div>

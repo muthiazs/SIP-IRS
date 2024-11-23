@@ -151,15 +151,14 @@
                     </div>
                     <div class="input-group mt-2">
                         <!-- Search bar -->
-                        <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2" style="max-width: 300px;">
-                        <button class="btn" style="background-color: #6878B1; color:#fff" type="button" id="button-addon2">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2" style="max-width: 250px;max-height:40px">
+                        <button class="btn" style="background-color: #6878B1; color:#fff;max-width: 250px;max-height:40px" type="button" id="button-addon2">
                             <span class="material-icons">search</span>
                         </button>
                         <!-- Filter buttons -->
                         <div>
                             <button class="btn custom-btn-primary" id="resetFilter">Semua</button>
-                            <button class="btn custom-btn-outline" id="filterGenap">Semester Genap</button>
-                            <button class="btn custom-btn-outline" id="filterGanjil">Semester Ganjil</button>
+                            <!-- Todo tambahin buat filter per semester -->
                         </div>
                     </div>
                                     
@@ -173,71 +172,6 @@
                                 font-size: 18px;">
                         <span class="fw-medium">Daftar Jadwal Kuliah</span>
                     </div>
-
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th style="width: 3rem;">No</th>
-                                <th style="width: 5rem;">Kode MK</th>
-                                <th style="width: 6rem;">Mata Kuliah</th>
-                                <th style="width: 5rem;">Semester</th>
-                                <th style="width: 4rem;">Kelas</th>
-                                <th style="width: 4rem;">SKS</th>
-                                <th style="width: 4rem;">Ruang</th>
-                                <th style="width: 5rem;">Hari</th>
-                                <th style="width: 6rem;">Jam Mulai</th>
-                                <th style="width: 6rem;">Jam Selesai</th>
-                                <th style="width: 4rem;">Kuota</th>
-                                <th style="width: 7rem;">Aksi</th>
-                            </tr>
-                        </thead>                
-                    <tbody id="irsTable">
-                        @foreach($jadwalKuliah as $index => $jadwal)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $jadwal->kode_matkul }}</td>
-                            <td>{{ $jadwal->nama_matkul }}</td>
-                            <td>{{ $jadwal->semester }}</td>
-                            <td>{{ $jadwal->kelas }}</td>
-                            <td>{{ $jadwal->sks }}</td>
-                            <td>{{ $jadwal->namaruang }}</td>
-                            <td>{{ $jadwal->hari }}</td>
-                            <td>{{ $jadwal->jam_mulai }}</td>
-                            <td>{{ $jadwal->jam_selesai }}</td>
-                            <td>{{ $jadwal->kuota }}</td>
-                            <td>
-                                <div class="button-group-tabel">
-                                    <div class="button-group-tabel">
-                                        <a class="btn mb-2 rounded-3" style="color:white; background-color: #67C3CC; font-size: 10px; padding: 5px 10px;" id="ambilBtn">Ambil</a>
-                                    </div>
-                                    <div class="button-group-tabel">
-                                        <a class="btn btn-danger mb-2 rounded-3" style="font-size: 10px; padding: 5px 10px;" id="batalkanBtn">Batal</a>
-                                    </div>
-                                </div>
-                            </td>                    
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div class="button-group-right">
-                    <div class="button-group-right">
-                        <a href="{{ route('mhs_newIRS') }}" class="btn" style="color:white; background-color:#FFB939">Keluar</a>
-                    </div>
-                    <div class="button-group-right">
-                        <a href="{{ route('mhs_draftIRS') }}" class="btn" style="color: white; background-color: #6878B1">Lanjutkan</a>
-                    </div>
-                </div>
-            </div> 
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Cari</button>
-            </div>
-                
-            <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
-                <div class="d-flex justify-content-center align-items-center">
-                    <span class="fw-medium">Daftar Jadwal Kuliah</span>
-                </div>
-            </div>
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -271,14 +205,25 @@
                     <td>{{ $jadwal->kuota }}</td>
                     <td>
                         <div class="button-group-tabel">
-                            <div class="button-group-tabel">
-                                <form action="{{ route('ambilJadwal') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
-                                <input type="hidden" name="status" value="draft"> <!-- Or other status value -->
-                                <button type="submit" class="btn btn-primary mb-2 rounded-3">Ambil</button>
+                            @if (!$jadwalStatus[$jadwal->id_jadwal])
+                                <form class="ambil-jadwal-form">
+                                    @csrf
+                                    <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
+                                    <input type="hidden" name="status" value="draft">
+                                    <button type="submit" 
+                                            class="btn btn-primary mb-2 rounded-3 ambil-btn" 
+                                            style="color:white; background-color: #028391; border-color :#028391;font-size: 15px; padding: 5px 10px;"
+                                            data-jadwal-id="{{ $jadwal->id_jadwal }}">
+                                        Ambil
+                                    </button>
                                 </form>
-                            </div>
+                            @else
+                                <button class="btn btn-secondary mb-2 rounded-3" 
+                                        disabled 
+                                        style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
+                                    Terambil
+                                </button>
+                            @endif
                         </div>
                     </td>                    
                 </tr>
@@ -287,10 +232,10 @@
         </table>
         <div class="button-group-right">
             <div class="button-group-right">
-                <a href="{{ route('mhs_newIRS') }}" class="btn btn-warning">Keluar</a>
+                <a href="{{ route('mhs_newIRS') }}" class="btn" style="color:white; background-color:#FFB939">Keluar</a>
             </div>
             <div class="button-group-right">
-                <a href="{{ route('mhs_draftIRS') }}" class="btn btn-info">Lanjutkan</a>
+                <a href="{{ route('mhs_draftIRS') }}" class="btn" style="color: white; background-color: #6878B1">Lanjutkan</a>
             </div>
         </div>
         </div>
@@ -300,6 +245,63 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('.ambil-jadwal-form');
+            
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const submitButton = this.querySelector('.ambil-btn');
+                    const jadwalId = submitButton.getAttribute('data-jadwal-id');
+                    
+                    submitButton.disabled = true;
+                    
+                    fetch('{{ route('ambilJadwal') }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Tampilkan notifikasi sukses
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                // Reload halaman setelah sukses
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message
+                            });
+                            submitButton.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Terjadi kesalahan pada server'
+                        });
+                        submitButton.disabled = false;
+                    });
+                });
+            });
+        });
+        </script>
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
