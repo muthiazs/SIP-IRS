@@ -118,6 +118,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
     Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'indexPembagianRuang'])->name('bak_PembagianRuang');
+    Route::get('/bak_CreateRuang', [BAK_PembagianruangController::class, 'indexCreateRuang'])->name('bak_CreateRuang');
+    Route::get('/bak_UpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexUpdateDeleteRuang'])->name('bak_UpdateDeleteRuang');
 });
 
 //Pembagian Ruang
