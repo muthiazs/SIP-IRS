@@ -129,7 +129,6 @@
                                 <td>{{ $data->kapasitas }}</td>
                                 <td>
                                     <button class="btn btn-primary mb-2">Tambah Ruang</button>
-                                    <button class="btn btn-danger">Batalkan</button>
                                 </td>
                             </tr>
                             @endforeach

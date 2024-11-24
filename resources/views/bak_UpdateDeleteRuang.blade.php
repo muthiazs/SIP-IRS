@@ -72,27 +72,10 @@
 
             <!-- Progress Cards -->
             <div class="card shadow-sm">
-                <h5 class="card-header bg-teal text-white text-center">Pembagian Ruang Kelas</h5>
+                <h5 class="card-header bg-teal text-white text-center">Tinjau dan Hapus Ruang Kelas</h5>
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex gap-3 text-center">
                         <!-- Dropdown Prodi -->
-                        <div>
-                            <div class="fw-bold">Program Studi</div>
-                            <div class="dropdown">
-                                <button class="btn btn-secondary text-white dropdown-toggle" type="button" id="dropdownMenuProdi" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Pilih Program Studi
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuProdi">
-                                    <li><a class="dropdown-item dropdown-item-prodi" href="#">Biologi</a></li>
-                                    <li><a class="dropdown-item dropdown-item-prodi" href="#">Bioteknologi</a></li>
-                                    <li><a class="dropdown-item dropdown-item-prodi" href="#">Fisika</a></li>
-                                    <li><a class="dropdown-item dropdown-item-prodi" href="#">Kimia</a></li>
-                                    <li><a class="dropdown-item dropdown-item-prodi" href="#">Matematika</a></li>
-                                    <li><a class="dropdown-item dropdown-item-prodi" href="#">Informatika</a></li>
-                                    <li><a class="dropdown-item dropdown-item-prodi" href="#">Statistika</a></li>
-                                </ul>
-                            </div>
-                        </div>
                         <!-- Dropdown Gedung -->
                         <div>
                             <div class="fw-bold">Gedung</div>
@@ -128,8 +111,7 @@
                                 <td>{{ $data->nama }}</td>
                                 <td>{{ $data->kapasitas }}</td>
                                 <td>
-                                    <button class="btn btn-primary mb-2">Tambah Ruang</button>
-                                    <button class="btn btn-danger">Batalkan</button>
+                                    <button class="btn btn-primary mb-2">Aksi</button>
                                 </td>
                             </tr>
                             @endforeach

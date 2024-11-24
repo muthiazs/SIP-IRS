@@ -57,7 +57,7 @@ class BAK_PembagianruangController extends Controller
                         )
                         ->first();
         ;
-        return view('bak_pembagianRuang', compact('tabelRuang', 'akademik'));
+        return view('bak_CreateRuang', compact('tabelRuang', 'akademik'));
     }
 
     public function indexUpdateDeleteRuang()
@@ -84,6 +84,6 @@ class BAK_PembagianruangController extends Controller
                         )
                         ->first();
         ;
-        return view('bak_pembagianRuang', compact('tabelRuang', 'akademik'));
+        return view('bak_UpdateDeleteRuang', compact('tabelRuang', 'akademik'));
     }
 }
