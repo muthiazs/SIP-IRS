@@ -180,10 +180,6 @@
                         <button class="btn" style="background-color: #6878B1; color:#fff;max-width: 250px;max-height:40px" type="button" id="button-addon2">
                             <span class="material-icons">search</span>
                         </button>
-                        <!-- Filter buttons -->
-                        <div>
-                            <button class="btn custom-btn-primary" id="resetFilter">Semua</button>
-                        </div>
                     </div>
                     </div>
                     <div class="table-responsive">
