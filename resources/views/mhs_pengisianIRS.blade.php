@@ -8,6 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Add DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
@@ -92,11 +95,46 @@
             box-sizing: border-box; /* Hitung padding dalam ukuran elemen */
         }
 
+        /* Card styling dengan margin */
         .card {
-            width: auto; /* Sesuaikan ukuran card dengan kontennya */
-            max-width: 100%; /* Agar tidak melebihi layar */
+            margin: 5px; /* Berikan margin 10px di sekeliling card */
+            width: auto; /* Pastikan mengikuti ukuran konten */
+            max-width: 100%; /* Agar tidak melampaui lebar layar */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan sedikit bayangan untuk estetika */
+        }
+        /* Styling untuk DataTables */
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: #027683 !important;
+            color: white !important;
+            border: 1px solid #027683 !important;
         }
 
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #67C3CC !important;
+            color: white !important;
+            border: 1px solid #67C3CC !important;
+        }
+
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_info {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .dataTables_wrapper .dataTables_paginate {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        /* Table responsive tanpa geser */
+        .table-responsive {
+            overflow-x: auto;
+            max-width: 100%; /* Agar tabel tetap berada dalam kontainer */
+        }   
+        
 
     </style> 
 </head>
@@ -114,23 +152,15 @@
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
+                {{-- <div>
                     <h1>{{$Periode_sekarang->jenis}}</h1>
-                </div>
-                <div class="position-relative">
-                    <button class="btn btn-primary rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                        <span class="visually-hidden">Notifikasi baru</span>
-                    </span>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Pengisian IRS Cards -->
             <div class="col-12">
                 <div class="card shadow-sm h-100">
-                <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi</h5>
+                <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi - Daftar Jadwal Kuliah</h5>
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex">
@@ -143,11 +173,6 @@
                                 <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
                             </div>
                         </div>
-                        <div>
-                            <div class="margincard">
-                                <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            </div>
-                        </div>
                     </div>
                     <div class="input-group mt-2">
                         <!-- Search bar -->
@@ -158,78 +183,69 @@
                         <!-- Filter buttons -->
                         <div>
                             <button class="btn custom-btn-primary" id="resetFilter">Semua</button>
-                            <!-- Todo tambahin buat filter per semester -->
                         </div>
                     </div>
-                                    
-                    <div class="banner text-center mt-2 rounded-top" 
-                        style="background-color: #027683; 
-                                color: white; 
-                                height: 40px; /* Tinggi banner */
-                                display: flex; /* Mengaktifkan Flexbox */
-                                justify-content: center; /* Pusat horizontal */
-                                align-items: center; /* Pusat vertikal */ 
-                                font-size: 18px;">
-                        <span class="fw-medium">Daftar Jadwal Kuliah</span>
                     </div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th style="width: 3rem;">No</th>
-                        <th style="width: 5rem;">Kode MK</th>
-                        <th style="width: 6rem;">Mata Kuliah</th>
-                        <th style="width: 5rem;">Semester</th>
-                        <th style="width: 4rem;">Kelas</th>
-                        <th style="width: 4rem;">SKS</th>
-                        <th style="width: 4rem;">Ruang</th>
-                        <th style="width: 5rem;">Hari</th>
-                        <th style="width: 6rem;">Jam Mulai</th>
-                        <th style="width: 6rem;">Jam Selesai</th>
-                        <th style="width: 4rem;">Kuota</th>
-                        <th style="width: 10rem;">Aksi</th>
-                    </tr>
-                </thead>                
-            <tbody id="irsTable">
-                @foreach($jadwalKuliah as $index => $jadwal)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $jadwal->kode_matkul }}</td>
-                    <td>{{ $jadwal->nama_matkul }}</td>
-                    <td>{{ $jadwal->semester }}</td>
-                    <td>{{ $jadwal->kelas }}</td>
-                    <td>{{ $jadwal->sks }}</td>
-                    <td>{{ $jadwal->namaruang }}</td>
-                    <td>{{ $jadwal->hari }}</td>
-                    <td>{{ $jadwal->jam_mulai }}</td>
-                    <td>{{ $jadwal->jam_selesai }}</td>
-                    <td>{{ $jadwal->kuota }}</td>
-                    <td>
-                        <div class="button-group-tabel">
-                            @if (!$jadwalStatus[$jadwal->id_jadwal])
-                                <form class="ambil-jadwal-form">
-                                    @csrf
-                                    <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
-                                    <input type="hidden" name="status" value="draft">
-                                    <button type="submit" 
-                                            class="btn btn-primary mb-2 rounded-3 ambil-btn" 
-                                            style="color:white; background-color: #028391; border-color :#028391;font-size: 15px; padding: 5px 10px;"
-                                            data-jadwal-id="{{ $jadwal->id_jadwal }}">
-                                        Ambil
-                                    </button>
-                                </form>
-                            @else
-                                <button class="btn btn-secondary mb-2 rounded-3" 
-                                        disabled 
-                                        style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
-                                    Terambil
-                                </button>
-                            @endif
-                        </div>
-                    </td>                    
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="jadwalTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 3rem;">No</th>
+                                    <th style="width: 5rem;">Kode MK</th>
+                                    <th style="width: 6rem;">Mata Kuliah</th>
+                                    <th style="width: 5rem;">Semester</th>
+                                    <th style="width: 4rem;">Kelas</th>
+                                    <th style="width: 4rem;">SKS</th>
+                                    <th style="width: 4rem;">Ruang</th>
+                                    <th style="width: 5rem;">Hari</th>
+                                    <th style="width: 6rem;">Jam Mulai</th>
+                                    <th style="width: 6rem;">Jam Selesai</th>
+                                    <th style="width: 4rem;">Kuota</th>
+                                    <th style="width: 10rem;">Aksi</th>
+                                </tr>
+                            </thead>                
+                            <tbody>
+                                @foreach($jadwalKuliah as $index => $jadwal)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $jadwal->kode_matkul }}</td>
+                                    <td>{{ $jadwal->nama_matkul }}</td>
+                                    <td>{{ $jadwal->semester }}</td>
+                                    <td>{{ $jadwal->kelas }}</td>
+                                    <td>{{ $jadwal->sks }}</td>
+                                    <td>{{ $jadwal->namaruang }}</td>
+                                    <td>{{ $jadwal->hari }}</td>
+                                    <td>{{ $jadwal->jam_mulai }}</td>
+                                    <td>{{ $jadwal->jam_selesai }}</td>
+                                    <td>{{ $jadwal->kuota }}</td>
+                                    <td>
+                                        <div class="button-group-tabel">
+                                            @if (!$jadwalStatus[$jadwal->id_jadwal])
+                                                <form class="ambil-jadwal-form">
+                                                    @csrf
+                                                    <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
+                                                    <input type="hidden" name="status" value="draft">
+                                                    <button type="submit" 
+                                                            class="btn btn-primary mb-2 rounded-3 ambil-btn" 
+                                                            style="color:white; background-color: #028391; border-color :#028391;font-size: 15px; padding: 5px 10px;"
+                                                            data-jadwal-id="{{ $jadwal->id_jadwal }}">
+                                                        Ambil
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <button class="btn btn-secondary mb-2 rounded-3" 
+                                                        disabled 
+                                                        style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
+                                                    Terambil
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </td>                    
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
         <div class="button-group-right">
             <div class="button-group-right">
                 <a href="{{ route('mhs_newIRS') }}" class="btn" style="color:white; background-color:#FFB939">Keluar</a>
@@ -243,7 +259,55 @@
   </div>
         </div>
     </div>
+    <!-- Add DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Inisialisasi DataTable
+            var table = $('#jadwalTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Semua"]],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json',
+                    lengthMenu: "Tampilkan _MENU_ data per halaman",
+                    zeroRecords: "Data tidak ditemukan",
+                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
+                    infoEmpty: "Tidak ada data yang tersedia",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Selanjutnya",
+                        previous: "Sebelumnya"
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: -1 }  // Nonaktifkan sorting untuk kolom aksi
+                ],
+                // Mengubah dom untuk menghilangkan search box default
+                dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                initComplete: function() {
+                    // Menghubungkan search box custom dengan DataTables
+                    $('#searchInput').on('keyup', function() {
+                        table.search(this.value).draw();
+                    });
 
+                    // Handler untuk tombol reset
+                    $('#resetFilter').on('click', function() {
+                        table.search('').draw();
+                    });
+                }
+            });
+        });
+    </script>
+    <!-- Add JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
