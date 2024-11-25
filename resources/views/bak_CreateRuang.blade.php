@@ -76,21 +76,22 @@
                 <div class="card-body d-flex flex-column">
                     <!-- Form Input Ruang -->
                     <div class="mt-4">
-                        <form id="formInputRuang">
-                            <div class="mb-3">
-                                <label for="inputIdRuang" class="form-label">ID Ruang</label>
-                                <input type="number" class="form-control" id="inputIdRuang" placeholder="Masukkan ID Ruang">
-                            </div>
-                            <div class="mb-3">
-                                <label for="inputNamaRuang" class="form-label">Nama Ruang</label>
-                                <input type="text" class="form-control" id="inputNamaRuang" placeholder="Masukkan Nama Ruang">
-                            </div>
-                            <div class="mb-3">
-                                <label for="inputKapasitasRuang" class="form-label">Kapasitas Ruang</label>
-                                <input type="number" class="form-control" id="inputKapasitasRuang" placeholder="Masukkan Kapasitas Ruang">
-                            </div>
-                            <button type="submit" class="btn btn-cyan w-100">Simpan</button>
-                        </form>
+                    <form id="formInputRuang" action="{{ route('ruang.store') }}" method="POST">
+                        @csrf <!-- Token CSRF untuk keamanan -->
+                        <div class="mb-3">
+                            <label for="inputIdRuang" class="form-label">ID Ruang</label>
+                            <input type="number" class="form-control" name="id_ruang" id="inputIdRuang" placeholder="Masukkan ID Ruang">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputNamaRuang" class="form-label">Nama Ruang</label>
+                            <input type="text" class="form-control" name="nama" id="inputNamaRuang" placeholder="Masukkan Nama Ruang">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputKapasitasRuang" class="form-label">Kapasitas Ruang</label>
+                            <input type="number" class="form-control" name="kapasitas" id="inputKapasitasRuang" placeholder="Masukkan Kapasitas Ruang">
+                        </div>
+                        <button type="submit" class="btn btn-cyan w-100">Simpan</button>
+                    </form>
                     </div>
                 </div>
             </div>

@@ -72,7 +72,7 @@
 
             <!-- Progress Cards -->
             <div class="card shadow-sm">
-                <h5 class="card-header bg-teal text-white text-center">Tambah Ruang Kelas Baru</h5>
+                <h5 class="card-header bg-teal text-white text-center">Tinjau dan Hapus Ruang Kelas</h5>
                 <div class="card-body d-flex flex-column">
                     <!-- Form Input Ruang -->
                     <div class="mt-4">

@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('alokasi_ruangan', function (Blueprint $table) {
-            $table->bigIncrements('id_alokasi');
             $table->foreignId('id_ruang')->constrained('ruangan', 'id_ruang');
             $table->foreignId('id_prodi')->constrained('program_studi', 'id_prodi');
-            $table->integer('semester');
+            $table->string('semester');
             $table->string('tahun_ajaran');
             $table->timestamp('created_at');
         });
