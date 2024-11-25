@@ -92,6 +92,30 @@ class BAK_PembagianruangController extends Controller
         return view('bak_CreateRuang', compact('tabelRuang', 'akademik'));
     }
 
+    public function createRuang(Request $request)
+    {
+        // dd($request->all());
+        // Validasi data
+
+        $lastRuangan = DB::table('ruangan')
+            ->orderBy('id_ruang', 'desc')
+            ->first();
+
+        $id_ruang = $lastRuangan ? $lastRuangan->id_ruang + 1 : 1;
+
+        // Simpan ke database
+        DB::table('ruangan')->insert([
+            'id_ruang' => $id_ruang,
+            'nama' => $request->nama,
+            'kapasitas' => $request->kapasitas,
+            'status' => 'tersedia', 
+            'created_at' => now(),
+        ]);
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Ruangan baru berhasil ditambahkan.');
+    }
+
     public function indexUpdateDeleteRuang()
     {
 

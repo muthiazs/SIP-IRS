@@ -76,12 +76,8 @@
                 <div class="card-body d-flex flex-column">
                     <!-- Form Input Ruang -->
                     <div class="mt-4">
-                    <form id="formInputRuang" action="{{ route('ruang.store') }}" method="POST">
+                    <form id="formInputRuang" action="{{ route('create.store') }}" method="POST">
                         @csrf <!-- Token CSRF untuk keamanan -->
-                        <div class="mb-3">
-                            <label for="inputIdRuang" class="form-label">ID Ruang</label>
-                            <input type="number" class="form-control" name="id_ruang" id="inputIdRuang" placeholder="Masukkan ID Ruang">
-                        </div>
                         <div class="mb-3">
                             <label for="inputNamaRuang" class="form-label">Nama Ruang</label>
                             <input type="text" class="form-control" name="nama" id="inputNamaRuang" placeholder="Masukkan Nama Ruang">
@@ -103,43 +99,7 @@
 
     <!-- Validation Logic -->
     <script>
-        $(document).ready(function() {
-            $('#formInputRuang').on('submit', function(e) {
-                e.preventDefault(); // Prevent form submission
-
-                // Get input values
-                const idRuang = parseInt($('#inputIdRuang').val().trim(), 10);
-                const namaRuang = $('#inputNamaRuang').val().trim();
-                const kapasitasRuang = parseInt($('#inputKapasitasRuang').val().trim(), 10);
-
-                // Validation
-                let errors = [];
-
-                // Validate ID Ruang
-                if (isNaN(idRuang) || idRuang <= 0) {
-                    errors.push('ID Ruang harus berupa angka positif.');
-                }
-
-                // Validate Nama Ruang
-                const namaRuangRegex = /^[a-k][0-9]{3}$/;
-                if (!namaRuangRegex.test(namaRuang)) {
-                    errors.push('Nama Ruang harus 4 karakter, diawali huruf "a-k", diikuti 3 digit angka.');
-                }
-
-                // Validate Kapasitas Ruang
-                if (isNaN(kapasitasRuang) || kapasitasRuang < 1 || kapasitasRuang > 100) {
-                    errors.push('Kapasitas Ruang harus berupa angka antara 1 hingga 100.');
-                }
-
-                // Display errors or success
-                if (errors.length > 0) {
-                    alert('Error:\n' + errors.join('\n'));
-                } else {
-                    alert(`Data berhasil disimpan:\nID Ruang: ${idRuang}\nNama Ruang: ${namaRuang}\nKapasitas Ruang: ${kapasitasRuang}`);
-                    $(this)[0].reset(); // Reset the form
-                }
-            });
-        });
+        
     </script>
 </body>
 </html>
