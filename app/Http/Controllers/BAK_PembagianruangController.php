@@ -96,6 +96,13 @@ class BAK_PembagianruangController extends Controller
     {
         // dd($request->all());
         // Validasi data
+        $cekRuangan = DB::table('ruangan')
+            ->where('nama', $request->nama)
+            ->first();
+
+        if ($cekRuangan) {
+            return redirect()->back()->with('error', 'Ruangan dengan nama tersebut sudah ada.');
+        }
 
         $lastRuangan = DB::table('ruangan')
             ->orderBy('id_ruang', 'desc')
