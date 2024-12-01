@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIP-IRS Dashboard</title>
+    <!-- jQuery HARUS PERTAMA -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Kemudian Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Icons -->
@@ -209,6 +214,26 @@
         }
     </script>
 
+    <!-- Toastr -->
+    <script>
+    $(document).ready(function() {
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "escapeHtml": true
+        }
+
+        @if(Session::has('toast_success'))
+            toastr.success('Ruangan berhasil dialokasikan');
+        @endif
+
+        @if(Session::has('toast_error'))
+            toastr.error("{!! Session::get('toast_error') !!}"); 
+        @endif
+    });
+    </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

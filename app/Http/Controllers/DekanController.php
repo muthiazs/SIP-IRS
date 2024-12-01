@@ -83,7 +83,7 @@ class DekanController extends Controller
         ->delete();
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Ruangan berhasil disetujui.');
+        return redirect()->back()->with('toast_success', 'Ruangan berhasil disetujui.');
     }
 
     public function PersetujuanJadwal()
