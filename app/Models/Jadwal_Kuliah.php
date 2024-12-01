@@ -20,4 +20,11 @@ class JadwalKuliah extends Model
         'semester',
         'id_periode',
     ];
+
+    // Relasi ke Matakuliah
+    public function matakuliah()
+    {
+        return $this->belongsTo(Matakuliah::class, 'kode_matkul', 'kode_matkul');
+    }
 }
+
