@@ -37,6 +37,36 @@ class BAK_PembagianruangController extends Controller
         return view('bak_pembagianRuang', compact('tabelRuang', 'akademik'));
     }
 
+    public function indexCekStatusRuang()
+    {
+        // Ambil ruangan yang belum dialokasikan
+        $statusRuang = DB::table('ruangan')
+                        ->join('alokasi_ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
+                        ->where('ruangan.status', '=', 'tersedia')  // Perbaiki penggunaan '=='
+                        ->where('ruangan.id_ruang', '=', DB::raw('alokasi_ruangan.id_ruang'))  // Pastikan kondisi kedua terpisah
+                        ->select(
+                            'ruangan.nama',
+                            'ruangan.kapasitas'
+                        )
+                        ->get();
+
+
+        // Data akademik tetap sama
+        $akademik = DB::table('pegawai')
+            ->join('users', 'pegawai.id_user', '=', 'users.id')
+            ->crossJoin('periode_akademik')
+            ->where('pegawai.id_user', auth()->id())
+            ->orderBy('periode_akademik.created_at', 'desc')
+            ->select(
+                'pegawai.nama',
+                'pegawai.nip',
+                'periode_akademik.nama_periode'
+            )
+            ->first();
+
+        return view('bak_pembagianRuang', compact('statusRuang', 'akademik'));
+    }
+
     public function storeRuang(Request $request)
     {
         $ruang = DB::table('ruangan')
