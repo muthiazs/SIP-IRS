@@ -279,3 +279,23 @@ input[type="checkbox"]:hover {
     color: white
 }
 
+/* Toast Sukses (Hijau) */
+.toast-success {
+    background-color: #28a745 !important; /* Warna hijau */
+    color: #ffffff !important; /* Warna teks */
+}
+
+/* Toast Error (Merah) */
+.toast-error {
+    background-color: #dc3545 !important; /* Warna merah */
+    color: #ffffff !important; /* Warna teks */
+}
+
+/* Ubah Progress Bar jika dibutuhkan */
+.toast-success .toast-progress {
+    background-color: #155724 !important; /* Hijau gelap */
+}
+
+.toast-error .toast-progress {
+    background-color: #721c24 !important; /* Merah gelap */
+}
