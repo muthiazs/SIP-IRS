@@ -82,17 +82,14 @@
                     <!-- Dropdown Prodi -->
                     <div class="mb-3">
                         <label class="fw-bold">Mata Kuliah</label>
-                        <select name="prodi" class="form-select" id="selectProdi" required>
-                            <option value="">Pilih Program Studi</option>
-                            <option value="Biologi">Biologi</option>
-                            <option value="Bioteknologi">Bioteknologi</option>
-                            <option value="Fisika">Fisika</option>
-                            <option value="Kimia">Kimia</option>
-                            <option value="Matematika">Matematika</option>
-                            <option value="Informatika">Informatika</option>
-                            <option value="Statistika">Statistika</option>
+                        <select name="kode_matkul" class="form-select" id="selectMatkul" required>
+                            <option value="">Pilih Mata Kuliah</option>
+                            @foreach($namaMK as $matkul)
+                                <option value="{{ $matkul->kode_matkul }}">{{ $matkul->nama_matkul }}</option>
+                            @endforeach
                         </select>
                     </div>
+
 
                     <!-- Dropdown Gedung -->
                     <div class="mb-3">
