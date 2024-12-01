@@ -61,7 +61,7 @@ class BAK_PembagianruangController extends Controller
         ]);
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Ruangan baru berhasil ditambahkan.');
+        return redirect()->back()->with('toast_success', 'Ruangan berhasil dialokasikan.');
     }
     
 

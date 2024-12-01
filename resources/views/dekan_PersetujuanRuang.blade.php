@@ -170,7 +170,7 @@
                     <td>{{ $data->prodi_nama }}</td>
                     <td>
                         <input type="hidden" name="nama_ruang" value="{{ $data->ruang_nama }}">
-                        <button type="submit" class="btn btn-primary mb-2">Tambah Ruang</button>
+                        <button type="submit" class="btn btn-primary mb-2">Setujui</button>
                     </td>
                 </tr>
                 @endforeach

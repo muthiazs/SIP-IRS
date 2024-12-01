@@ -4,6 +4,9 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>SIP-IRS Dashboard</title>
+   <!-- Toaster -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
    <!-- jQuery -->
    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
    <!-- Bootstrap CSS -->
@@ -160,5 +163,27 @@
        });
    }
    </script>
+   <!-- Toastr -->
+   <script>
+    @if(Session::has('toast_success'))
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000"
+        }
+        toastr.success("{{ Session::get('toast_success') }}");
+    @endif
+
+    @if(Session::has('toast_error'))
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000"
+        }
+        toastr.error("{{ Session::get('toast_error') }}");
+    @endif
+    </script>
 </body>
 </html>
