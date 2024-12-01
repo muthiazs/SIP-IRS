@@ -146,8 +146,12 @@
                         <td>{{ $rancanganSementara->kuota}}</td>
                         <td>
                             <div class="button-group-tabel">
-                                <a class="btn btn-danger mb-2 rounded-3" id="batalkanBtn">Batal</a>
-                            </div>
+                            <form action="{{ route('batalkanJadwal') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id_jadwal" value="{{ $rancanganSementara->id_jadwal }}">
+                                <button type="submit" class="btn btn-danger">Batalkan Jadwal</button>
+                            </form>
+
                         </td>
                     </tr>
                 @endforeach
@@ -167,6 +171,57 @@
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).on('click', '.batalBtn', function() {
+        var id_jadwal = $(this).data('id');  // Ambil id_jadwal dari atribut data-id
+
+        Swal.fire({
+            title: 'Batal Jadwal',
+            text: 'Apakah Anda yakin ingin membatalkan jadwal ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, Batalkan!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ route('batalkanJadwal') }}',  // Sesuaikan dengan route yang tepat
+                    type: 'POST',
+                    data: {
+                        id_jadwal: id_jadwal,
+                        _token: '{{ csrf_token() }}'  // Kirim csrf token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire(
+                                'Dibatalkan!',
+                                response.message,
+                                'success'
+                            ).then(() => {
+                                location.reload();  // Reload halaman setelah berhasil
+                            });
+                        } else {
+                            Swal.fire(
+                                'Gagal!',
+                                response.message,
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.fire(
+                            'Terjadi kesalahan!',
+                            'Silakan coba lagi.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
+</script>
 <script>
     // Menangani klik tombol Konfirmasi
     document.getElementById('konfirmasiBtn').addEventListener('click', function() {

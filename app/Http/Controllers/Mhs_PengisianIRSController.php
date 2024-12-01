@@ -7,6 +7,7 @@ use App\Models\IRS; // Model untuk tabel IRS
 use App\Models\JadwalKuliah; // Model untuk tabel jadwal kuliah
 use App\Models\PeriodeAkademik;  // Add this line to import the PeriodeAkademik model
 use App\Models\Mahasiswa;  // Add this line to import the PeriodeAkademik model
+use APP\Models\Matakuliah;
 
 
 
@@ -14,18 +15,18 @@ class Mhs_PengisianIRSController extends Controller
 {
     public function indexPilihJadwal()
     {
-        // Ngambil Periode 
+        // Mengambil data periode akademik yang sedang berlangsung
         $Periode_sekarang = DB::table('periode_akademik')
-            ->orderByRaw('periode_akademik.id_periode DESC')
-            ->select('periode_akademik.jenis')
+            ->orderByDesc('id_periode')
+            ->select('jenis')
             ->first();
-    
-        // Pastikan ada data yang ditemukan untuk periode_sekarang
+
+        // Cek apakah periode akademik ditemukan
         if (!$Periode_sekarang) {
             return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
         }
-    
-        // Fetch daftar matkul (list of courses)
+
+        // Fetch jadwal kuliah berdasarkan periode
         $jadwalKuliah = DB::table('jadwal_kuliah')
             ->join('matakuliah', 'matakuliah.kode_matkul', '=', 'jadwal_kuliah.kode_matkul')
             ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
@@ -50,10 +51,11 @@ class Mhs_PengisianIRSController extends Controller
                 'jadwal_kuliah.jam_mulai',
                 'jadwal_kuliah.jam_selesai',
                 'jadwal_kuliah.kuota',
+                DB::raw('(SELECT COUNT(*) FROM irs WHERE irs.id_jadwal = jadwal_kuliah.id_jadwal) as kuota_terisi')
             )
             ->get();
-    
-        // Fetch mahasiswa data
+
+        // Mengambil data mahasiswa yang sedang login
         $mahasiswa = DB::table('mahasiswa')
             ->join('users', 'mahasiswa.id_user', '=', 'users.id')
             ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
@@ -71,14 +73,19 @@ class Mhs_PengisianIRSController extends Controller
             )
             ->first();
 
-            // Tambahkan pengecekan status untuk setiap jadwal
-            $jadwalStatus = [];
-            foreach ($jadwalKuliah as $jadwal) {
-                $jadwalStatus[$jadwal->id_jadwal] = $this->cekStatusPengambilan($jadwal->id_jadwal);
-    }
+        // Cek apakah data mahasiswa ditemukan
+        if (!$mahasiswa) {
+            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
 
-    
-        return view('mhs_pengisianIRS', compact('Periode_sekarang','jadwalKuliah', 'mahasiswa', 'jadwalStatus'));  // Pass data to the view
+        // Menambahkan pengecekan status untuk setiap jadwal kuliah
+        $jadwalStatus = [];
+        foreach ($jadwalKuliah as $jadwal) {
+            $jadwalStatus[$jadwal->id_jadwal] = $this->cekStatusPengambilan($jadwal->id_jadwal);
+        }
+        $jadwalStatus = collect($jadwalStatus); // Pastikan ini adalah koleksi
+
+        return view('mhs_pengisianIRS', compact('Periode_sekarang', 'jadwalKuliah', 'mahasiswa', 'jadwalStatus'));
     }
 
 
@@ -111,93 +118,120 @@ class Mhs_PengisianIRSController extends Controller
     // }
 
     public function cekStatusPengambilan($id_jadwal)
-{
-    $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
-    return IRS::where('nim', $mahasiswa->nim)
-              ->where('id_jadwal', $id_jadwal)
-              ->exists();
-}
+    {
+        $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+        if ($mahasiswa) {
+            return IRS::where('nim', $mahasiswa->nim)
+                      ->where('id_jadwal', $id_jadwal)
+                      ->exists();
+        }
+        return false;
+    }
+
 
     public function ambilJadwal(Request $request)
-{
-    try {
-        $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
-    
-        if (!$periodeAkademik) {
+    {
+        try {
+            $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
+            if (!$periodeAkademik) {
+                return response()->json(['success' => false, 'message' => 'Periode akademik tidak ditemukan.'], 404);
+            }
+
+            $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+            if (!$mahasiswa) {
+                return response()->json(['success' => false, 'message' => 'Data mahasiswa tidak ditemukan.'], 404);
+            }
+
+            $request->validate([
+                'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
+                'status' => 'required|string|max:255',
+            ]);
+
+            IRS::create([
+                'nim' => $mahasiswa->nim,
+                'semester' => $mahasiswa->semester,
+                'id_jadwal' => $request->id_jadwal,
+                'status' => $request->status,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Jadwal berhasil diambil',
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Periode akademik tidak ditemukan.'
-            ], 404);
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
         }
-    
+    }
+
+
+private function hitungMaxSks($ipsLalu)
+{
+    if ($ipsLalu >= 0 && $ipsLalu <= 1) {
+        return 15;  // Maksimal 15 SKS
+    } elseif ($ipsLalu > 1 && $ipsLalu <= 2.5) {
+        return 18;  // Maksimal 18 SKS
+    } elseif ($ipsLalu > 2.5 && $ipsLalu <= 3.5) {
+        return 21;  // Maksimal 21 SKS
+    } elseif ($ipsLalu > 3.5 && $ipsLalu <= 4) {
+        return 24;  // Maksimal 24 SKS
+    } else {
+        return 0;  // Tidak valid
+    }
+}
+
+public function batalkanJadwal(Request $request)
+{
+    try {
+        // Check if id_jadwal is present in the request
+        if (!$request->has('id_jadwal')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID Jadwal tidak ditemukan di request.'
+            ], 400);
+        }
+
+        // Get the logged-in student's data
         $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+        
         if (!$mahasiswa) {
             return response()->json([
                 'success' => false,
                 'message' => 'Data mahasiswa tidak ditemukan.'
             ], 404);
         }
-    
-        $request->validate([
-            'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
-            'status' => 'required|string|max:255',
-        ]);
-    
-        IRS::create([
-            'nim' => $mahasiswa->nim,
-            'semester' => $mahasiswa->semester,
-            'id_jadwal' => $request->id_jadwal,
-            'status' => $request->status,
-        ]);
-    
+
+        // Use IRS table to find the student's schedule by nim and id_jadwal
+        $irs = IRS::where('nim', $mahasiswa->nim)
+                    ->where('id_jadwal', $request->id_jadwal)
+                    ->first();
+
+        if (!$irs) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Jadwal tidak ditemukan.'
+            ], 404);
+        }
+
+        // Delete the record by its primary key 'id_irs'
+        $irs->delete();
+
         return response()->json([
             'success' => true,
-            'message' => 'Jadwal berhasil diambil'
+            'message' => 'Jadwal berhasil dibatalkan.',
         ]);
+
     } catch (\Exception $e) {
+        // Handle error and return the exception details
         return response()->json([
             'success' => false,
-            'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            'error' => $e->getTrace() // Provide stack trace for debugging
         ], 500);
     }
 }
-    
-    
-    
-
-    // public function indexPengisianIRS()
-    // {
-    //     $data = [
-    //         'mahasiswa' => [
-    //             'name' => 'Draco Lucius Malfoy',
-    //             'nim' => '24060122130071',
-    //             'program_studi' => 'S1 Informatika'
-    //         ],
-    //         'user' => [
-    //             'name' => 'Bill Gates',
-    //             'nip' => '198203092006041002'
-    //         ],
-    //         'semester' => [
-    //             'current' => '2024/2025 Ganjil',
-    //             'period' => '1 Mar - 2 April'
-    //         ],
-    //         'stats' => [
-    //             'semester' => 5,
-    //             'ipk' => '3.6/4.0',
-    //             'sksk' => 86
-    //         ],
-    //         'status' => [
-    //             'irs' => 'ditolak',
-    //             'registrasi' => true
-    //         ],
-    //         'pengisianirs' => [
-    //             'maxbeban' => 24,
-    //             'total' => 0
-    //         ]
-    //     ];
-        
-    //     return view('mhs_pengisianIRS', compact('data'));  // Gunakan dot notation
-    // }
 
 
         public function periodeHabis()
@@ -248,6 +282,7 @@ class Mhs_PengisianIRSController extends Controller
             ->join('ruangan','ruangan.id_ruang','=','jadwal_kuliah.id_ruang')
             ->where('mahasiswa.id_user', auth()->id())
             ->select(
+                'jadwal_kuliah.id_jadwal as id_jadwal',
                 'matakuliah.kode_matkul',
                 'matakuliah.nama_matkul',
                 'jadwal_kuliah.semester',

@@ -82,8 +82,9 @@ Route::group([], function () {
     // Halaman pengisian IRS kalo udah pernah ambil aka draft irs
     Route::prefix('draftIRS')->group(function () {
         Route::get('/', [Mhs_PengisianIRSController::class, 'draftIRS'])->name('mhs_draftIRS');
+        Route::post('/batalkanJadwal', [Mhs_PengisianIRSController::class, 'batalkanJadwal'])->name('batalkanJadwal');
     });
-
+    
     // Pengambilan Matkul oleh Mahasiswa
     // Route::prefix('pengambilanMatkul')->group(function () {
     //     Route::get('/', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
