@@ -152,18 +152,29 @@
 
             <!-- Cards Section -->
             <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th style="width: 3rem;">No</th>
-                        <th style="width: 5rem;">Ruang</th>
-                        <th style="width: 4rem;">Kuota</th>
-                        <th style="width: 4rem;">Hari</th>
-                        <th style="width: 6rem;">Jam Mulai</th>
-                        <th style="width: 6rem;">Jam Selesai</th>
-                        <th style="width: 8rem;">Program Studi</th>
-                    </tr>
-                </thead>
-                <!-- Table body here -->
+            <thead>
+                <tr>
+                    <th style="width: 3rem;">No</th>
+                    <th style="width: 5rem;">Ruang</th>
+                    <th style="width: 4rem;">Kuota</th>
+                    <th style="width: 8rem;">Program Studi</th>
+                    <th style="width: 5rem;">Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tabelRuang">
+                @foreach($accRuang as $index => $data)
+                <tr>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $data->ruang_nama }}</td>
+                    <td>{{ $data->kapasitas }}</td>
+                    <td>{{ $data->prodi_nama }}</td>
+                    <td>
+                        <input type="hidden" name="nama_ruang" value="{{ $data->ruang_nama }}">
+                        <button type="submit" class="btn btn-primary mb-2">Tambah Ruang</button>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
             </table>
 
         </div>
