@@ -89,50 +89,49 @@ class Mhs_PengisianIRSController extends Controller
     }
 
     public function konfirmasiIRS(Request $request)
-{
-    try {
-        // Ambil data mahasiswa yang sedang login
-        $mahasiswa = DB::table('mahasiswa')
-            ->join('users', 'mahasiswa.id_user', '=', 'users.id')
-            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
-            ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
-            ->crossJoin('periode_akademik')
-            ->where('mahasiswa.id_user', auth()->id())
-            ->select(
-                'mahasiswa.nim',
-                'mahasiswa.nama as nama_mhs',
-                'program_studi.nama as prodi_nama',
-                'dosen.nama as nama_doswal',
-                'dosen.nip',
-                'users.username',
-                'periode_akademik.nama_periode'
-            )
-            ->first();
-
-        // Cek apakah data mahasiswa ditemukan
-        if (!$mahasiswa) {
-            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+    {
+        try {
+            // Ambil data mahasiswa yang sedang login
+            $mahasiswa = DB::table('mahasiswa')
+                ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+                ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+                ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+                ->crossJoin('periode_akademik')
+                ->where('mahasiswa.id_user', auth()->id())
+                ->select(
+                    'mahasiswa.nim',
+                    'mahasiswa.nama as nama_mhs',
+                    'program_studi.nama as prodi_nama',
+                    'dosen.nama as nama_doswal',
+                    'dosen.nip',
+                    'users.username',
+                    'periode_akademik.nama_periode'
+                )
+                ->first();
+    
+            // Cek apakah data mahasiswa ditemukan
+            if (!$mahasiswa) {
+                return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+            }
+    
+            // Update semua IRS dengan status 'draft' milik mahasiswa tersebut
+            $updatedRows = IRS::where('nim', $mahasiswa->nim)
+                               ->where('status', 'draft')
+                               ->update(['status' => 'belum disetujui']);
+    
+            // Cek apakah ada data yang diupdate
+            if ($updatedRows > 0) {
+                return redirect()->route('mhs_draftIRS')->with('success', 'Berhasil mengonfirmasi IRS. Menunggu persetujuan.');
+            } else {
+                return redirect()->route('mhs_draftIRS')->with('warning', 'Tidak ada IRS draft yang perlu dikonfirmasi.');
+            }
+        } catch (\Exception $e) {
+            // Tangani error
+            return redirect()->route('mhs_draftIRS')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        // Update semua IRS dengan status 'draft' milik mahasiswa tersebut
-        $updatedRows = IRS::where('nim', $mahasiswa->nim)
-                           ->where('status', 'draft')
-                           ->update(['status' => 'belum disetujui']);
-
-         // Cek apakah ada data yang diupdate
-         if ($updatedRows > 0) {
-            return redirect()->route('mhs_rrencanastudi')
-                ->with('success', 'Berhasil mengonfirmasi IRS. Menunggu persetujuan dosen wali.');
-        } else {
-            return redirect()->route('mhs_rrencanastudi')
-                ->with('warning', 'Tidak ada IRS draft yang perlu dikonfirmasi.');
-        }
-    } catch (\Exception $e) {
-        // Tangani error
-        return redirect()->route('mhs_rrencanastudi')
-            ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
     }
-}
+    
+
 
 public function rencanaStudi()
 {

@@ -174,6 +174,7 @@
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     $(document).on('click', '.batalBtn', function() {
         var id_jadwal = $(this).data('id');  // Ambil id_jadwal dari atribut data-id
@@ -225,18 +226,37 @@
         });
     });
 </script>
+
 <script>
-    document.getElementById('konfirmasiForm').addEventListener('submit', function(e) {
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        confirmButtonText: 'OK'
+    });
+    @endif
+
+    @if(session('warning'))
+    Swal.fire({
+        icon: 'warning',
+        title: 'Peringatan',
+        text: '{{ session('warning') }}',
+        confirmButtonText: 'OK'
+    });
+    @endif
+
+    document.getElementById('konfirmasiForm')?.addEventListener('submit', function(e) {
         e.preventDefault();
         
         Swal.fire({
-            title: 'Konfirmasi Pengisian IRS',
-            text: 'Apakah Anda yakin ingin mengonfirmasi semua IRS draft?',
-            icon: 'warning',
+            title: 'Konfirmasi Rencana Studi',
+            text: 'Apakah Anda yakin ingin mengajukan Rencana Studi?',
+            icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, konfirmasi!',
+            confirmButtonText: 'Ya, Ajukan!',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
