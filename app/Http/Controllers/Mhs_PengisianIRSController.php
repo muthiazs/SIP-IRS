@@ -340,48 +340,49 @@ public function batalkanJadwal(Request $request)
         }
 
         public function draftIRS()
-        {
-            // Fetch mahasiswa data
-            $mahasiswa = DB::table('mahasiswa')
-            ->join('users', 'mahasiswa.id_user', '=', 'users.id')
-            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
-            ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
-            ->where('mahasiswa.id_user', auth()->id())
-            ->select(
-                'mahasiswa.nim',
-                'mahasiswa.nama as nama_mhs',
-                'program_studi.nama as prodi_nama',
-                'dosen.nama as nama_doswal',
-                'dosen.nip',
-                'users.username'
-            ) 
-            ->first();
+{
+    // Fetch mahasiswa data
+    $mahasiswa = DB::table('mahasiswa')
+        ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+        ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+        ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+        ->where('mahasiswa.id_user', auth()->id())
+        ->select(
+            'mahasiswa.nim',
+            'mahasiswa.nama as nama_mhs',
+            'program_studi.nama as prodi_nama',
+            'dosen.nama as nama_doswal',
+            'dosen.nip',
+            'users.username'
+        )
+        ->first();
 
-            //Method get untuk fetch data dr tabel IRS
-            $rancanganIRSSementara = DB::table('irs')
-            ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
-            ->join('matakuliah', 'jadwal_kuliah.kode_matkul','=','matakuliah.kode_matkul')
-            ->join('mahasiswa', 'mahasiswa.nim', '=', 'irs.nim')
-            ->join('ruangan','ruangan.id_ruang','=','jadwal_kuliah.id_ruang')
-            ->where('mahasiswa.id_user', auth()->id())
-            ->select(
-                'jadwal_kuliah.id_jadwal as id_jadwal',
-                'matakuliah.kode_matkul',
-                'matakuliah.nama_matkul',
-                'jadwal_kuliah.semester',
-                'jadwal_kuliah.kelas',
-                'matakuliah.sks',
-                'ruangan.nama as nama_ruang',
-                'jadwal_kuliah.hari',
-                'jadwal_kuliah.jam_mulai',
-                'jadwal_kuliah.jam_selesai',
-                'jadwal_kuliah.kuota',
-            )
-            ->get();
+        $rancanganIRSSementara = DB::table('irs')
+        ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
+        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->join('mahasiswa', 'mahasiswa.nim', '=', 'irs.nim')
+        ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
+        ->where('mahasiswa.id_user', auth()->id())
+        ->where('irs.status', 'draft')
+        ->select(
+            'jadwal_kuliah.kode_matkul',
+            'matakuliah.nama_matkul',
+            'jadwal_kuliah.semester',
+            'jadwal_kuliah.kelas',
+            'matakuliah.sks', // Hapus jika kolom ini tidak ada
+            'ruangan.nama',
+            'jadwal_kuliah.hari',
+            'jadwal_kuliah.jam_mulai',
+            'jadwal_kuliah.jam_selesai',
+            'jadwal_kuliah.kuota',
+            'jadwal_kuliah.id_jadwal'
+        )
+        ->get();
+    
 
-            // Pass both daftarMk and mahasiswa data to the view
-            return view('mhs_draftIRS', compact('mahasiswa','rancanganIRSSementara'));
-        }
+    return view('mhs_draftIRS', compact('mahasiswa', 'rancanganIRSSementara'));
+}
+
 
         public function newIRS()
         {

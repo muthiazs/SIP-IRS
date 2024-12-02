@@ -139,7 +139,7 @@
                         <td>{{ $rancanganSementara->semester }}</td>
                         <td>{{ $rancanganSementara->kelas }}</td>
                         <td>{{ $rancanganSementara->sks }}</td>
-                        <td>{{ $rancanganSementara->nama_ruang }}</td>
+                        <td>{{ $rancanganSementara->nama }}</td>
                         <td>{{ $rancanganSementara->hari }}</td>
                         <td>{{ $rancanganSementara->jam_mulai }}</td>
                         <td>{{ $rancanganSementara->jam_selesai }}</td>
