@@ -139,7 +139,7 @@
                         <td>{{ $rancanganSementara->semester }}</td>
                         <td>{{ $rancanganSementara->kelas }}</td>
                         <td>{{ $rancanganSementara->sks }}</td>
-                        <td>{{ $rancanganSementara->nama_ruang }}</td>
+                        <td>{{ $rancanganSementara->nama }}</td>
                         <td>{{ $rancanganSementara->hari }}</td>
                         <td>{{ $rancanganSementara->jam_mulai }}</td>
                         <td>{{ $rancanganSementara->jam_selesai }}</td>
@@ -161,7 +161,10 @@
         <div class="button-group-right">
             <a href="{{ route('mhs_pengisianIRS') }}" class="btn btn-warning" style=" margin-bottom:15px" >Kembali</a>
             <a href="{{ route('mhs_draftIRS') }}" class="btn btn-warning" style=" background-color: #028391; border-color :#028391; color :#fff; margin-bottom:15px">Draft IRS</a>
-            <button type="button" class="btn btn-info" id="konfirmasiBtn" style="color: white; background-color: #6878B1;  margin-bottom:15px; margin-right:10px">Konfirmasi</button>
+            <form action="{{ route('konfirmasi_irs') }}" method="POST" id="konfirmasiForm">
+                @csrf
+                <button type="submit" class="btn btn-info" id="konfirmasiBtn" style="color: white; background-color: #6878B1; margin-bottom:15px; margin-right:10px">Konfirmasi</button>
+            </form>
         </div>
         
     </div>
@@ -172,6 +175,7 @@
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     $(document).on('click', '.batalBtn', function() {
         var id_jadwal = $(this).data('id');  // Ambil id_jadwal dari atribut data-id
@@ -223,22 +227,41 @@
         });
     });
 </script>
+
 <script>
-    // Menangani klik tombol Konfirmasi
-    document.getElementById('konfirmasiBtn').addEventListener('click', function() {
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: '{{ session('success') }}',
+        confirmButtonText: 'OK'
+    });
+    @endif
+
+    @if(session('warning'))
+    Swal.fire({
+        icon: 'warning',
+        title: 'Peringatan',
+        text: '{{ session('warning') }}',
+        confirmButtonText: 'OK'
+    });
+    @endif
+
+    document.getElementById('konfirmasiForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
         Swal.fire({
-            title: 'Konfirmasi Pengisian IRS',
-            text: 'Apakah Anda yakin ingin mengonfirmasi pengisian IRS ini?',
-            icon: 'warning',
+            title: 'Konfirmasi Rencana Studi',
+            text: 'Apakah Anda yakin ingin mengajukan Rencana Studi?',
+            icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, konfirmasi!',
+            confirmButtonText: 'Ya, Ajukan!',
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Jika konfirmasi sukses, redirect ke route yang diinginkan
-                window.location.href = '#';
+                this.submit();
             }
         });
     });

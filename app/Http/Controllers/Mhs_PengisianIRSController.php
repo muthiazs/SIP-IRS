@@ -89,6 +89,105 @@ class Mhs_PengisianIRSController extends Controller
         return view('mhs_pengisianIRS', compact('Periode_sekarang', 'jadwalKuliah', 'mahasiswa', 'jadwalStatus'));
     }
 
+    public function konfirmasiIRS(Request $request)
+    {
+        try {
+            // Ambil data mahasiswa yang sedang login
+            $mahasiswa = DB::table('mahasiswa')
+                ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+                ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+                ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+                ->crossJoin('periode_akademik')
+                ->where('mahasiswa.id_user', auth()->id())
+                ->select(
+                    'mahasiswa.nim',
+                    'mahasiswa.nama as nama_mhs',
+                    'program_studi.nama as prodi_nama',
+                    'dosen.nama as nama_doswal',
+                    'dosen.nip',
+                    'users.username',
+                    'periode_akademik.nama_periode'
+                )
+                ->first();
+    
+            // Cek apakah data mahasiswa ditemukan
+            if (!$mahasiswa) {
+                return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+            }
+    
+            // Update semua IRS dengan status 'draft' milik mahasiswa tersebut
+            $updatedRows = IRS::where('nim', $mahasiswa->nim)
+                               ->where('status', 'draft')
+                               ->update(['status' => 'belum disetujui']);
+    
+            // Cek apakah ada data yang diupdate
+            if ($updatedRows > 0) {
+                return redirect()->route('mhs_draftIRS')->with('success', 'Berhasil mengonfirmasi IRS. Menunggu persetujuan.');
+            } else {
+                return redirect()->route('mhs_draftIRS')->with('warning', 'Tidak ada IRS draft yang perlu dikonfirmasi.');
+            }
+        } catch (\Exception $e) {
+            // Tangani error
+            return redirect()->route('mhs_draftIRS')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+    
+
+
+    public function rencanaStudi()
+    {
+        // Ambil data mahasiswa yang sedang login
+        $mahasiswa = DB::table('mahasiswa')
+            ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+            ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+            ->crossJoin('periode_akademik')
+            ->where('mahasiswa.id_user', auth()->id())
+            ->select(
+                'mahasiswa.nim',
+                'mahasiswa.nama as nama_mhs',
+                'program_studi.nama as prodi_nama',
+                'dosen.nama as nama_doswal',
+                'dosen.nip',
+                'users.username',
+                'periode_akademik.nama_periode'
+            )
+            ->first();
+    
+        // Cek apakah data mahasiswa ditemukan
+        if (!$mahasiswa) {
+            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
+    
+        // Ambil IRS mahasiswa yang bukan draft
+        $irsRiwayat = DB::table('irs')
+            ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
+            ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+            ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
+            ->where('irs.nim', $mahasiswa->nim)
+            ->whereIn('irs.status', ['belum disetujui', 'disetujui']) // Ambil status IRS tertentu
+            ->select(
+                'jadwal_kuliah.kode_matkul',
+                'matakuliah.nama_matkul',
+                'jadwal_kuliah.semester',
+                'jadwal_kuliah.kelas',
+                'matakuliah.sks',
+                'ruangan.nama as ruang',
+                'jadwal_kuliah.hari',
+                'jadwal_kuliah.jam_mulai',
+                'jadwal_kuliah.jam_selesai',
+                'jadwal_kuliah.kuota',
+                'jadwal_kuliah.id_jadwal',
+                'irs.status' // Tambahkan kolom status untuk pengecekan
+            )
+            ->get();
+    
+        // Ambil status terakhir IRS jika ada
+        $statusTerakhir = $irsRiwayat->first()->status ?? null;
+    
+        return view('mhs_rrencanaStudi', compact('mahasiswa', 'irsRiwayat', 'statusTerakhir'));
+    }
+
 
     // public function ambilJadwal(Request $request)
     // {
@@ -231,49 +330,49 @@ public function batalkanJadwal(Request $request)
         }
 
         public function draftIRS()
-        {
-            // Fetch mahasiswa data
-            $mahasiswa = DB::table('mahasiswa')
-            ->join('users', 'mahasiswa.id_user', '=', 'users.id')
-            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
-            ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
-            ->where('mahasiswa.id_user', auth()->id())
-            ->select(
-                'mahasiswa.nim',
-                'mahasiswa.nama as nama_mhs',
-                'program_studi.nama as prodi_nama',
-                'dosen.nama as nama_doswal',
-                'dosen.nip',
-                'users.username'
-            ) 
-            ->first();
+{
+    // Fetch mahasiswa data
+    $mahasiswa = DB::table('mahasiswa')
+        ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+        ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+        ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+        ->where('mahasiswa.id_user', auth()->id())
+        ->select(
+            'mahasiswa.nim',
+            'mahasiswa.nama as nama_mhs',
+            'program_studi.nama as prodi_nama',
+            'dosen.nama as nama_doswal',
+            'dosen.nip',
+            'users.username'
+        )
+        ->first();
 
-            //Method get untuk fetch data dr tabel IRS
-            $rancanganIRSSementara = DB::table('irs')
-            ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
-            ->join('matakuliah', 'jadwal_kuliah.kode_matkul','=','matakuliah.kode_matkul')
-            ->join('mahasiswa', 'mahasiswa.nim', '=', 'irs.nim')
-            ->join('ruangan','ruangan.id_ruang','=','jadwal_kuliah.id_ruang')
-            ->where('mahasiswa.id_user', auth()->id())
-            ->select(
-                'irs.id_irs as id_irs',
-                'jadwal_kuliah.id_jadwal as id_jadwal',
-                'matakuliah.kode_matkul',
-                'matakuliah.nama_matkul',
-                'jadwal_kuliah.semester',
-                'jadwal_kuliah.kelas',
-                'matakuliah.sks',
-                'ruangan.nama as nama_ruang',
-                'jadwal_kuliah.hari',
-                'jadwal_kuliah.jam_mulai',
-                'jadwal_kuliah.jam_selesai',
-                'jadwal_kuliah.kuota',
-            )
-            ->get();
+        $rancanganIRSSementara = DB::table('irs')
+        ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
+        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->join('mahasiswa', 'mahasiswa.nim', '=', 'irs.nim')
+        ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
+        ->where('mahasiswa.id_user', auth()->id())
+        ->where('irs.status', 'draft')
+        ->select(
+            'jadwal_kuliah.kode_matkul',
+            'matakuliah.nama_matkul',
+            'jadwal_kuliah.semester',
+            'jadwal_kuliah.kelas',
+            'matakuliah.sks', // Hapus jika kolom ini tidak ada
+            'ruangan.nama',
+            'jadwal_kuliah.hari',
+            'jadwal_kuliah.jam_mulai',
+            'jadwal_kuliah.jam_selesai',
+            'jadwal_kuliah.kuota',
+            'jadwal_kuliah.id_jadwal'
+        )
+        ->get();
 
-            // Pass both daftarMk and mahasiswa data to the view
-            return view('mhs_draftIRS', compact('mahasiswa','rancanganIRSSementara'));
-        }
+    return view('mhs_draftIRS', compact('mahasiswa', 'rancanganIRSSementara'));
+}
+
+
 
         public function newIRS()
         {

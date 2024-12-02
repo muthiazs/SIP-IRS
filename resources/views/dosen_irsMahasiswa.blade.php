@@ -65,20 +65,21 @@
 <body>
     <div class="wrapper">
         <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
-        {{-- @if(isset($dosen))
-            <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
-        @else
-            <p>Data dosen tidak ditemukan.</p>
-        @endif --}}
-
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
             <header class="header">
-                    <h1>IRS Mahasiswa</h1>
-                    <p>Semester Akademik Sekarang 2024/2025 Ganjil</p>
-                    <h2>Periode Penyetujuan IRS</h2>
+                <div>
+                    <h1 class="fs-3 fw-bold">IRS Mahasiswa</h1>
+                    <p class="text-muted">Semester Akademik Sekarang </p>
+                </div>
             </header>
-
+            <!-- Period Banner -->
+            <div class="period-banner p-3 rounded-3 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-teal">Periode Penyetujuan IRS</span>
+                    <span class="text-teal fw-bold">...-...</span>
+                </div>
+            </div>
             <!-- Filter and Search -->
             <section class="filter-search mt-2 d-flex align-items-start">
                 <!-- Filter Dropdown -->
@@ -116,28 +117,59 @@
                     </div>
                 </div>
             </section>
-           
             <!-- Student List -->
-            <section class="student-list mt-2">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>
-                                <input type="checkbox" id="select-all">
-                            </th>
-                            <th>No</th>
-                            <th>Nama Mahasiswa</th>
-                            <th>Angkatan</th>
-                            <th>NIM</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="student-list">
-                        <!-- Student data will be dynamically added here -->
-                    </tbody>                    
-                </table>
-            </section>
+           <!-- Bagian yang sudah ada dari template Anda -->
+           <section class="student-list mt-2">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="select-all">
+                        </th>
+                        <th>No</th>
+                        <th>Nama Mahasiswa</th>
+                        <th>NIM</th>
+                        <th>Angkatan</th>
+                        <th>Prodi</th>
+                        <th>Total Usulan</th>
+                        <th>Status Terakhir</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="student-list">
+                    @foreach($usulanIRS as $index => $irs)
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="form-check-input student-checkbox">
+                        </td>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $irs->nama_mahasiswa }}</td>
+                        <td>{{ $irs->nim }}</td>
+                        <td>{{ $irs->angkatan }}</td>
+                        <td>{{ $irs->prodi_nama }}</td>
+                        <td>{{ $irs->total_usulan }}</td>
+                        <td>
+                            <span class="badge 
+                                @if($irs->status_terakhir == 'belum disetujui') bg-warning 
+                                @elseif($irs->status_terakhir == 'disetujui') bg-success 
+                                @else bg-secondary 
+                                @endif">
+                                {{ $irs->status_terakhir }}
+                            </span>
+                        </td>
+                        <td>
+                            {{-- <a href="{{ route('dosen.detail.irs', ['nim' => $irs->nim]) }}" class="btn btn-sm btn-primary">
+                                Lihat Detail
+                            </a> --}}
+                            <a href="" class="btn btn-sm btn-primary">
+                                Lihat Detail
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </section>
         </div>
     </div>
         <!-- Footer -->
@@ -151,12 +183,7 @@
         const searchInput = document.getElementById('search-input');
         const searchButton = document.getElementById('search-button');
 
-        // Sample data
-        const students = [
-            { no: 1, nama: 'Muthia Zhafira Sahnah', angkatan: 2022, nim: '24060122130071', status: 'Disetujui' },
-            { no: 2, nama: 'Alya Safina', angkatan: 2022, nim: '2406012213002', status: 'Belum Disetujui' },
-            { no: 3, nama: 'Rizky Pratama', angkatan: 2023, nim: '2406012313001', status: 'Ditolak' }
-        ];
+        
 
         // Render student data with reset numbering and checkboxes
         function renderStudents(filteredStudents) {

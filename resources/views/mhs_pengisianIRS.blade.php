@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <!-- Add DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
@@ -34,10 +34,11 @@
 
         /* Menambahkan roundness pada tabel */
         .table {
-            border-radius: 10px; Sesuaikan besar roundness
-            overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
+            border-radius: 10px; /*Sesuaikan besar roundness*/
+            overflow: hidden; /*Menghindari isi tabel keluar dari roundness */
             table-layout: fixed; /* Ukuran kolom tetap */
             width: 100%; /* Pastikan tabel mengambil seluruh lebar kontainer */
+            padding: 10px;
         }
         
         .table th, .table td {

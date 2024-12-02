@@ -49,8 +49,41 @@ class DekanController extends Controller
                         'users.username',
                         'periode_akademik.nama_periode'
                     )
-                    ->first();        
-        return view('dekan_PersetujuanRuang', compact('dekan'));
+                    ->first();
+        $accRuang = DB::table('ruangan')
+                    -> join('alokasi_ruangan', 'ruangan.id_ruang', '=', 'alokasi_ruangan.id_ruang')
+                    -> join('program_studi', 'alokasi_ruangan.id_prodi', '=', 'program_studi.id_prodi')
+                    -> where(
+                        'ruangan.status', '=', 'tersedia'
+                    )
+                    -> select(
+                        'ruangan.nama as ruang_nama',
+                        'ruangan.kapasitas',
+                        'program_studi.nama as prodi_nama'
+                        )
+                    -> get();
+        return view('dekan_PersetujuanRuang', compact('dekan', 'accRuang'));
+    }
+
+    public function setujuiRuang(Request $request)
+    {
+        $ruang = DB::table('ruangan')
+        ->where('nama', $request->nama_ruang)
+        ->first();
+        // dd($ruang);
+        
+        DB::table('ruangan')
+        ->where('id_ruang', $ruang->id_ruang)
+        ->update([
+            'status' => 'digunakan'
+        ]);
+
+        DB::table('alokasi_ruangan')
+        ->where('id_ruang', $ruang->id_ruang)  
+        ->delete();
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('toast_success', 'Ruangan berhasil disetujui.');
     }
 
     public function PersetujuanJadwal()

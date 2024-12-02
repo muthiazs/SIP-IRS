@@ -213,29 +213,39 @@
                                     <th>Kode MK</th>
                                     <th>Mata Kuliah</th>
                                     <th>Kelas</th>
+                                    <th>Semester</th>
                                     <th>SKS</th>
                                     <th>Ruang</th>
-                                    <th>Nama Dosen</th>
+                                    <th>Hari</th>
+                                    <th>Jam Mulai</th>
+                                    <th>Jam Selesai</th>
                                 </tr>
                             </thead>
-                            <tbody id="irsTable">
-                                {{-- @foreach($jadwalKuliah as $index => $jadwal)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $jadwal->kode_matkul }}</td>
-                                    <td>{{ $jadwal->nama_matkul }}</td>
-                                    <td>{{ $jadwal->kelas }}</td>
-                                    <td>{{ $jadwal->semester }}</td>
-                                    <td>{{ $jadwal->sks }}</td>
-                                    <td>{{ $jadwal->namaruang }}</td>
-                                    <td>{{ $jadwal->hari }}</td>
-                                    <td>{{ $jadwal->jam_mulai }}</td>
-                                    <td>{{ $jadwal->jam_selesai }}</td>
-                                    <td>{{ $jadwal->kuota }}</td>
-                                </tr>
-                                @endforeach --}}
+                            <tbody>
+                                @forelse($irsRiwayat as $index => $item)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $item->kode_matkul }}</td>
+                                        <td>{{ $item->nama_matkul }}</td>
+                                        <td>{{ $item->kelas }}</td>
+                                        <td>{{ $item->semester }}</td>
+                                        <td>{{ $item->sks }}</td>
+                                        <td>{{ $item->ruang }}</td>
+                                        <td>{{ $item->hari }}</td>
+                                        <td>{{ $item->jam_mulai }}</td>
+                                        <td>{{ $item->jam_selesai }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="12" class="text-center">Tidak ada data jadwal.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
+                         <!-- Status Terakhir -->
+                        <div class="alert alert-danger">
+                            <strong>Status Terakhir IRS:</strong> {{ $statusTerakhir ?? 'Belum ada status' }}
+                        </div>
                     </div>
                   </div>
                 </div>
