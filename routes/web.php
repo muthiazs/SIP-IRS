@@ -109,7 +109,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/rencanaStudi', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('mhs_rencanaStudi');
     Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'indexPilihJadwal'])->name('mhs_pengisianIRS');
     Route::get('/daftarMatkul', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('mhs_daftarMatkul');
-    Route::get('/rrencanaStudi', [Mhs_PengisianIRSController::class, 'rrencanaStudi'])->name('mhs_rrencanaStudi');
+    Route::get('/rrencanaStudi', [Mhs_PengisianIRSController::class, 'rencanaStudi'])->name('mhs_rrencanaStudi');
     Route::get('/periodeIRSHabis', [Mhs_PengisianIRSController::class, 'periodeHabis'])->name('mhs_habisPeriodeIRS');
     Route::get('/newIRS', [Mhs_PengisianIRSController::class, 'newIRS'])->name('mhs_newIRS');
     Route::get('/draftIRS', [Mhs_PengisianIRSController::class, 'draftIRS'])->name('mhs_draftIRS');
