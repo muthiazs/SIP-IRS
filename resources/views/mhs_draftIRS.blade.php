@@ -149,6 +149,7 @@
                             <form action="{{ route('batalkanJadwal') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id_jadwal" value="{{ $rancanganSementara->id_jadwal }}">
+                                <input type="hidden" name="id_irs" value="{{ $rancanganSementara->id_irs }}"> <!-- Menambahkan id_irs -->
                                 <button type="submit" class="btn btn-danger">Batalkan Jadwal</button>
                             </form>
 

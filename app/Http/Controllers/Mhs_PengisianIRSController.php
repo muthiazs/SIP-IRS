@@ -8,6 +8,7 @@ use App\Models\JadwalKuliah; // Model untuk tabel jadwal kuliah
 use App\Models\PeriodeAkademik;  // Add this line to import the PeriodeAkademik model
 use App\Models\Mahasiswa;  // Add this line to import the PeriodeAkademik model
 use APP\Models\Matakuliah;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -283,54 +284,27 @@ private function hitungMaxSks($ipsLalu)
 
 public function batalkanJadwal(Request $request)
 {
-    try {
-        // Check if id_jadwal is present in the request
-        if (!$request->has('id_jadwal')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'ID Jadwal tidak ditemukan di request.'
-            ], 400);
-        }
-
-        // Get the logged-in student's data
-        $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
-        
-        if (!$mahasiswa) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Data mahasiswa tidak ditemukan.'
-            ], 404);
-        }
-
-        // Use IRS table to find the student's schedule by nim and id_jadwal
-        $irs = IRS::where('nim', $mahasiswa->nim)
-                    ->where('id_jadwal', $request->id_jadwal)
-                    ->first();
-
-        if (!$irs) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Jadwal tidak ditemukan.'
-            ], 404);
-        }
-
-        // Delete the record by its primary key 'id_irs'
-        $irs->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Jadwal berhasil dibatalkan.',
-        ]);
-
-    } catch (\Exception $e) {
-        // Handle error and return the exception details
-        return response()->json([
-            'success' => false,
-            'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
-            'error' => $e->getTrace() // Provide stack trace for debugging
-        ], 500);
+    $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+    if (!$mahasiswa) {
+        return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
     }
+    // Validasi input
+    $request->validate([
+        'id_irs' => 'required|integer|exists:irs,id_irs',
+    ]);
+
+    // Hapus record berdasarkan id_irs
+    IRS::where('id_irs', $request->id_irs)
+        ->where('nim', $mahasiswa->nim)
+        ->where('id_jadwal', $request->id_jadwal)           
+        ->delete();
+
+    // Redirect atau respon sukses
+    return redirect()->back()->with('success', 'Jadwal berhasil dibatalkan.');
 }
+
+
+
 
 
         public function periodeHabis()
@@ -394,10 +368,10 @@ public function batalkanJadwal(Request $request)
             'jadwal_kuliah.id_jadwal'
         )
         ->get();
-    
 
     return view('mhs_draftIRS', compact('mahasiswa', 'rancanganIRSSementara'));
 }
+
 
 
         public function newIRS()
