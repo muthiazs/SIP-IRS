@@ -13,5 +13,13 @@ class IRS extends Model
         'id_jadwal',
         'status',
     ];
+
+
+
+    public function jadwalKuliah()
+    {
+    return $this->belongsTo(JadwalKuliah::class, 'id_jadwal', 'id_jadwal');
+    }
+
 }
 
