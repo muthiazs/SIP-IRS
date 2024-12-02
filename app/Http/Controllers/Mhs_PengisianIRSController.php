@@ -365,7 +365,8 @@ public function batalkanJadwal(Request $request)
             'jadwal_kuliah.jam_mulai',
             'jadwal_kuliah.jam_selesai',
             'jadwal_kuliah.kuota',
-            'jadwal_kuliah.id_jadwal'
+            'jadwal_kuliah.id_jadwal',
+            'irs.id_irs'
         )
         ->get();
 
