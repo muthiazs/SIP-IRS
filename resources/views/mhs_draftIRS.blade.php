@@ -160,7 +160,10 @@
         <div class="button-group-right">
             <a href="{{ route('mhs_pengisianIRS') }}" class="btn btn-warning" style=" margin-bottom:15px" >Kembali</a>
             <a href="{{ route('mhs_draftIRS') }}" class="btn btn-warning" style=" background-color: #028391; border-color :#028391; color :#fff; margin-bottom:15px">Draft IRS</a>
-            <button type="submit" class="btn btn-info" id="konfirmasiBtn" style="color: white; background-color: #6878B1;  margin-bottom:15px; margin-right:10px">Konfirmasi</button>
+            <form action="{{ route('konfirmasi_irs') }}" method="POST" id="konfirmasiForm">
+                @csrf
+                <button type="submit" class="btn btn-info" id="konfirmasiBtn" style="color: white; background-color: #6878B1; margin-bottom:15px; margin-right:10px">Konfirmasi</button>
+            </form>
         </div>
         
     </div>
@@ -223,23 +226,23 @@
     });
 </script>
 <script>
-    // Menangani klik tombol Konfirmasi
-    document.querySelector('form').addEventListener('submit', function(e) {
-    e.preventDefault(); // Cegah pengiriman default
-    Swal.fire({
-        title: 'Konfirmasi Pengisian IRS',
-        text: 'Apakah Anda yakin ingin mengonfirmasi semua IRS?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya, konfirmasi!',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            this.submit(); // Kirimkan form jika dikonfirmasi
-        }
+    document.getElementById('konfirmasiForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        Swal.fire({
+            title: 'Konfirmasi Pengisian IRS',
+            text: 'Apakah Anda yakin ingin mengonfirmasi semua IRS draft?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, konfirmasi!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+        });
     });
-});
 </script>
 
