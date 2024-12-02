@@ -38,6 +38,7 @@
             overflow: hidden; /*Menghindari isi tabel keluar dari roundness */
             table-layout: fixed; /* Ukuran kolom tetap */
             width: 100%; /* Pastikan tabel mengambil seluruh lebar kontainer */
+            padding: 10px;
         }
         
         .table th, .table td {
