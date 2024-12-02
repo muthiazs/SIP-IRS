@@ -124,6 +124,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/ruang/create', [BAK_PembagianruangController::class, 'createRuang'])->name('create.store');
     Route::get('/bak_UpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexUpdateDeleteRuang'])->name('bak_UpdateDeleteRuang');
     Route::get('/bak_NextUpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexNextUpdateDeleteRuang'])->name('bak_NextUpdateDeleteRuang');
+    Route::post('/mahasiswa/konfirmasi-irs', [Mhs_PengisianIRSController::class, 'konfirmasiIRS'])->name('konfirmasiIRS');
+
 });
 
 //Pembagian Ruang

@@ -160,7 +160,7 @@
         <div class="button-group-right">
             <a href="{{ route('mhs_pengisianIRS') }}" class="btn btn-warning" style=" margin-bottom:15px" >Kembali</a>
             <a href="{{ route('mhs_draftIRS') }}" class="btn btn-warning" style=" background-color: #028391; border-color :#028391; color :#fff; margin-bottom:15px">Draft IRS</a>
-            <button type="button" class="btn btn-info" id="konfirmasiBtn" style="color: white; background-color: #6878B1;  margin-bottom:15px; margin-right:10px">Konfirmasi</button>
+            <button type="submit" class="btn btn-info" id="konfirmasiBtn" style="color: white; background-color: #6878B1;  margin-bottom:15px; margin-right:10px">Konfirmasi</button>
         </div>
         
     </div>
@@ -224,22 +224,22 @@
 </script>
 <script>
     // Menangani klik tombol Konfirmasi
-    document.getElementById('konfirmasiBtn').addEventListener('click', function() {
-        Swal.fire({
-            title: 'Konfirmasi Pengisian IRS',
-            text: 'Apakah Anda yakin ingin mengonfirmasi pengisian IRS ini?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, konfirmasi!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Jika konfirmasi sukses, redirect ke route yang diinginkan
-                window.location.href = '#';
-            }
-        });
+    document.querySelector('form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Cegah pengiriman default
+    Swal.fire({
+        title: 'Konfirmasi Pengisian IRS',
+        text: 'Apakah Anda yakin ingin mengonfirmasi semua IRS?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, konfirmasi!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            this.submit(); // Kirimkan form jika dikonfirmasi
+        }
     });
+});
 </script>
 

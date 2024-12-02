@@ -213,7 +213,6 @@
                                     <td>{{ $jadwal->hari }}</td>
                                     <td>{{ $jadwal->jam_mulai }}</td>
                                     <td>{{ $jadwal->jam_selesai }}</td>
-                                    <td>{{ $jadwal->kuota }}</td>
                                     <td>{{ $jadwal->kuota_terisi }} / {{ $jadwal->kuota}}</td>
                                     <td>
                                         <div class="button-group-tabel">

@@ -88,6 +88,28 @@ class Mhs_PengisianIRSController extends Controller
         return view('mhs_pengisianIRS', compact('Periode_sekarang', 'jadwalKuliah', 'mahasiswa', 'jadwalStatus'));
     }
 
+    public function konfirmasiIRS(Request $request)
+    {
+        // Ambil semua jadwal_ids
+        $jadwalIds = $request->input('jadwal_ids');
+
+        if (!$jadwalIds || count($jadwalIds) === 0) {
+            return redirect()->back()->with('error', 'Tidak ada IRS untuk dikonfirmasi.');
+        }
+
+        // Update status IRS menjadi terkonfirmasi
+        try {
+            DB::table('irs')
+                ->whereIn('id_jadwal', $jadwalIds)
+                ->update(['status' => 'belum disetujui']); // Sesuaikan kolom dengan database
+
+            return redirect()->route('mhs_pengisianIRS')->with('success', 'IRS berhasil dikonfirmasi.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengonfirmasi IRS.');
+        }
+    }
+
+
 
     // public function ambilJadwal(Request $request)
     // {

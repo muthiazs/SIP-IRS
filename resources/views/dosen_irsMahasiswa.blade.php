@@ -65,12 +65,6 @@
 <body>
     <div class="wrapper">
         <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
-        {{-- @if(isset($dosen))
-            <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
-        @else
-            <p>Data dosen tidak ditemukan.</p>
-        @endif --}}
-
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
             <header class="header">
