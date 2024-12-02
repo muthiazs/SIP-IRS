@@ -22,6 +22,7 @@
                 </a>
                 <ul class="submenu">
                     <li><a href="/bak_PembagianRuang" class="nav-link">Atur Ruang</a></li>
+                    <li><a href="/bak_CekStatusRuang" class="nav-link">Cek Ruang</a></li>
                     <li><a href="/bak_UpdateDeleteRuang" class="nav-link">Edit Ruang</a></li>
                     <li><a href="/bak_CreateRuang" class="nav-link">Tambahkan Ruang</a></li>
                 </ul>

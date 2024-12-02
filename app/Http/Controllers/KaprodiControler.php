@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Matakuliah;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -48,7 +49,8 @@ class KaprodiControler extends Controller
                             'periode_akademik.nama_periode'
                         )
                         ->first();
-        return view('kaprodi_JadwalKuliah', compact('kaprodi'));
+        $namaMK = Matakuliah::all(); 
+        return view('kaprodi_JadwalKuliah', compact('kaprodi', 'namaMK'));
     }
 
     public function StatusMahasiswa()
@@ -72,4 +74,5 @@ class KaprodiControler extends Controller
                         ->first();
         return view('kaprodi_StatusMahasiswa', compact('kaprodi'));
     }
+
 } 
