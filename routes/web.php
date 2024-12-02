@@ -9,6 +9,7 @@ use App\Http\Controllers\BAK_PembagianruangController;
 use App\Http\Controllers\Kaprodi_JadwalKuliahControler;
 use App\Http\Controllers\KaprodiControler;
 use App\Http\Controllers\IRSController;
+use App\Http\Controllers\DosenController;
 use App\Http\Controllers\Mhs_PengisianIRSController;
 
 
@@ -127,7 +128,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/bak_UpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexUpdateDeleteRuang'])->name('bak_UpdateDeleteRuang');
     Route::get('/bak_NextUpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexNextUpdateDeleteRuang'])->name('bak_NextUpdateDeleteRuang');
     Route::post('/konfirmasi-irs', [Mhs_PengisianIRSController::class, 'konfirmasiIRS'])->name('konfirmasi_irs');
-    // Route::get('/rrencanaStudi', [Mhs_PengisianIRSController::class, 'rencanaStudi'])->name('rencanaStudi');
+    Route::get('/dosen_irsMahasiswa', [DosenController::class, 'usulanIRSMahasiswa'])->name('dosen_irsMahasiswa');
 });
 
 //Pembagian Ruang
