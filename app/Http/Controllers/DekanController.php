@@ -65,6 +65,27 @@ class DekanController extends Controller
         return view('dekan_PersetujuanRuang', compact('dekan', 'accRuang'));
     }
 
+    public function setujuiRuang(Request $request)
+    {
+        $ruang = DB::table('ruangan')
+        ->where('nama', $request->nama_ruang)
+        ->first();
+        // dd($ruang);
+        
+        DB::table('ruangan')
+        ->where('id_ruang', $ruang->id_ruang)
+        ->update([
+            'status' => 'digunakan'
+        ]);
+
+        DB::table('alokasi_ruangan')
+        ->where('id_ruang', $ruang->id_ruang)  
+        ->delete();
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('toast_success', 'Ruangan berhasil disetujui.');
+    }
+
     public function PersetujuanJadwal()
     {
         // Debugging query langsung

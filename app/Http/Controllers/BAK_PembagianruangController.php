@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class BAK_PembagianruangController extends Controller
 {
+    // Controller untuk Pembagian Ruang
     public function indexPembagianRuang()
     {
         // Ambil ruangan yang belum dialokasikan
@@ -21,7 +22,6 @@ class BAK_PembagianruangController extends Controller
             )
             ->get();
 
-        // Data akademik tetap sama
         $akademik = DB::table('pegawai')
             ->join('users', 'pegawai.id_user', '=', 'users.id')
             ->crossJoin('periode_akademik')
@@ -37,6 +37,36 @@ class BAK_PembagianruangController extends Controller
         return view('bak_pembagianRuang', compact('tabelRuang', 'akademik'));
     }
 
+    // Controller untuk Cek Status Ruang (apakah sudah di-acc Dekan atau belum)
+    public function indexCekStatusRuang()
+    {
+        // Ambil ruangan yang belum dialokasikan
+        $statusRuang = DB::table('ruangan')
+                        ->join('alokasi_ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
+                        ->where('ruangan.status', '=', 'tersedia')  // Perbaiki penggunaan '=='
+                        ->where('ruangan.id_ruang', '=', DB::raw('alokasi_ruangan.id_ruang'))  // Pastikan kondisi kedua terpisah
+                        ->select(
+                            'ruangan.nama',
+                            'ruangan.kapasitas'
+                        )
+                        ->get();
+
+        $akademik = DB::table('pegawai')
+            ->join('users', 'pegawai.id_user', '=', 'users.id')
+            ->crossJoin('periode_akademik')
+            ->where('pegawai.id_user', auth()->id())
+            ->orderBy('periode_akademik.created_at', 'desc')
+            ->select(
+                'pegawai.nama',
+                'pegawai.nip',
+                'periode_akademik.nama_periode'
+            )
+            ->first();
+
+        return view('bak_pembagianRuang', compact('statusRuang', 'akademik'));
+    }
+
+    // Controller untuk Alokasi Pembagian Ruang
     public function storeRuang(Request $request)
     {
         $ruang = DB::table('ruangan')
@@ -61,10 +91,11 @@ class BAK_PembagianruangController extends Controller
         ]);
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Ruangan baru berhasil ditambahkan.');
+        return redirect()->back()->with('toast_success', 'Ruangan berhasil dialokasikan.');
     }
     
 
+    // Controller untuk page Create Ruang
     public function indexCreateRuang()
     {
 
@@ -101,7 +132,7 @@ class BAK_PembagianruangController extends Controller
             ->first();
 
         if ($cekRuangan) {
-            return redirect()->back()->with('error', 'Ruangan dengan nama tersebut sudah ada.');
+            return redirect()->back()->with('toast_error', 'Ruangan dengan nama tersebut sudah ada.');
         }
 
         $lastRuangan = DB::table('ruangan')
@@ -120,7 +151,7 @@ class BAK_PembagianruangController extends Controller
         ]);
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Ruangan baru berhasil ditambahkan.');
+        return redirect()->back()->with('toast_success', 'Ruangan baru berhasil ditambahkan.');
     }
 
     public function indexUpdateDeleteRuang()
