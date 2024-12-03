@@ -79,35 +79,7 @@
                     </span>
                 </div>
             </div>
-
-             <!-- Pengisian IRS Cards -->
-        {{-- <div class="col-12">
-            <div class="card shadow-sm h-100">
-              <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi</h5>
-            <div class="card-body d-flex flex-column">
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex">
-                        <div class="margincard">
-                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
-                        </div>
-                        <div class="margincard" style="margin-left: 10px;">
-                            <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="margincard">
-                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                        </div>
-                    </div>
-                </div>
-            </div>  --}}
-            {{-- <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Cari Jadwal Kuliah" aria-label="Search" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Cari</button>
-            </div> --}}
-                
+        
             <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
                 <div class="d-flex justify-content-center align-items-center">
                     <span class="fw-medium">Isian Rencana Studi</span>
@@ -115,137 +87,65 @@
             </div>
 
             {{-- Rencana Studi untuk setiap semester --}}
+            <!-- Accordion untuk Jadwal IRS -->
             <div class="accordion accordion-flush" id="accordionFlushExample">
+                @foreach($semesters as $semester)
                 <div class="accordion-item">
-                  <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                      Semester 1
-                    </button>
-                  </h2>
-                  <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kode MK</th>
-                                    <th>Mata Kuliah</th>
-                                    <th>Kelas</th>
-                                    <th>SKS</th>
-                                    <th>Ruang</th>
-                                    <th>Nama Dosen</th>
-                                </tr>
-                            </thead>
-                            <tbody id="irsTable">
-                                {{-- @foreach($jadwalKuliah as $index => $jadwal)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $jadwal->kode_matkul }}</td>
-                                    <td>{{ $jadwal->nama_matkul }}</td>
-                                    <td>{{ $jadwal->kelas }}</td>
-                                    <td>{{ $jadwal->semester }}</td>
-                                    <td>{{ $jadwal->sks }}</td>
-                                    <td>{{ $jadwal->namaruang }}</td>
-                                    <td>{{ $jadwal->hari }}</td>
-                                    <td>{{ $jadwal->jam_mulai }}</td>
-                                    <td>{{ $jadwal->jam_selesai }}</td>
-                                    <td>{{ $jadwal->kuota }}</td>
-                                </tr>
-                                @endforeach --}}
-                            </tbody>
-                        </table>
-                    </div>
-                  </div>
-                </div>
-                <div class="accordion-item">
-                  <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                      Semester 2
-                    </button>
-                  </h2>
-                  <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kode MK</th>
-                                    <th>Mata Kuliah</th>
-                                    <th>Kelas</th>
-                                    <th>SKS</th>
-                                    <th>Ruang</th>
-                                    <th>Nama Dosen</th>
-                                </tr>
-                            </thead>
-                            <tbody id="irsTable">
-                                {{-- @foreach($jadwalKuliah as $index => $jadwal)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $jadwal->kode_matkul }}</td>
-                                    <td>{{ $jadwal->nama_matkul }}</td>
-                                    <td>{{ $jadwal->kelas }}</td>
-                                    <td>{{ $jadwal->semester }}</td>
-                                    <td>{{ $jadwal->sks }}</td>
-                                    <td>{{ $jadwal->namaruang }}</td>
-                                    <td>{{ $jadwal->hari }}</td>
-                                    <td>{{ $jadwal->jam_mulai }}</td>
-                                    <td>{{ $jadwal->jam_selesai }}</td>
-                                    <td>{{ $jadwal->kuota }}</td>
-                                </tr>
-                                @endforeach --}}
-                            </tbody>
-                        </table>
-                    </div>
-                  </div>
-                </div>
-                <div class="accordion-item">
-                  <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                      Semester 3
-                    </button>
-                  </h2>
-                  <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kode MK</th>
-                                    <th>Mata Kuliah</th>
-                                    <th>Kelas</th>
-                                    <th>Semester</th>
-                                    <th>SKS</th>
-                                    <th>Ruang</th>
-                                    <th>Hari</th>
-                                    <th>Jam Mulai</th>
-                                    <th>Jam Selesai</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($irsRiwayat as $index => $item)
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse{{ $semester }}" aria-expanded="false" aria-controls="flush-collapse{{ $semester }}">
+                            Semester {{ $semester }}
+                        </button>
+                    </h2>
+                    <div id="flush-collapse{{ $semester }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body">
+                            @if(isset($irsPerSemester[$semester]))
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kode MK</th>
+                                        <th>Mata Kuliah</th>
+                                        <th>Kelas</th>
+                                        <th>SKS</th>
+                                        <th>Ruang</th>
+                                        <th>Hari</th>
+                                        <th>Jam Mulai</th>
+                                        <th>Jam Selesai</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($irsPerSemester[$semester] as $index => $item)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $item->kode_matkul }}</td>
                                         <td>{{ $item->nama_matkul }}</td>
                                         <td>{{ $item->kelas }}</td>
-                                        <td>{{ $item->semester }}</td>
                                         <td>{{ $item->sks }}</td>
                                         <td>{{ $item->ruang }}</td>
                                         <td>{{ $item->hari }}</td>
                                         <td>{{ $item->jam_mulai }}</td>
                                         <td>{{ $item->jam_selesai }}</td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="12" class="text-center">Tidak ada data jadwal.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                         <!-- Status Terakhir -->
-                        <div class="alert alert-danger">
-                            <strong>Status Terakhir IRS:</strong> {{ $statusTerakhir ?? 'Belum ada status' }}
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            @else
+                            <p>Tidak ada data IRS untuk semester ini.</p>
+                            @endif
                         </div>
+                        <!-- Status Terakhir -->
+                        <div class="alert alert-secondary">
+                            <strong>Status Terakhir IRS Semester {{ $semester }}:</strong> 
+                            {{ $statusTerakhirPerSemester[$semester] ?? 'Belum ada status' }}
+                        </div>
+                        <!-- Tombol Cetak IRS -->
+                        <div class="mt-3">
+                            <a href="{{ route('cetak_pdf') }}" class="btn btn-primary">Cetak IRS</a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
                     </div>
                   </div>
                 </div>
