@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -158,12 +157,9 @@
                             </span>
                         </td>
                         <td>
-                            {{-- <a href="{{ route('dosen.detail.irs', ['nim' => $irs->nim]) }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('dosen_detailIRSMahasiswa', ['nim' => $irs->nim]) }}" class="btn btn-sm btn-primary">
                                 Lihat Detail
-                            </a> --}}
-                            <a href="" class="btn btn-sm btn-primary">
-                                Lihat Detail
-                            </a>
+                            </a>                                                                        
                         </td>
                     </tr>
                     @endforeach
