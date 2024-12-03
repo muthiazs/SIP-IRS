@@ -8,6 +8,23 @@ use App\Models\IRS;
 
 class DosenController extends Controller
 {
+    public function index(Request $request)
+{
+    $searchTerm = $request->input('search', '');
+    $statusFilter = $request->input('status', 'all');
+
+    // Fetch students based on search term and status filter
+    $usulanIRS = IRS::query()
+        ->when($searchTerm, function ($query) use ($searchTerm) {
+            return $query->where('nama_mahasiswa', 'like', '%' . $searchTerm . '%');
+        })
+        ->when($statusFilter !== 'all', function ($query) use ($statusFilter) {
+            return $query->where('status_terakhir', $statusFilter);
+        })
+        ->get();
+
+    return view('dosen.index', compact('usulanIRS'));
+}
     public function usulanIRSMahasiswa()
     {
         // Ambil data dosen yang sedang login

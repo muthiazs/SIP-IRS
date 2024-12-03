@@ -131,7 +131,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dosen_irsMahasiswa', [DosenController::class, 'usulanIRSMahasiswa'])->name('dosen_irsMahasiswa');
     // Rute untuk menampilkan detail IRS mahasiswa
     Route::get('/dosen/detail-irs/{nim}', [DosenController::class, 'detailIRS'])->name('dosen_detailIRSMahasiswa');
-
+    //Buat filter etc
+    Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
     // Setujui IRS
     Route::get('/dosen/approve-irs/{nim}', [DosenController::class, 'approveIRS'])->name('dosen.approve.irs');
 

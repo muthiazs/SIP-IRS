@@ -119,11 +119,13 @@
                 </tbody>
             </table>
 
-                <!-- Tombol Setujui dan Batalkan Persetujuan dalam Satu Grup -->
-        <div class="btn-group" role="group" aria-label="IRS Approval Actions">
-            <a href="{{ route('dosen.approve.irs', ['nim' => $mahasiswa->nim]) }}" class="btn btn-success">Setujui</a>
-            <a href="{{ route('dosen.cancel.approval.irs', ['nim' => $mahasiswa->nim]) }}" class="btn btn-danger">Batalkan Persetujuan</a>
-        </div>
+            <div class="btn-group" role="group" aria-label="IRS Approval Actions">
+                <!-- Tombol Setujui dengan konfirmasi -->
+                <button type="button" class="btn btn-success" onclick="confirmApproval('approve')">Setujui</button>
+                
+                <!-- Tombol Batalkan Persetujuan dengan konfirmasi -->
+                <button type="button" class="btn btn-danger" onclick="confirmApproval('cancel')">Batalkan Persetujuan</button>
+            </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -137,12 +139,13 @@
             },
             'cancel': {
                 title: 'Batalkan Persetujuan',
-                text: 'Apakah Anda yakin ingin membatalkan persetujuan IRS?',
+                text: 'Apakah Anda yakin ingin membatalkan persetujuan IRS? Tindakan ini tidak dapat dibatalkan.',
                 confirmButtonText: 'Ya, Batalkan',
                 successMessage: 'Persetujuan IRS berhasil dibatalkan!'
             }
         };
 
+        // Menampilkan SweetAlert konfirmasi
         Swal.fire({
             title: messages[action].title,
             text: messages[action].text,
@@ -154,8 +157,12 @@
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                $('#actionInput').val(action);
-                $('#irsApprovalForm').submit();
+                // Jika konfirmasi diterima, redirect ke action terkait
+                if (action === 'approve') {
+                    window.location.href = '{{ route('dosen.approve.irs', ['nim' => $mahasiswa->nim]) }}';
+                } else if (action === 'cancel') {
+                    window.location.href = '{{ route('dosen.cancel.approval.irs', ['nim' => $mahasiswa->nim]) }}';
+                }
             }
         });
     }
@@ -165,8 +172,8 @@
             icon: 'success',
             title: 'Berhasil',
             text: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 2500
+            showConfirmButton: true,  // Menampilkan tombol konfirmasi
+            confirmButtonText: 'Tutup'
         });
     @endif
 
@@ -175,8 +182,8 @@
             icon: 'error',
             title: 'Gagal',
             text: '{{ session('error') }}',
-            showConfirmButton: false,
-            timer: 2500
+            showConfirmButton: true,  // Menampilkan tombol konfirmasi
+            confirmButtonText: 'Tutup'
         });
     @endif
 </script>
