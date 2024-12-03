@@ -146,6 +146,7 @@ class Mhs_PengisianIRSController extends Controller
             ->select(
                 'mahasiswa.nim',
                 'mahasiswa.nama as nama_mhs',
+                'mahasiswa.semester',
                 'program_studi.nama as prodi_nama',
                 'dosen.nama as nama_doswal',
                 'dosen.nip',
@@ -159,17 +160,20 @@ class Mhs_PengisianIRSController extends Controller
             return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
         }
     
-        // Ambil IRS mahasiswa yang bukan draft
+        // Ambil IRS mahasiswa
         $irsRiwayat = DB::table('irs')
             ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
             ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
             ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
+            ->join('mahasiswa as mhs', 'irs.nim', '=', 'mhs.nim') // Gunakan alias `mhs`
             ->where('irs.nim', $mahasiswa->nim)
-            ->whereIn('irs.status', ['belum disetujui', 'disetujui']) // Ambil status IRS tertentu
+            ->whereIn('irs.status', ['belum disetujui', 'disetujui', 'draft', 'BARU'])
             ->select(
                 'jadwal_kuliah.kode_matkul',
                 'matakuliah.nama_matkul',
-                'jadwal_kuliah.semester',
+                'jadwal_kuliah.semester as semester',
+                'irs.semester as smtIRS',
+                'mhs.semester as smtMhs', // Gunakan alias untuk menghindari konflik
                 'jadwal_kuliah.kelas',
                 'matakuliah.sks',
                 'ruangan.nama as ruang',
@@ -178,15 +182,35 @@ class Mhs_PengisianIRSController extends Controller
                 'jadwal_kuliah.jam_selesai',
                 'jadwal_kuliah.kuota',
                 'jadwal_kuliah.id_jadwal',
-                'irs.status' // Tambahkan kolom status untuk pengecekan
+                'irs.status'
             )
             ->get();
     
-        // Ambil status terakhir IRS jika ada
-        $statusTerakhir = $irsRiwayat->first()->status ?? null;
+        // Kelompokkan data IRS berdasarkan semester IRS
+        $irsPerSemester = [];
+        foreach ($irsRiwayat as $irs) {
+            $irsPerSemester[$irs->smtIRS][] = $irs;
+        }
     
-        return view('mhs_rrencanaStudi', compact('mahasiswa', 'irsRiwayat', 'statusTerakhir'));
+        // Ambil semua semester mahasiswa untuk accordion flush
+        $semesters = range(1, $mahasiswa->semester); // Buat range dari semester 1 hingga semester mahasiswa saat ini
+    
+        // Ambil status terakhir IRS jika ada
+        // Kelompokkan data IRS berdasarkan semester IRS
+        $irsPerSemester = [];
+        $statusTerakhirPerSemester = []; // Tambahkan array untuk status per semester
+        foreach ($irsRiwayat as $irs) {
+            $irsPerSemester[$irs->smtIRS][] = $irs;
+
+            // Cek status terakhir untuk setiap semester
+            if (!isset($statusTerakhirPerSemester[$irs->smtIRS])) {
+                $statusTerakhirPerSemester[$irs->smtIRS] = $irs->status;
+            }
+        }
+    
+        return view('mhs_rrencanaStudi', compact('mahasiswa', 'irsPerSemester', 'statusTerakhirPerSemester', 'semesters'));
     }
+    
 
 
     // public function ambilJadwal(Request $request)
