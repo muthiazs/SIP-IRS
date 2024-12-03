@@ -9,7 +9,7 @@ use App\Models\PeriodeAkademik;  // Add this line to import the PeriodeAkademik 
 use App\Models\Mahasiswa;  // Add this line to import the PeriodeAkademik model
 use App\Models\Matakuliah;
 use Illuminate\Support\Facades\Log;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -214,36 +214,51 @@ class Mhs_PengisianIRSController extends Controller
     }
     
     public function cetak_pdf()
-    {
-        // Ambil data mahasiswa yang sedang login
-        $mahasiswa = DB::table('mahasiswa')
-            ->where('mahasiswa.id_user', auth()->id())
-            ->first();
-    
-        // Cek apakah data mahasiswa ditemukan
-        if (!$mahasiswa) {
-            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
-        }
-    
-        // Ambil data IRS mahasiswa
-        $irsCetak = DB::table('irs')
-            ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
-            ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
-            ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
-            ->join('mahasiswa as mhs', 'irs.nim', '=', 'mhs.nim') // Gunakan alias `mhs`
-            ->where('irs.nim', $mahasiswa->nim)
-            ->whereIn('irs.status', ['belum disetujui', 'disetujui', 'draft', 'BARU'])
-            ->get();
-    
-        // Membuat nama file PDF
-        $fileName = 'irs-' . $mahasiswa->nim . '-pdf.pdf';
-    
-        // Load view untuk PDF
-        $pdf = PDF::loadview('irs_pdf', ['irs' => $irsCetak]);
-    
-        // Return PDF sebagai file download
-        return $pdf->download($fileName);
+{
+    // Ambil data mahasiswa yang sedang login
+    $mahasiswa = DB::table('mahasiswa')
+        ->where('mahasiswa.id_user', auth()->id())
+        ->first();
+
+    // Cek apakah data mahasiswa ditemukan
+    if (!$mahasiswa) {
+        return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
     }
+
+    // Ambil data IRS mahasiswa
+    $irsCetak = DB::table('irs')
+        ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
+        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
+        ->join('mahasiswa as mhs', 'irs.nim', '=', 'mhs.nim')
+        ->join('dosen', 'dosen.id_dosen' , '=' , 'jadwal_kuliah.id_dosen')
+        ->where('irs.nim', $mahasiswa->nim)
+        ->whereIn('irs.status', ['belum disetujui', 'disetujui', 'draft', 'BARU'])
+        ->select(
+            'matakuliah.kode_matkul',
+            'matakuliah.nama_matkul', 
+            'jadwal_kuliah.semester', 
+            'jadwal_kuliah.kelas', 
+            'matakuliah.sks', 
+            'ruangan.nama as ruang', 
+            'irs.status',
+            'dosen.nama as nama_dosen'
+        )
+        ->get();
+
+    // Membuat nama file PDF
+    $fileName = 'irs-' . $mahasiswa->nim . '-pdf.pdf';
+
+    // Load view untuk PDF dengan data tambahan mahasiswa
+    $pdf = PDF::loadView('irs_pdf', [
+        'irs' => $irsCetak,
+        'mahasiswa' => $mahasiswa
+    ]);
+
+    // Return PDF sebagai file download
+    return $pdf->download($fileName);
+}
+
     
 
     // public function ambilJadwal(Request $request)

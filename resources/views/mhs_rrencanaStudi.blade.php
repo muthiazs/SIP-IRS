@@ -79,35 +79,7 @@
                     </span>
                 </div>
             </div>
-
-             <!-- Pengisian IRS Cards -->
-        {{-- <div class="col-12">
-            <div class="card shadow-sm h-100">
-              <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi</h5>
-            <div class="card-body d-flex flex-column">
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex">
-                        <div class="margincard">
-                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
-                        </div>
-                        <div class="margincard" style="margin-left: 10px;">
-                            <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="margincard">
-                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                        </div>
-                    </div>
-                </div>
-            </div>  --}}
-            {{-- <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Cari Jadwal Kuliah" aria-label="Search" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Cari</button>
-            </div> --}}
-                
+        
             <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
                 <div class="d-flex justify-content-center align-items-center">
                     <span class="fw-medium">Isian Rencana Studi</span>
@@ -162,7 +134,7 @@
                             @endif
                         </div>
                         <!-- Status Terakhir -->
-                        <div class="alert alert-danger">
+                        <div class="alert alert-secondary">
                             <strong>Status Terakhir IRS Semester {{ $semester }}:</strong> 
                             {{ $statusTerakhirPerSemester[$semester] ?? 'Belum ada status' }}
                         </div>

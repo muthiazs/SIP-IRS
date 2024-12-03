@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Facades\Route;
+@endphp
 <div class="sidebar container">
     <div class="sidebar p-4 text-white">
         <div class="text-center mb-4">
