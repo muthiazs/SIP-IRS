@@ -105,7 +105,12 @@ class DekanController extends Controller
                         'users.username',
                         'periode_akademik.nama_periode'
                     )
-                    ->first();        
-        return view('dekan_PersetujuanJadwal', compact('dekan'));
+                    ->first();
+        
+        $programStudi = DB::table('program_studi')
+                    ->select('id_prodi', 'nama')
+                    ->get();
+
+        return view('dekan_PersetujuanJadwal', compact('dekan', 'programStudi'));
     }
 }

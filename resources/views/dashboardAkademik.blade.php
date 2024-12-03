@@ -53,7 +53,7 @@
                         <div class="card-body text-center">
                             <h5 class="fw-bold">Penyusunan Pembagian Ruang Kelas</h5>
                             <p class="text-muted mb-3">Anda belum mengajukan pembagian ruang</p>
-                            <button class="btn btn-danger">Buat Pembagian Ruang</button>
+                            <button class="btn btn-danger" onclick="window.location.href='{{ route('bak_PembagianRuang') }}'">Buat Pembagian Ruang</button>
                         </div>
                     </div>
                 </div>

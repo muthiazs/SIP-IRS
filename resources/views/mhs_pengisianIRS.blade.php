@@ -181,8 +181,45 @@
                         <button class="btn" style="background-color: #6878B1; color:#fff;max-width: 250px;max-height:40px" type="button" id="button-addon2">
                             <span class="material-icons">search</span>
                         </button>
+                        <!-- Filter buttons -->
+                        {{-- <div>
+                            <button class="btn custom-btn-primary" id="resetFilter">Semua</button>
+                            <button class="btn custom-btn-outline" id="filterGenap">Semester Genap</button>
+                            <button class="btn custom-btn-outline" id="filterGanjil">Semester Ganjil</button>
+                        </div> --}}
+
+                        <!-- Dropdown Filter for Semester -->
+                        <div class="dropdown d-inline-block me-3">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="semesterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Pilih Semester
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="semesterDropdown">
+                                <li><button class="dropdown-item" id="1">Semester 1</button></li>
+                                <li><button class="dropdown-item" id="2">Semester 2</button></li>
+                                <li><button class="dropdown-item" id="3">Semester 3</button></li>
+                                <li><button class="dropdown-item" id="4">Semester 4</button></li>
+                                <li><button class="dropdown-item" id="5">Semester 5</button></li>
+                                <li><button class="dropdown-item" id="6">Semester 6</button></li>
+                                <li><button class="dropdown-item" id="7">Semester 7</button></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><button class="dropdown-item" id="pilihan">Pilihan</button></li>
+                            </ul>                            
+                        </div>
                     </div>
+
+
+                    <div class="banner text-center mt-2 rounded-top" 
+                        style="background-color: #027683; 
+                                color: white; 
+                                height: 40px; /* Tinggi banner */
+                                display: flex; /* Mengaktifkan Flexbox */
+                                justify-content: center; /* Pusat horizontal */
+                                align-items: center; /* Pusat vertikal */ 
+                                font-size: 18px;">
+                        <span class="fw-medium">Daftar Jadwal Kuliah</span>
                     </div>
+
+                   
                     <div class="table-responsive">
                         <table class="table table-bordered" id="jadwalTable">
                             <thead>
@@ -465,3 +502,11 @@
         });
     });
 </script>
+
+<div class="d-flex justify-content-center mt-3">
+    <nav aria-label="Page navigation">
+        <ul class="pagination" id="pagination">
+            <!-- Pagination buttons will be dynamically inserted here -->
+        </ul>
+    </nav>
+</div>

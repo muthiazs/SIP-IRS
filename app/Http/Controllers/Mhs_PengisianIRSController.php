@@ -302,41 +302,94 @@ class Mhs_PengisianIRSController extends Controller
 
 
     public function ambilJadwal(Request $request)
-    {
-        try {
-            $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
-            if (!$periodeAkademik) {
-                return response()->json(['success' => false, 'message' => 'Periode akademik tidak ditemukan.'], 404);
-            }
+{
+    try {
+        $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
+        if (!$periodeAkademik) {
+            return response()->json(['success' => false, 'message' => 'Periode akademik tidak ditemukan.'], 404);
+        }
 
-            $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
-            if (!$mahasiswa) {
-                return response()->json(['success' => false, 'message' => 'Data mahasiswa tidak ditemukan.'], 404);
-            }
+        $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+        if (!$mahasiswa) {
+            return response()->json(['success' => false, 'message' => 'Data mahasiswa tidak ditemukan.'], 404);
+        }
 
-            $request->validate([
-                'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
-                'status' => 'required|string|max:255',
-            ]);
+        $request->validate([
+            'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
+            'status' => 'required|string|max:255',
+        ]);
 
-            IRS::create([
-                'nim' => $mahasiswa->nim,
-                'semester' => $mahasiswa->semester,
-                'id_jadwal' => $request->id_jadwal,
-                'status' => $request->status,
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Jadwal berhasil diambil',
-            ]);
-        } catch (\Exception $e) {
+        // Check for scheduling conflicts
+        $isConflict = $this->cekJadwalBertabrakan($mahasiswa->nim, $request->id_jadwal);
+        if ($isConflict) {
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
-            ], 500);
+                'message' => 'Jadwal yang Anda pilih bertabrakan dengan jadwal yang sudah diambil.',
+            ], 409); // Conflict status code
+        }
+
+        // Insert the schedule into IRS
+        IRS::create([
+            'nim' => $mahasiswa->nim,
+            'semester' => $mahasiswa->semester,
+            'id_jadwal' => $request->id_jadwal,
+            'status' => $request->status,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Jadwal berhasil diambil',
+        ]);
+    } catch (\Exception $e) {
+        // Log the exception for debugging purposes
+        Log::error("Error in ambilJadwal: " . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+        ], 500);
+    }
+}
+
+// Method to check if the student's schedule conflicts with an existing one
+private function cekJadwalBertabrakan($nim, $id_jadwal)
+{
+    $selectedJadwal = DB::table('jadwal_kuliah')
+        ->where('id_jadwal', $id_jadwal)
+        ->first();
+
+    if (!$selectedJadwal) {
+        return false; // Jadwal tidak ditemukan
+    }
+
+    // ... (other checks for capacity and quota)
+
+    $existingJadwal = DB::table('irs')
+        ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+        ->where('irs.nim', $nim)
+        ->where('jadwal_kuliah.hari', $selectedJadwal->hari)
+        ->select('jadwal_kuliah.jam_mulai', 'jadwal_kuliah.jam_selesai')
+        ->get();
+
+    foreach ($existingJadwal as $jadwal) {
+        // Convert time strings to timestamps for comparison
+        $selectedJadwalStart = strtotime($selectedJadwal->jam_mulai);
+        $selectedJadwalEnd = strtotime($selectedJadwal->jam_selesai);
+        $existingJadwalStart = strtotime($jadwal->jam_mulai);
+        $existingJadwalEnd = strtotime($jadwal->jam_selesai);
+
+        // Check for overlap
+        if (
+            ($selectedJadwalStart >= $existingJadwalStart && $selectedJadwalStart < $existingJadwalEnd) ||
+            ($selectedJadwalEnd > $existingJadwalStart && $selectedJadwalEnd <= $existingJadwalEnd)
+        ) {
+            return true; // Jadwal bertabrakan
         }
     }
+
+    return false; // Tidak ada konflik jadwal
+}
+
 
 
 private function hitungMaxSks($ipsLalu)
@@ -491,7 +544,6 @@ public function batalkanJadwal(Request $request)
 
             // Pass both daftarMk and mahasiswa data to the view
             return view('mhs_rrencanaStudi', compact('mahasiswa'));
-        }
-        
+        }        
 
 }
