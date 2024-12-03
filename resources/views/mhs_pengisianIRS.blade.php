@@ -8,6 +8,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Add DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
@@ -31,10 +34,11 @@
 
         /* Menambahkan roundness pada tabel */
         .table {
-            border-radius: 10px; Sesuaikan besar roundness
-            overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
+            border-radius: 10px; /*Sesuaikan besar roundness*/
+            overflow: hidden; /*Menghindari isi tabel keluar dari roundness */
             table-layout: fixed; /* Ukuran kolom tetap */
             width: 100%; /* Pastikan tabel mengambil seluruh lebar kontainer */
+            padding: 10px;
         }
         
         .table th, .table td {
@@ -92,11 +96,46 @@
             box-sizing: border-box; /* Hitung padding dalam ukuran elemen */
         }
 
+        /* Card styling dengan margin */
         .card {
-            width: auto; /* Sesuaikan ukuran card dengan kontennya */
-            max-width: 100%; /* Agar tidak melebihi layar */
+            margin: 5px; /* Berikan margin 10px di sekeliling card */
+            width: auto; /* Pastikan mengikuti ukuran konten */
+            max-width: 100%; /* Agar tidak melampaui lebar layar */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan sedikit bayangan untuk estetika */
+        }
+        /* Styling untuk DataTables */
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: #027683 !important;
+            color: white !important;
+            border: 1px solid #027683 !important;
         }
 
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #67C3CC !important;
+            color: white !important;
+            border: 1px solid #67C3CC !important;
+        }
+
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_info {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .dataTables_wrapper .dataTables_paginate {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        /* Table responsive tanpa geser */
+        .table-responsive {
+            overflow-x: auto;
+            max-width: 100%; /* Agar tabel tetap berada dalam kontainer */
+        }   
+        
 
     </style> 
 </head>
@@ -114,23 +153,15 @@
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
+                {{-- <div>
                     <h1>{{$Periode_sekarang->jenis}}</h1>
-                </div>
-                <div class="position-relative">
-                    <button class="btn btn-primary rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                        <span class="visually-hidden">Notifikasi baru</span>
-                    </span>
-                </div>
+                </div> --}}
             </div>
 
             <!-- Pengisian IRS Cards -->
             <div class="col-12">
                 <div class="card shadow-sm h-100">
-                <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi</h5>
+                <h5 class="card-header" style="background-color: #027683; color: white;">Pengisian Rencana Studi - Daftar Jadwal Kuliah</h5>
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex">
@@ -143,16 +174,11 @@
                                 <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
                             </div>
                         </div>
-                        <div>
-                            <div class="margincard">
-                                <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            </div>
-                        </div>
                     </div>
                     <div class="input-group mt-2">
                         <!-- Search bar -->
-                        <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2" style="max-width: 300px;">
-                        <button class="btn" style="background-color: #6878B1; color:#fff" type="button" id="button-addon2">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2" style="max-width: 250px;max-height:40px">
+                        <button class="btn" style="background-color: #6878B1; color:#fff;max-width: 250px;max-height:40px" type="button" id="button-addon2">
                             <span class="material-icons">search</span>
                         </button>
                         <!-- Filter buttons -->
@@ -252,13 +278,186 @@
                     </div>
                 </div>
             </div> 
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="jadwalTable">
+                            <thead>
+                                <tr>
+                                    <th style="width: 3rem;">No</th>
+                                    <th style="width: 5rem;">Kode MK</th>
+                                    <th style="width: 6rem;">Mata Kuliah</th>
+                                    <th style="width: 5rem;">Semester</th>
+                                    <th style="width: 4rem;">Kelas</th>
+                                    <th style="width: 4rem;">SKS</th>
+                                    <th style="width: 4rem;">Ruang</th>
+                                    <th style="width: 5rem;">Hari</th>
+                                    <th style="width: 6rem;">Jam Mulai</th>
+                                    <th style="width: 6rem;">Jam Selesai</th>
+                                    <th style="width: 4rem;">Kuota</th>
+                                    <th style="width: 10rem;">Aksi</th>
+                                </tr>
+                            </thead>                
+                            <tbody>
+                                @foreach($jadwalKuliah as $index => $jadwal)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $jadwal->kode_matkul }}</td>
+                                    <td>{{ $jadwal->nama_matkul }}</td>
+                                    <td>{{ $jadwal->semester }}</td>
+                                    <td>{{ $jadwal->kelas }}</td>
+                                    <td>{{ $jadwal->sks }}</td>
+                                    <td>{{ $jadwal->namaruang }}</td>
+                                    <td>{{ $jadwal->hari }}</td>
+                                    <td>{{ $jadwal->jam_mulai }}</td>
+                                    <td>{{ $jadwal->jam_selesai }}</td>
+                                    <td>{{ $jadwal->kuota_terisi }} / {{ $jadwal->kuota}}</td>
+                                    <td>
+                                        <div class="button-group-tabel">
+                                            @if (!$jadwalStatus[$jadwal->id_jadwal])
+                                                <form class="ambil-jadwal-form">
+                                                    @csrf
+                                                    <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
+                                                    <input type="hidden" name="status" value="draft">
+                                                    <button type="submit" 
+                                                            class="btn btn-primary mb-2 rounded-3 ambil-btn" 
+                                                            style="color:white; background-color: #028391; border-color :#028391;font-size: 15px; padding: 5px 10px;"
+                                                            data-jadwal-id="{{ $jadwal->id_jadwal }}">
+                                                        Ambil
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <button class="btn btn-secondary mb-2 rounded-3" 
+                                                        disabled 
+                                                        style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
+                                                    Terambil
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </td>                    
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+        <div class="button-group-right">
+            <div class="button-group-right">
+                <a href="{{ route('mhs_newIRS') }}" class="btn" style="color:white; background-color:#FFB939">Keluar</a>
+            </div>
+            <div class="button-group-right">
+                <a href="{{ route('mhs_draftIRS') }}" class="btn" style="color: white; background-color: #6878B1">Lanjutkan</a>
+            </div>
+        </div>
         </div>
     </div>
   </div>
         </div>
     </div>
+    <!-- Add DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Inisialisasi DataTable
+            var table = $('#jadwalTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Semua"]],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json',
+                    lengthMenu: "Tampilkan _MENU_ data per halaman",
+                    zeroRecords: "Data tidak ditemukan",
+                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
+                    infoEmpty: "Tidak ada data yang tersedia",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Selanjutnya",
+                        previous: "Sebelumnya"
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: -1 }  // Nonaktifkan sorting untuk kolom aksi
+                ],
+                // Mengubah dom untuk menghilangkan search box default
+                dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                initComplete: function() {
+                    // Menghubungkan search box custom dengan DataTables
+                    $('#searchInput').on('keyup', function() {
+                        table.search(this.value).draw();
+                    });
 
+                    // Handler untuk tombol reset
+                    $('#resetFilter').on('click', function() {
+                        table.search('').draw();
+                    });
+                }
+            });
+        });
+    </script>
+    <!-- Add JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('.ambil-jadwal-form');
+            
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const submitButton = this.querySelector('.ambil-btn');
+                    const jadwalId = submitButton.getAttribute('data-jadwal-id');
+                    
+                    submitButton.disabled = true;
+                    
+                    fetch('{{ route('ambilJadwal') }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Tampilkan notifikasi sukses
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil!',
+                                text: data.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                // Reload halaman setelah sukses
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message
+                            });
+                            submitButton.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Terjadi kesalahan pada server'
+                        });
+                        submitButton.disabled = false;
+                    });
+                });
+            });
+        });
+        </script>
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -360,104 +559,6 @@
             row.style.display = ''; // Tampilkan semua baris
         });
     });
-
-    const rowsPerPage = 5;
-    const rows = document.querySelectorAll('#irsTable tr');
-    const totalPages = Math.ceil(rows.length / rowsPerPage);
-
-    function paginate(rows, page) {
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        
-        rows.forEach((row, index) => {
-            if (index >= start && index < end) {
-                row.style.display = ''; // Show this row
-            } else {
-                row.style.display = 'none'; // Hide this row
-            }
-        });
-    }
-
-    // Create pagination buttons
-    function createPagination(totalPages) {
-        const paginationContainer = document.getElementById('pagination');
-        paginationContainer.innerHTML = ''; // Clear existing pagination
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('li');
-            pageButton.classList.add('page-item');
-            pageButton.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-            pageButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                paginate(rows, i);
-            });
-            paginationContainer.appendChild(pageButton);
-        }
-    }
-
-    // Initialize pagination
-    paginate(rows, 1);
-    createPagination(totalPages);
-
-
-</script>
-
-<!-- Script to handle filter functionality -->
-<script>
-    // Function to filter rows based on selected semester
-    function filterBySemester(semester) {
-        const rows = document.querySelectorAll('#irsTable tr');
-        rows.forEach(row => {
-            const semesterCell = row.querySelector('td:nth-child(4)'); // Get the semester column
-            if (semesterCell) {
-                const cellText = semesterCell.innerText.trim();
-                if (semester === 'Pilihan' || cellText === semester) {
-                    row.style.display = ''; // Show the row
-                } else {
-                    row.style.display = 'none'; // Hide the row
-                }
-            }
-        });
-    }
-
-    // Add event listeners to dropdown items to apply filter
-    document.getElementById('semester1').addEventListener('click', function() {
-        filterBySemester('1');
-    });
-    document.getElementById('semester2').addEventListener('click', function() {
-        filterBySemester('2');
-    });
-    document.getElementById('semester3').addEventListener('click', function() {
-        filterBySemester('3');
-    });
-    document.getElementById('semester4').addEventListener('click', function() {
-        filterBySemester('4');
-    });
-    document.getElementById('semester5').addEventListener('click', function() {
-        filterBySemester('5');
-    });
-    document.getElementById('pilihan').addEventListener('click', function() {
-        filterBySemester('Pilihan');
-    });
-
-    // Filter berdasarkan semester
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-    item.addEventListener('click', function() {
-        const semesterFilter = this.id;
-        const rows = document.querySelectorAll('#irsTable tr');
-        
-        rows.forEach(row => {
-            const semester = parseInt(row.cells[3].textContent.trim());
-            
-            // Show only rows that match the selected semester
-            if (semesterFilter === 'semua' || (semesterFilter === 'genap' && semester % 2 === 0) || (semesterFilter === 'ganjil' && semester % 2 !== 0)) {
-                row.style.display = '';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    });
-});
 </script>
 
 <div class="d-flex justify-content-center mt-3">

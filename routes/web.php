@@ -9,6 +9,7 @@ use App\Http\Controllers\BAK_PembagianruangController;
 use App\Http\Controllers\Kaprodi_JadwalKuliahControler;
 use App\Http\Controllers\KaprodiControler;
 use App\Http\Controllers\IRSController;
+use App\Http\Controllers\DosenController;
 use App\Http\Controllers\Mhs_PengisianIRSController;
 
 
@@ -82,8 +83,9 @@ Route::group([], function () {
     // Halaman pengisian IRS kalo udah pernah ambil aka draft irs
     Route::prefix('draftIRS')->group(function () {
         Route::get('/', [Mhs_PengisianIRSController::class, 'draftIRS'])->name('mhs_draftIRS');
+        Route::post('/batalkanJadwal', [Mhs_PengisianIRSController::class, 'batalkanJadwal'])->name('batalkanJadwal');
     });
-
+    
     // Pengambilan Matkul oleh Mahasiswa
     // Route::prefix('pengambilanMatkul')->group(function () {
     //     Route::get('/', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
@@ -108,7 +110,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/rencanaStudi', [Mhs_PengisianIRSController::class, 'indexRencanaStudi'])->name('mhs_rencanaStudi');
     Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'indexPilihJadwal'])->name('mhs_pengisianIRS');
     Route::get('/daftarMatkul', [Mhs_PengisianIRSController::class, 'indexDaftarMatkul'])->name('mhs_daftarMatkul');
-    Route::get('/rrencanaStudi', [Mhs_PengisianIRSController::class, 'rrencanaStudi'])->name('mhs_rrencanaStudi');
+    Route::get('/rrencanaStudi', [Mhs_PengisianIRSController::class, 'rencanaStudi'])->name('mhs_rrencanaStudi');
     Route::get('/periodeIRSHabis', [Mhs_PengisianIRSController::class, 'periodeHabis'])->name('mhs_habisPeriodeIRS');
     Route::get('/newIRS', [Mhs_PengisianIRSController::class, 'newIRS'])->name('mhs_newIRS');
     Route::get('/draftIRS', [Mhs_PengisianIRSController::class, 'draftIRS'])->name('mhs_draftIRS');
@@ -116,8 +118,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/kaprodi_JadwalKuliah', [KaprodiControler::class, 'JadwalKuliah'])->name('kaprodi_JadwalKuliah');
     Route::get('/kaprodi_StatusMahasiswa', [KaprodiControler::class, 'StatusMahasiswa'])->name('kaprodi_StatusMahasiswa');
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
+    Route::post('/ruang/acc', [DekanController::class, 'setujuiRuang'])->name('ruang.acc');
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
     Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'indexPembagianRuang'])->name('bak_PembagianRuang');
+    Route::get('/bak_CekStatusRuang', [BAK_PembagianruangController::class, 'indexCekStatusRuang'])->name('bak_CekStatusRuang');
+    Route::post('/ruang/store', [BAK_PembagianruangController::class, 'storeRuang'])->name('ruang.store');
+    Route::get('/bak_CreateRuang', [BAK_PembagianruangController::class, 'indexCreateRuang'])->name('bak_CreateRuang');
+    Route::post('/ruang/create', [BAK_PembagianruangController::class, 'createRuang'])->name('create.store');
+    Route::get('/bak_UpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexUpdateDeleteRuang'])->name('bak_UpdateDeleteRuang');
+    Route::get('/bak_NextUpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexNextUpdateDeleteRuang'])->name('bak_NextUpdateDeleteRuang');
+    Route::post('/konfirmasi-irs', [Mhs_PengisianIRSController::class, 'konfirmasiIRS'])->name('konfirmasi_irs');
+    Route::get('/dosen_irsMahasiswa', [DosenController::class, 'usulanIRSMahasiswa'])->name('dosen_irsMahasiswa');
 });
 
 //Pembagian Ruang

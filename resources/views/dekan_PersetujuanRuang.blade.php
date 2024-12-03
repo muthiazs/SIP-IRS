@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIP-IRS Dashboard</title>
+    <!-- jQuery HARUS PERTAMA -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- Kemudian Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Icons -->
@@ -131,40 +136,54 @@
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
-            <!-- Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h1 class="fs-3 fw-bold">Persetujuan Ruang</h1>
-                    <p class="text-muted">Semester Akademik sekarang</p>
+            <form action="{{ route('ruang.acc') }}" method="POST">
+                @csrf
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h1 class="fs-3 fw-bold">Persetujuan Ruang</h1>
+                        <p class="text-muted">Semester Akademik sekarang</p>
+                    </div>
+                    <div class="position-relative">
+                        <button class="btn btn-teal rounded-circle p-2">
+                            <span class="material-icons text-white">notifications</span>
+                        </button>
+                        <span class="notification-badge"></span>
+                    </div>
                 </div>
-                <div class="position-relative">
-                    <button class="btn btn-teal rounded-circle p-2">
-                        <span class="material-icons text-white">notifications</span>
-                    </button>
-                    <span class="notification-badge"></span>
+
+                <!-- Period Banner -->
+                <div class="period-banner p-3 rounded-3 mb-4 d-flex justify-content-between">
+                    <span>Periode Persetujuan Ruang Kelas</span>
                 </div>
-            </div>
 
-            <!-- Period Banner -->
-            <div class="period-banner p-3 rounded-3 mb-4 d-flex justify-content-between">
-                <span>Periode Persetujuan Ruang Kelas</span>
-            </div>
-
-            <!-- Cards Section -->
-            <table class="table table-bordered">
+                <!-- Cards Section -->
+                <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th style="width: 3rem;">No</th>
                         <th style="width: 5rem;">Ruang</th>
                         <th style="width: 4rem;">Kuota</th>
-                        <th style="width: 4rem;">Hari</th>
-                        <th style="width: 6rem;">Jam Mulai</th>
-                        <th style="width: 6rem;">Jam Selesai</th>
                         <th style="width: 8rem;">Program Studi</th>
+                        <th style="width: 5rem;">Aksi</th>
                     </tr>
                 </thead>
-                <!-- Table body here -->
-            </table>
+                <tbody id="tabelRuang">
+                    @foreach($accRuang as $index => $data)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $data->ruang_nama }}</td>
+                        <td>{{ $data->kapasitas }}</td>
+                        <td>{{ $data->prodi_nama }}</td>
+                        <td>
+                            <input type="hidden" name="nama_ruang" value="{{ $data->ruang_nama }}">
+                            <button type="submit" class="btn btn-primary mb-2">Setujui</button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+                </table>
+            </form>
         </div>
     </div>
 
@@ -195,6 +214,26 @@
         }
     </script>
 
+    <!-- Toastr -->
+    <script>
+    $(document).ready(function() {
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000",
+            "escapeHtml": true
+        }
+
+        @if(Session::has('toast_success'))
+            toastr.success('Ruangan berhasil dialokasikan');
+        @endif
+
+        @if(Session::has('toast_error'))
+            toastr.error("{!! Session::get('toast_error') !!}"); 
+        @endif
+    });
+    </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
