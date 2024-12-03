@@ -11,11 +11,11 @@
         </div>
     
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="#" class="nav-link active rounded d-flex align-items-center">
+            <a href="/dashboardAkademik" class="nav-link {{ Route::is('dashboardAkademik') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
+            <a href="/bak_PembagianRuang" class="nav-link {{ Route::is('bak_PembagianRuang') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">description</span>
                 Pembagian Ruang
             </a>

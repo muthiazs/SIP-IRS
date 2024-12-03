@@ -251,7 +251,6 @@ class Mhs_PengisianIRSController extends Controller
 
             // Pass both daftarMk and mahasiswa data to the view
             return view('mhs_rrencanaStudi', compact('mahasiswa'));
-        }
-        
+        }        
 
 }

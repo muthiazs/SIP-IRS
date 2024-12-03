@@ -91,7 +91,7 @@
             <!-- Cards Section -->
             {{-- Rencana Studi untuk setiap semester --}}
             <div class="accordion accordion-flush" id="accordionFlushExample">
-                @foreach ($programStudi as $prodi)
+                @foreach ($prodi)
                     <div class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-{{ $prodi->id_prodi }}" aria-expanded="false" aria-controls="flush-collapse-{{ $prodi->id_prodi }}">

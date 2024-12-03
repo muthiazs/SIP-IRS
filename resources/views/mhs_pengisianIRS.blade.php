@@ -156,13 +156,32 @@
                             <span class="material-icons">search</span>
                         </button>
                         <!-- Filter buttons -->
-                        <div>
+                        {{-- <div>
                             <button class="btn custom-btn-primary" id="resetFilter">Semua</button>
                             <button class="btn custom-btn-outline" id="filterGenap">Semester Genap</button>
                             <button class="btn custom-btn-outline" id="filterGanjil">Semester Ganjil</button>
+                        </div> --}}
+
+                        <!-- Dropdown Filter for Semester -->
+                        <div class="dropdown d-inline-block me-3">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="semesterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Pilih Semester
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="semesterDropdown">
+                                <li><button class="dropdown-item" id="1">Semester 1</button></li>
+                                <li><button class="dropdown-item" id="2">Semester 2</button></li>
+                                <li><button class="dropdown-item" id="3">Semester 3</button></li>
+                                <li><button class="dropdown-item" id="4">Semester 4</button></li>
+                                <li><button class="dropdown-item" id="5">Semester 5</button></li>
+                                <li><button class="dropdown-item" id="6">Semester 6</button></li>
+                                <li><button class="dropdown-item" id="7">Semester 7</button></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><button class="dropdown-item" id="pilihan">Pilihan</button></li>
+                            </ul>                            
                         </div>
                     </div>
-                                    
+
+
                     <div class="banner text-center mt-2 rounded-top" 
                         style="background-color: #027683; 
                                 color: white; 
@@ -174,6 +193,7 @@
                         <span class="fw-medium">Daftar Jadwal Kuliah</span>
                     </div>
 
+                    <!-- Tabel IRS -->
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -190,35 +210,39 @@
                                 <th style="width: 4rem;">Kuota</th>
                                 <th style="width: 7rem;">Aksi</th>
                             </tr>
-                        </thead>                
-                    <tbody id="irsTable">
-                        @foreach($jadwalKuliah as $index => $jadwal)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $jadwal->kode_matkul }}</td>
-                            <td>{{ $jadwal->nama_matkul }}</td>
-                            <td>{{ $jadwal->semester }}</td>
-                            <td>{{ $jadwal->kelas }}</td>
-                            <td>{{ $jadwal->sks }}</td>
-                            <td>{{ $jadwal->namaruang }}</td>
-                            <td>{{ $jadwal->hari }}</td>
-                            <td>{{ $jadwal->jam_mulai }}</td>
-                            <td>{{ $jadwal->jam_selesai }}</td>
-                            <td>{{ $jadwal->kuota }}</td>
-                            <td>
-                                <div class="button-group-tabel">
-                                    <div class="button-group-tabel">
-                                        <a class="btn mb-2 rounded-3" style="color:white; background-color: #67C3CC; font-size: 10px; padding: 5px 10px;" id="ambilBtn">Ambil</a>
-                                    </div>
-                                    <div class="button-group-tabel">
-                                        <a class="btn btn-danger mb-2 rounded-3" style="font-size: 10px; padding: 5px 10px;" id="batalkanBtn">Batal</a>
-                                    </div>
-                                </div>
-                            </td>                    
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody id="irsTable">
+                            @foreach($jadwalKuliah as $index => $jadwal)
+                            <tr data-semester="{{ $jadwal->semester }}">
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $jadwal->kode_matkul }}</td>
+                                <td>{{ $jadwal->nama_matkul }}</td>
+                                <td>{{ $jadwal->semester }}</td>
+                                <td>{{ $jadwal->kelas }}</td>
+                                <td>{{ $jadwal->sks }}</td>
+                                <td>{{ $jadwal->namaruang }}</td>
+                                <td>{{ $jadwal->hari }}</td>
+                                <td>{{ $jadwal->jam_mulai }}</td>
+                                <td>{{ $jadwal->jam_selesai }}</td>
+                                <td>{{ $jadwal->kuota }}</td>
+                                <td>
+                                    <button class="btn mb-2 rounded-3" style="color:white; background-color: #67C3CC; font-size: 10px; padding: 5px 10px;" id="ambilBtn">Ambil</button>
+                                    <button class="btn btn-danger mb-2 rounded-3" style="font-size: 10px; padding: 5px 10px;" id="batalkanBtn">Batal</button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                <!-- Add the pagination section below your table -->
+                <div class="d-flex justify-content-center mt-3">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination" id="pagination">
+                            <!-- Pagination buttons will be dynamically inserted here -->
+                        </ul>
+                    </nav>
+                </div>
+
                 <div class="button-group-right">
                     <div class="button-group-right">
                         <a href="{{ route('mhs_newIRS') }}" class="btn" style="color:white; background-color:#FFB939">Keluar</a>
@@ -228,74 +252,6 @@
                     </div>
                 </div>
             </div> 
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Cari</button>
-            </div>
-                
-            <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
-                <div class="d-flex justify-content-center align-items-center">
-                    <span class="fw-medium">Daftar Jadwal Kuliah</span>
-                </div>
-            </div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th style="width: 3rem;">No</th>
-                        <th style="width: 5rem;">Kode MK</th>
-                        <th style="width: 6rem;">Mata Kuliah</th>
-                        <th style="width: 5rem;">Semester</th>
-                        <th style="width: 4rem;">Kelas</th>
-                        <th style="width: 4rem;">SKS</th>
-                        <th style="width: 4rem;">Ruang</th>
-                        <th style="width: 5rem;">Hari</th>
-                        <th style="width: 6rem;">Jam Mulai</th>
-                        <th style="width: 6rem;">Jam Selesai</th>
-                        <th style="width: 4rem;">Kuota</th>
-                        <th style="width: 10rem;">Aksi</th>
-                    </tr>
-                </thead>                
-            <tbody id="irsTable">
-                @foreach($jadwalKuliah as $index => $jadwal)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $jadwal->kode_matkul }}</td>
-                    <td>{{ $jadwal->nama_matkul }}</td>
-                    <td>{{ $jadwal->semester }}</td>
-                    <td>{{ $jadwal->kelas }}</td>
-                    <td>{{ $jadwal->sks }}</td>
-                    <td>{{ $jadwal->namaruang }}</td>
-                    <td>{{ $jadwal->hari }}</td>
-                    <td>{{ $jadwal->jam_mulai }}</td>
-                    <td>{{ $jadwal->jam_selesai }}</td>
-                    <td>{{ $jadwal->kuota }}</td>
-                    <td>
-                        <div class="button-group-tabel">
-                            <div class="button-group-tabel">
-                                <form action="{{ route('ambilJadwal') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
-                                <input type="hidden" name="status" value="draft"> <!-- Or other status value -->
-                                <button type="submit" class="btn btn-primary mb-2 rounded-3">Ambil</button>
-                                </form>
-                            </div>
-                            <div class="button-group-tabel">
-                                <a class="btn btn-danger mb-2 rounded-3" id="batalkanBtn">Batal</a>
-                            </div>
-                        </div>
-                    </td>                    
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <div class="button-group-right">
-            <div class="button-group-right">
-                <a href="{{ route('mhs_newIRS') }}" class="btn btn-warning">Keluar</a>
-            </div>
-            <div class="button-group-right">
-                <a href="{{ route('mhs_draftIRS') }}" class="btn btn-info">Lanjutkan</a>
-            </div>
-        </div>
         </div>
     </div>
   </div>
@@ -404,4 +360,110 @@
             row.style.display = ''; // Tampilkan semua baris
         });
     });
+
+    const rowsPerPage = 5;
+    const rows = document.querySelectorAll('#irsTable tr');
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    function paginate(rows, page) {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        
+        rows.forEach((row, index) => {
+            if (index >= start && index < end) {
+                row.style.display = ''; // Show this row
+            } else {
+                row.style.display = 'none'; // Hide this row
+            }
+        });
+    }
+
+    // Create pagination buttons
+    function createPagination(totalPages) {
+        const paginationContainer = document.getElementById('pagination');
+        paginationContainer.innerHTML = ''; // Clear existing pagination
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('li');
+            pageButton.classList.add('page-item');
+            pageButton.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+            pageButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                paginate(rows, i);
+            });
+            paginationContainer.appendChild(pageButton);
+        }
+    }
+
+    // Initialize pagination
+    paginate(rows, 1);
+    createPagination(totalPages);
+
+
 </script>
+
+<!-- Script to handle filter functionality -->
+<script>
+    // Function to filter rows based on selected semester
+    function filterBySemester(semester) {
+        const rows = document.querySelectorAll('#irsTable tr');
+        rows.forEach(row => {
+            const semesterCell = row.querySelector('td:nth-child(4)'); // Get the semester column
+            if (semesterCell) {
+                const cellText = semesterCell.innerText.trim();
+                if (semester === 'Pilihan' || cellText === semester) {
+                    row.style.display = ''; // Show the row
+                } else {
+                    row.style.display = 'none'; // Hide the row
+                }
+            }
+        });
+    }
+
+    // Add event listeners to dropdown items to apply filter
+    document.getElementById('semester1').addEventListener('click', function() {
+        filterBySemester('1');
+    });
+    document.getElementById('semester2').addEventListener('click', function() {
+        filterBySemester('2');
+    });
+    document.getElementById('semester3').addEventListener('click', function() {
+        filterBySemester('3');
+    });
+    document.getElementById('semester4').addEventListener('click', function() {
+        filterBySemester('4');
+    });
+    document.getElementById('semester5').addEventListener('click', function() {
+        filterBySemester('5');
+    });
+    document.getElementById('pilihan').addEventListener('click', function() {
+        filterBySemester('Pilihan');
+    });
+
+    // Filter berdasarkan semester
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', function() {
+        const semesterFilter = this.id;
+        const rows = document.querySelectorAll('#irsTable tr');
+        
+        rows.forEach(row => {
+            const semester = parseInt(row.cells[3].textContent.trim());
+            
+            // Show only rows that match the selected semester
+            if (semesterFilter === 'semua' || (semesterFilter === 'genap' && semester % 2 === 0) || (semesterFilter === 'ganjil' && semester % 2 !== 0)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+
+<div class="d-flex justify-content-center mt-3">
+    <nav aria-label="Page navigation">
+        <ul class="pagination" id="pagination">
+            <!-- Pagination buttons will be dynamically inserted here -->
+        </ul>
+    </nav>
+</div>
