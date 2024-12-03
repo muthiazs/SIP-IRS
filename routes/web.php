@@ -71,7 +71,9 @@ Route::group([], function () {
     // Pembuatan Rencana Studi oleh Mahasiswa
     Route::prefix('rrencanaStudi')->group(function () {
         Route::get('/', [Mhs_PengisianIRSController::class, 'rrencanaStudi'])->name('mhs_rrencanaStudi');
+        Route::get('/cetak_pdf', [Mhs_PengisianIRSController::class, 'cetak_pdf'])->name('cetak_pdf');
     });
+
     // Halaman kalo periode isi irs Habis
     Route::prefix('periodeIRSHabis')->group(function () {
         Route::get('/', [Mhs_PengisianIRSController::class, 'periodeHabis'])->name('mhs_habisPeriodeIRS');
