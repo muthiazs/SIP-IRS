@@ -166,6 +166,10 @@
                             <strong>Status Terakhir IRS Semester {{ $semester }}:</strong> 
                             {{ $statusTerakhirPerSemester[$semester] ?? 'Belum ada status' }}
                         </div>
+                        <!-- Tombol Cetak IRS -->
+                        <div class="mt-3">
+                            <a href="{{ route('cetak_pdf') }}" class="btn btn-primary">Cetak IRS</a>
+                        </div>
                     </div>
                 </div>
                 @endforeach
