@@ -1,56 +1,183 @@
-<!-- resources/views/dosen_detailIRSMahasiswa.blade.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail IRS Mahasiswa</title>
+    <title>IRS Mahasiswa Perwalian - SIP-IRS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- CSS dan JS dari public -->
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
+    <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+    <style>
+       .wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Tabel IRS */
+        /* Mengubah warna header tabel */
+        .table thead th {
+            background-color: #FED488; /* Sesuaikan warna header */
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
+        .table tbody td {
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
+        /* Menambahkan roundness pada tabel */
+        .table {
+            border-radius: 10px; /* Sesuaikan besar roundness */
+            overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
+        }
+        /* Roundness untuk header */
+        .table thead th:first-child {
+            border-top-left-radius: 10px;
+        }
+        .table thead th:last-child {
+            border-top-right-radius: 10px;
+        }
+        
+        /* Roundness untuk footer jika dibutuhkan */
+        .table tfoot td:first-child {
+            border-bottom-left-radius: 10px;
+        }
+        .table tfoot td:last-child {
+            border-bottom-right-radius: 10px;
+        }
+
+        .filter-search {
+            gap: 10px; /* Jarak antara filter dropdown dan search bar */
+        }
+        .filter-search .form-select {
+            width: 200px; /* Lebar dropdown */
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Detail IRS Mahasiswa</h1>
+    <div class="wrapper">
+        <x-sidebar-dosen :dosen="$dosen"></x-sidebar-dosen>
+        <!--Main Content-->
+        <div class="main-content flex-grow-1 p-4">
+            <header class="header">
+                <div>
+                    <h1 class="fs-3 fw-bold">IRS Mahasiswa</h1>
+                    <p class="text-muted">Semester Akademik Sekarang</p>
+                </div>
+            </header>
+            <div class="period-banner p-3 rounded-3 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-teal">Periode Penyetujuan IRS</span>
+                    <span class="text-teal fw-bold">...-...</span>
+                </div>
+            </div>
 
-    <!-- Data Dosen -->
-    <section class="dosen-info">
-        <h2>Data Dosen</h2>
-        <p><strong>Nama Dosen:</strong> {{ $dosen->dosen_nama }}</p>
-        <p><strong>Prodi:</strong> {{ $dosen->prodi_nama }}</p>
-    </section>
+            <!-- Nama Mahasiswa -->
+            <h3 class="fw-bold mb-4">{{ $mahasiswa->nama }} ({{ $mahasiswa->nim }})</h3>
 
-    <!-- Data Mahasiswa -->
-    <section class="mahasiswa-info">
-        <h2>Data Mahasiswa</h2>
-        <p><strong>NIM:</strong> {{ $mahasiswa->nim }}</p>
-        <p><strong>Nama:</strong> {{ $mahasiswa->nama }}</p>
-        <p><strong>Angkatan:</strong> {{ $mahasiswa->angkatan }}</p>
-        <p><strong>Prodi:</strong> {{ $mahasiswa->prodi_nama }}</p>
-    </section>
-
-    <!-- Data IRS -->
-    <section class="irs-info">
-        <h2>Daftar IRS Mahasiswa</h2>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Matakuliah</th>
-                    <th>Hari</th>
-                    <th>Jam Mulai</th>
-                    <th>Jam Selesai</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($irs as $item)
+            <!-- Tabel IRS -->
+            <table class="table table-bordered">
+                <thead>
                     <tr>
-                        <td>{{ $item->nama_matkul }}</td>
-                        <td>{{ $item->hari }}</td>
-                        <td>{{ $item->jam_mulai }}</td>
-                        <td>{{ $item->jam_selesai }}</td>
-                        <td>{{ $item->status }}</td>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Mata Kuliah</th>
+                        <th>Kelas</th>
+                        <th>SKS</th>
+                        <th>Ruang</th>
+                        <th>Status</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </section>
+                </thead>
+                <tbody>
+                    @forelse ($irs as $key => $item)
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $item->kode }}</td>
+                        <td>{{ $item->mata_kuliah }}</td>
+                        <td>{{ $item->kelas }}</td>
+                        <td>{{ $item->sks }}</td>
+                        <td>{{ $item->ruang }}</td>
+                        <td><span class="badge 
+                            @if($item->status == 'belum disetujui') bg-warning 
+                            @elseif($item->status == 'disetujui') bg-success 
+                            @else bg-secondary 
+                            @endif">
+                            {{ ucfirst($item->status) }}
+                        </span></td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" class="text-center">Tidak ada data IRS.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
 
+                <!-- Tombol Setujui dan Batalkan Persetujuan dalam Satu Grup -->
+        <div class="btn-group" role="group" aria-label="IRS Approval Actions">
+            <a href="{{ route('dosen.approve.irs', ['nim' => $mahasiswa->nim]) }}" class="btn btn-success">Setujui</a>
+            <a href="{{ route('dosen.cancel.approval.irs', ['nim' => $mahasiswa->nim]) }}" class="btn btn-danger">Batalkan Persetujuan</a>
+        </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmApproval(action) {
+        const messages = {
+            'approve': {
+                title: 'Setujui IRS',
+                text: 'Apakah Anda yakin ingin menyetujui IRS mahasiswa ini?',
+                confirmButtonText: 'Ya, Setujui',
+                successMessage: 'IRS berhasil disetujui!'
+            },
+            'cancel': {
+                title: 'Batalkan Persetujuan',
+                text: 'Apakah Anda yakin ingin membatalkan persetujuan IRS?',
+                confirmButtonText: 'Ya, Batalkan',
+                successMessage: 'Persetujuan IRS berhasil dibatalkan!'
+            }
+        };
+
+        Swal.fire({
+            title: messages[action].title,
+            text: messages[action].text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: messages[action].confirmButtonText,
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#actionInput').val(action);
+                $('#irsApprovalForm').submit();
+            }
+        });
+    }
+
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 2500
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: '{{ session('error') }}',
+            showConfirmButton: false,
+            timer: 2500
+        });
+    @endif
+</script>
 </html>
