@@ -219,65 +219,7 @@
                         <span class="fw-medium">Daftar Jadwal Kuliah</span>
                     </div>
 
-                    <!-- Tabel IRS -->
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th style="width: 3rem;">No</th>
-                                <th style="width: 5rem;">Kode MK</th>
-                                <th style="width: 6rem;">Mata Kuliah</th>
-                                <th style="width: 5rem;">Semester</th>
-                                <th style="width: 4rem;">Kelas</th>
-                                <th style="width: 4rem;">SKS</th>
-                                <th style="width: 4rem;">Ruang</th>
-                                <th style="width: 5rem;">Hari</th>
-                                <th style="width: 6rem;">Jam Mulai</th>
-                                <th style="width: 6rem;">Jam Selesai</th>
-                                <th style="width: 4rem;">Kuota</th>
-                                <th style="width: 7rem;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="irsTable">
-                            @foreach($jadwalKuliah as $index => $jadwal)
-                            <tr data-semester="{{ $jadwal->semester }}">
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $jadwal->kode_matkul }}</td>
-                                <td>{{ $jadwal->nama_matkul }}</td>
-                                <td>{{ $jadwal->semester }}</td>
-                                <td>{{ $jadwal->kelas }}</td>
-                                <td>{{ $jadwal->sks }}</td>
-                                <td>{{ $jadwal->namaruang }}</td>
-                                <td>{{ $jadwal->hari }}</td>
-                                <td>{{ $jadwal->jam_mulai }}</td>
-                                <td>{{ $jadwal->jam_selesai }}</td>
-                                <td>{{ $jadwal->kuota }}</td>
-                                <td>
-                                    <button class="btn mb-2 rounded-3" style="color:white; background-color: #67C3CC; font-size: 10px; padding: 5px 10px;" id="ambilBtn">Ambil</button>
-                                    <button class="btn btn-danger mb-2 rounded-3" style="font-size: 10px; padding: 5px 10px;" id="batalkanBtn">Batal</button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                <!-- Add the pagination section below your table -->
-                <div class="d-flex justify-content-center mt-3">
-                    <nav aria-label="Page navigation">
-                        <ul class="pagination" id="pagination">
-                            <!-- Pagination buttons will be dynamically inserted here -->
-                        </ul>
-                    </nav>
-                </div>
-
-                <div class="button-group-right">
-                    <div class="button-group-right">
-                        <a href="{{ route('mhs_newIRS') }}" class="btn" style="color:white; background-color:#FFB939">Keluar</a>
-                    </div>
-                    <div class="button-group-right">
-                        <a href="{{ route('mhs_draftIRS') }}" class="btn" style="color: white; background-color: #6878B1">Lanjutkan</a>
-                    </div>
-                </div>
-            </div> 
+                   
                     <div class="table-responsive">
                         <table class="table table-bordered" id="jadwalTable">
                             <thead>
