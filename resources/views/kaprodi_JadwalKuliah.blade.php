@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIP-IRS Dashboard</title>
+<title>SIP-IRS Buat Jadwal Kuliah</title>
 <!-- jQuery HARUS PERTAMA -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- Kemudian Toastr -->

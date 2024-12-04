@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rencana Studi IRS</title>
+    <title>Cetak IRS</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -28,14 +28,17 @@
         }
 
         .header-title {
-            font-size: 20px;
+            font-size: 15px;
             font-weight: bold;
             color: #000000;
         }
 
         .sub-title {
-            font-size: 20px;
-            margin-top: 10px;
+            font-size: 15px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #000000;
+            text-align: center;
         }
 
         .info-section {
@@ -54,7 +57,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12pt;
+            font-size: 10pt;
             margin-top: 10px;
         }
 
@@ -90,9 +93,8 @@
         <!-- Header -->
         <div class="header">
             <p class="header-title">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET DAN TEKNOLOGI</p>
-            <p>FAKULTAS SAINS DAN MATEMATIKA</p>
-            <p>UNIVERSITAS DIPONEGORO</p>
-            <p class="sub-title">Isian Rencana Studi (IRS)</p>
+            <p class="header-title">FAKULTAS SAINS DAN MATEMATIKA</p>
+            <p class="header-title">UNIVERSITAS DIPONEGORO</p>
         </div>
 
         <!-- Student Info -->
@@ -110,6 +112,7 @@
 
         <!-- Table -->
         <div class="table-container">
+            <p class="sub-title">ISIAN RENCANA STUDI (IRS)</p>
             <table>
                 <thead>
                     <tr>
