@@ -24,17 +24,13 @@
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <div>
+                    <h1 class="fs-3 fw-bold">Pengisian IRS Mahasiswa 👩🏻‍💻 </h1>
+                </div>
+            </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                
-                </div>
-                <div class="position-relative">
-                    <button class="btn btn-primary rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                        <span class="visually-hidden">Notifikasi baru</span>
-                    </span>
                 </div>
             </div>
 

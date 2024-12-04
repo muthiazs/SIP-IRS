@@ -217,8 +217,15 @@ class Mhs_PengisianIRSController extends Controller
 {
     // Ambil data mahasiswa yang sedang login
     $mahasiswa = DB::table('mahasiswa')
-        ->where('mahasiswa.id_user', auth()->id())
-        ->first();
+    ->join('program_studi as prodi', 'prodi.id_prodi', '=', 'mahasiswa.id_prodi')
+    ->where('mahasiswa.id_user', auth()->id())
+    ->select(
+        'prodi.nama as nama_prodi',
+        'mahasiswa.nim', // Tambahkan nim di sin
+        'mahasiswa.nama as nama'
+    )
+    ->first();
+
 
     // Cek apakah data mahasiswa ditemukan
     if (!$mahasiswa) {
@@ -245,6 +252,13 @@ class Mhs_PengisianIRSController extends Controller
             'dosen.nama as nama_dosen'
         )
         ->get();
+        $pembimbing = DB::table('dosen')
+        ->join('mahasiswa', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+        ->select(
+            'dosen.nama as nama_pembimbing',
+            'dosen.nip as nip'
+        )
+        ->first();
 
     // Membuat nama file PDF
     $fileName = 'irs-' . $mahasiswa->nim . '-pdf.pdf';
@@ -252,7 +266,8 @@ class Mhs_PengisianIRSController extends Controller
     // Load view untuk PDF dengan data tambahan mahasiswa
     $pdf = PDF::loadView('irs_pdf', [
         'irs' => $irsCetak,
-        'mahasiswa' => $mahasiswa
+        'mahasiswa' => $mahasiswa,
+        'pembimbing' => $pembimbing // Tambahkan ini
     ]);
 
     // Return PDF sebagai file download

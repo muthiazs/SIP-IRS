@@ -15,8 +15,8 @@
         /* Tabel IRS */
         /* Mengubah warna header tabel */
         .table thead th {
-            background-color: #FED488; /* Sesuaikan warna header */
-            color: black; /* Teks putih */
+            background-color:  #FED488; /* Sesuaikan warna header */
+            color: rgb(0, 0, 0); /* Teks putih */
             font-family: 'Poppins';
             text-align: center; /* Menengahkan teks */
             font-size: 12px;
@@ -70,19 +70,11 @@
                 <div>
                     {{-- <h1>{{$Periode_sekarang->jenis}}</h1> --}}
                 </div>
-                <div class="position-relative">
-                    <button class="btn btn-primary rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                        <span class="visually-hidden">Notifikasi baru</span>
-                    </span>
-                </div>
             </div>
         
             <div class="period-banner mb-1 text-center font-size: 12px" style="background-color: #027683; color: white;">
                 <div class="d-flex justify-content-center align-items-center">
-                    <span class="fw-medium">Isian Rencana Studi</span>
+                    <span class="fw-medium">IRS</span>
                 </div>
             </div>
 
@@ -99,6 +91,9 @@
                     <div id="flush-collapse{{ $semester }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
                             @if(isset($irsPerSemester[$semester]))
+                            <div class="d-flex justify-content-center align-items-center">
+                                <span class="fw-medium">Isian Rencana Studi Mahasiswa</span>
+                            </div>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -134,7 +129,7 @@
                             @endif
                         </div>
                         <!-- Status Terakhir -->
-                        <div class="alert alert-secondary">
+                        <div class="">
                             <strong>Status Terakhir IRS Semester {{ $semester }}:</strong> 
                             {{ $statusTerakhirPerSemester[$semester] ?? 'Belum ada status' }}
                         </div>

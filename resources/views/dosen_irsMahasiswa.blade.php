@@ -83,8 +83,7 @@
             <section class="filter-search mt-2 d-flex justify-content-between align-items-center">
                 <!-- Search by Nama -->
                 <div class="search-group">
-                    <label for="search-input" class="form-label fw-bold">Search by Nama</label>
-                    <input type="text" id="search-input" class="form-control" placeholder="Search by name">
+                    <input type="text" id="search-input" class="form-control" placeholder=" 🔍 Cari nama">
                 </div>
             </section>
             <!-- Student List -->

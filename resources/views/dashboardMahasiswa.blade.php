@@ -21,26 +21,17 @@
                 <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
             </svg>
         </div>
-
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center ">
                 <div>
                     <h1 class="fs-3 fw-bold">Selamat datang, {{  $mahasiswa->username }} 👋</h1>
                     <p class="text-muted"> {{ $mahasiswa->nama_periode }} </p>
                 </div>
-                <div class="position-relative">
-                    <button class="btn btn-primary rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                        <span class="visually-hidden">Notifikasi baru</span>
-                    </span>
-                </div>
             </div>
 
             <!-- Period Banner -->
-            <div class="period-banner mb-4">
+            <div class="alert alert-success" role="alert">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="fw-medium">Periode Pengisian IRS</span>
                     <!-- <span class="fw-medium"> $data['semester']['period'] </span> -->
@@ -53,22 +44,19 @@
                     <div class="stats-card text-center">
                         <h6 class="text-muted mb-2">Semester Studi</h6>
                         <!-- ini aku isi sembarangan duluu aku mau coba bikin side bar nya ga berubah klo di-scroll -->
-                        <h2 class="mb-0"> 3 </h2>
-                        <!-- <h2 class="mb-0"> $data['stats']['semester']</h2> -->
+                        <h2 class="mb-0"> {{ $mahasiswa->semester }} </h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stats-card text-center">
                         <h6 class="text-muted mb-2">IPK</h6>
-                        <h2 class="mb-0"> 3,92 </h2>
-                        <!-- <h2 class="mb-0"> $data['stats']['ipk'] </h2> -->
+                        <h2 class="mb-0">{{ $mahasiswa->IPk }}</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="stats-card text-center">
                         <h6 class="text-muted mb-2">SKSk</h6>
-                        <h2 class="mb-0"> 45 </h2>
-                        <!-- <h2 class="mb-0"> $data['stats']['sksk'] </h2> -->
+                        <h2 class="mb-0"> {{ $mahasiswa->SKSk }} </h2>
                     </div>
                 </div>
             </div>

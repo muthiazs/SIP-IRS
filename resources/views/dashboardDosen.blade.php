@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Facades\Route;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,13 +34,6 @@
                     <h1 class="fs-3 fw-bold">Selamat datang, {{ $dosen->username }} 👋</h1>
                     <p class="text-muted">Semester Akademik Sekarang </p>
                 </div>
-                <div class="position-relative">
-                    <!-- Button Notifikasi -->
-                    <button class="btn btn-notification rounded-circle p-2">
-                        <span class="material-icons text-white">notifications</span>
-                    </button>
-                    <span class="notification-badge"></span>
-                </div>
             </div>
 
             <!-- Period Banner -->
@@ -64,36 +60,11 @@
                                     <div class="small text-muted">IRS Disetujui</div>
                                 </div>
                                 <div>
-                                    <div class="fs-4 fw-bold text-danger">
-                                        1 / 1 
-                                    </div>
-                                    <div class="small text-muted">IRS Ditolak</div>
-                                </div>
-                                <div>
                                     <div class="fs-4 fw-bold text-black">
                                         1 / 1  
                                     </div>
                                     <div class="small text-muted">Belum Ditinjau</div>
                                 </div>
-                            <!-- <div class="d-flex justify-content-between text-center">
-                                <div>
-                                    <div class="fs-4 fw-bold text-konfirmasi">
-                                        ['progress']['disetujui']['count'] / $data['progress']['disetujui']['total'] 
-                                    </div>
-                                    <div class="small text-muted">IRS Disetujui</div>
-                                </div>
-                                <div>
-                                    <div class="fs-4 fw-bold text-danger">
-                                        ['progress']['ditolak']['count']/ $data['progress']['ditolak']['total']
-                                    </div>
-                                    <div class="small text-muted">IRS Ditolak</div>
-                                </div>
-                                <div>
-                                    <div class="fs-4 fw-bold text-black">
-                                        ['progress']['pending']['count']/ $data['progress']['pending']['total'] 
-                                    </div>
-                                    <div class="small text-muted">Belum Ditinjau</div>
-                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -110,7 +81,9 @@
                             <p class="fs-6 fw-semibold mb-2">Anda belum selesai meninjau semua rencana studi</p>
                             <p class="text-muted mb-3">Silahkan lanjutkan peninjauan</p>
                             <button class="btn btn-primary">
-                                Lihat Detail
+                                <a href="/dosen_irsMahasiswa" class="btn-primary" style="color: #fff" >
+                                    Lihat Detail
+                                </a>
                             </button>
                         </div>
                     </div>
@@ -122,7 +95,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
-                            <span class="material-icons text-teal me-2">calendar_today</span>
+                            <span class="material-icons text-teal me-2" style="color: blue">calendar_today</span>
                             <h3 class="fs-5 fw-semibold mb-0">Kalender Akademik</h3>
                         </div>
                         <button class="btn text-teal">

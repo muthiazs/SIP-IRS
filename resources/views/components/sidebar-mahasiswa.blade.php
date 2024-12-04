@@ -26,10 +26,6 @@
                 <span class="material-icons me-3">edit</span>
                 Buat Rencana Studi
             </a>
-            <a href="#" class="nav-link rounded d-flex align-items-center">
-                <span class="material-icons me-3">assessment</span>
-                Hasil Studi
-            </a>
         </nav>
 
         <!-- Logout Button -->

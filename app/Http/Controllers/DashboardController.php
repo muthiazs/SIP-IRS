@@ -62,6 +62,7 @@ class DashboardController extends Controller
                     ->join('users', 'mahasiswa.id_user', '=', 'users.id')
                     ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
                     ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+                    ->join('progress_mahasiswa as prg' , 'prg.id_mahasiswa' , '=' , 'mahasiswa.id_mahasiswa')
                     ->crossJoin('periode_akademik')
                     ->where('mahasiswa.id_user', auth()->id())
                     ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
@@ -72,7 +73,10 @@ class DashboardController extends Controller
                         'dosen.nama as nama_doswal',
                         'dosen.nip',
                         'users.username',
-                        'periode_akademik.nama_periode'
+                        'periode_akademik.nama_periode',
+                        'prg.IPk as IPk',
+                        'prg.SKSk as SKSk',
+                        'prg.semester_studi as semester'
                     ) 
                     ->first();  // Ambil baris pertama dengan timestamp terbaru
         return view('dashboardMahasiswa', compact('mahasiswa'));
