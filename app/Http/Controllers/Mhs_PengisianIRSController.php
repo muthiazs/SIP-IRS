@@ -212,8 +212,7 @@ class Mhs_PengisianIRSController extends Controller
     
         return view('mhs_rrencanaStudi', compact('mahasiswa', 'irsPerSemester', 'statusTerakhirPerSemester', 'semesters'));
     }
-    
-    public function cetak_pdf()
+    public function cetak_pdf($semester)
 {
     // Ambil data mahasiswa yang sedang login
     $mahasiswa = DB::table('mahasiswa')
@@ -221,18 +220,17 @@ class Mhs_PengisianIRSController extends Controller
     ->where('mahasiswa.id_user', auth()->id())
     ->select(
         'prodi.nama as nama_prodi',
-        'mahasiswa.nim', // Tambahkan nim di sin
+        'mahasiswa.nim',
         'mahasiswa.nama as nama'
     )
     ->first();
-
 
     // Cek apakah data mahasiswa ditemukan
     if (!$mahasiswa) {
         return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
     }
 
-    // Ambil data IRS mahasiswa
+    // Ambil data IRS mahasiswa untuk semester tertentu
     $irsCetak = DB::table('irs')
         ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
         ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
@@ -240,6 +238,7 @@ class Mhs_PengisianIRSController extends Controller
         ->join('mahasiswa as mhs', 'irs.nim', '=', 'mhs.nim')
         ->join('dosen', 'dosen.id_dosen' , '=' , 'jadwal_kuliah.id_dosen')
         ->where('irs.nim', $mahasiswa->nim)
+        ->where('irs.semester', $semester)
         ->whereIn('irs.status', ['belum disetujui', 'disetujui', 'draft', 'BARU'])
         ->select(
             'matakuliah.kode_matkul',
@@ -252,7 +251,8 @@ class Mhs_PengisianIRSController extends Controller
             'dosen.nama as nama_dosen'
         )
         ->get();
-        $pembimbing = DB::table('dosen')
+
+    $pembimbing = DB::table('dosen')
         ->join('mahasiswa', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
         ->select(
             'dosen.nama as nama_pembimbing',
@@ -261,13 +261,14 @@ class Mhs_PengisianIRSController extends Controller
         ->first();
 
     // Membuat nama file PDF
-    $fileName = 'irs-' . $mahasiswa->nim . '-pdf.pdf';
+    $fileName = 'irs-' . $mahasiswa->nim . '-semester-' . $semester . '.pdf';
 
     // Load view untuk PDF dengan data tambahan mahasiswa
     $pdf = PDF::loadView('irs_pdf', [
         'irs' => $irsCetak,
         'mahasiswa' => $mahasiswa,
-        'pembimbing' => $pembimbing // Tambahkan ini
+        'pembimbing' => $pembimbing,
+        'semester' => $semester
     ]);
 
     // Return PDF sebagai file download

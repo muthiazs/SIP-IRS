@@ -112,7 +112,7 @@
 
         <!-- Table -->
         <div class="table-container">
-            <p class="sub-title">ISIAN RENCANA STUDI (IRS)</p>
+            <p class="sub-title">Isian Rencana Studi Semester {{ $semester }}</p>
             <table>
                 <thead>
                     <tr>

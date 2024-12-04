@@ -140,6 +140,8 @@ Route::middleware('auth')->group(function () {
 
     // Batalkan Persetujuan IRS
     Route::get('/dosen/cancel-approval-irs/{nim}', [DosenController::class, 'cancelApprovalIRS'])->name('dosen.cancel.approval.irs');
+    //route Cetak PDF 
+    Route::get('/cetak-pdf/{semester}', [Mhs_PengisianIRSController::class, 'cetak_pdf'])->name('cetak.pdf');
 
 
 

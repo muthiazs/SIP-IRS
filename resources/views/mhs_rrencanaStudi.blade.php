@@ -134,9 +134,20 @@
                             {{ $statusTerakhirPerSemester[$semester] ?? 'Belum ada status' }}
                         </div>
                         <!-- Tombol Cetak IRS -->
-                        <div class="mt-3">
-                            <a href="{{ route('cetak_pdf') }}" class="btn btn-primary">Cetak IRS</a>
-                        </div>
+                         <!-- Tambahkan tombol cetak PDF -->
+                         @if(isset($irsPerSemester[$semester]))
+                         <!-- Existing table code -->
+                         
+                         <!-- Tambahkan tombol cetak PDF -->
+                         <div class="text-left mt-3">
+                             <a href="{{ route('cetak.pdf', ['semester' => $semester]) }}" class="btn btn-primary">
+                                 Cetak PDF Semester {{ $semester }}
+                             </a>
+                         </div>
+                     @else
+                         <p>Tidak ada data IRS untuk semester ini.</p>
+                     @endif
+            
                     </div>
                 </div>
                 @endforeach
