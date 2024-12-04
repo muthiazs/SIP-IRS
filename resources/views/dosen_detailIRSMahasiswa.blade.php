@@ -80,7 +80,10 @@
 
             <!-- Nama Mahasiswa -->
             <h3 class="fw-bold mb-4">{{ $mahasiswa->nama }} ({{ $mahasiswa->nim }})</h3>
-
+             <!-- Tombol untuk mengunduh IRS dalam format PDF -->
+            <div class="print-btn">
+                <a href="{{ route('dosen.print_irs_pdf', $mahasiswa->nim) }}" class="btn btn-primary mb-4" >Unduh Histori IRS</a>
+            </div>
             <!-- Tabel IRS -->
             <table class="table table-bordered">
                 <thead>
