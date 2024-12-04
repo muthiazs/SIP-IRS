@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\IRS; 
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DosenController extends Controller
 {
@@ -25,144 +26,247 @@ class DosenController extends Controller
 
     return view('dosen.index', compact('usulanIRS'));
 }
-    public function usulanIRSMahasiswa()
-    {
-        // Ambil data dosen yang sedang login
-        $dosen = DB::table('dosen')
-            ->join('users', 'dosen.id_user', '=', 'users.id')
-            ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-            ->where('dosen.id_user', auth()->id())
-            ->select(
-                'dosen.nip',
-                'dosen.nama as dosen_nama',
-                'program_studi.nama as prodi_nama',
-                'dosen.prodi_id'
-            )
-            ->first();
-    
-        // Ambil list mahasiswa dengan usulan IRS yang bukan draft
-        $usulanIRS = DB::table('irs')
-            ->join('mahasiswa', 'irs.nim', '=', 'mahasiswa.nim')
-            ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
-            ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
-            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
-            ->where('mahasiswa.id_dosen', auth()->user()->id) // Filter mahasiswa berdasarkan dosen wali
-            ->where('irs.status', '!=', 'draft')
-            ->select(
-                'mahasiswa.nim',
+public function usulanIRSMahasiswa()
+{
+    // Ambil data dosen yang sedang login
+    $dosen = DB::table('dosen')
+        ->join('users', 'dosen.id_user', '=', 'users.id')
+        ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+        ->where('dosen.id_user', auth()->id())
+        ->select(
+            'dosen.nip',
+            'dosen.nama as dosen_nama',
+            'program_studi.nama as prodi_nama',
+            'dosen.prodi_id'
+        )
+        ->first();
+
+    // Ambil list mahasiswa dengan usulan IRS yang bukan draft dan semester aktif sesuai
+    $usulanIRS = DB::table('irs')
+        ->join('mahasiswa', 'irs.nim', '=', 'mahasiswa.nim')
+        ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+        ->where('mahasiswa.id_dosen', auth()->user()->id) // Filter mahasiswa berdasarkan dosen wali
+        ->where('irs.status', '!=', 'draft') // Pastikan status IRS bukan draft
+        ->whereIn('irs.semester', function($query) {
+            $query->select('semester')
+                ->from('mahasiswa')
+                ->whereColumn('mahasiswa.nim', 'irs.nim'); // Pastikan semester IRS sesuai dengan semester mahasiswa
+        })
+        ->select(
+            'mahasiswa.nim',
             'mahasiswa.nama as nama_mahasiswa',
             'mahasiswa.angkatan',
             'program_studi.nama as prodi_nama',
             DB::raw('COUNT(irs.id_irs) as total_usulan'),
             DB::raw('MAX(irs.status) as status_terakhir')
-            )
-            ->groupBy(
-                'mahasiswa.nim', 
-                'mahasiswa.nama', 
-                'mahasiswa.angkatan', 
-                'program_studi.nama'
-            )
-            ->get();
-    
-        return view('dosen_irsMahasiswa', compact('dosen', 'usulanIRS'));
+        )
+        ->groupBy(
+            'mahasiswa.nim', 
+            'mahasiswa.nama', 
+            'mahasiswa.angkatan', 
+            'program_studi.nama'
+        )
+        ->get();
+
+    return view('dosen_irsMahasiswa', compact('dosen', 'usulanIRS'));
+}
+
+
+public function detailIRS($nim)
+{
+    // Ambil data dosen yang sedang login
+    $dosen = DB::table('dosen')
+        ->join('users', 'dosen.id_user', '=', 'users.id')
+        ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+        ->where('dosen.id_user', auth()->id())
+        ->select(
+            'dosen.nip',
+            'dosen.nama as dosen_nama',
+            'program_studi.nama as prodi_nama',
+            'dosen.prodi_id'
+        )
+        ->first();
+
+    // Ambil data mahasiswa berdasarkan NIM
+    $mahasiswa = DB::table('mahasiswa')->where('nim', $nim)->first();
+
+    // Pastikan mahasiswa yang diambil adalah mahasiswa yang dibimbing oleh dosen yang sedang login
+    if ($mahasiswa->id_dosen != auth()->user()->id) {
+        return redirect()->back()->with('error', 'Anda tidak memiliki akses ke IRS mahasiswa ini.');
     }
 
-    public function detailIRS($nim)
-    {
-        // Ambil data dosen yang sedang login
-        $dosen = DB::table('dosen')
-            ->join('users', 'dosen.id_user', '=', 'users.id')
-            ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-            ->where('dosen.id_user', auth()->id())
-            ->select(
-                'dosen.nip',
-                'dosen.nama as dosen_nama',
-                'program_studi.nama as prodi_nama',
-                'dosen.prodi_id'
-            )
-            ->first();
+    // Ambil IRS mahasiswa
+    $irs = DB::table('irs')
+        ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->join('ruangan', 'jadwal_kuliah.id_ruang', '=', 'ruangan.id_ruang')
+        ->where('irs.nim', $nim)
+        ->where('irs.status', '!=', 'draft') // Pastikan status IRS bukan draft
+        ->whereIn('irs.semester', function($query) {
+            $query->select('semester')
+                ->from('mahasiswa')
+                ->whereColumn('mahasiswa.nim', 'irs.nim'); // Pastikan semester IRS sesuai dengan semester mahasiswa
+        })
+        ->select(
+            'jadwal_kuliah.kode_matkul as kode',
+            'matakuliah.nama_matkul as mata_kuliah',
+            'jadwal_kuliah.kelas',
+            'matakuliah.sks',
+            'ruangan.nama as ruang',
+            'irs.status'
+        )
+        ->get();
 
-        // Ambil data mahasiswa berdasarkan NIM
-        $mahasiswa = DB::table('mahasiswa')->where('nim', $nim)->first();
+    return view('dosen_detailIRSMahasiswa', compact('dosen', 'mahasiswa', 'irs'));
+}
 
-        // Ambil IRS mahasiswa
-        $irs = DB::table('irs')
-            ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
-            ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
-            ->join('ruangan' , 'jadwal_kuliah.id_ruang', '=' , 'ruangan.id_ruang')
-            ->where('irs.nim', $nim)
-            ->select(
-                'jadwal_kuliah.kode_matkul as kode',
-                'matakuliah.nama_matkul as mata_kuliah',
-                'jadwal_kuliah.kelas',
-                'matakuliah.sks',
-                'ruangan.nama as ruang',
-                'irs.status'
-            )
-            ->get();
-
-        return view('dosen_detailIRSMahasiswa', compact('dosen', 'mahasiswa', 'irs'));
-    }   
     //untuk setujui irs 
     public function approveIRS($nim)
-    {
-        // Cari data mahasiswa berdasarkan NIM menggunakan query builder
-        $mahasiswa = DB::table('mahasiswa')->where('nim', $nim)->first();
-    
-        if (!$mahasiswa) {
-            return redirect()->back()->with('error', 'Mahasiswa tidak ditemukan.');
-        }
-    
-        // Cari IRS berdasarkan mahasiswa
-        // Cari IRS berdasarkan mahasiswa menggunakan nim
-        $irs = DB::table('irs')->where('nim', $mahasiswa->nim)->first();
+{
+    // Cari data mahasiswa berdasarkan NIM
+    $mahasiswa = DB::table('mahasiswa')->where('nim', $nim)->first();
 
-    
-        if (!$irs) {
-            return redirect()->back()->with('error', 'Data IRS tidak ditemukan.');
-        }
-    
-        // Update status IRS menjadi disetujui
-        DB::table('irs')
-            ->where('nim', $irs->nim)
-            ->update(['status' => 'disetujui']);
-    
-        // Redirect dengan pesan sukses
-        return redirect()->back()->with('success', 'Status IRS berhasil disetujui.');
+    if (!$mahasiswa) {
+        return redirect()->back()->with('error', 'Mahasiswa tidak ditemukan.');
     }
+
+    // Pastikan mahasiswa yang diambil adalah yang dibimbing oleh dosen yang sedang login
+    if ($mahasiswa->id_dosen != auth()->user()->id) {
+        return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk menyetujui IRS mahasiswa ini.');
+    }
+
+    // Cari IRS berdasarkan mahasiswa dan pastikan semester IRS sesuai dengan semester mahasiswa
+    $irs = DB::table('irs')
+        ->join('mahasiswa', 'mahasiswa.nim', '=', 'irs.nim')
+        ->where('irs.nim', $mahasiswa->nim)
+        ->where('irs.status', '!=', 'draft')  // Pastikan status IRS bukan draft
+        ->whereIn('irs.semester', function($query) use ($mahasiswa) {
+            $query->select('semester')
+                ->from('mahasiswa')
+                ->where('mahasiswa.nim', $mahasiswa->nim);  // Pastikan semester IRS sesuai dengan semester mahasiswa
+        })
+        ->first();
+
+    if (!$irs) {
+        return redirect()->back()->with('error', 'Data IRS tidak ditemukan atau semester IRS tidak sesuai dengan semester mahasiswa.');
+    }
+
+    // Update status IRS menjadi disetujui
+    DB::table('irs')
+        ->where('nim', $irs->nim)
+        ->where('semester', $irs->semester)  // Pastikan semester sesuai
+        ->update(['status' => 'disetujui']);
+
+    return redirect()->back()->with('success', 'Status IRS berhasil disetujui.');
+}
+
     
     //untuk batal persetujuian irs 
     public function cancelApprovalIRS($nim)
     {
-        // Cari data mahasiswa berdasarkan NIM menggunakan query builder
+        // Cari data mahasiswa berdasarkan NIM
         $mahasiswa = DB::table('mahasiswa')->where('nim', $nim)->first();
     
         if (!$mahasiswa) {
             return redirect()->back()->with('error', 'Mahasiswa tidak ditemukan.');
         }
     
-        // Cari IRS berdasarkan mahasiswa
-        // Cari IRS berdasarkan mahasiswa menggunakan nim
-        $irs = DB::table('irs')->where('nim', $mahasiswa->nim)->first();
-
+        // Pastikan mahasiswa yang diambil adalah yang dibimbing oleh dosen yang sedang login
+        if ($mahasiswa->id_dosen != auth()->user()->id) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses untuk membatalkan persetujuan IRS mahasiswa ini.');
+        }
+    
+        // Cari IRS berdasarkan mahasiswa dan pastikan semester IRS sesuai dengan semester mahasiswa
+        $irs = DB::table('irs')
+            ->join('mahasiswa', 'mahasiswa.nim', '=', 'irs.nim')
+            ->where('irs.nim', $mahasiswa->nim)
+            ->where('irs.status', 'disetujui')  // Pastikan IRS yang dipilih sudah disetujui
+            ->whereIn('irs.semester', function($query) use ($mahasiswa) {
+                $query->select('semester')
+                    ->from('mahasiswa')
+                    ->where('mahasiswa.nim', $mahasiswa->nim);  // Pastikan semester IRS sesuai dengan semester mahasiswa
+            })
+            ->first();
     
         if (!$irs) {
-            return redirect()->back()->with('error', 'Data IRS tidak ditemukan.');
+            return redirect()->back()->with('error', 'Data IRS tidak ditemukan atau semester IRS tidak sesuai dengan semester mahasiswa.');
         }
     
-        // Batalkan persetujuan hanya jika status IRS adalah disetujui
-        if ($irs->status == 'disetujui') {
-            DB::table('irs')
-                ->where('nim', $irs->nim)
-                ->update(['status' => 'draft']);
-
+        // Batalkan persetujuan IRS dengan mengubah status menjadi draft
+        DB::table('irs')
+            ->where('nim', $irs->nim)
+            ->where('semester', $irs->semester)  // Pastikan semester sesuai
+            ->update(['status' => 'draft']);
     
-            // Redirect dengan pesan sukses
-            return redirect()->back()->with('success', 'Persetujuan IRS berhasil dibatalkan.');
-        } else {
-            return redirect()->back()->with('error', 'Status IRS belum disetujui.');
-        }
+        return redirect()->back()->with('success', 'Persetujuan IRS berhasil dibatalkan.');
     }
+    
+    // Method untuk mencetak IRS mahasiswa dalam format PDF
+    public function printIRSPDF($nim)
+{
+    // Cari data mahasiswa berdasarkan NIM
+    $mahasiswa = DB::table('mahasiswa')
+        ->join('program_studi as prodi', 'prodi.id_prodi', '=', 'mahasiswa.id_prodi')
+        ->where('nim', $nim)
+        ->select(
+            'prodi.nama as nama_prodi',
+            'mahasiswa.nim',
+            'mahasiswa.nama as nama',
+            'mahasiswa.id_dosen'  // Pastikan kolom id_dosen juga dipilih
+        )
+        ->first();
+
+    if (!$mahasiswa) {
+        return redirect()->back()->with('error', 'Mahasiswa tidak ditemukan.');
+    }
+
+    // Ambil data dosen yang sedang login
+    $dosen = auth()->user(); // Pastikan ini adalah dosen yang sedang login
+
+
+
+   // Ambil data IRS mahasiswa untuk semester tertentu
+   $irs = DB::table('irs')
+   ->join('jadwal_kuliah', 'jadwal_kuliah.id_jadwal', '=', 'irs.id_jadwal')
+   ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+   ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
+   ->join('mahasiswa as mhs', 'irs.nim', '=', 'mhs.nim')
+   ->join('dosen', 'dosen.id_dosen' , '=' , 'jadwal_kuliah.id_dosen')
+   ->where('irs.nim', $mahasiswa->nim)
+   ->whereIn('irs.status', ['belum disetujui', 'disetujui', 'draft', 'BARU'])
+   ->select(
+       'matakuliah.kode_matkul',
+       'matakuliah.nama_matkul', 
+       'jadwal_kuliah.semester', 
+       'jadwal_kuliah.kelas', 
+       'matakuliah.sks', 
+       'ruangan.nama as ruang', 
+       'irs.status',
+       'dosen.nama as nama_dosen'
+   )
+   ->get();
+
+    if ($irs->isEmpty()) {
+        return redirect()->back()->with('error', 'Data IRS mahasiswa ini tidak ditemukan.');
+    }
+
+    // Ambil data pembimbing
+    $pembimbing = DB::table('dosen')
+        ->where('id_dosen', $mahasiswa->id_dosen)  // Gunakan id_dosen untuk mencocokkan dengan dosen
+        ->select('dosen.nama as nama_pembimbing', 'dosen.nip as nip')
+        ->first();
+
+    // Generate PDF dari view IRSFullPDF.blade.php
+    $pdf = PDF::loadView('IRSFullPDF', compact('mahasiswa', 'irs', 'pembimbing'));
+
+    // Unduh PDF
+    return $pdf->download('irs_mahasiswa_' . $nim . '.pdf');
+}
+
+
+
     
 
 
