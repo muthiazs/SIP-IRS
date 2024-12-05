@@ -254,28 +254,31 @@
                                     <td>{{ $jadwal->kuota_terisi }} / {{ $jadwal->kuota}}</td>
                                     <td>
                                         <div class="button-group-tabel">
-                                            @if (!$jadwalStatus[$jadwal->id_jadwal]) <!-- Jika statusnya belum diambil -->
+                                            @if (!$jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_jadwal'] && !$jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_matkul'])
                                                 <form class="ambil-jadwal-form">
                                                     @csrf
                                                     <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
                                                     <input type="hidden" name="status" value="draft">
                                                     <button type="submit" 
-                                                            class="btn btn-primary mb-2 rounded-3 ambil-btn" 
-                                                            style="color:white; background-color: #028391; border-color: #028391; font-size: 15px; padding: 5px 10px;"
-                                                            data-jadwal-id="{{ $jadwal->id_jadwal }}">
+                                                            class="btn btn-primary mb-2 rounded-3 ambil-btn"
+                                                            style="color:white; background-color: #028391; border-color: #028391; font-size: 15px; padding: 5px 10px;">
                                                         Ambil
                                                     </button>
                                                 </form>
-                                            @else <!-- Jika statusnya sudah diambil dengan status draft -->
-                                                <button class="btn btn-secondary mb-2 rounded-3" 
-                                                        disabled 
+                                            @elseif ($jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_matkul'])
+                                                <button class="btn btn-secondary mb-2 rounded-3"
+                                                        onclick="swal('Mata Kuliah Sudah Diambil', 'Anda tidak dapat mengambil mata kuliah yang sama lebih dari satu kali.', 'warning')"
                                                         style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
-                                                    Terambil
+                                                    Terambil 
+                                                </button>
+                                            @else
+                                                <button class="btn btn-secondary mb-2 rounded-3"
+                                                        style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
+                                                    Terambil 
                                                 </button>
                                             @endif
                                         </div>
                                     </td>
-                                           
                                 </tr>
                                 @endforeach
                             </tbody>
