@@ -306,15 +306,19 @@ class Mhs_PengisianIRSController extends Controller
     // }
 
     public function cekStatusPengambilan($id_jadwal)
-    {
-        $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
-        if ($mahasiswa) {
-            return IRS::where('nim', $mahasiswa->nim)
-                      ->where('id_jadwal', $id_jadwal)
-                      ->exists();
-        }
-        return false;
+{
+    $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+
+    if ($mahasiswa) {
+        return IRS::where('nim', $mahasiswa->nim)
+                  ->where('id_jadwal', $id_jadwal)
+                  ->where('status', 'draft') // Pastikan hanya status draft yang dicek
+                  ->exists();
     }
+
+    return false;
+}
+
 
 
     public function ambilJadwal(Request $request)
