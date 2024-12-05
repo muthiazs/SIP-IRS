@@ -143,6 +143,14 @@ Route::middleware('auth')->group(function () {
     //route Cetak PDF 
     Route::get('/cetak-pdf/{semester}', [Mhs_PengisianIRSController::class, 'cetak_pdf'])->name('cetak.pdf');
 
+    // Route untuk menampilkan halaman cetak IRS
+    Route::get('dosen/print-irs/{nim}', [DosenController::class, 'printIRS'])->name('dosen.print_irs');
+
+    // Route untuk mengunduh IRS dalam bentuk PDF
+    // Route untuk mengunduh IRS dalam format PDF
+    Route::get('dosen/print-irs-pdf/{nim}', [DosenController::class, 'printIRSPDF'])->name('dosen.print_irs_pdf');
+
+
 
 
 });

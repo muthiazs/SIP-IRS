@@ -30,32 +30,32 @@ class Mhs_PengisianIRSController extends Controller
 
         // Fetch jadwal kuliah berdasarkan periode
         $jadwalKuliah = DB::table('jadwal_kuliah')
-            ->join('matakuliah', 'matakuliah.kode_matkul', '=', 'jadwal_kuliah.kode_matkul')
-            ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
-            ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'jadwal_kuliah.id_periode')
-            ->when($Periode_sekarang->jenis == 'ganjil', function($query) {
-                return $query->whereRaw('matakuliah.semester % 2 != 0');
-            })
-            ->when($Periode_sekarang->jenis == 'genap', function($query) {
-                return $query->whereRaw('matakuliah.semester % 2 = 0');
-            })
-            ->orderBy('matakuliah.semester')
-            ->orderBy('matakuliah.nama_matkul')
-            ->select(
-                'jadwal_kuliah.id_jadwal',
-                'matakuliah.kode_matkul as kode_matkul',
-                'matakuliah.nama_matkul',
-                'jadwal_kuliah.kelas',
-                'matakuliah.semester',
-                'matakuliah.sks',
-                'ruangan.nama as namaruang',
-                'jadwal_kuliah.hari',
-                'jadwal_kuliah.jam_mulai',
-                'jadwal_kuliah.jam_selesai',
-                'jadwal_kuliah.kuota',
-                DB::raw('(SELECT COUNT(*) FROM irs WHERE irs.id_jadwal = jadwal_kuliah.id_jadwal) as kuota_terisi')
-            )
-            ->get();
+        ->join('matakuliah', 'matakuliah.kode_matkul', '=', 'jadwal_kuliah.kode_matkul')
+        ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
+        ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'jadwal_kuliah.id_periode')
+        ->when($Periode_sekarang->jenis == 'ganjil', function($query) {
+            return $query->whereRaw('matakuliah.semester % 2 != 0');
+        })
+        ->when($Periode_sekarang->jenis == 'genap', function($query) {
+            return $query->whereRaw('matakuliah.semester % 2 = 0');
+        })
+        ->orderBy('matakuliah.semester')
+        ->orderBy('matakuliah.nama_matkul')
+        ->select(
+            'jadwal_kuliah.id_jadwal',
+            'matakuliah.kode_matkul as kode_matkul',
+            'matakuliah.nama_matkul',
+            'jadwal_kuliah.kelas',
+            'matakuliah.semester',
+            'matakuliah.sks',
+            'ruangan.nama as namaruang',
+            'jadwal_kuliah.hari',
+            'jadwal_kuliah.jam_mulai',
+            'jadwal_kuliah.jam_selesai',
+            'jadwal_kuliah.kuota',
+            DB::raw('(SELECT COUNT(*) FROM irs WHERE irs.id_jadwal = jadwal_kuliah.id_jadwal) as kuota_terisi')
+        )
+        ->get();
 
         // Mengambil data mahasiswa yang sedang login
         $mahasiswa = DB::table('mahasiswa')
@@ -81,11 +81,25 @@ class Mhs_PengisianIRSController extends Controller
         }
 
         // Menambahkan pengecekan status untuk setiap jadwal kuliah
-        $jadwalStatus = [];
-        foreach ($jadwalKuliah as $jadwal) {
-            $jadwalStatus[$jadwal->id_jadwal] = $this->cekStatusPengambilan($jadwal->id_jadwal);
+    $jadwalStatus = [];
+    foreach ($jadwalKuliah as $jadwal) {
+        // Cek apakah jadwal ini sudah diambil dengan status draft
+        $sudahDiambilJadwal = $this->cekStatusPengambilan($jadwal->id_jadwal);
+
+        // Cek apakah mata kuliah ini sudah ada di IRS dengan status draft
+        $sudahDiambilMatkul = DB::table('irs')
+            ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+            ->where('irs.nim', $mahasiswa->nim)
+            ->where('jadwal_kuliah.kode_matkul', $jadwal->kode_matkul)
+            ->where('irs.status', 'draft')
+            ->exists();
+
+            // Simpan status
+            $jadwalStatus[$jadwal->id_jadwal] = [
+                'sudah_diambil_jadwal' => $sudahDiambilJadwal,
+                'sudah_diambil_matkul' => $sudahDiambilMatkul,
+            ];
         }
-        $jadwalStatus = collect($jadwalStatus); // Pastikan ini adalah koleksi
 
         return view('mhs_pengisianIRS', compact('Periode_sekarang', 'jadwalKuliah', 'mahasiswa', 'jadwalStatus'));
     }
@@ -327,15 +341,19 @@ class Mhs_PengisianIRSController extends Controller
     // }
 
     public function cekStatusPengambilan($id_jadwal)
-    {
-        $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
-        if ($mahasiswa) {
-            return IRS::where('nim', $mahasiswa->nim)
-                      ->where('id_jadwal', $id_jadwal)
-                      ->exists();
-        }
-        return false;
+{
+    $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+
+    if ($mahasiswa) {
+        return IRS::where('nim', $mahasiswa->nim)
+                  ->where('id_jadwal', $id_jadwal)
+                  ->where('status', 'draft') // Pastikan hanya status draft yang dicek
+                  ->exists();
     }
+
+    return false;
+}
+
 
 
     public function ambilJadwal(Request $request)
