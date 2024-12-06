@@ -13,7 +13,6 @@ class KalenderAkademikSeeder extends Seeder
      */
     public function run(): void
     {
-
        // Ambil tanggal saat ini
        $currentDate = Carbon::now();
         
