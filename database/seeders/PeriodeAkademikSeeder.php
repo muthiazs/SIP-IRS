@@ -14,8 +14,8 @@ class PeriodeAkademikSeeder extends Seeder
             [
                 'id_periode' => '23242',
                 'nama_periode' => 'Semester Akademik 2023/2024 Genap',
-                'tahun_mulai' => '2024-01-03 00:00:00',
-                'tahun_selesai' => '2024-12-31 23:59:59',
+                'tahun_mulai' => '2024-09-10 00:00:00',
+                'tahun_selesai' => '2024-06-10 23:59:59',
                 'jenis' => 'genap',
             ],
             [
