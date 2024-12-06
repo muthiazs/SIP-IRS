@@ -97,17 +97,16 @@
             <p class="header-title">UNIVERSITAS DIPONEGORO</p>
         </div>
 
-        <!-- Student Info -->
+        <!--  Info -->
         <div class="info-section">
             <p><strong>Nama Mahasiswa:</strong> {{ $mahasiswa->nama }}</p>
             <p><strong>NIM:</strong> {{ $mahasiswa->nim }}</p>
             <p><strong>Program Studi:</strong> {{ $mahasiswa->nama_prodi }}</p>
-        </div>
-
-        <!-- Pembimbing Info -->
-        <div class="info-section">
             <p><strong>Nama Pembimbing:</strong> {{ $pembimbing->nama_pembimbing }}</p>
             <p><strong>NIP:</strong> {{ $pembimbing->nip }}</p>
+        </div>
+        <div class="info-section">
+            <p><strong>Total SKS:</strong> {{ $totalSKS }}</p>
         </div>
 
         <!-- Table -->
