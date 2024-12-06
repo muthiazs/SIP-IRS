@@ -353,14 +353,14 @@ class Mhs_PengisianIRSController extends Controller
             'status' => 'required|string|max:255',
         ]);
 
-        // // Check for scheduling conflicts
-        // $isConflict = $this->cekJadwalBertabrakan($mahasiswa->nim, $request->id_jadwal);
-        // if ($isConflict) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Jadwal yang Anda pilih bertabrakan dengan jadwal yang sudah diambil.',
-        //     ], 409); // Conflict status code
-        // }
+        // Check for scheduling conflicts
+        $isConflict = $this->cekJadwalBertabrakan($mahasiswa->nim, $request->id_jadwal);
+        if ($isConflict) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Jadwal yang Anda pilih bertabrakan dengan jadwal yang sudah diambil.',
+            ], 409); // Conflict status code
+        }
 
         // Insert the schedule into IRS
         IRS::create([
@@ -385,42 +385,55 @@ class Mhs_PengisianIRSController extends Controller
     }
 }
 
-// Method to check if the student's schedule conflicts with an existing one
-// private function cekJadwalBertabrakan($nim, $id_jadwal)
-// {
-//     $selectedJadwal = DB::table('jadwal_kuliah')
-//         ->where('id_jadwal', $id_jadwal)
-//         ->first();
+//Method to check if the student's schedule conflicts with an existing one
+private function cekJadwalBertabrakan($nim, $id_jadwal)
+{
+    $selectedJadwal = DB::table('jadwal_kuliah')
+        ->where('id_jadwal', $id_jadwal)
+        ->first();
 
-//     if (!$selectedJadwal) {
-//         return false; // Jadwal tidak ditemukan
-//     }
+    if (!$selectedJadwal) {
+        return false; // Jadwal tidak ditemukan
+    }
 
-//     $existingJadwal = DB::table('irs')
-//         ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
-//         ->where('irs.nim', $nim)
-//         ->where('jadwal_kuliah.hari', $selectedJadwal->hari)
-//         ->select('jadwal_kuliah.jam_mulai', 'jadwal_kuliah.jam_selesai')
-//         ->get();
+    // Ambil semester mahasiswa saat ini berdasarkan NIM
+    $semesterMahasiswa = DB::table('mahasiswa')
+        ->where('nim', $nim)
+        ->value('semester');
 
-//     foreach ($existingJadwal as $jadwal) {
-//         // Convert time strings to timestamps for comparison
-//         $selectedJadwalStart = strtotime($selectedJadwal->jam_mulai);
-//         $selectedJadwalEnd = strtotime($selectedJadwal->jam_selesai);
-//         $existingJadwalStart = strtotime($jadwal->jam_mulai);
-//         $existingJadwalEnd = strtotime($jadwal->jam_selesai);
+    if (!$semesterMahasiswa) {
+        return false; // Mahasiswa tidak ditemukan
+    }
 
-//         // Check for overlap
-//         if (
-//             ($selectedJadwalStart >= $existingJadwalStart && $selectedJadwalStart < $existingJadwalEnd) ||
-//             ($selectedJadwalEnd > $existingJadwalStart && $selectedJadwalEnd <= $existingJadwalEnd)
-//         ) {
-//             return true; // Jadwal bertabrakan
-//         }
-//     }
+    // Ambil jadwal IRS yang hanya semester sama dengan mahasiswa saat ini
+    $existingJadwal = DB::table('irs')
+        ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+        ->where('irs.nim', $nim)
+        ->where('irs.semester', $semesterMahasiswa) // Hanya IRS semester saat ini
+        ->where('jadwal_kuliah.hari', $selectedJadwal->hari)
+        ->select('jadwal_kuliah.jam_mulai', 'jadwal_kuliah.jam_selesai')
+        ->get();
 
-//     return false; // Tidak ada konflik jadwal
-// }
+    foreach ($existingJadwal as $jadwal) {
+        // Convert time strings to timestamps for comparison
+        $selectedJadwalStart = strtotime($selectedJadwal->jam_mulai);
+        $selectedJadwalEnd = strtotime($selectedJadwal->jam_selesai);
+        $existingJadwalStart = strtotime($jadwal->jam_mulai);
+        $existingJadwalEnd = strtotime($jadwal->jam_selesai);
+
+        // Check for overlap
+        if (
+            ($selectedJadwalStart >= $existingJadwalStart && $selectedJadwalStart < $existingJadwalEnd) ||
+            ($selectedJadwalEnd > $existingJadwalStart && $selectedJadwalEnd <= $existingJadwalEnd)
+        ) {
+            return true; // Jadwal bertabrakan
+        }
+    }
+
+    return false; // Tidak ada konflik jadwal
+}
+
+
 
 
 
