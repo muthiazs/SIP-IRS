@@ -14,7 +14,7 @@
 <body class="bg-light">
     <div class="d-flex">
     <!-- untuk manggil komponen sidebar -->
-    <x-sidebar-mahasiswa :mahasiswa="$mahasiswa"></x-sidebar-mahasiswa>
+    <x-sidebar-mahasiswa :mahasiswa="$mahasiswa" :masaIRS="$masaIRS"></x-sidebar-mahasiswa>
         <!-- Wave decoration -->
         <div class="wave-decoration"> 
             <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
@@ -33,7 +33,7 @@
             <!-- Period Banner -->
             <div class="alert alert-success" role="alert">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-medium">Periode Pengisian IRS</span>
+                    <span class="fw-medium">Periode Pengisian IRS: {{$fetchPeriodeISIIRS->tanggal_mulai}} - {{$fetchPeriodeISIIRS->tanggal_selesai}}</span>
                     <!-- <span class="fw-medium"> $data['semester']['period'] </span> -->
                 </div>
             </div>
@@ -75,12 +75,16 @@
                 <div class="col-md-6">
                     <div class="stats-card">
                         <h5 class="mb-3">Status IRS</h5>
-                        <p class="fs-6 fw-semibold mb-2">Periode pengisian irs dibuka dari ... - ... </p>
+                        <p class="fs-6 fw-semibold mb-2">Periode pengisian IRS dibuka dari {{ $fetchPeriodeISIIRS->tanggal_mulai }} - {{ $fetchPeriodeISIIRS->tanggal_selesai }} </p>
                             <div class="button-group-right">
-                                <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('mhs_newIRS') }}'">Buat IRS</button>
-                            </div>
-                            </div>
-
+                            @if ($masaIRS === 'isiIRS')
+                                <button class="btn btn-primary" onclick="window.location.href='{{ route('mhs_newIRS') }}'">Buat IRS</button>
+                            @elseif ($masaIRS === 'gantiIRS' || $masaIRS === 'batalIRS')
+                                <button class="btn btn-primary" onclick="window.location.href='{{ route('mhs_draftIRS') }}'">Edit IRS</button>
+                            @else
+                                <button class="btn btn-secondary" onclick="window.location.href='{{ route('mhs_habisPeriodeIRS') }}'">Periode IRS Habis</button>
+                            @endif
+                                                    </div>
                     </div>
                 </div>
             </div>
