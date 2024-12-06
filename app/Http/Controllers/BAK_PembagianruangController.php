@@ -91,7 +91,7 @@ class BAK_PembagianruangController extends Controller
         ]);
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('toast_success', 'Ruangan berhasil dialokasikan.');
+        return redirect()->back()->with('success', 'Ruangan berhasil dialokasikan.');
     }
     
 
@@ -132,7 +132,7 @@ class BAK_PembagianruangController extends Controller
             ->first();
 
         if ($cekRuangan) {
-            return redirect()->back()->with('toast_error', 'Ruangan dengan nama tersebut sudah ada.');
+            return redirect()->back()->with('error', 'Ruangan dengan nama tersebut sudah ada.');
         }
 
         $lastRuangan = DB::table('ruangan')
@@ -151,7 +151,7 @@ class BAK_PembagianruangController extends Controller
         ]);
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('toast_success', 'Ruangan baru berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Ruangan baru berhasil ditambahkan.');
     }
 
     public function indexUpdateDeleteRuang()
