@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 
@@ -55,28 +56,122 @@ class DashboardController extends Controller
         return view('dashboardKaprodi', compact('kaprodi'));
     }
 
-    // Method untuk Dashboard Mahasiswa
+
+
+    //Method untuk dashboard Mahasiswa
     public function indexMahasiswa()
     {
+        $currentDate = Carbon::now()->toDateString(); // Tanggal saat ini
+        // dump($currentDate);
+
+        // Ambil periode akademik terbaru berdasarkan id_periode
+        $periodeTerbaru = DB::table('periode_akademik')
+            ->orderBy('id_periode', 'DESC') // Mengambil periode akademik berdasarkan id_periode terbaru
+            ->first();
+        // dump($periodeTerbaru);
+
+        // Pastikan periode akademik terbaru ditemukan
+        if (!$periodeTerbaru) {
+            return view('dashboardMahasiswa', compact('mahasiswa', 'masaIRS'));
+        }
+        
+        // Ambil data mahasiswa dengan periode akademik terbaru
         $mahasiswa = DB::table('mahasiswa')
-                    ->join('users', 'mahasiswa.id_user', '=', 'users.id')
-                    ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
-                    ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
-                    ->crossJoin('periode_akademik')
-                    ->where('mahasiswa.id_user', auth()->id())
-                    ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
-                    ->select(
-                        'mahasiswa.nim',
-                        'mahasiswa.nama as nama_mhs',
-                        'program_studi.nama as prodi_nama',
-                        'dosen.nama as nama_doswal',
-                        'dosen.nip',
-                        'users.username',
-                        'periode_akademik.nama_periode'
-                    ) 
-                    ->first();  // Ambil baris pertama dengan timestamp terbaru
-        return view('dashboardMahasiswa', compact('mahasiswa'));
+            ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+            ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+            ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+            ->join('progress_mahasiswa as prg', 'prg.id_mahasiswa', '=', 'mahasiswa.id_mahasiswa')
+            ->crossJoin('periode_akademik')
+            ->join('kalender_akademik', 'kalender_akademik.id_periode', '=', 'periode_akademik.id_periode')
+            ->where('mahasiswa.id_user', auth()->id())
+            ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) // Menggunakan periode akademik terbaru
+            ->whereIn('kalender_akademik.kode_kegiatan', ['isiIRS', 'gantiIRS', 'batalIRS']) // Mengambil kode kegiatan IRS
+            ->orderBy('periode_akademik.id_periode', 'desc') // Mengurutkan berdasarkan periode terbaru
+            ->select(
+                'mahasiswa.nim',
+                'mahasiswa.nama as nama_mhs',
+                'program_studi.nama as prodi_nama',
+                'dosen.nama as nama_doswal',
+                'dosen.nip',
+                'users.username',
+                'periode_akademik.nama_periode',
+                'prg.IPk as IPk',
+                'prg.SKSk as SKSk',
+                'prg.semester_studi as semester',
+                'kalender_akademik.tanggal_mulai',
+                'kalender_akademik.tanggal_selesai'
+            )
+            ->first();
+
+        // Ambil masa IRS berdasarkan periode akademik terbaru dan rentang waktu
+        $fetchPeriodeISIIRS = DB::table('kalender_akademik')
+            ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+            ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) // Menggunakan periode akademik terbaru
+            ->where('kalender_akademik.kode_kegiatan','=','isiIRS')
+            ->select(
+                'kalender_akademik.tanggal_mulai', // Menggunakan nama kolom yang valid
+                'kalender_akademik.tanggal_selesai', // Menggunakan nama kolom yang valid
+                'kalender_akademik.nama_kegiatan' // Untuk kebutuhan tambahan
+            )
+            ->first();
+
+        // dump($mahasiswa);
+    
+        // // Ambil masa IRS berdasarkan periode akademik terbaru dan rentang waktu
+        $periodeIRS = DB::table('kalender_akademik')
+            ->join('periode_akademik','periode_akademik.id_periode','=','kalender_akademik.id_periode')
+            ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) // Menggunakan periode akademik terbaru
+            ->where(function ($query) use ($currentDate) {
+                $query->whereIn('kode_kegiatan', ['isiIRS', 'gantiIRS', 'batalIRS'])
+                    ->whereDate('tanggal_mulai', '<=', $currentDate)
+                    ->whereDate('tanggal_selesai', '>=', $currentDate);
+            })
+            ->pluck('kalender_akademik.nama_kegiatan')
+            ->first();
+        // dump($periodeIRS);
+        
+        // Tetapkan nilai masa IRS berdasarkan hasil query
+        $masaIRS = $periodeIRS ?? null;
+        // dump($masaIRS);
+        
+        // Kirim data ke view
+        return view('dashboardMahasiswa', compact('mahasiswa', 'masaIRS','fetchPeriodeISIIRS',));
     }
+    
+    
+    
+    
+    
+    
+
+    
+
+    // public function indexMahasiswa()
+    // {
+    //     $mahasiswa = DB::table('mahasiswa')
+    //                 ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+    //                 ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+    //                 ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+    //                 ->join('progress_mahasiswa as prg' , 'prg.id_mahasiswa' , '=' , 'mahasiswa.id_mahasiswa')
+    //                 ->crossJoin('periode_akademik')
+    //                 ->where('mahasiswa.id_user', auth()->id())
+    //                 ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
+    //                 ->select(
+    //                     'mahasiswa.nim',
+    //                     'mahasiswa.nama as nama_mhs',
+    //                     'program_studi.nama as prodi_nama',
+    //                     'dosen.nama as nama_doswal',
+    //                     'dosen.nip',
+    //                     'users.username',
+    //                     'periode_akademik.nama_periode',
+    //                     'prg.IPk as IPk',
+    //                     'prg.SKSk as SKSk',
+    //                     'prg.semester_studi as semester'
+    //                 ) 
+    //                 ->first();  // Ambil baris pertama dengan timestamp terbaru
+    //     return view('dashboardMahasiswa', compact('mahasiswa'));
+    // }
+
     
     
 

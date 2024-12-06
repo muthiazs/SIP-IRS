@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengisian Rencana Studi - SIP-IRS</title>
+    <title>SIP-IRS Pengisian IRS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -167,11 +167,15 @@
                         <div class="d-flex">
                             <div class="margincard">
                                 <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                                <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
+                                <span class="badge irs-badge" style="background-color: #67C3CC;">
+                                    {{ $maksimalSKS }} SKS
+                                </span>
                             </div>
                             <div class="margincard" style="margin-left: 10px;">
                                 <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                                <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
+                                <span class="badge irs-badge" style="background-color: #67C3CC;">
+                                    {{ $totalSKSTerpilih }} SKS
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -254,27 +258,32 @@
                                     <td>{{ $jadwal->kuota_terisi }} / {{ $jadwal->kuota}}</td>
                                     <td>
                                         <div class="button-group-tabel">
-                                            @if (!$jadwalStatus[$jadwal->id_jadwal])
-                                                <form class="ambil-jadwal-form">
-                                                    @csrf
-                                                    <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
-                                                    <input type="hidden" name="status" value="draft">
-                                                    <button type="submit" 
-                                                            class="btn btn-primary mb-2 rounded-3 ambil-btn" 
-                                                            style="color:white; background-color: #028391; border-color :#028391;font-size: 15px; padding: 5px 10px;"
-                                                            data-jadwal-id="{{ $jadwal->id_jadwal }}">
-                                                        Ambil
-                                                    </button>
-                                                </form>
-                                            @else
-                                                <button class="btn btn-secondary mb-2 rounded-3" 
-                                                        disabled 
+                                            @if (!$jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_jadwal'] && !$jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_matkul'])
+                                            <form class="ambil-jadwal-form" data-sks="{{ $jadwal->sks }}">
+                                                @csrf
+                                                <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
+                                                <input type="hidden" name="status" value="draft">
+                                                <button type="submit" 
+                                                        class="btn btn-primary mb-2 rounded-3 ambil-btn"
+                                                        style="color:white; background-color: #028391; border-color: #028391; font-size: 15px; padding: 5px 10px;">
+                                                    Ambil
+                                                </button>
+                                            </form>                                            
+                                            @elseif ($jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_matkul'])
+                                                <button class="btn btn-secondary mb-2 rounded-3"
+                                                        onclick="swal('Mata Kuliah Sudah Diambil', 'Anda tidak dapat mengambil mata kuliah yang sama lebih dari satu kali.', 'warning')"
                                                         style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
-                                                    Terambil
+                                                    Terambil 
+                                                </button>
+                                            @else
+                                                <button class="btn btn-secondary mb-2 rounded-3"
+                                                        style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
+                                                    Terambil 
                                                 </button>
                                             @endif
                                         </div>
-                                    </td>                    
+                                        
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -502,7 +511,49 @@
         });
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const maksimalSKS = {{ $maksimalSKS }};
+    const totalSKSTerpilih = {{ $totalSKSTerpilih }};
 
+    // Fungsi untuk validasi SKS
+    function validateSKS(selectedSKS, callback) {
+        if (selectedSKS + totalSKSTerpilih > maksimalSKS) {
+            Swal.fire({
+                icon: 'error',
+                title: 'SKS Melebihi Batas',
+                text: `Anda hanya boleh mengambil maksimal ${maksimalSKS} SKS.`,
+                confirmButtonColor: '#d33',
+            });
+            return false;
+        }
+        callback();
+    }
+
+    // Attach event listener ke tombol "Ambil"
+    document.querySelectorAll('.ambil-btn').forEach(function (button) {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Ambil SKS dari data-sks di elemen form
+            const selectedSKS = parseInt(this.closest('form').dataset.sks);
+
+            // Validasi sebelum submit form
+            validateSKS(selectedSKS, () => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Jadwal berhasil dipilih!',
+                    confirmButtonColor: '#028391',
+                }).then(() => {
+                    this.closest('form').submit();
+                });
+            });
+        });
+    });
+});
+
+</script>
 <div class="d-flex justify-content-center mt-3">
     <nav aria-label="Page navigation">
         <ul class="pagination" id="pagination">

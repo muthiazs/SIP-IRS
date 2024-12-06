@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengisian Rencana Studi - SIP-IRS</title>
+    <title>SIP-IRS Draft IRS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -94,16 +94,15 @@
                     <div class="d-flex">
                         <div class="margincard">
                             <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
+                            <span class="badge irs-badge" style="background-color: #67C3CC;">
+                                {{ $maksimalSKS }} SKS
+                            </span>
                         </div>
                         <div class="margincard" style="margin-left: 10px;">
                             <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                            <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="margincard">
-                            <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
+                            <span class="badge irs-badge" style="background-color: #67C3CC;">
+                                {{ $totalSKSTerpilih }} SKS
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -126,7 +125,6 @@
                     <th>Hari</th>
                     <th>Jam Mulai</th>
                     <th>Jam Selesai</th>
-                    <th>Kuota</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -143,7 +141,6 @@
                         <td>{{ $rancanganSementara->hari }}</td>
                         <td>{{ $rancanganSementara->jam_mulai }}</td>
                         <td>{{ $rancanganSementara->jam_selesai }}</td>
-                        <td>{{ $rancanganSementara->kuota}}</td>
                         <td>
                             <div class="button-group-tabel">
                             <form action="{{ route('batalkanJadwal') }}" method="POST">

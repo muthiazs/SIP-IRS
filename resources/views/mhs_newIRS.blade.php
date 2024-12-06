@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Mahasiswa - SIP-IRS</title>
+    <title>SIP-IRS Buat IRS Baru</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -24,24 +24,20 @@
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <div>
+                    <h1 class="fs-3 fw-bold">Pengisian IRS Mahasiswa 👩🏻‍💻 </h1>
+                </div>
+            </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                
-                </div>
-                <div class="position-relative">
-                    <button class="btn btn-primary rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                        <span class="visually-hidden">Notifikasi baru</span>
-                    </span>
                 </div>
             </div>
 
             <!-- Alert Banner -->
             <div class="alert alert-success" role="alert">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-medium">Periode Pengisian IRS Dimulai sampai tanggal ...-....</span>
+                    <span class="fw-medium">Periode Pengisian IRS Dimulai sampai tanggal {{ $fetchPeriodeISIIRS->tanggal_mulai }} - {{ $fetchPeriodeISIIRS->tanggal_selesai }}</span>
                     <!-- <span class="fw-medium"> $data['semester']['period'] </span> -->
                 </div>
             </div>
@@ -54,7 +50,7 @@
                             <h3 class="fs-5 fw-semibold">Periode pengisian IRS</h3>
                             <span class="fs-4 text-danger">🗓️</span>
                         </div>
-                        <p class="fs-6 fw-semibold mb-2">Periode pengisian irs dibuka dari ... - ... </p>
+                        <p class="fs-6 fw-semibold mb-2">Periode pengisian irs dibuka dari {{ $fetchPeriodeISIIRS->tanggal_mulai }} - {{ $fetchPeriodeISIIRS->tanggal_selesai }} </p>
                         <div class="button-group-right">
                             <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('mhs_pengisianIRS') }}'">Buat IRS</button>
                         </div>
