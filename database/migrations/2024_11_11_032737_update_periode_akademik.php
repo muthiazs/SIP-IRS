@@ -9,8 +9,8 @@ class UpdatePeriodeAkademik extends Migration
     public function up()
     {
         Schema::table('periode_akademik', function (Blueprint $table) {
-            $table->string('tahun_mulai')->nullable();
-            $table->string('tahun_selesai')->nullable();
+            $table->dateTime('tahun_mulai')->nullable();
+            $table->dateTime('tahun_selesai')->nullable();
             $table->enum('jenis', ['ganjil', 'genap'])->nullable();
         });
     }
