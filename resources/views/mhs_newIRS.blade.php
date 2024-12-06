@@ -37,7 +37,7 @@
             <!-- Alert Banner -->
             <div class="alert alert-success" role="alert">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-medium">Periode Pengisian IRS Dimulai sampai tanggal ...-....</span>
+                    <span class="fw-medium">Periode Pengisian IRS Dimulai sampai tanggal {{ $fetchPeriodeISIIRS->tanggal_mulai }} - {{ $fetchPeriodeISIIRS->tanggal_selesai }}</span>
                     <!-- <span class="fw-medium"> $data['semester']['period'] </span> -->
                 </div>
             </div>
@@ -50,7 +50,7 @@
                             <h3 class="fs-5 fw-semibold">Periode pengisian IRS</h3>
                             <span class="fs-4 text-danger">🗓️</span>
                         </div>
-                        <p class="fs-6 fw-semibold mb-2">Periode pengisian irs dibuka dari ... - ... </p>
+                        <p class="fs-6 fw-semibold mb-2">Periode pengisian irs dibuka dari {{ $fetchPeriodeISIIRS->tanggal_mulai }} - {{ $fetchPeriodeISIIRS->tanggal_selesai }} </p>
                         <div class="button-group-right">
                             <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('mhs_pengisianIRS') }}'">Buat IRS</button>
                         </div>

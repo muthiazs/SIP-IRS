@@ -95,10 +95,23 @@ Route::group([], function () {
 });
 
 // Role Selection Page for Dosen
+// Route::post('/roleSelection', [AuthController::class, 'roleSelection'])->name('roleSelection');
+// Route::get('/not-page', [AuthController::class, 'notPage'])->name('notPage');
+// Route::post('/handleRoleSelection', [AuthController::class, 'handleRoleSelection'])->name('handleRoleSelection');
+// Route::post('/submit-role-selection', [AuthController::class, 'submitRoleSelection'])->name('submitRoleSelection');
+
+// Route to display the role selection page
 Route::get('/roleSelection', [AuthController::class, 'roleSelection'])->name('roleSelection');
-Route::get('/not-page', [AuthController::class, 'notPage'])->name('notPage');
+
+// Route for handling the form submission of role selection
 Route::post('/handleRoleSelection', [AuthController::class, 'handleRoleSelection'])->name('handleRoleSelection');
+
+// Route for a "not page" (optional)
+Route::get('/not-page', [AuthController::class, 'notPage'])->name('notPage');
+
+// Submit role selection (if needed for another action)
 Route::post('/submit-role-selection', [AuthController::class, 'submitRoleSelection'])->name('submitRoleSelection');
+
 
 // Protected Routes with Authentication
 Route::middleware('auth')->group(function () {
