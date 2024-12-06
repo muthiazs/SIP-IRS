@@ -410,7 +410,7 @@ class Mhs_PengisianIRSController extends Controller
     }
 }
 
-// Method to check if the student's schedule conflicts with an existing one
+//Method to check if the student's schedule conflicts with an existing one
 private function cekJadwalBertabrakan($nim, $id_jadwal)
 {
     $selectedJadwal = DB::table('jadwal_kuliah')
@@ -421,11 +421,20 @@ private function cekJadwalBertabrakan($nim, $id_jadwal)
         return false; // Jadwal tidak ditemukan
     }
 
-    // ... (other checks for capacity and quota)
+    // Ambil semester mahasiswa saat ini berdasarkan NIM
+    $semesterMahasiswa = DB::table('mahasiswa')
+        ->where('nim', $nim)
+        ->value('semester');
 
+    if (!$semesterMahasiswa) {
+        return false; // Mahasiswa tidak ditemukan
+    }
+
+    // Ambil jadwal IRS yang hanya semester sama dengan mahasiswa saat ini
     $existingJadwal = DB::table('irs')
         ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
         ->where('irs.nim', $nim)
+        ->where('irs.semester', $semesterMahasiswa) // Hanya IRS semester saat ini
         ->where('jadwal_kuliah.hari', $selectedJadwal->hari)
         ->select('jadwal_kuliah.jam_mulai', 'jadwal_kuliah.jam_selesai')
         ->get();
@@ -448,6 +457,8 @@ private function cekJadwalBertabrakan($nim, $id_jadwal)
 
     return false; // Tidak ada konflik jadwal
 }
+
+
 
 
 
