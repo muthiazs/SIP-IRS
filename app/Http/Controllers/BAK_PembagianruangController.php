@@ -157,7 +157,6 @@ class BAK_PembagianruangController extends Controller
 
     public function indexUpdateDeleteRuang()
     {
-
         $tabelRuang = DB::table('ruangan')
             ->select(
                 'ruangan.nama',
@@ -208,4 +207,34 @@ class BAK_PembagianruangController extends Controller
         ;
         return view('bak_NextUpdateDeleteRuang', compact('tabelRuang', 'akademik'));
     }
+
+    public function updateRuang(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'id_ruang' => 'required|exists:ruangan,id_ruang',
+            'nama' => 'required|string|max:255',
+            'kapasitas' => 'required|integer|min:1',
+        ]);
+
+        // Update data ruangan
+        DB::table('ruangan')
+            ->where('id_ruang', $request->id_ruang)
+            ->update([
+                'nama' => $request->nama,
+                'kapasitas' => $request->kapasitas,
+                'updated_at' => now(),
+            ]);
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Data ruangan berhasil diperbarui.');
+    }
+
+    public function deleteRuang(Request $request)
+    {
+        DB::table('ruangan')->where('id_ruang', $request->id_ruang)->delete();
+        return response()->json(['message' => 'Ruangan berhasil dihapus'], 200);
+    }
+
+
 }
