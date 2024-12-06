@@ -340,7 +340,7 @@ class Mhs_PengisianIRSController extends Controller
     //     return redirect()->route('mhs_pengisianIRS')->with('success', 'Jadwal berhasil diambil.');
     // }
 
-    public function cekStatusPengambilan($id_jadwal)
+public function cekStatusPengambilan($id_jadwal)
 {
     $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
 
@@ -353,6 +353,7 @@ class Mhs_PengisianIRSController extends Controller
 
     return false;
 }
+
 
 
 
