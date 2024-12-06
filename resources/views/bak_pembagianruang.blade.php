@@ -61,16 +61,6 @@
       <div class="main-content flex-grow-1 p-4">
           <!-- Header -->
           <div class="d-flex justify-content-between align-items-center mb-4">
-              <div>
-                  <h1 class="fs-3 fw-bold">Selamat Datang {{ $akademik->nama }} 👋</h1>
-                  <p class="text-muted">Semester Akademik Sekarang</p>
-              </div>
-              <div class="position-relative">
-                  <button class="btn btn-teal rounded-circle p-2">
-                      <span class="material-icons">notifications</span>
-                  </button>
-                  <span class="notification-badge"></span>
-              </div>
           </div>
 
           <!-- Progress Cards -->
@@ -164,25 +154,5 @@
   }
   </script>
 
-  <!-- Toastr -->
-    <script>
-    $(document).ready(function() {
-        toastr.options = {
-            "closeButton": true,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "3000",
-            "escapeHtml": true
-        }
-
-        @if(Session::has('toast_success'))
-            toastr.success('Ruangan berhasil dialokasikan');
-        @endif
-
-        @if(Session::has('toast_error'))
-            toastr.error("{!! Session::get('toast_error') !!}"); 
-        @endif
-    });
-    </script>
 </body>
 </html>

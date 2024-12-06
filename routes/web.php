@@ -142,6 +142,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/ruang/create', [BAK_PembagianruangController::class, 'createRuang'])->name('create.store');
     Route::get('/bak_UpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexUpdateDeleteRuang'])->name('bak_UpdateDeleteRuang');
     Route::get('/bak_NextUpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexNextUpdateDeleteRuang'])->name('bak_NextUpdateDeleteRuang');
+    Route::post('/ruang/update', [BAK_PembagianruangController::class, 'updateRuang'])->name('update.ruang');
+    Route::post('/ruang/delete', [BAK_PembagianruangController::class, 'deleteRuang'])->name('delete.ruang');
     Route::post('/konfirmasi-irs', [Mhs_PengisianIRSController::class, 'konfirmasiIRS'])->name('konfirmasi_irs');
     Route::get('/dosen_irsMahasiswa', [DosenController::class, 'usulanIRSMahasiswa'])->name('dosen_irsMahasiswa');
     // Rute untuk menampilkan detail IRS mahasiswa
