@@ -42,14 +42,15 @@ class BAK_PembagianruangController extends Controller
     {
         // Ambil ruangan yang belum dialokasikan
         $statusRuang = DB::table('ruangan')
-                        ->join('alokasi_ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
-                        ->where('ruangan.status', '=', 'tersedia')  // Perbaiki penggunaan '=='
-                        ->where('ruangan.id_ruang', '=', DB::raw('alokasi_ruangan.id_ruang'))  // Pastikan kondisi kedua terpisah
-                        ->select(
-                            'ruangan.nama',
-                            'ruangan.kapasitas'
-                        )
-                        ->get();
+            ->join('alokasi_ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
+            ->join('program_studi', 'program_studi.id_prodi', '=', 'alokasi_ruangan.id_prodi') // Ganti 'id' menjadi 'id_prodi'
+            ->where('ruangan.status', '=', 'tersedia')
+            ->select(
+                'ruangan.nama',
+                'ruangan.kapasitas',
+                'program_studi.nama as nama_prodi' // Ambil dari tabel program_studi
+            )
+            ->get();
 
         $akademik = DB::table('pegawai')
             ->join('users', 'pegawai.id_user', '=', 'users.id')
@@ -63,7 +64,7 @@ class BAK_PembagianruangController extends Controller
             )
             ->first();
 
-        return view('bak_pembagianRuang', compact('statusRuang', 'akademik'));
+        return view('bak_CekStatusRuang', compact('statusRuang', 'akademik'));
     }
 
     // Controller untuk Alokasi Pembagian Ruang

@@ -58,16 +58,6 @@
         <div class="main-content flex-grow-1 p-4">
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $akademik->nama }} 👋</h1>
-                    <p class="text-muted">Semester Akademik Sekarang</p>
-                </div>
-                <div class="position-relative">
-                    <button class="btn btn-teal rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="notification-badge"></span>
-                </div>
             </div>
 
             <!-- Progress Cards -->
@@ -101,6 +91,7 @@
                                 <th>No</th>
                                 <th>Nama Ruang</th>
                                 <th>Kapasitas</th>
+                                <th>Program Studi</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -110,6 +101,7 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $data->nama }}</td>
                                 <td>{{ $data->kapasitas }}</td>
+                                <td>{{ $data->nama_prodi }}</td>
                                 <td>
                                     <button class="btn btn-primary mb-2" onclick="window.location.href='{{ route('bak_NextUpdateDeleteRuang') }}'">Batalkan</button>
                                 </td>
@@ -150,7 +142,7 @@
         });
     
         function filterTabelByGedung(gedung) {
-            $('#tabelRuang tr').each(function() {
+            $('#statusRuang tr').each(function() {
                 if ($(this).find('td').length) { // Skip header row
                     const namaRuang = $(this).find('td:eq(1)').text().trim();
                     
