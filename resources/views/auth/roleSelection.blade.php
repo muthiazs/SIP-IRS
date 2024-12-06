@@ -93,10 +93,12 @@
                                 Dosen Wali
                             </label>
                         </div>
-                        <button class='btn-primary text-white' type="submit">Pilih Role</button>
+                        <form action="{{ route('handleRoleSelection') }}" method="POST">
+                            @csrf
+                            <!-- Form fields for role selection -->
+                            <button class='btn-primary text-white' type="submit">Pilih Role</button>
+                        </form>
                     </form>
-
-
                 </div>
             </div>
         </div>
@@ -104,3 +106,23 @@
 </div>
 </body>
 </html>
+<script>
+    fetch('/handleRoleSelection', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': '{{ csrf_token() }}', // CSRF token for Laravel
+    },
+    body: JSON.stringify({
+        role: selectedRole // selectedRole is the role chosen by the user
+    })
+})
+.then(response => response.json())
+.then(data => {
+    // Handle response
+})
+.catch(error => {
+    console.error('Error:', error);
+});
+
+</script>
