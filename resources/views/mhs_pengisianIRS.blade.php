@@ -89,7 +89,7 @@
         }
 
         .card-body {
-            overflow-x: auto; /* Agar tabel tidak keluar dari card */
+            /* overflow-x: auto; Agar tabel tidak keluar dari card */
             padding: 15px; /* Tambahkan padding agar terlihat rapi */
             width: auto; /* Sesuaikan lebar dengan konten */
             max-width: 100%; /* Pastikan tidak melebihi layar */
@@ -100,7 +100,7 @@
         .card {
             margin: 5px; /* Berikan margin 10px di sekeliling card */
             width: auto; /* Pastikan mengikuti ukuran konten */
-            max-width: 100%; /* Agar tidak melampaui lebar layar */
+            max-width: 90%; /* Agar tidak melampaui lebar layar */
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan sedikit bayangan untuk estetika */
         }
         /* Styling untuk DataTables */

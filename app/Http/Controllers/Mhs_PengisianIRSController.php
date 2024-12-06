@@ -351,8 +351,40 @@ class Mhs_PengisianIRSController extends Controller
     }
 }
 
-// Method to check if the student's schedule conflicts with an existing one
 private function cekJadwalBertabrakan($nim, $id_jadwal)
+{
+    $selectedJadwal = DB::table('jadwal_kuliah')
+        ->where('id_jadwal', $id_jadwal)
+        ->first();
+
+    if (!$selectedJadwal) {
+        return false; // Jadwal tidak ditemukan
+    }
+
+    // Cek kapasitas
+    $kuotaTerisi = DB::table('irs')
+        ->where('id_jadwal', $id_jadwal)
+        ->count();
+
+    if ($kuotaTerisi >= $selectedJadwal->kuota) {
+        return true; // Kuota penuh
+    }
+
+    // Cek tumpang tindih waktu
+    if ($this->cekTumpangTindihWaktu($nim, $selectedJadwal)) {
+        return true;
+    }
+
+    // Cek kode matkul
+    if ($this->cekKodeMatkulSama($nim, $selectedJadwal->kode_matkul)) {
+        return true;
+    }
+
+    return false; // Tidak ada konflik jadwal
+}
+
+// Method to check if the student's schedule conflicts with an existing one
+private function cekTumpangTindihWaktu($nim, $id_jadwal)
 {
     $selectedJadwal = DB::table('jadwal_kuliah')
         ->where('id_jadwal', $id_jadwal)
@@ -367,6 +399,7 @@ private function cekJadwalBertabrakan($nim, $id_jadwal)
     $existingJadwal = DB::table('irs')
         ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
         ->where('irs.nim', $nim)
+        // ->where('jadwal_kuliah.kode_matkul', $selectedJadwal->kode_matkul) // Tambahkan kondisi untuk kode matkul
         ->where('jadwal_kuliah.hari', $selectedJadwal->hari)
         ->select('jadwal_kuliah.jam_mulai', 'jadwal_kuliah.jam_selesai')
         ->get();
@@ -390,7 +423,15 @@ private function cekJadwalBertabrakan($nim, $id_jadwal)
     return false; // Tidak ada konflik jadwal
 }
 
-
+private function cekKodeMatkulSama($nim, $kodeMatkul)
+{
+    // Cek apakah mahasiswa sudah mengambil mata kuliah dengan kode matkul yang sama
+    return DB::table('irs')
+        ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+        ->where('irs.nim', $nim)
+        ->where('jadwal_kuliah.kode_matkul', $kodeMatkul)
+        ->exists();
+}
 
 private function hitungMaxSks($ipsLalu)
 {
