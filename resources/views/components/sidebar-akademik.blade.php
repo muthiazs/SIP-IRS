@@ -1,6 +1,3 @@
-@php
-    use Illuminate\Support\Facades\Route;
-@endphp
 <div class="sidebar container">
     <div class="sidebar p-4 text-white">
         <div class="text-center mb-4">
@@ -14,14 +11,22 @@
         </div>
     
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="/dashboardAkademik" class="nav-link {{ Route::is('dashboardAkademik') ? 'active' : '' }} rounded d-flex align-items-center">
+            <a href="/dashboardAkademik" class="nav-link active rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
-            <a href="/bak_PembagianRuang" class="nav-link {{ Route::is('bak_PembagianRuang') ? 'active' : '' }} rounded d-flex align-items-center">
-                <span class="material-icons me-3">description</span>
-                Pembagian Ruang
-            </a>
+            <div class="nav-item">
+                <a href="/bak_PembagianRuang" class="nav-link rounded d-flex align-items-center toggle-submenu">
+                    <span class="material-icons me-3">description</span>
+                    Pembagian Ruang
+                </a>
+                <ul class="submenu">
+                    <li><a href="/bak_PembagianRuang" class="nav-link">Atur Ruang</a></li>
+                    <li><a href="/bak_CekStatusRuang" class="nav-link">Cek Ruang</a></li>
+                    <li><a href="/bak_UpdateDeleteRuang" class="nav-link">Edit Ruang</a></li>
+                    <li><a href="/bak_CreateRuang" class="nav-link">Tambahkan Ruang</a></li>
+                </ul>
+            </div>
         </nav>
     
         <!-- Logout Button -->
