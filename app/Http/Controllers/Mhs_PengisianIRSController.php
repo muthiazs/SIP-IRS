@@ -113,6 +113,7 @@ class Mhs_PengisianIRSController extends Controller
                 ->where('irs.status', 'draft')
                 ->exists();
 
+
             // Simpan status
             $jadwalStatus[$jadwal->id_jadwal] = [
                 'sudah_diambil_jadwal' => $sudahDiambilJadwal,
