@@ -10,6 +10,7 @@ use App\Models\Mahasiswa;  // Add this line to import the PeriodeAkademik model
 use App\Models\Matakuliah;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Carbon;
 
 
 
@@ -93,6 +94,7 @@ class Mhs_PengisianIRSController extends Controller
             ->where('jadwal_kuliah.kode_matkul', $jadwal->kode_matkul)
             ->where('irs.status', 'draft')
             ->exists();
+
 
             // Simpan status
             $jadwalStatus[$jadwal->id_jadwal] = [
@@ -340,6 +342,8 @@ class Mhs_PengisianIRSController extends Controller
     //     return redirect()->route('mhs_pengisianIRS')->with('success', 'Jadwal berhasil diambil.');
     // }
 
+
+
     public function cekStatusPengambilan($id_jadwal)
 {
     $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
@@ -552,11 +556,19 @@ public function batalkanJadwal(Request $request)
 
     return view('mhs_draftIRS', compact('mahasiswa', 'rancanganIRSSementara'));
 }
-
-
-
         public function newIRS()
         {
+            // Ambil periode akademik terbaru berdasarkan id_periode
+                $periodeTerbaru = DB::table('periode_akademik')
+                ->orderBy('id_periode', 'DESC') // Mengambil periode akademik berdasarkan id_periode terbaru
+                ->first();
+            // dump($periodeTerbaru);
+
+            // Pastikan periode akademik terbaru ditemukan
+            if (!$periodeTerbaru) {
+                return view('dashboardMahasiswa', compact('mahasiswa', 'masaIRS'));
+            }
+
                 // Fetch mahasiswa data
             $mahasiswa = DB::table('mahasiswa')
             ->join('users', 'mahasiswa.id_user', '=', 'users.id')
@@ -573,8 +585,20 @@ public function batalkanJadwal(Request $request)
             ) 
             ->first();
 
+            // Ambil masa IRS berdasarkan periode akademik terbaru dan rentang waktu
+            $fetchPeriodeISIIRS = DB::table('kalender_akademik')
+            ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+            ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) // Menggunakan periode akademik terbaru
+            ->where('kalender_akademik.kode_kegiatan','=','isiIRS')
+            ->select(
+                'kalender_akademik.tanggal_mulai', // Menggunakan nama kolom yang valid
+                'kalender_akademik.tanggal_selesai', // Menggunakan nama kolom yang valid
+                'kalender_akademik.nama_kegiatan' // Untuk kebutuhan tambahan
+            )
+            ->first();
+
             // Pass both daftarMk and mahasiswa data to the view
-            return view('mhs_newIRS', compact('mahasiswa'));
+            return view('mhs_newIRS', compact('mahasiswa','fetchPeriodeISIIRS'));
         }
 
         public function rrencanaStudi()
