@@ -748,11 +748,11 @@ public function ambilJadwal(Request $request)
             // Ambil mahasiswa dengan prioritas terendah
             $mahasiswaTerpental = IRS::where('id_jadwal', $request->id_jadwal)
                 ->orderBy('prioritas', 'desc')
-                ->orderBy('created_at', 'desc')
+                ->orderByDesc('created_at')
                 ->first();
 
             // Periksa apakah mahasiswa baru lebih rendah prioritas
-            if ($mahasiswaTerpental->prioritas < $prioritas) {
+            if ($mahasiswaTerpental->prioritas <= $prioritas) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Kuota penuh, Anda tidak memenuhi prioritas.',
