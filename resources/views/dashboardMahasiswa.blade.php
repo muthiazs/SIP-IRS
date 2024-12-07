@@ -34,7 +34,6 @@
             <div class="alert alert-success" role="alert">
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="fw-medium">Periode Pengisian IRS: {{$fetchPeriodeISIIRS->tanggal_mulai}} - {{$fetchPeriodeISIIRS->tanggal_selesai}}</span>
-                    <!-- <span class="fw-medium"> $data['semester']['period'] </span> -->
                 </div>
             </div>
 
@@ -69,7 +68,7 @@
                             <span class="material-icons text-primary me-2">calendar_today</span>
                             <h5 class="mb-0">Kalender Akademik</h5>
                         </div>
-                        <a href="#" class="btn btn-outline-primary">Lihat Kalender</a>
+                        <a href="{{ route('kalender_akademik') }}" class="btn btn-outline-primary">Lihat Kalender</a>
                     </div>
                 </div>
                 <div class="col-md-6">

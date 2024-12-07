@@ -10,27 +10,75 @@ use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
-    // Method untuk Dashboard Dosen
     public function index()
-    {
-        $dosen = DB::table('dosen')
-                    ->join('users', 'dosen.id_user', '=', 'users.id')
-                    ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                    ->crossJoin('periode_akademik')
-                    ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
-                    ->select(
-                        'dosen.nip',                    // Pastikan NIP sudah dipilih
-                        'dosen.nama as dosen_nama',
-                        'program_studi.nama as prodi_nama',
-                        'dosen.prodi_id',
-                        'users.username',
-                        'periode_akademik.nama_periode'
-                    )
-                    ->where('dosen.id_user', '=', auth()->id())
-                    ->first();
-        // dd($dosen);
-        return view('dashboardDosen', compact('dosen'));
+{
+    // Ambil data dosen
+    $dosen = DB::table('dosen')
+        ->join('users', 'dosen.id_user', '=', 'users.id')
+        ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+        ->crossJoin('periode_akademik')
+        ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
+        ->select(
+            'dosen.nip',
+            'dosen.nama as dosen_nama',
+            'program_studi.nama as prodi_nama',
+            'dosen.prodi_id',
+            'users.username',
+            'periode_akademik.nama_periode'
+        )
+        ->where('dosen.id_user', '=', auth()->id())
+        ->first();
+
+    // Ambil periode akademik terbaru
+    $periodeTerbaru = DB::table('periode_akademik')
+        ->orderBy('id_periode', 'desc')
+        ->first();
+
+
+    // Ambil masa IRS berdasarkan periode akademik terbaru dan rentang waktu
+    $fetchPeriodeSetujuIRS = DB::table('kalender_akademik')
+    ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+    ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) // Menggunakan periode akademik terbaru
+    ->where('kalender_akademik.kode_kegiatan','=','setujuiIRS')
+    ->select(
+        'kalender_akademik.tanggal_mulai', // Menggunakan nama kolom yang valid
+        'kalender_akademik.tanggal_selesai', // Menggunakan nama kolom yang valid
+        'kalender_akademik.nama_kegiatan' // Untuk kebutuhan tambahan
+    )
+    ->first();
+
+    // Cek apakah data periode penyetujuan IRS ada
+    if (!$fetchPeriodeSetujuIRS) {
+        // Jika data tidak ditemukan, beri nilai default
+        $fetchPeriodeSetujuIRS = (object)[
+            'tanggal_mulai' => 'Data tidak ditemukan',
+            'tanggal_selesai' => 'Data tidak ditemukan',
+            'nama_kegiatan' => 'Data tidak ditemukan'
+        ];
     }
+
+    // Ambil masa penyetujuan IRS yang aktif saat ini
+    $currentDate = now();
+    $periodeIRS = DB::table('kalender_akademik')
+        ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+        ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode)
+        ->where(function ($query) use ($currentDate) {
+            $query->where('kode_kegiatan', '=', 'setujuIRS')  // Gunakan '=' untuk mencocokkan 'setujuIRS'
+                ->whereDate('tanggal_mulai', '<=', $currentDate->toDateString())
+                ->whereDate('tanggal_selesai', '>=', $currentDate->toDateString());
+        })
+        ->pluck('kalender_akademik.nama_kegiatan')
+        ->first();
+
+    // Tetapkan nilai masa IRS berdasarkan hasil query
+    $masaIRS = $periodeIRS ?? null;
+
+    // Kirim data ke view
+    return view('dashboardDosen', compact('dosen', 'masaIRS', 'fetchPeriodeSetujuIRS'));
+}
+
+
+
 
 
     // Method untuk Dashboard Kaprodi
@@ -137,6 +185,7 @@ class DashboardController extends Controller
         // Kirim data ke view
         return view('dashboardMahasiswa', compact('mahasiswa', 'masaIRS','fetchPeriodeISIIRS',));
     }
+    
     
     
     

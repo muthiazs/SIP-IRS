@@ -4,14 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class PeriodeAkademikSeeder extends Seeder
 {
     public function run()
     {
-         // Ambil tanggal saat ini
-         $currentDate = Carbon::now();
         // Data periode akademik
         $periode = [
             [
@@ -22,10 +19,10 @@ class PeriodeAkademikSeeder extends Seeder
                 'jenis' => 'genap',
             ],
             [
-               'id_periode' => '24251',
+                'id_periode' => '24251',
                 'nama_periode' => 'Semester Akademik 2024/2025 Ganjil',
-                'tahun_mulai' => $currentDate->copy()->addWeeks(2)->toDateTimeString(), // 2 minggu dari sekarang
-                'tahun_selesai' => $currentDate->copy()->addWeeks(3)->toDateTimeString(), // 3 minggu dari sekarang
+                'tahun_mulai' => '2024-12-07 00:00:00', // Manual tanggal mulai
+                'tahun_selesai' => '2025-08-01 23:59:59', // Manual tanggal selesai
                 'jenis' => 'ganjil',
             ]
         ];

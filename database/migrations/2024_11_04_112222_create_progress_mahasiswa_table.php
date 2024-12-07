@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('id_mahasiswa')->constrained('mahasiswa', 'id_mahasiswa');
             $table->integer('semester_studi');
             $table->float('IPk');
-            $table->float('IPs_lalu');
+            $table->float('IPs_lalu', 8, 2);
             $table->integer('SKSk');
             $table->string('status')->default('aktif');
             $table->timestamp('created_at');

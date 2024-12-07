@@ -52,6 +52,13 @@ class ProdiSeeder extends Seeder
                 'id_fak' => 1,
                 'created_at' => now(),
             ],
+            [
+                'id_prodi' => 7,
+                'nama' => 'Bioteknologi',
+                'kaprodi_id' => 20, 
+                'id_fak' => 1,
+                'created_at' => now(),
+            ],
         ];
 
         DB::table('program_studi')->insert($prodis);

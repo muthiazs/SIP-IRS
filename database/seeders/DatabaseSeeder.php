@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use UpdatePeriodeAkademik;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,7 +26,9 @@ class DatabaseSeeder extends Seeder
             PegawaiSeeder::class,
             JadwalKuliahSeeder::class,
             IrsSeeder::class,
-            ProgressMhsSeeder::class
+            ProgressMhsSeeder::class,
+            KalenderAkademikSeeder::class,
+            TambahJadwalSeeder::class
         ]);
     }
 }

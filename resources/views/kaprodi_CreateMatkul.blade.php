@@ -54,7 +54,7 @@
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar">
-            <x-sidebar-akademik :akademik="$akademik"></x-sidebar-akademik>
+            <x-sidebar-kaprodi :kaprodi="$kaprodi"></x-sidebar-kaprodi>
         </div>
 
         <!-- Main Content -->
@@ -69,15 +69,19 @@
                 <div class="card-body d-flex flex-column">
                     <!-- Form Input Ruang -->
                     <div class="mt-4">
-                    <form id="formInputRuang" action="{{ route('create.store') }}" method="POST">
-                        @csrf <!-- Token CSRF untuk keamanan -->
+                    <form id="formInputRuang" action="{{ route('matkul.store') }}" method="POST">
+                        @csrf
                         <div class="mb-3">
-                            <label for="inputNamaRuang" class="form-label">Nama Ruang</label>
-                            <input type="text" class="form-control" name="nama" id="inputNamaRuang" placeholder="Masukkan Nama Ruang">
+                            <label for="kodeMatkul" class="form-label">Kode Mata Kuliah</label>
+                            <input type="text" class="form-control" name="kode_matkul" id="kodeMatkul" placeholder="Masukkan Kode Mata Kuliah" required>
                         </div>
                         <div class="mb-3">
-                            <label for="inputKapasitasRuang" class="form-label">Kapasitas Ruang</label>
-                            <input type="number" class="form-control" name="kapasitas" id="inputKapasitasRuang" placeholder="Masukkan Kapasitas Ruang">
+                            <label for="namaMatkul" class="form-label">Nama Mata Kuliah</label>
+                            <input type="text" class="form-control" name="nama_matkul" id="namaMatkul" placeholder="Masukkan Nama Mata Kuliah" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sks" class="form-label">SKS</label>
+                            <input type="number" class="form-control" name="sks" id="sks" placeholder="Masukkan SKS" required>
                         </div>
                         <button type="submit" class="btn btn-cyan w-100">Simpan</button>
                     </form>
@@ -92,7 +96,46 @@
 
     <!-- Validation Logic -->
     <script>
-        
+        document.getElementById('formInputRuang').addEventListener('submit', function (e) {
+            
+            const kodeMatkul = document.getElementById('kodeMatkul').value;
+            const namaMatkul = document.getElementById('namaMatkul').value;
+            const sks = parseInt(document.getElementById('sks').value);
+            const semester = document.getElementById('semester').value;
+
+            const kodePattern = /^(PAIK|UUW)\d{4}$/;
+
+            // Validasi Kode Mata Kuliah
+            if (!kodePattern.test(kodeMatkul)) {
+                e.preventDefault();
+                toastr.error('Kode mata kuliah harus diawali "PAIK" atau "UUW" dan diikuti 4 angka.');
+                return;
+            }
+
+            // Validasi Nama Mata Kuliah
+            if (namaMatkul.length > 50) {
+                e.preventDefault();
+                toastr.error('Nama mata kuliah tidak boleh lebih dari 50 karakter.');
+                return;
+            }
+
+            // Validasi SKS
+            if (isNaN(sks) || sks < 1 || sks > 8) {
+                e.preventDefault();
+                toastr.error('SKS harus berupa angka antara 1-8.');
+                return;
+            }
+
+            // Validasi Semester
+            if (!['1', '2', '3', '4', '5', '6', 'lainnya'].includes(semester)) {
+                e.preventDefault();
+                error('Semester tidak valid.');
+                return;
+            }
+
+            // Jika validasi lolos, lanjutkan submit
+            success('Validasi berhasil, data disimpan!');
+        });
     </script>
 
 </body>

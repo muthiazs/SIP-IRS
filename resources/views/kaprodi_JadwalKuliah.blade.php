@@ -65,16 +65,6 @@
     <div class="main-content flex-grow-1 p-4">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1 class="fs-3 fw-bold">Selamat Datang {{ $kaprodi->username }} 👋</h1>
-                <p class="text-muted">Semester kaprodi Sekarang</p>
-            </div>
-            <div class="position-relative">
-                <button class="btn btn-teal rounded-circle p-2">
-                    <span class="material-icons">notifications</span>
-                </button>
-                <span class="notification-badge"></span>
-            </div>
         </div>
 
         <!-- Progress Cards -->

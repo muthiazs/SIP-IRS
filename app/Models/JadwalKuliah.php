@@ -20,8 +20,13 @@ class JadwalKuliah extends Model
         'semester',
         'id_periode',
     ];
+    protected $primaryKey = 'id_jadwal';
+    protected $keyType = 'int';
+    public $incrementing = true;
+
 
     // Relasi ke Matakuliah
+    protected $with = ['matakuliah'];
     public function matakuliah()
     {
         return $this->belongsTo(Matakuliah::class, 'kode_matkul', 'kode_matkul');
