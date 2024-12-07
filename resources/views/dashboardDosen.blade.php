@@ -104,9 +104,12 @@
                             <span class="material-icons text-teal me-2" style="color: blue">calendar_today</span>
                             <h3 class="fs-5 fw-semibold mb-0">Kalender Akademik</h3>
                         </div>
-                        <button class="btn text-teal">
-                            <span class="material-icons">arrow_forward</span>
-                        </button>
+                        <div class="d-flex">
+                            <a href="{{ route('kalender_akademik') }}" class="btn btn-outline-primary me-2">Lihat Kalender</a>
+                            <button class="btn text-teal">
+                                <span class="material-icons">arrow_forward</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

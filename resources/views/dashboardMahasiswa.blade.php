@@ -69,7 +69,7 @@
                             <span class="material-icons text-primary me-2">calendar_today</span>
                             <h5 class="mb-0">Kalender Akademik</h5>
                         </div>
-                        <a href="#" class="btn btn-outline-primary">Lihat Kalender</a>
+                        <a href="{{ route('kalender_akademik') }}" class="btn btn-outline-primary">Lihat Kalender</a>
                     </div>
                 </div>
                 <div class="col-md-6">

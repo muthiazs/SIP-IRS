@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BAK_PembagianruangController;
 use App\Http\Controllers\Kaprodi_JadwalKuliahControler;
 use App\Http\Controllers\KaprodiControler;
+use App\Http\Controllers\KalenderAkademikController;
 use App\Http\Controllers\IRSController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\Mhs_PengisianIRSController;
@@ -166,7 +167,9 @@ Route::middleware('auth')->group(function () {
     Route::get('dosen/print-irs-pdf/{nim}', [DosenController::class, 'printIRSPDF'])->name('dosen.print_irs_pdf');
 
     Route::post('/approve-irs', [DosenController::class, 'approveSelectedIRS'])->name('approve.selected.irs');
-
+    
+    //controller kalender akademik
+    Route::get('/kalender_akademik', [KalenderAkademikController::class, 'index'])->name('kalender_akademik');
 
 
 });
