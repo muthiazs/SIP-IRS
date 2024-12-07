@@ -45,13 +45,26 @@
         .d-flex.gap-3 {
             gap: 20px;
         }
+        .d-flex.justify-content-between {
+            align-items: center;
+        }
+        .btn-teal {
+            width: auto;
+            height: 45px;
+            background-color: #028391;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            padding: 0 20px;
+        }
+
     </style>
 </head>
 <body class="bg-light">
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar">
-            <x-sidebar-akademik :akademik="$akademik"></x-sidebar-akademik>
+            <x-sidebar-kaprodi :kaprodi="$kaprodi"></x-sidebar-kaprodi>
         </div>
 
         <!-- Main Content -->
@@ -62,44 +75,51 @@
 
             <!-- Progress Cards -->
             <div class="card shadow-sm">
-                <h5 class="card-header bg-teal text-white text-center">Tinjau dan Hapus Ruang Kelas</h5>
+                <h5 class="card-header bg-teal text-white text-center">Tinjau Mata Kuliah</h5>
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex gap-3 text-center">
-                        <!-- Dropdown Prodi -->
-                        <!-- Dropdown Gedung -->
                         <div>
-                            <div class="fw-bold">Gedung</div>
+                            <div class="fw-bold">Semester</div>
                             <div class="dropdown">
                                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuGedung" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Pilih Gedung
+                                    Pilih Semester
                                 </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuGedung">
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">A</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">B</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">C</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">D</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">E</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">F</a></li>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuSemester">
+                                    <li><a class="dropdown-item dropdown-item-semester" href="#">1</a></li>
+                                    <li><a class="dropdown-item dropdown-item-semester" href="#">2</a></li>
+                                    <li><a class="dropdown-item dropdown-item-semester" href="#">3</a></li>
+                                    <li><a class="dropdown-item dropdown-item-semester" href="#">4</a></li>
+                                    <li><a class="dropdown-item dropdown-item-semester" href="#">5</a></li>
+                                    <li><a class="dropdown-item dropdown-item-semester" href="#">6</a></li>
+                                    <li><a class="dropdown-item dropdown-item-semester" href="#">Lainnya</a></li>
                                 </ul>
                             </div>
+                            <button class="btn btn-teal fw-bold" onclick="window.location.href='{{ route('kaprodi_CreateMatkul') }}'">+ Tambah Mata Kuliah</button>
                         </div>
                     </div>
-                    <table class="table">
+                    <table class="table table-bordered mt-4">
                         <thead>
                             <tr>
-                                <th>Nama Ruang</th>
-                                <th>Kapasitas</th>
+                                <th>No</th>
+                                <th>Kode Mata Kuliah</th>
+                                <th>Nama Mata Kuliah</th>
+                                <th>SKS</th>
+                                <th>Semester</th>
+                                <th>Dosen Pembimbing</th>
                                 <th>Aksi</th>
+                            </tr>
                         </thead>
-                        <tbody>
-                            @foreach($tabelRuang as $ruang)
+                        <tbody id="mataKuliah">
+                            @foreach($mataKuliah as $index => $data)
                             <tr>
-                                <td>{{ $ruang->nama }}</td>
-                                <td>{{ $ruang->kapasitas }}</td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $data->kode_matkul }}</td>
+                                <td>{{ $data->nama_matkul }}</td>
+                                <td>{{ $data->sks }}</td>
+                                <td>{{ $data->sks }}</td>
+                                <td>{{ $data->semester }}</td>
                                 <td>
-                                    <a href="{{ route('update.ruang', ['nama' => $ruang->nama]) }}" class="btn btn-primary">
-                                        Aksi
-                                    </a>
+                                    <button class="btn btn-primary mb-2" onclick="window.location.href='{{ route('kaprodi_UpdateDeleteMatkul') }}'">Aksi</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -138,7 +158,7 @@
         });
     
         function filterTabelByGedung(gedung) {
-            $('#tabelRuang tr').each(function() {
+            $('#statusRuang tr').each(function() {
                 if ($(this).find('td').length) { // Skip header row
                     const namaRuang = $(this).find('td:eq(1)').text().trim();
                     
