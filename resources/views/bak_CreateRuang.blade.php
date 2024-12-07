@@ -80,7 +80,6 @@
                             <input type="number" class="form-control" name="kapasitas" id="inputKapasitasRuang" placeholder="Masukkan Kapasitas Ruang">
                         </div>
                         <button type="submit" class="btn btn-cyan w-100">Simpan</button>
-                        <button type="submit" class="btn btn-cyan w-100">Hapus</button>
                     </form>
                     </div>
                 </div>
