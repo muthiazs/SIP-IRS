@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIP-IRS Pengisian IRS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -259,16 +260,16 @@
                                     <td>
                                         <div class="button-group-tabel">
                                             @if (!$jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_jadwal'] && !$jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_matkul'])
-                                            <form class="ambil-jadwal-form" data-sks="{{ $jadwal->sks }}">
-                                                @csrf
-                                                <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
-                                                <input type="hidden" name="status" value="draft">
-                                                <button type="submit" 
-                                                        class="btn btn-primary mb-2 rounded-3 ambil-btn"
-                                                        style="color:white; background-color: #028391; border-color: #028391; font-size: 15px; padding: 5px 10px;">
-                                                    Ambil
-                                                </button>
-                                            </form>                                            
+                                                <form class="ambil-jadwal-form">
+                                                    @csrf
+                                                    <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
+                                                    <input type="hidden" name="status" value="draft">
+                                                    <button type="submit" 
+                                                            class="btn btn-primary mb-2 rounded-3 ambil-btn"
+                                                            style="color:white; background-color: #028391; border-color: #028391; font-size: 15px; padding: 5px 10px;">
+                                                        Ambil
+                                                    </button>
+                                                </form>
                                             @elseif ($jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_matkul'])
                                                 <button class="btn btn-secondary mb-2 rounded-3"
                                                         onclick="swal('Mata Kuliah Sudah Diambil', 'Anda tidak dapat mengambil mata kuliah yang sama lebih dari satu kali.', 'warning')"
@@ -282,7 +283,6 @@
                                                 </button>
                                             @endif
                                         </div>
-                                        
                                     </td>
                                 </tr>
                                 @endforeach
@@ -352,63 +352,8 @@
     </script>
     <!-- Add JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const forms = document.querySelectorAll('.ambil-jadwal-form');
-            
-            forms.forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    const formData = new FormData(this);
-                    const submitButton = this.querySelector('.ambil-btn');
-                    const jadwalId = submitButton.getAttribute('data-jadwal-id');
-                    
-                    submitButton.disabled = true;
-                    
-                    fetch('{{ route('ambilJadwal') }}', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Tampilkan notifikasi sukses
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: data.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(() => {
-                                // Reload halaman setelah sukses
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: data.message
-                            });
-                            submitButton.disabled = false;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Terjadi kesalahan pada server'
-                        });
-                        submitButton.disabled = false;
-                    });
-                });
-            });
-        });
-        </script>
+    
+    
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -451,6 +396,85 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('.ambil-jadwal-form');
+        
+
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                console.log('max_sks from PHP:', @json($maksimalSKS));
+                console.log('total_sks from PHP:', @json($totalSKSTerpilih));
+                console.log('current_sks from PHP:', @json($sksMatkul));
+
+                // Pastikan data total_sks, max_sks, dan current_sks diambil dari Blade ke JS
+                const total_sks = @json($totalSKSTerpilih);
+                const max_sks = @json($maksimalSKS);
+                const current_sks = @json($sksMatkul);
+                const formData = new FormData(this);
+                const submitButton = this.querySelector('.ambil-btn');
+                submitButton.disabled = true;
+
+                fetch('{{ route('ambilJadwal') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Received data:', data); // Log data yang diterima untuk debugging
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        // Penanganan error jika melebihi batas SKS
+                        if (total_sks + current_sks > max_sks) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Melebihi Batas SKS',
+                                html: `
+                                    Anda hanya diperbolehkan mengambil maksimal ${max_sks} SKS berdasarkan IPS Anda.<br>
+                                    Total SKS saat ini: ${total_sks}<br>
+                                    SKS yang akan diambil: ${current_sks}
+                                `,
+                                confirmButtonText: 'Mengerti'
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.message
+                            });
+                        }
+
+                        submitButton.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Terjadi kesalahan pada server'
+                    });
+                    submitButton.disabled = false;
+                });
+            });
+        });
+    });
+</script>
+
 
 {{-- Menangani searching --}}
 <script>
@@ -475,84 +499,6 @@
         });
     });
 </script>
-
-<script>
-    // Tombol untuk filter semester genap
-    document.getElementById('filterGenap').addEventListener('click', function () {
-        const rows = document.querySelectorAll('#irsTable tr');
-        rows.forEach(row => {
-            const semester = parseInt(row.cells[3].textContent.trim()); // Ambil nilai semester dari kolom ke-4
-            if (semester % 2 === 0) { // Jika semester genap
-                row.style.display = ''; // Tampilkan baris
-            } else {
-                row.style.display = 'none'; // Sembunyikan baris
-            }
-        });
-    });
-
-    // Tombol untuk filter semester ganjil
-    document.getElementById('filterGanjil').addEventListener('click', function () {
-        const rows = document.querySelectorAll('#irsTable tr');
-        rows.forEach(row => {
-            const semester = parseInt(row.cells[3].textContent.trim()); // Ambil nilai semester dari kolom ke-4
-            if (semester % 2 !== 0) { // Jika semester ganjil
-                row.style.display = ''; // Tampilkan baris
-            } else {
-                row.style.display = 'none'; // Sembunyikan baris
-            }
-        });
-    });
-
-    // Tombol untuk reset filter
-    document.getElementById('resetFilter').addEventListener('click', function () {
-        const rows = document.querySelectorAll('#irsTable tr');
-        rows.forEach(row => {
-            row.style.display = ''; // Tampilkan semua baris
-        });
-    });
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const maksimalSKS = {{ $maksimalSKS }};
-    const totalSKSTerpilih = {{ $totalSKSTerpilih }};
-
-    // Fungsi untuk validasi SKS
-    function validateSKS(selectedSKS, callback) {
-        if (selectedSKS + totalSKSTerpilih > maksimalSKS) {
-            Swal.fire({
-                icon: 'error',
-                title: 'SKS Melebihi Batas',
-                text: `Anda hanya boleh mengambil maksimal ${maksimalSKS} SKS.`,
-                confirmButtonColor: '#d33',
-            });
-            return false;
-        }
-        callback();
-    }
-
-    // Attach event listener ke tombol "Ambil"
-    document.querySelectorAll('.ambil-btn').forEach(function (button) {
-        button.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            // Ambil SKS dari data-sks di elemen form
-            const selectedSKS = parseInt(this.closest('form').dataset.sks);
-
-            // Validasi sebelum submit form
-            validateSKS(selectedSKS, () => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil!',
-                    text: 'Jadwal berhasil dipilih!',
-                    confirmButtonColor: '#028391',
-                }).then(() => {
-                    this.closest('form').submit();
-                });
-            });
-        });
-    });
-});
-
 </script>
 <div class="d-flex justify-content-center mt-3">
     <nav aria-label="Page navigation">

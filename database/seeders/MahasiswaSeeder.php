@@ -16,7 +16,7 @@ class MahasiswaSeeder extends Seeder
                 'nama' => 'Muthia Zhafira Sahnah',
                 'semester' => 3,
                 'id_prodi' => 1,  // Informatika
-                'id_dosen' => 20,  // Bu Dinar
+                'id_dosen' => 3,  // Bu Dinar
                 'angkatan' => '2023',
                 'created_at' => now(),
             ],
@@ -26,7 +26,7 @@ class MahasiswaSeeder extends Seeder
                 'nama' => 'Tirza Aurellia Wijaya',
                 'semester' => 3,
                 'id_prodi' => 1,  // Informatika
-                'id_dosen' => 20,  // Bu Dinar
+                'id_dosen' => 3,  // Bu Dinar
                 'angkatan' => '2023',
                 'created_at' => now(),
             ],
@@ -36,7 +36,7 @@ class MahasiswaSeeder extends Seeder
                 'nama' => 'Nadiva Aulia Inayah',
                 'semester' => 5,
                 'id_prodi' => 1,  // Informatika
-                'id_dosen' => 20,  // Bu Dinar
+                'id_dosen' => 3,  // Bu Dinar
                 'angkatan' => '2022',
                 'created_at' => now(),
             ],
@@ -46,7 +46,7 @@ class MahasiswaSeeder extends Seeder
                 'nama' => 'Alya Safina',
                 'semester' => 5,
                 'id_prodi' => 1,  // Informatika
-                'id_dosen' => 20,  // Bu Dinar
+                'id_dosen' => 3,  // Bu Dinar
                 'angkatan' => '2022',
                 'created_at' => now(),
             ]

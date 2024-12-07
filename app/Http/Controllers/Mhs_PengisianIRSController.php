@@ -11,12 +11,11 @@ use App\Models\Matakuliah;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
-
-
+use PhpParser\Node\Expr\Cast\Double;
 
 class Mhs_PengisianIRSController extends Controller
 {
-    public function indexPilihJadwal()
+    public function indexPilihJadwal(Request $request)
     {
         // Mengambil data periode akademik yang sedang berlangsung
         $Periode_sekarang = DB::table('periode_akademik')
@@ -58,7 +57,10 @@ class Mhs_PengisianIRSController extends Controller
         )
         ->get();
 
-
+        // Ambil SKS mata kuliah yang akan dipilih
+        $sksMatkul = JadwalKuliah::join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+            ->where('jadwal_kuliah.id_jadwal', $request->id_jadwal)
+            ->value('matakuliah.sks');
         // Mengambil data mahasiswa yang sedang login
         $mahasiswa = DB::table('mahasiswa')
             ->join('users', 'mahasiswa.id_user', '=', 'users.id')
@@ -85,7 +87,7 @@ class Mhs_PengisianIRSController extends Controller
             return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
         }
 
-        // Hitung maksimal SKS berdasarkan IPS
+        // Hitung maksimal SKS berdasarkan ips
         $maksimalSKS = $this->hitungMaksimalSKS(
             $mahasiswa->semester_studi, 
             $mahasiswa->IPs_lalu
@@ -121,7 +123,9 @@ class Mhs_PengisianIRSController extends Controller
             ];
         }
 
-        return view('mhs_pengisianIRS', compact('Periode_sekarang', 'jadwalKuliah', 'mahasiswa', 'jadwalStatus','maksimalSKS','totalSKSTerpilih'));
+
+
+        return view('mhs_pengisianIRS', compact('Periode_sekarang', 'jadwalKuliah', 'mahasiswa', 'jadwalStatus','maksimalSKS','totalSKSTerpilih','sksMatkul'));
     }
 
     public function konfirmasiIRS(Request $request)
@@ -377,55 +381,102 @@ public function cekStatusPengambilan($id_jadwal)
 
 
 
-    public function ambilJadwal(Request $request)
+public function ambilJadwal(Request $request)
 {
     try {
+        // 1. Dapatkan periode akademik terbaru
         $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
         if (!$periodeAkademik) {
             return response()->json(['success' => false, 'message' => 'Periode akademik tidak ditemukan.'], 404);
         }
 
+        // 2. Cari data mahasiswa berdasarkan ID pengguna yang login
         $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
         if (!$mahasiswa) {
             return response()->json(['success' => false, 'message' => 'Data mahasiswa tidak ditemukan.'], 404);
         }
 
+        // 3. Validasi input request
         $request->validate([
             'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
             'status' => 'required|string|max:255',
         ]);
 
-        // Check for scheduling conflicts
-        $isConflict = $this->cekJadwalBertabrakan($mahasiswa->nim, $request->id_jadwal);
-        if ($isConflict) {
+        // 4. Periksa apakah jadwal bertabrakan dengan jadwal yang sudah diambil
+        if ($this->cekJadwalBertabrakan($mahasiswa->nim, $request->id_jadwal)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Jadwal yang Anda pilih bertabrakan dengan jadwal yang sudah diambil.',
-            ], 409); // Conflict status code
+            ], 409);
         }
 
-        // Insert the schedule into IRS
+        // 5. Hitung maksimal SKS berdasarkan IPS sebelumnya
+        $maksimalSKS = $this->hitungMaksimalSKS($mahasiswa->semester_studi, $mahasiswa->IPs_lalu);
+
+        // 6. Hitung total SKS yang sudah dipilih
+        $totalSKSTerpilih = IRS::join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+            ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+            ->where('irs.nim', $mahasiswa->nim)
+            ->where('irs.status', 'draft')
+            ->sum('matakuliah.sks');
+
+        // 7. Fetch jadwal kuliah dan SKS-nya
+        $jadwalKuliah = JadwalKuliah::join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+            ->where('jadwal_kuliah.id_jadwal', $request->id_jadwal)
+            ->select('jadwal_kuliah.*', 'matakuliah.sks')
+            ->first();
+
+        if (!$jadwalKuliah) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Jadwal kuliah tidak ditemukan atau data bermasalah.',
+            ], 404);
+        }
+
+        // 8. Ambil jumlah SKS mata kuliah yang ingin diambil
+        $sksMatkul = $jadwalKuliah->sks;
+
+        // Log untuk debugging
+        Log::info('Debug SKS', [
+            'id_jadwal' => $request->id_jadwal,
+            'sks_matkul' => $sksMatkul,
+            'total_sks_terpilih' => $totalSKSTerpilih,
+            'maksimal_sks' => $maksimalSKS,
+        ]);
+
+        // 9. Validasi apakah total SKS melebihi batas
+        if ($totalSKSTerpilih + $sksMatkul > $maksimalSKS) {
+            return response()->json([
+                'success' => false,
+                'message' => "Anda hanya diperbolehkan mengambil maksimal {$maksimalSKS} SKS berdasarkan IPS Anda. Total SKS saat ini: {$totalSKSTerpilih}, SKS yang akan diambil: {$sksMatkul}",
+            ], 400);
+        }
+
+        // 10. Masukkan jadwal ke IRS
         IRS::create([
             'nim' => $mahasiswa->nim,
-            'semester' => $mahasiswa->semester,
+            'semester' => $mahasiswa->semester_studi,
             'id_jadwal' => $request->id_jadwal,
             'status' => $request->status,
         ]);
 
+        // 11. Berikan respons berhasil
         return response()->json([
             'success' => true,
-            'message' => 'Jadwal berhasil diambil',
+            'message' => 'Jadwal berhasil diambil.',
         ]);
     } catch (\Exception $e) {
-        // Log the exception for debugging purposes
+        // 12. Log error untuk debugging
         Log::error("Error in ambilJadwal: " . $e->getMessage());
 
+        // 13. Berikan respons kesalahan server
         return response()->json([
             'success' => false,
-            'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            'message' => 'Terjadi kesalahan pada server. Silakan coba lagi.',
         ], 500);
     }
 }
+
 
 //Method to check if the student's schedule conflicts with an existing one
 private function cekJadwalBertabrakan($nim, $id_jadwal)
@@ -477,20 +528,34 @@ private function cekJadwalBertabrakan($nim, $id_jadwal)
 
 
 
-private function hitungMaksimalSKS($semesterStudi, $ipsLalu)
+public function hitungMaksimalSKS($semester_studi, $IPs_lalu)
 {
-    if ($ipsLalu >= 0 && $ipsLalu <= 1) {
-        return 15;  // Maksimal 15 SKS
-    } elseif ($ipsLalu > 1 && $ipsLalu <= 2.5) {
-        return 18;  // Maksimal 18 SKS
-    } elseif ($ipsLalu > 2.5 && $ipsLalu <= 3.5) {
-        return 21;  // Maksimal 21 SKS
-    } elseif ($ipsLalu > 3.5 && $ipsLalu <= 4) {
-        return 24;  // Maksimal 24 SKS
-    } else {
-        return 0;  // Tidak valid
+    if ($semester_studi == 1 || $semester_studi == 2) {
+        // Aturan untuk semester pertama dan kedua
+        if ($IPs_lalu < 2.00) {
+            return 18; // Jika IPS kurang dari 2, maksimal 18 SKS
+        } else {
+            return 20; // Jika IPS >= 2.00, maksimal 20 SKS
+        }
+    } elseif ($semester_studi >= 3) {
+        // Aturan untuk semester ketiga dan seterusnya
+        if ($IPs_lalu < 2.00) {
+            return 18; // IPS < 2, maksimal 18 SKS
+        } elseif ($IPs_lalu >= 2.00 && $IPs_lalu <= 2.49) {
+            return 20; // IPS antara 2.00 - 2.49, maksimal 20 SKS
+        } elseif ($IPs_lalu >= 2.50 && $IPs_lalu <= 2.99) {
+            return 22; // IPS antara 2.50 - 2.99, maksimal 22 SKS
+        } else {
+            return 24; // IPS >= 3.00, maksimal 24 SKS
+        }
     }
+
+    // Default jika tidak ada aturan yang sesuai
+    return 0;
 }
+
+
+
 
 public function batalkanJadwal(Request $request)
 {
