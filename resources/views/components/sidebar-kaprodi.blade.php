@@ -7,6 +7,7 @@
             <div class="profile-img rounded-circle mx-auto mb-3">
                     <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
                 </div>
+                {{-- @dd($kaprodi) --}}
                 <h2 class="fs-4 fw-bold">{{ $kaprodi->dosen_nama }}</h2>
                 <p class="small opacity-75">NIP. {{ $kaprodi->nip }}</p>
                 <p class="small opacity-75">Ketua Program Studi<br>Program Studi S1 {{ $kaprodi->prodi_nama }}<br> Fakultas Sains dan Matematika</p>

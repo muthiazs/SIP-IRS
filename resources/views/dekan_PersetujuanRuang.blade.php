@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+@php
+    use Illuminate\Support\Facades\Session;
+@endphp
 <html lang="en">
 <head>
     <meta charset="UTF-8">

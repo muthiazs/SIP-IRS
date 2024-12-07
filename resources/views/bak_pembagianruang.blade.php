@@ -26,7 +26,7 @@
           color: #ffffff;
       }
       .text-blue {
-          color: #456DDB;
+          color: #6878B1;
       }
       .card-body {
           background-color: #FFF2E5;
@@ -116,7 +116,7 @@
                                   <td>{{ $data->kapasitas }}</td>
                                   <td>
                                       <input type="hidden" name="nama_ruang" value="{{ $data->nama }}">
-                                      <button type="submit" class="btn btn-primary mb-2">Tambah Ruang</button>
+                                      <button type="submit" class="btn btn-blue mb-2">Tambah Ruang</button>
                                   </td>
                               </tr>
                               @endforeach

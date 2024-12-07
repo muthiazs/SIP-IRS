@@ -165,6 +165,8 @@ Route::middleware('auth')->group(function () {
     // Route untuk mengunduh IRS dalam format PDF
     Route::get('dosen/print-irs-pdf/{nim}', [DosenController::class, 'printIRSPDF'])->name('dosen.print_irs_pdf');
 
+    Route::post('/kaprodi/jadwal/store', [KaprodiControler::class, 'storeJadwalKuliah'])->name('jadwal.store');
+
 
 
 
