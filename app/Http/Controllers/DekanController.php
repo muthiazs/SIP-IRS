@@ -50,11 +50,12 @@ class DekanController extends Controller
                         'periode_akademik.nama_periode'
                     )
                     ->first();
+
         $accRuang = DB::table('ruangan')
                     -> join('alokasi_ruangan', 'ruangan.id_ruang', '=', 'alokasi_ruangan.id_ruang')
                     -> join('program_studi', 'alokasi_ruangan.id_prodi', '=', 'program_studi.id_prodi')
                     -> where(
-                        'ruangan.status', '=', 'tersedia'
+                        'ruangan.status', '=', 'diajukan'
                     )
                     -> select(
                         'ruangan.nama as ruang_nama',
@@ -75,7 +76,24 @@ class DekanController extends Controller
         DB::table('ruangan')
         ->where('id_ruang', $ruang->id_ruang)
         ->update([
-            'status' => 'digunakan'
+            'status' => 'telah digunakan'
+        ]);
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Ruangan berhasil disetujui.');
+    }
+
+    public function tolakRuang(Request $request)
+    {
+        $ruang = DB::table('ruangan')
+        ->where('nama', $request->nama_ruang)
+        ->first();
+        // dd($ruang);
+
+        DB::table('ruangan')
+        ->where('id_ruang', $ruang->id_ruang)
+        ->update([
+            'status' => 'tersedia'
         ]);
 
         DB::table('alokasi_ruangan')
@@ -83,7 +101,7 @@ class DekanController extends Controller
         ->delete();
 
         // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('toast_success', 'Ruangan berhasil disetujui.');
+        return redirect()->back()->with('success', 'Persetujuan ditolak.');
     }
 
     public function PersetujuanJadwal()

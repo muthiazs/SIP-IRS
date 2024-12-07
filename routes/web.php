@@ -132,11 +132,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/draftIRS', [Mhs_PengisianIRSController::class, 'draftIRS'])->name('mhs_draftIRS');
     // Route::get('/pengambilanMatkul', [Mhs_PengisianIRSController::class, 'indexAmbilMatkul'])->name('pengambilanMatkul');
     Route::get('/kaprodi_JadwalKuliah', [KaprodiControler::class, 'JadwalKuliah'])->name('kaprodi_JadwalKuliah');
+    Route::get('/kaprodi_CreateMatkul', [KaprodiControler::class, 'CreateMatkul'])->name('kaprodi_CreateMatkul');
+    Route::post('/matkul/store', [KaprodiControler::class, 'store'])->name('matkul.store');
     Route::get('/kaprodi_StatusMahasiswa', [KaprodiControler::class, 'StatusMahasiswa'])->name('kaprodi_StatusMahasiswa');
+    Route::get('/kaprodi_SetMatkul', [KaprodiControler::class, 'setMatkul'])->name('kaprodi_SetMatkul');
+    Route::get('/kaprodi_UpdateDeleteMatkul', [KaprodiControler::class, 'UpdateDeleteMatkul'])->name('kaprodi_UpdateDeleteMatkul');
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
     Route::post('/ruang/acc', [DekanController::class, 'setujuiRuang'])->name('ruang.acc');
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
     Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'indexPembagianRuang'])->name('bak_PembagianRuang');
+    Route::post('/ruang/cancel', [BAK_PembagianruangController::class, 'cancelAlokasiRuang'])->name('cancel.ruang');
     Route::get('/bak_CekStatusRuang', [BAK_PembagianruangController::class, 'indexCekStatusRuang'])->name('bak_CekStatusRuang');
     Route::post('/ruang/store', [BAK_PembagianruangController::class, 'storeRuang'])->name('ruang.store');
     Route::get('/bak_CreateRuang', [BAK_PembagianruangController::class, 'indexCreateRuang'])->name('bak_CreateRuang');

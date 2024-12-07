@@ -15,11 +15,6 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
-     <!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-<!-- DataTables JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <style>
         .btn-teal {
             width: 45px;
@@ -56,7 +51,7 @@
     <div class="d-flex">
         <!-- Sidebar -->
         <div class="sidebar">
-            <x-sidebar-akademik :akademik="$akademik"></x-sidebar-akademik>
+            <x-sidebar-kaprodi :kaprodi="$kaprodi"></x-sidebar-kaprodi>
         </div>
 
         <!-- Main Content -->
@@ -72,17 +67,19 @@
                     <!-- Form Input Ruang -->
                     <div class="mt-4">
                         <form id="formInputRuang" action="{{ route('update.ruang') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id_ruang" value="{{ $ruangan->id_ruang }}">
+                            @csrf <!-- Token CSRF untuk keamanan -->
+                            <input type="hidden" name="id_ruang" id="inputIdRuang" value=""> <!-- Tambahkan input ID hidden -->
+                            
                             <div class="mb-3">
-                                <label for="namaRuang" class="form-label">Nama Ruang</label>
-                                <input type="text" class="form-control" id="namaRuang" name="nama" value="{{ $ruangan->nama }}">
+                                <label for="inputNamaRuang" class="form-label">Nama Ruang</label>
+                                <input type="text" class="form-control" name="nama" id="inputNamaRuang" placeholder="Masukkan Nama Ruang">
                             </div>
                             <div class="mb-3">
-                                <label for="kapasitasRuang" class="form-label">Kapasitas Ruang</label>
-                                <input type="number" class="form-control" id="kapasitasRuang" name="kapasitas" value="{{ $ruangan->kapasitas }}">
+                                <label for="inputKapasitasRuang" class="form-label">Kapasitas Ruang</label>
+                                <input type="number" class="form-control" name="kapasitas" id="inputKapasitasRuang" placeholder="Masukkan Kapasitas Ruang">
                             </div>
                             <button type="submit" class="btn btn-cyan w-100">Simpan</button>
+                            <button type="button" class="btn btn-danger w-100 mt-2" onclick="hapusRuang('{{ $data->id_ruang }}')">Hapus Ruang</button>
                         </form>
                     </div>
                 </div>
@@ -100,12 +97,14 @@
                 e.preventDefault(); // Prevent form submission
 
                 let errors = [];
+                const idRuang = $('#inputIdRuang').val().trim(); // Ambil ID Ruang
                 const namaRuang = $('#inputNamaRuang').val().trim(); // Ambil Nama Ruang
                 const kapasitasRuang = parseInt($('#inputKapasitasRuang').val().trim()); // Ambil Kapasitas Ruang
 
                 // Validate Nama Ruang
-                if (namaRuang === '') {
-                    errors.push('Nama Ruang tidak boleh kosong.');
+                const namaRuangRegex = /^[a-k][0-9]{3}$/;
+                if (!namaRuangRegex.test(namaRuang)) {
+                    errors.push('Nama Ruang harus 4 karakter, diawali huruf "a-k", diikuti 3 digit angka.');
                 }
 
                 // Validate Kapasitas Ruang
@@ -117,10 +116,42 @@
                 if (errors.length > 0) {
                     alert('Error:\n' + errors.join('\n'));
                 } else {
-                    this.submit(); // Submit the form if no errors
+                    // Submit the form if no errors
+                    this.submit();
                 }
             });
         });
+    </script>
+
+    <script>
+        // Simpan data ke form untuk update
+        function editRuang(id, nama, kapasitas) {
+            $('#inputIdRuang').val(id); // Masukkan ID ruangan
+            $('#inputNamaRuang').val(nama); // Masukkan nama ruangan
+            $('#inputKapasitasRuang').val(kapasitas); // Masukkan kapasitas ruangan
+        }
+    </script>
+
+    <script>
+        function hapusRuang(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus ruangan ini?')) {
+                $.ajax({
+                    url: '/ruang/delete',
+                    type: 'POST',
+                    data: {
+                        id_ruang: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        alert('Ruangan berhasil dihapus!');
+                        location.reload();
+                    },
+                    error: function() {
+                        alert('Terjadi kesalahan, coba lagi!');
+                    }
+                });
+            }
+        }
     </script>
 
 </body>

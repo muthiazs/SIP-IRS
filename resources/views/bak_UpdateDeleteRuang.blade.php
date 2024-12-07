@@ -123,16 +123,6 @@
         <div class="main-content flex-grow-1 p-4">
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h1 class="fs-3 fw-bold">Selamat Datang {{ $akademik->nama }} 👋</h1>
-                    <p class="text-muted">Semester Akademik Sekarang</p>
-                </div>
-                <div class="position-relative">
-                    <button class="btn btn-teal rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="notification-badge"></span>
-                </div>
             </div>
 
             <!-- Progress Cards -->
@@ -159,24 +149,27 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
 
                     <table class="table table-bordered mt-4" id="cekTable">
+=======
+                    <table class="table">
+>>>>>>> bbcf6585ca3d548ad1d3afcbaf12bbcf4f7d5811
                         <thead>
                             <tr>
-                                <th>No</th>
                                 <th>Nama Ruang</th>
                                 <th>Kapasitas</th>
                                 <th>Aksi</th>
-                            </tr>
                         </thead>
-                        <tbody id="tabelRuang">
-                            @foreach($tabelRuang as $index => $data)
+                        <tbody>
+                            @foreach($tabelRuang as $ruang)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $data->nama }}</td>
-                                <td>{{ $data->kapasitas }}</td>
+                                <td>{{ $ruang->nama }}</td>
+                                <td>{{ $ruang->kapasitas }}</td>
                                 <td>
-                                    <button class="btn btn-primary mb-2" onclick="window.location.href='{{ route('bak_NextUpdateDeleteRuang') }}'">Aksi</button>
+                                    <a href="{{ route('update.ruang', ['nama' => $ruang->nama]) }}" class="btn btn-primary">
+                                        Aksi
+                                    </a>
                                 </td>
                             </tr>
                             @endforeach
