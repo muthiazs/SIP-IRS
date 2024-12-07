@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -6,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Matakuliah extends Model
 {
     protected $table = 'matakuliah';
+    protected $primaryKey = 'id_matkul';
+    protected $keyType = 'int';
+    public $incrementing = true;
 
     protected $fillable = [
         'kode_matkul',

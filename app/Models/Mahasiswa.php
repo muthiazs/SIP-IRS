@@ -17,4 +17,12 @@ class Mahasiswa extends Model
         'id_dosen',
         'angkatan',
     ];
+    protected $primaryKey = 'id_mahasiswa'; // Primary key
+    public $timestamps = true; // Menyertakan created_at dan updated_at
+
+    // Relasi dengan ProgressMahasiswa (1 mahasiswa memiliki banyak progress)
+    public function progressMahasiswa()
+    {
+        return $this->hasMany(ProgressMahasiswa::class, 'id_mahasiswa');
+    }
 }
