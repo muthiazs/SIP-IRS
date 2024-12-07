@@ -170,6 +170,7 @@ Route::middleware('auth')->group(function () {
     // Route untuk mengunduh IRS dalam format PDF
     Route::get('dosen/print-irs-pdf/{nim}', [DosenController::class, 'printIRSPDF'])->name('dosen.print_irs_pdf');
 
+    Route::post('/approve-irs', [DosenController::class, 'approveSelectedIRS'])->name('approve.selected.irs');
 
 
 

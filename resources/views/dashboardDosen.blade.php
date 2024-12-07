@@ -37,12 +37,18 @@
             </div>
 
             <!-- Period Banner -->
-            <div class="period-banner p-3 rounded-3 mb-4">
+            <div class="alert alert-success" role="alert">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="text-teal">Periode Penyetujuan IRS</span>
-                    <span class="text-teal fw-bold">bla</span>
+                    <span class="fw-medium">
+                        Periode Penyetujuan IRS: 
+                        {{ $fetchPeriodeSetujuIRS->tanggal_mulai }} - {{ $fetchPeriodeSetujuIRS->tanggal_selesai }}
+                    </span>
                 </div>
             </div>
+
+
+
+
 
             <!-- Progress Cards -->
             <div class="row g-4 mb-4">

@@ -357,77 +357,32 @@
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    // Menangani klik tombol Ambil
-    document.getElementById('ambilBtn').addEventListener('click', function() {
-        Swal.fire({
-            title: 'Konfirmasi Ambil Mata Kuliah',
-            text: 'Apakah Anda yakin ingin mengambil mata kuliah ini?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, ambil!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Aksi yang terjadi setelah konfirmasi, bisa diarahkan ke route
-                window.location.href = '#'; // Ganti dengan route yang sesuai
-            }
-        });
-    });
-
-    // Menangani klik tombol Batalkan
-    document.getElementById('batalkanBtn').addEventListener('click', function() {
-        Swal.fire({
-            title: 'Konfirmasi Batalkan Mata Kuliah',
-            text: 'Apakah Anda yakin ingin membatalkan pengambilan mata kuliah ini?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, batalkan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Aksi yang terjadi setelah konfirmasi, bisa diarahkan ke route
-                window.location.href = '#'; // Ganti dengan route yang sesuai
-            }
-        });
-    });
-</script>
+{{-- versi lama yg gaada maks sks nya --}}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const forms = document.querySelectorAll('.ambil-jadwal-form');
         
-
         forms.forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-
-                console.log('max_sks from PHP:', @json($maksimalSKS));
-                console.log('total_sks from PHP:', @json($totalSKSTerpilih));
-                console.log('current_sks from PHP:', @json($sksMatkul));
-
-                // Pastikan data total_sks, max_sks, dan current_sks diambil dari Blade ke JS
-                const total_sks = @json($totalSKSTerpilih);
-                const max_sks = @json($maksimalSKS);
-                const current_sks = @json($sksMatkul);
+                
                 const formData = new FormData(this);
                 const submitButton = this.querySelector('.ambil-btn');
+                const jadwalId = submitButton.getAttribute('data-jadwal-id');
+                
                 submitButton.disabled = true;
-
+                
                 fetch('{{ route('ambilJadwal') }}', {
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('Received data:', data); // Log data yang diterima untuk debugging
                     if (data.success) {
+                        // Tampilkan notifikasi sukses
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil!',
@@ -435,29 +390,15 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
+                            // Reload halaman setelah sukses
                             window.location.reload();
                         });
                     } else {
-                        // Penanganan error jika melebihi batas SKS
-                        if (total_sks + current_sks > max_sks) {
-                            Swal.fire({
-                                icon: 'warning',
-                                title: 'Melebihi Batas SKS',
-                                html: `
-                                    Anda hanya diperbolehkan mengambil maksimal ${max_sks} SKS berdasarkan IPS Anda.<br>
-                                    Total SKS saat ini: ${total_sks}<br>
-                                    SKS yang akan diambil: ${current_sks}
-                                `,
-                                confirmButtonText: 'Mengerti'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: data.message
-                            });
-                        }
-
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.message
+                        });
                         submitButton.disabled = false;
                     }
                 })
@@ -473,7 +414,93 @@
             });
         });
     });
-</script>
+    </script>
+{{-- 
+//buat yang total sks ak komen dulu biar ak bisa kerjain fitur lain 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const forms = document.querySelectorAll('.ambil-jadwal-form');
+
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            console.log('max_sks from PHP:', @json($maksimalSKS));
+            console.log('total_sks from PHP:', @json($totalSKSTerpilih));
+            console.log('sksMatkul from PHP:', @json($sksMatkul));
+
+            const total_sks = @json($totalSKSTerpilih);
+            const max_sks = @json($maksimalSKS);
+            const sksMatkul = @json($sksMatkul);
+
+            // Log FormData to check its contents
+            const formData = new FormData(this);
+            console.log('Form Data:', [...formData.entries()]);
+
+            // Validate data before sending
+            if (!sksMatkul || total_sks === null) {
+                console.error("Missing or invalid data: sksMatkul or total_sks");
+                return; // Prevent submission if data is invalid
+            }
+
+            const submitButton = this.querySelector('.ambil-btn');
+            submitButton.disabled = true;
+
+            fetch('{{ route('ambilJadwal') }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Received data:', data);
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: data.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    if (total_sks + sksMatkul > max_sks) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Melebihi Batas SKS',
+                            html: `
+                                Anda hanya diperbolehkan mengambil maksimal ${max_sks} SKS berdasarkan IPS Anda.<br>
+                                Total SKS saat ini: ${total_sks}<br>
+                                SKS yang akan diambil: ${sksMatkul}
+                            `,
+                            confirmButtonText: 'Mengerti'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.message
+                        });
+                    }
+                    submitButton.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Terjadi kesalahan pada server'
+                });
+                submitButton.disabled = false;
+            });
+        });
+    });
+});
+</script> --}}
 
 
 {{-- Menangani searching --}}
