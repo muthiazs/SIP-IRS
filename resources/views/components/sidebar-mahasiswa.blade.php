@@ -23,22 +23,23 @@
                 Rencana Studi
             </a>
             @if ($masaIRS == 'isiIRS')
-                <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }}">
-                    <span class="material-icons me-3">edit</span>
+                <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+                    <span class="material-icons me-3">create</span> <!-- "create" untuk ikon edit -->
                     Buat Rencana Studi
                 </a>
             @elseif ($masaIRS == 'gantiIRS' || $masaIRS == 'batalIRS')
-                <a href="{{ route('mhs_draftIRS') }}" class="nav-link {{ Route::is('mhs_draftIRS') ? 'active' : '' }}">
+                <a href="{{ route('mhs_draftIRS') }}" class="nav-link {{ Route::is('mhs_draftIRS') ? 'active' : '' }} rounded d-flex align-items-center">
                     <span class="material-icons me-3">edit</span>
                     Edit Rencana Studi
                 </a>
             @else
-                <a href="{{ route('mhs_habisPeriodeIRS') }}" class="nav-link">
-                    <span class="material-icons me-3">block</span>
-                    Periode IRS Habis
+                <a href="{{ route('mhs_habisPeriodeIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+                    <span class="material-icons me-3">access_time</span> <!-- "access_time" untuk ikon periode habis -->
+                    Buat Rencana Studi
                 </a>
             @endif
         </nav>
+        
 
         <!-- Logout Button -->
         <button class="btn btn-logout position-absolute bottom-0 mb-4 rounded-3" onclick="confirmLogout()">Keluar</button>

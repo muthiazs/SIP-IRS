@@ -154,9 +154,6 @@
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                {{-- <div>
-                    <h1>{{$Periode_sekarang->jenis}}</h1>
-                </div> --}}
             </div>
 
             <!-- Pengisian IRS Cards -->

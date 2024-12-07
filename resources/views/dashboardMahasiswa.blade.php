@@ -31,25 +31,11 @@
             </div>
 
             <!-- Period Banner -->
-            <!-- Period Banner -->
-            <div class="alert 
-            @if($periodeStatus === 'active') alert-success 
-            @elseif($periodeStatus === 'expired') alert-danger 
-            @else alert-secondary @endif" role="alert">
-            <div class="d-flex justify-content-between align-items-center">
-                @if($periodeStatus === 'active')
-                    <span class="fw-medium">
-                        Periode Pengisian IRS: 
-                        {{ $fetchPeriodeISIIRS->tanggal_mulai }} - {{ $fetchPeriodeISIIRS->tanggal_selesai }}
-                    </span>
-                @elseif($periodeStatus === 'expired')
-                    <span class="fw-medium">Periode pengisian IRS telah berakhir.</span>
-                @else
-                    <span class="fw-medium">Tidak ada periode pengisian IRS yang aktif saat ini.</span>
-                @endif
+            <div class="alert alert-success" role="alert">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-medium">Periode Pengisian IRS: {{$fetchPeriodeISIIRS->tanggal_mulai}} - {{$fetchPeriodeISIIRS->tanggal_selesai}}</span>
+                </div>
             </div>
-            </div>
-
 
             <!-- Stats Cards -->
             <div class="row g-4 mb-4">
@@ -97,7 +83,7 @@
                             @else
                                 <button class="btn btn-secondary" onclick="window.location.href='{{ route('mhs_habisPeriodeIRS') }}'">Periode IRS Habis</button>
                             @endif
-                            </div>
+                                                    </div>
                     </div>
                 </div>
             </div>
