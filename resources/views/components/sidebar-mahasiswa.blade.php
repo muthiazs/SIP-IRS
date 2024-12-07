@@ -23,19 +23,19 @@
                 Rencana Studi
             </a>
             @if ($masaIRS == 'isiIRS')
-                <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }}rounded d-flex align-items-center">
+                <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }}">
                     <span class="material-icons me-3">edit</span>
                     Buat Rencana Studi
                 </a>
             @elseif ($masaIRS == 'gantiIRS' || $masaIRS == 'batalIRS')
-                <a href="{{ route('mhs_draftIRS') }}" class="nav-link {{ Route::is('mhs_draftIRS') ? 'active' : '' }}rounded d-flex align-items-center">
+                <a href="{{ route('mhs_draftIRS') }}" class="nav-link {{ Route::is('mhs_draftIRS') ? 'active' : '' }}">
                     <span class="material-icons me-3">edit</span>
-                    Buat Rencana Studi
+                    Edit Rencana Studi
                 </a>
             @else
-                <a href="{{ route('mhs_habisPeriodeIRS') }}" class="nav-link rounded d-flex align-items-center">
-                    <span class="material-icons me-3">edit</span>
-                    Buat Rencana Studi
+                <a href="{{ route('mhs_habisPeriodeIRS') }}" class="nav-link">
+                    <span class="material-icons me-3">block</span>
+                    Periode IRS Habis
                 </a>
             @endif
         </nav>
