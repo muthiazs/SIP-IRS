@@ -10,8 +10,9 @@ class PeriodeAkademikSeeder extends Seeder
 {
     public function run()
     {
-         // Ambil tanggal saat ini
-         $currentDate = Carbon::now();
+        // Ambil tanggal saat ini
+        $currentDate = Carbon::now();
+        
         // Data periode akademik
         $periode = [
             [
@@ -22,10 +23,10 @@ class PeriodeAkademikSeeder extends Seeder
                 'jenis' => 'genap',
             ],
             [
-               'id_periode' => '24251',
+                'id_periode' => '24251',
                 'nama_periode' => 'Semester Akademik 2024/2025 Ganjil',
-                'tahun_mulai' => $currentDate->copy()->addWeeks(2)->toDateTimeString(), // 2 minggu dari sekarang
-                'tahun_selesai' => $currentDate->copy()->addWeeks(3)->toDateTimeString(), // 3 minggu dari sekarang
+                'tahun_mulai' => $currentDate->copy()->addWeeks(2)->addYear()->toDateTimeString(), // 2 minggu dari sekarang + 1 tahun
+                'tahun_selesai' => $currentDate->copy()->addWeeks(3)->addYear()->toDateTimeString(), // 3 minggu dari sekarang + 1 tahun
                 'jenis' => 'ganjil',
             ]
         ];
