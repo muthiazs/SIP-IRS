@@ -32,14 +32,60 @@ public function usulanIRSMahasiswa()
     $dosen = DB::table('dosen')
         ->join('users', 'dosen.id_user', '=', 'users.id')
         ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+        ->crossJoin('periode_akademik')
+        ->orderBy('periode_akademik.created_at', 'desc')
         ->where('dosen.id_user', auth()->id())
         ->select(
             'dosen.nip',
             'dosen.nama as dosen_nama',
             'program_studi.nama as prodi_nama',
-            'dosen.prodi_id'
+            'dosen.prodi_id',
+            'periode_akademik.nama_periode'
         )
         ->first();
+
+    // Ambil periode akademik terbaru
+    $periodeTerbaru = DB::table('periode_akademik')
+        ->orderBy('id_periode', 'desc')
+        ->first();
+
+    // Ambil masa IRS berdasarkan periode akademik terbaru dan rentang waktu
+    $fetchPeriodeSetujuIRS = DB::table('kalender_akademik')
+        ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+        ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) // Menggunakan periode akademik terbaru
+        ->where('kalender_akademik.kode_kegiatan','=','setujuiIRS')
+        ->select(
+            'kalender_akademik.tanggal_mulai', // Menggunakan nama kolom yang valid
+            'kalender_akademik.tanggal_selesai', // Menggunakan nama kolom yang valid
+            'kalender_akademik.nama_kegiatan' // Untuk kebutuhan tambahan
+        )
+        ->first();
+
+    // Cek apakah data periode penyetujuan IRS ada
+    if (!$fetchPeriodeSetujuIRS) {
+        // Jika data tidak ditemukan, beri nilai default
+        $fetchPeriodeSetujuIRS = (object)[
+            'tanggal_mulai' => 'Data tidak ditemukan',
+            'tanggal_selesai' => 'Data tidak ditemukan',
+            'nama_kegiatan' => 'Data tidak ditemukan'
+        ];
+    }
+
+    // Ambil masa penyetujuan IRS yang aktif saat ini
+    $currentDate = now();
+    $periodeIRS = DB::table('kalender_akademik')
+        ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+        ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode)
+        ->where(function ($query) use ($currentDate) {
+            $query->where('kode_kegiatan', '=', 'setujuIRS')  // Gunakan '=' untuk mencocokkan 'setujuIRS'
+                ->whereDate('tanggal_mulai', '<=', $currentDate->toDateString())
+                ->whereDate('tanggal_selesai', '>=', $currentDate->toDateString());
+        })
+        ->pluck('kalender_akademik.nama_kegiatan')
+        ->first();
+
+    // Tetapkan nilai masa IRS berdasarkan hasil query
+    $masaIRS = $periodeIRS ?? null;
 
     // Ambil list mahasiswa dengan usulan IRS yang bukan draft dan semester aktif sesuai
     $usulanIRS = DB::table('irs')
@@ -70,7 +116,7 @@ public function usulanIRSMahasiswa()
         )
         ->get();
 
-    return view('dosen_irsMahasiswa', compact('dosen', 'usulanIRS'));
+    return view('dosen_irsMahasiswa', compact('dosen', 'usulanIRS','masaIRS', 'fetchPeriodeSetujuIRS'));
 }
 
 
@@ -266,8 +312,33 @@ public function detailIRS($nim)
 }
 
 
+public function approveSelectedIRS(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'nim' => 'required|array|min:1',  // Pastikan ada NIM yang dipilih
+        'nim.*' => 'exists:mahasiswa,nim', // Pastikan NIM valid
+    ]);
 
-    
+    $nimList = $request->nim;
+
+    // Proses update status IRS menjadi 'disetujui' untuk setiap NIM
+    foreach ($nimList as $nim) {
+        $mahasiswa = DB::table('mahasiswa')->where('nim', $nim)->first();
+
+        if (!$mahasiswa || $mahasiswa->id_dosen != auth()->user()->id) {
+            return response()->json(['error' => 'Akses tidak sah atau data mahasiswa tidak ditemukan'], 403);
+        }
+
+        // Perbarui status IRS menjadi 'disetujui'
+        DB::table('irs')
+            ->where('nim', $nim)
+            ->where('status', '!=', 'disetujui')  // Pastikan hanya IRS yang belum disetujui yang diubah
+            ->update(['status' => 'disetujui']);
+    }
+
+    return response()->json(['success' => 'IRS yang dipilih berhasil disetujui']);
+}
 
 
 }
