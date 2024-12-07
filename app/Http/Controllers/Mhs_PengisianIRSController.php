@@ -436,13 +436,13 @@ public function ambilJadwal(Request $request)
         // 8. Ambil jumlah SKS mata kuliah yang ingin diambil
         $sksMatkul = $jadwalKuliah->sks;
 
-        // Log untuk debugging
+
+
         Log::info('Debug SKS', [
-            'id_jadwal' => $request->id_jadwal,
-            'sks_matkul' => $sksMatkul,
-            'total_sks_terpilih' => $totalSKSTerpilih,
-            'maksimal_sks' => $maksimalSKS,
+            'sksMatkul' => $sksMatkul,  // Tambahkan log untuk current_sks
         ]);
+
+        
 
         // 9. Validasi apakah total SKS melebihi batas
         if ($totalSKSTerpilih + $sksMatkul > $maksimalSKS) {
@@ -475,6 +475,20 @@ public function ambilJadwal(Request $request)
             'message' => 'Terjadi kesalahan pada server. Silakan coba lagi.',
         ], 500);
     }
+
+        // Mengambil data dari form atau request
+        $maksimalSKS = $request->input('maksimalSKS');
+        $totalSKSTerpilih = $request->input('totalSKSTerpilih');
+        $sksMatkul = $request->input('sksMatkul');
+
+        // Lakukan logika lain jika perlu
+
+        // Mengirimkan data ke view setelah form diproses
+        return view('mhs_pengisianIRS', [
+            'maksimalSKS' => $maksimalSKS,
+            'totalSKSTerpilih' => $totalSKSTerpilih,
+            'sksMatkul' => $sksMatkul
+        ]);
 }
 
 
