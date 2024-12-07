@@ -25,7 +25,7 @@ class PeriodeAkademikSeeder extends Seeder
             [
                 'id_periode' => '24251',
                 'nama_periode' => 'Semester Akademik 2024/2025 Ganjil',
-                'tahun_mulai' => $currentDate->copy()->addWeeks(2)->addYear()->toDateTimeString(), // 2 minggu dari sekarang + 1 tahun
+                'tahun_mulai' => $currentDate->subWeek(1)->toDateTimeString(), // 2 minggu dari sekarang + 1 tahun
                 'tahun_selesai' => $currentDate->copy()->addWeeks(3)->addYear()->toDateTimeString(), // 3 minggu dari sekarang + 1 tahun
                 'jenis' => 'ganjil',
             ]
