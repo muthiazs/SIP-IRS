@@ -580,83 +580,84 @@ public function cekStatusPengambilan($id_jadwal)
 //         // ]);
 // }
 
-public function ambilJadwal(Request $request)
-{
-    try {
-        $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
-        if (!$periodeAkademik) {
-            return response()->json(['success' => false, 'message' => 'Periode akademik tidak ditemukan.'], 404);
-        }
+//FIKS BUAT PPL, G ADA PRIORITAS
+// public function ambilJadwal(Request $request)
+// {
+//     try {
+//         $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
+//         if (!$periodeAkademik) {
+//             return response()->json(['success' => false, 'message' => 'Periode akademik tidak ditemukan.'], 404);
+//         }
 
-        $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
-        Log::debug('Mahasiswa ID:', ['id_mahasiswa' => $mahasiswa->id_mahasiswa]);
-        if (!$mahasiswa) {
-            return response()->json(['success' => false, 'message' => 'Data mahasiswa tidak ditemukan.'], 404);
-        }
+//         $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+//         Log::debug('Mahasiswa ID:', ['id_mahasiswa' => $mahasiswa->id_mahasiswa]);
+//         if (!$mahasiswa) {
+//             return response()->json(['success' => false, 'message' => 'Data mahasiswa tidak ditemukan.'], 404);
+//         }
 
-        $request->validate([
-            'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
-            'status' => 'required|string|max:255',
-        ]);
+//         $request->validate([
+//             'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
+//             'status' => 'required|string|max:255',
+//         ]);
 
-        $isConflict = $this->cekJadwalBertabrakan($mahasiswa->nim, $request->id_jadwal);
-        if ($isConflict) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Jadwal yang Anda pilih bertabrakan dengan jadwal yang sudah diambil.',
-            ], 409);
-        }
+//         $isConflict = $this->cekJadwalBertabrakan($mahasiswa->nim, $request->id_jadwal);
+//         if ($isConflict) {
+//             return response()->json([
+//                 'success' => false,
+//                 'message' => 'Jadwal yang Anda pilih bertabrakan dengan jadwal yang sudah diambil.',
+//             ], 409);
+//         }
 
-        $totalSKS = IRS::with('jadwalKuliah.matakuliah')
-            ->where('nim', $mahasiswa->nim)
-            ->where('semester', $mahasiswa->semester)
-            ->get()
-            ->sum(function ($irs) {
-                return $irs->jadwalKuliah->matakuliah->sks ?? 0;
-        });
+//         $totalSKS = IRS::with('jadwalKuliah.matakuliah')
+//             ->where('nim', $mahasiswa->nim)
+//             ->where('semester', $mahasiswa->semester)
+//             ->get()
+//             ->sum(function ($irs) {
+//                 return $irs->jadwalKuliah->matakuliah->sks ?? 0;
+//         });
 
-        Log::info('Total SKS yang sudah diambil:', ['total_sks' => $totalSKS]);
+//         Log::info('Total SKS yang sudah diambil:', ['total_sks' => $totalSKS]);
 
-        $jadwal = JadwalKuliah::with('matakuliah')->find($request->id_jadwal);
-        $sksBaru = $jadwal->matakuliah->sks ?? 0;
+//         $jadwal = JadwalKuliah::with('matakuliah')->find($request->id_jadwal);
+//         $sksBaru = $jadwal->matakuliah->sks ?? 0;
 
-        // Tangkap hasil dari hitungMaksimalSKS
-        $maksimalSKS = $this->hitungMaksimalSKS($mahasiswa->id_mahasiswa);
+//         // Tangkap hasil dari hitungMaksimalSKS
+//         $maksimalSKS = $this->hitungMaksimalSKS($mahasiswa->id_mahasiswa);
 
-        if (($totalSKS + $sksBaru) > $maksimalSKS) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Total SKS yang diambil melebihi batas maksimal SKS (' . $maksimalSKS . ').',
-            ], 400);
-        }
+//         if (($totalSKS + $sksBaru) > $maksimalSKS) {
+//             return response()->json([
+//                 'success' => false,
+//                 'message' => 'Total SKS yang diambil melebihi batas maksimal SKS (' . $maksimalSKS . ').',
+//             ], 400);
+//         }
 
-        IRS::create([
-            'nim' => $mahasiswa->nim,
-            'semester' => $mahasiswa->semester,
-            'id_jadwal' => $request->id_jadwal,
-            'status' => $request->status,
-        ]);
+//         IRS::create([
+//             'nim' => $mahasiswa->nim,
+//             'semester' => $mahasiswa->semester,
+//             'id_jadwal' => $request->id_jadwal,
+//             'status' => $request->status,
+//         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Jadwal berhasil diambil.',
-            'total_sks' => $totalSKS + $sksBaru,
-        ]);
-    } catch (\Exception $e) {
-        Log::error("Error in ambilJadwal: " . $e->getMessage());
+//         return response()->json([
+//             'success' => true,
+//             'message' => 'Jadwal berhasil diambil.',
+//             'total_sks' => $totalSKS + $sksBaru,
+//         ]);
+//     } catch (\Exception $e) {
+//         Log::error("Error in ambilJadwal: " . $e->getMessage());
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
-        ], 500);
-    }
-}
-
-
-
+//         return response()->json([
+//             'success' => false,
+//             'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+//         ], 500);
+//     }
+// }
 
 
-// //VERSI SEMENTARA BUAT MUTHIA NGERJAIN FITUR LAIN
+
+
+
+//VERSI SEMENTARA BUAT MUTHIA NGERJAIN FITUR LAIN
 // public function ambilJadwal(Request $request)
 // {
 //     try {
@@ -709,6 +710,140 @@ public function ambilJadwal(Request $request)
 //         ], 500);
 //     }
 // }
+
+
+
+
+public function ambilJadwal(Request $request)
+{
+    try {
+        $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
+        if (!$periodeAkademik) {
+            return response()->json(['success' => false, 'message' => 'Periode akademik tidak ditemukan.'], 404);
+        }
+
+        $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
+        if (!$mahasiswa) {
+            return response()->json(['success' => false, 'message' => 'Data mahasiswa tidak ditemukan.'], 404);
+        }
+
+        $request->validate([
+            'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
+            'status' => 'required|string|max:255',
+        ]);
+
+        $jadwal = JadwalKuliah::with('matakuliah')->find($request->id_jadwal);
+        if (!$jadwal) {
+            return response()->json(['success' => false, 'message' => 'Jadwal tidak ditemukan.'], 404);
+        }
+
+        $kuota = $jadwal->kuota; // Pastikan kolom 'kuota' ada di tabel jadwal_kuliah
+        $totalTerisi = IRS::where('id_jadwal', $request->id_jadwal)->count();
+
+        // Hitung prioritas
+        $prioritas = $this->cekPrioritasIRS($mahasiswa->id_mahasiswa, $request->id_jadwal);
+        Log::info('Prioritas jadwal:', ['prioritas' => $prioritas]);
+
+        if ($totalTerisi >= $kuota) {
+            // Ambil mahasiswa dengan prioritas terendah
+            $mahasiswaTerpental = IRS::where('id_jadwal', $request->id_jadwal)
+                ->orderBy('prioritas', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            // Periksa apakah mahasiswa baru lebih rendah prioritas
+            if ($mahasiswaTerpental->prioritas < $prioritas) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kuota penuh, Anda tidak memenuhi prioritas.',
+                ], 400);
+            }
+
+            // Hapus mahasiswa dengan prioritas terendah
+            $mahasiswaTerpental->delete();
+            Log::info('Mahasiswa terpental:', ['id_irs' => $mahasiswaTerpental->id]);
+        }
+
+        // Simpan data IRS dengan prioritas
+        IRS::create([
+            'nim' => $mahasiswa->nim,
+            'semester' => $mahasiswa->semester,
+            'id_jadwal' => $request->id_jadwal,
+            'status' => $request->status,
+            'prioritas' => $prioritas,
+        ]);
+        Log::info('Data yang akan disimpan ke tabel IRS:', [
+            'nim' => $mahasiswa->nim,
+            'semester' => $mahasiswa->semester,
+            'id_jadwal' => $request->id_jadwal,
+            'status' => $request->status,
+            'prioritas' => $prioritas,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Jadwal berhasil diambil.',
+        ]);
+    } catch (\Exception $e) {
+        Log::error("Error in ambilJadwal: " . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+        ], 500);
+    }
+}
+
+
+public function cekPrioritasIRS($id_mahasiswa, $id_jadwal)
+{
+    // Fetch the mahasiswa record
+    $mahasiswa = Mahasiswa::find($id_mahasiswa);
+
+    if (!$mahasiswa) {
+        Log::debug('Data mahasiswa tidak ditemukan dengan id: ' . $id_mahasiswa);
+        return 0; // Default priority
+    }
+
+    // Ambil semester mahasiswa saat ini
+    $semesterMahasiswa = DB::table('mahasiswa')
+        ->where('id_mahasiswa', $id_mahasiswa)
+        ->value('semester');
+    Log::debug('Mahasiswa ini semester: ' . $semesterMahasiswa);
+
+    // Ambil kode matkul dari jadwal yang dipilih
+    $kodeMatkulDipilih = JadwalKuliah::join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->where('jadwal_kuliah.id_jadwal', $id_jadwal)
+        ->value('matakuliah.kode_matkul');
+
+    if (!$kodeMatkulDipilih) {
+        Log::debug('Kode mata kuliah tidak ditemukan untuk jadwal dengan id: ' . $id_jadwal);
+        return 0;
+    }
+
+    // Ambil semester dari mata kuliah yang dipilih
+    $semesterMatkul = Matakuliah::where('kode_matkul', $kodeMatkulDipilih)
+        ->value('semester');
+    Log::debug('Matakuliah ini untuk semester: ' . $semesterMatkul);
+
+    // Cek apakah mata kuliah dengan kode yang sama sudah diambil
+    $existsInIRS = IRS::join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->where('irs.nim', $mahasiswa->nim)
+        ->where('matakuliah.kode_matkul', $kodeMatkulDipilih)
+        ->exists();
+
+    // Tentukan prioritas
+    if ($semesterMahasiswa == $semesterMatkul) {
+        return 1; // Prioritas tinggi (sesuai semester mahasiswa)
+    } elseif ($semesterMahasiswa < $semesterMatkul) {
+        return 4; // Prioritas rendah (mata kuliah di semester lebih tinggi)
+    } else {
+        return $existsInIRS ? 3 : 2; // 3 jika sudah pernah diambil, 2 jika baru
+    }
+}
+
+
 
 
 
