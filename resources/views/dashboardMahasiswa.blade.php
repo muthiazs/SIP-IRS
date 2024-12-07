@@ -97,7 +97,7 @@
                             @else
                                 <button class="btn btn-secondary" onclick="window.location.href='{{ route('mhs_habisPeriodeIRS') }}'">Periode IRS Habis</button>
                             @endif
-                                                    </div>
+                            </div>
                     </div>
                 </div>
             </div>
