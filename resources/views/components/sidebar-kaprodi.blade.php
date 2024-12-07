@@ -23,8 +23,8 @@
                     Jadwal Kuliah
                 </a>
                 <ul class="submenu">
-                    <li><a href="/kaprodi_SetJadwal" class="nav-link">Set Jadwal</a></li>
-                    <li><a href="/kaprodi_SetMataKuliah" class="nav-link">Set Mata Kuliah</a></li>
+                    <li><a href="/kaprodi_JadwalKuliah" class="nav-link">Set Jadwal Kuliah</a></li>
+                    <li><a href="/kaprodi_SetMatkul" class="nav-link">Set Mata Kuliah</a></li>
                 </ul>
             </div>
             <a href="/kaprodi_StatusMahasiswa" class="nav-link rounded d-flex align-items-center">

@@ -61,16 +61,6 @@
     <div class="main-content flex-grow-1 p-4">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1 class="fs-3 fw-bold">Selamat Datang {{ $kaprodi->username }} 👋</h1>
-                <p class="text-muted">Semester kaprodi Sekarang</p>
-            </div>
-            <div class="position-relative">
-                <button class="btn btn-teal rounded-circle p-2">
-                    <span class="material-icons">notifications</span>
-                </button>
-                <span class="notification-badge"></span>
-            </div>
         </div>
 
         <!-- Progress Cards -->
@@ -93,15 +83,12 @@
 
                     <!-- Dropdown Gedung -->
                     <div class="mb-3">
-                        <label class="fw-bold">Gedung</label>
+                        <label class="fw-bold">Ruang</label>
                         <select name="gedung" class="form-select" id="selectGedung" required>
-                            <option value="">Pilih Gedung</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                            <option value="E">E</option>
-                            <option value="F">F</option>
+                            <option value="">Pilih Ruang</option>
+                            @foreach($ruangan as $r)
+                                <option value="{{ $r->id_ruang }}">{{ $r->nama }} (Kapasitas: {{ $r->kapasitas }})</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -109,7 +96,7 @@
                     <div class="mb-3">
                         <label class="fw-bold">Jam Mulai</label>
                         <select name="gedung" class="form-select" id="selectGedung" required>
-                            <option value="">Pilih Gedung</option>
+                            <option value="">Pilih Jam</option>
                             <option value="A">A</option>
                             <option value="B">B</option>
                             <option value="C">C</option>
@@ -164,25 +151,5 @@ function filterTabelByGedung(gedung) {
 }
 </script>
 
-Toastr -->
-    <!-- <script>
-    $(document).ready(function() {
-        toastr.options = {
-            "closeButton": true,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "3000",
-            "escapeHtml": true
-        }
-
-        @if(Session::has('toast_success'))
-            toastr.success('Ruangan berhasil dialokasikan');
-        @endif
-
-        @if(Session::has('toast_error'))
-            toastr.error("{!! Session::get('toast_error') !!}"); 
-        @endif
-    });
-    </script> --> 
 </body>
 </html>

@@ -140,22 +140,26 @@
                 @csrf
                 <!-- Header -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div>
-                        <h1 class="fs-3 fw-bold">Persetujuan Ruang</h1>
-                        <p class="text-muted">Semester Akademik sekarang</p>
-                    </div>
-                    <div class="position-relative">
-                        <button class="btn btn-teal rounded-circle p-2">
-                            <span class="material-icons text-white">notifications</span>
-                        </button>
-                        <span class="notification-badge"></span>
-                    </div>
                 </div>
 
                 <!-- Period Banner -->
                 <div class="period-banner p-3 rounded-3 mb-4 d-flex justify-content-between">
                     <span>Periode Persetujuan Ruang Kelas</span>
                 </div>
+
+                <div class="mb-3">
+                          <label class="fw-bold">Program Studi</label>
+                          <select name="prodi" class="form-select" id="selectProdi" required>
+                              <option value="">Pilih Program Studi</option>
+                              <option value="Biologi">Biologi</option>
+                              <option value="Bioteknologi">Bioteknologi</option>
+                              <option value="Fisika">Fisika</option>
+                              <option value="Kimia">Kimia</option>
+                              <option value="Matematika">Matematika</option>
+                              <option value="Informatika">Informatika</option>
+                              <option value="Statistika">Statistika</option>
+                          </select>
+                      </div>
 
                 <!-- Cards Section -->
                 <table class="table table-bordered">
@@ -178,6 +182,7 @@
                         <td>
                             <input type="hidden" name="nama_ruang" value="{{ $data->ruang_nama }}">
                             <button type="submit" class="btn btn-primary mb-2">Setujui</button>
+                            <button type="submit" class="btn btn-primary mb-2">Tolak</button>
                         </td>
                     </tr>
                     @endforeach
@@ -224,17 +229,26 @@
             "timeOut": "3000",
             "escapeHtml": true
         }
-
-        @if(Session::has('toast_success'))
-            toastr.success('Ruangan berhasil dialokasikan');
-        @endif
-
-        @if(Session::has('toast_error'))
-            toastr.error("{!! Session::get('toast_error') !!}"); 
-        @endif
     });
     </script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Dropdown Logic -->
+    <script>
+        $(document).ready(function() {
+            $('#selectProdi').change(function() {
+                const prodi = $(this).val().trim().toLowerCase();
+                $('#tabelRuang tr').each(function() {
+                    const namaProdi = $(this).find('td:eq(3)').text().trim().toLowerCase();
+                    if ( namaProdi.includes(prodi)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
