@@ -189,35 +189,6 @@ class DashboardController extends Controller
     
     
     
-    
-
-    
-
-    // public function indexMahasiswa()
-    // {
-    //     $mahasiswa = DB::table('mahasiswa')
-    //                 ->join('users', 'mahasiswa.id_user', '=', 'users.id')
-    //                 ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
-    //                 ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
-    //                 ->join('progress_mahasiswa as prg' , 'prg.id_mahasiswa' , '=' , 'mahasiswa.id_mahasiswa')
-    //                 ->crossJoin('periode_akademik')
-    //                 ->where('mahasiswa.id_user', auth()->id())
-    //                 ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
-    //                 ->select(
-    //                     'mahasiswa.nim',
-    //                     'mahasiswa.nama as nama_mhs',
-    //                     'program_studi.nama as prodi_nama',
-    //                     'dosen.nama as nama_doswal',
-    //                     'dosen.nip',
-    //                     'users.username',
-    //                     'periode_akademik.nama_periode',
-    //                     'prg.IPk as IPk',
-    //                     'prg.SKSk as SKSk',
-    //                     'prg.semester_studi as semester'
-    //                 ) 
-    //                 ->first();  // Ambil baris pertama dengan timestamp terbaru
-    //     return view('dashboardMahasiswa', compact('mahasiswa'));
-    // }
 
     
     
@@ -296,7 +267,38 @@ class DashboardController extends Controller
             $akademik->tanggal_selesai = \Carbon\Carbon::parse($akademik->tanggal_selesai)->format('Y-m-d');
         }
 
-        return view('dashboardAkademik', compact('akademik'));
+
+        // Ambil periode akademik terbaru berdasarkan id_periode
+        $periodeTerbaru = DB::table('periode_akademik')
+            ->orderBy('id_periode', 'DESC') // Mengambil periode akademik berdasarkan id_periode terbaru
+            ->first();
+
+        // Pastikan periode akademik terbaru ditemukan
+        if (!$periodeTerbaru) {
+            return view('dashboardMahasiswa', compact('mahasiswa', 'masaIRS'));
+        }
+
+        // Ambil masa atur ruang yang aktif berdasarkan periode akademik terbaru
+        $currentDate = now(); // Mendapatkan tanggal saat ini
+
+        $fetchPeriodeAturRuang = DB::table('kalender_akademik')
+            ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+            ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) // Menggunakan periode akademik terbaru
+            ->where('kalender_akademik.kode_kegiatan', '=', 'aturRuang') // Menggunakan kode kegiatan 'aturRuang'
+            ->whereDate('kalender_akademik.tanggal_mulai', '<=', $currentDate->toDateString()) // Memastikan tanggal mulai tidak melebihi tanggal sekarang
+            ->whereDate('kalender_akademik.tanggal_selesai', '>=', $currentDate->toDateString()) // Memastikan tanggal selesai lebih besar dari atau sama dengan tanggal sekarang
+            ->select(
+                'kalender_akademik.tanggal_mulai', // Mengambil tanggal mulai
+                'kalender_akademik.tanggal_selesai', // Mengambil tanggal selesai
+                'kalender_akademik.nama_kegiatan' // Mengambil nama kegiatan
+            )
+            ->first(); // Mengambil hanya satu hasil yang sesuai dengan periode saat ini
+
+        // Tetapkan nilai masa atur ruang berdasarkan hasil query
+        $masaAturRuang = $fetchPeriodeAturRuang ?? null;
+
+
+        return view('dashboardAkademik', compact('akademik', 'masaAturRuang', 'periodeTerbaru'));
     }
     
     

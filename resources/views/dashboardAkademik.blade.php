@@ -34,10 +34,19 @@
             </div>
 
             <!-- Period Banner -->
-            <div class="period-banner p-3 rounded-3 mb-4 d-flex justify-content-between">
-                <span>Periode Pembagian Ruang Kelas</span>
-                <span>{{ $akademik->tanggal_mulai}} sampai {{ $akademik->tanggal_selesai}}</span>
+        <div class="alert alert-success" role="alert">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-medium">
+                    Masa Pengaturan Ruang: 
+                    @if($masaAturRuang)
+                        {{ $masaAturRuang->nama_kegiatan }} ({{ $masaAturRuang->tanggal_mulai }} - {{ $masaAturRuang->tanggal_selesai }})
+                    @else
+                        Tidak ada periode pengaturan ruang yang aktif
+                    @endif
+                </span>
             </div>
+        </div>
+
 
 
             <!-- Cards Section -->
