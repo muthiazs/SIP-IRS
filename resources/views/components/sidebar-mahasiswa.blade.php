@@ -8,7 +8,7 @@
                 <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
             </div>
             {{-- @dd($mahasiswa) --}}
-            <h2 class="fs-4 fw-bold">{{ $mahasiswa->nama }}</h2>
+            <h2 class="fs-4 fw-bold">{{ $mahasiswa->nama_mhs }}</h2>
             <p class="small opacity-75">NIM: {{ $mahasiswa->nim }}</p>
             <p class="small opacity-75">Mahasiswa<br>Program Studi S1 {{ $mahasiswa->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
             <p class="small opacity-75">Dosen Wali: {{ $mahasiswa->nama_doswal }}<br>NIP. {{ $mahasiswa->nip }}</p>
