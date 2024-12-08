@@ -36,8 +36,12 @@
                         <span class="text-teal">Periode Penyetujuan Ruang Kelas</span>
                     </div>
                     <div class="d-flex flex-column align-items-end">
-                        <span class="text-teal fw-bold">bla</span> <!-- Tanggal periode jadwal kuliah -->
-                        <span class="text-teal fw-bold">bla</span> <!-- Tanggal periode ruang kelas -->
+                        {{-- @if($periode)
+                            <span>{{ $periode->tanggal_mulai ?? 'Tanggal tidak tersedia' }} sampai {{ $periode->tanggal_selesai ?? 'Tanggal tidak tersedia' }}</span>
+                        @endif --}}
+
+                        {{-- <span class="text-teal fw-bold">{{ $dekan->tanggal_mulai}} sampai {{ $dekan->tanggal_selesai}}</span> <!-- Tanggal periode jadwal kuliah -->
+                        <span class="text-teal fw-bold">{{ $dekan->tanggal_mulai}} sampai {{ $dekan->tanggal_selesai}}</span> <!-- Tanggal periode ruang kelas --> --}}
                     </div>
                 </div>
             </div>

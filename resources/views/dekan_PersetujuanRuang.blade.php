@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-@php
-    use Illuminate\Support\Facades\Session;
-@endphp
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -164,6 +161,8 @@
                           </select>
                       </div>
 
+                      <button type="button" class="btn btn-success mb-4" onclick="approveAllRooms()">Setujui Semua Ruang</button>
+                      
                 <!-- Cards Section -->
                 <table class="table table-bordered">
                 <thead>
@@ -197,6 +196,9 @@
 
     <!-- Konfirmasi Button -->
     <button class="btn btn-blue position-absolute bottom-0 mb-4 rounded-3" onclick="confirmButton()">Konfirmasi</button>
+    <!-- Tombol Setujui Semua -->
+    
+
 
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
@@ -253,5 +255,26 @@
             });
         });
     </script>
+
+    <script>
+        function approveAllRooms() {
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Apakah Anda yakin ingin menyetujui semua ruangan?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Setujui Semua',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect ke route untuk menyetujui semua ruangan
+                    window.location.href = "{{ route('ruang.acc.all') }}";
+                }
+            });
+        }
+    </script>
+
 </body>
 </html>

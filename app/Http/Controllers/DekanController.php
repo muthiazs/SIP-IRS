@@ -84,6 +84,17 @@ class DekanController extends Controller
         return redirect()->back()->with('success', 'Ruangan berhasil disetujui.');
     }
 
+    public function setujuiSemuaRuang()
+    {
+        // Update semua ruangan yang diajukan menjadi 'telah digunakan'
+        DB::table('ruangan')
+            ->where('status', 'diajukan')
+            ->update(['status' => 'telah digunakan']);
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Semua ruangan berhasil disetujui.');
+    }
+
     public function tolakRuang(Request $request)
     {
         $ruang = DB::table('ruangan')

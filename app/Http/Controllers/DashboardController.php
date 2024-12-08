@@ -229,26 +229,47 @@ class DashboardController extends Controller
         $dekan = DB::table('dosen')
                     ->join('users', 'dosen.id_user', '=', 'users.id')
                     ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                    ->crossJoin('periode_akademik')
+                    ->crossJoin('kalender_akademik')
                     ->where('users.roles1', '=', 'dosen')
                     ->where('users.roles2', '=', 'dekan')
                     ->where('dosen.id_user', '=', auth()->id())
-                    ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
+                    ->where('kode_kegiatan', '=', 'setujuRuanganJadwal')
+                    ->orderBy('kalender_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                     ->select(
                         'dosen.nip',
                         'dosen.nama as dosen_nama',
                         'program_studi.nama as prodi_nama',
                         'dosen.prodi_id',
                         'users.username',
-                        'periode_akademik.nama_periode'
+                        'kalender_akademik.tanggal_mulai',
+                        'kalender_akademik.tanggal_selesai'
                     )
                     ->first();
         Log::debug('Kaprodi Data:', (array) $dekan);  // Log data yang diambil untuk diperiksa
 
+        $periode = DB::table('kalender_Akademik')
+                    ->where('kode_kegiatan', '=', 'setujuRuanganJadwal')
+                    ->orderBy('kalender_akademik.created_at', 'desc')
+                    ->select(
+                        'kalender_akademik.tanggal_mulai',
+                        'kalender_akademik.tanggal_selesai'
+                    )
+                    ->first();
+
         if (!$dekan) {
             return redirect()->back()->with('error', 'Kaprodi tidak ditemukan.');
         }
-        return view('dashboardDekan', compact('dekan'));
+        if (!$periode) {
+            $periode = (object) ['tanggal_mulai' => null, 'tanggal_selesai' => null];
+        }
+        
+
+        if ($periode) {
+            $periode->tanggal_mulai = \Carbon\Carbon::parse($periode->tanggal_mulai)->format('Y-m-d');
+            $periode->tanggal_selesai = \Carbon\Carbon::parse($periode->tanggal_selesai)->format('Y-m-d');
+        }
+        
+        return view('dashboardDekan', compact('dekan', 'periode'));
     }
 
     
@@ -258,16 +279,22 @@ class DashboardController extends Controller
         // Contoh data dummy, nantinya bisa diambil dari database
         $akademik = DB::table('pegawai')
                         ->join('users', 'pegawai.id_user', '=', 'users.id')
-                        ->crossJoin('periode_akademik')
+                        ->crossJoin('kalender_akademik')
                         ->where('pegawai.id_user', auth()->id())
-                        ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
+                        ->where('kode_kegiatan', '=', 'aturRuang')
+                        ->orderBy('kalender_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                         ->select(
                             'pegawai.nama',
                             'pegawai.nip',
-                            'periode_akademik.nama_periode'
+                            'kalender_akademik.tanggal_mulai',
+                            'kalender_akademik.tanggal_selesai'
                         )
                         ->first();
-        ;
+        // Format tanggal menggunakan Carbon
+        if ($akademik) {
+            $akademik->tanggal_mulai = \Carbon\Carbon::parse($akademik->tanggal_mulai)->format('Y-m-d');
+            $akademik->tanggal_selesai = \Carbon\Carbon::parse($akademik->tanggal_selesai)->format('Y-m-d');
+        }
 
         return view('dashboardAkademik', compact('akademik'));
     }

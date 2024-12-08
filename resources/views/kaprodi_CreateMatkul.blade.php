@@ -65,25 +65,35 @@
 
             <!-- Progress Cards -->
             <div class="card shadow-sm">
-                <h5 class="card-header bg-teal text-white text-center">Tambah Ruang Kelas Baru</h5>
+                <h5 class="card-header bg-teal text-white text-center">Tambah Mata Kuliah Baru</h5>
                 <div class="card-body d-flex flex-column">
                     <!-- Form Input Ruang -->
                     <div class="mt-4">
-                    <form id="formInputRuang" action="{{ route('matkul.store') }}" method="POST">
+                    <form id="formInputMatkul" action="{{ route('matkul.create') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="kodeMatkul" class="form-label">Kode Mata Kuliah</label>
-                            <input type="text" class="form-control" name="kode_matkul" id="kodeMatkul" placeholder="Masukkan Kode Mata Kuliah" required>
+                            <input type="text" class="form-control" name="kode_matkul" id="kodeMatkul" placeholder="Kode mata kuliah harus diawali PAIK atau UUW dan diikuti 4 angka." required>
+                            <div class="invalid-feedback">Kode harus diawali PAIK atau UUW diikuti 4 angka.</div>
                         </div>
                         <div class="mb-3">
                             <label for="namaMatkul" class="form-label">Nama Mata Kuliah</label>
                             <input type="text" class="form-control" name="nama_matkul" id="namaMatkul" placeholder="Masukkan Nama Mata Kuliah" required>
+                            <div class="invalid-feedback">Nama mata kuliah harus terdiri dari 1-50 huruf.</div>
                         </div>
                         <div class="mb-3">
                             <label for="sks" class="form-label">SKS</label>
-                            <input type="number" class="form-control" name="sks" id="sks" placeholder="Masukkan SKS" required>
+                            <input type="number" class="form-control" name="sks" id="sks" placeholder="SKS harus berupa angka antara 1-8, atau 'lainnya'" required>
+                            <div class="invalid-feedback">SKS harus berupa angka antara 1-8, atau 'lainnya'.</div>
                         </div>
-                        <button type="submit" class="btn btn-cyan w-100">Simpan</button>
+                        <div class="mb-3">
+                            <label for="semester" class="form-label">Semester</label>
+                            <input type="number" class="form-control" name="semester" id="semester" placeholder="Semester harus berupa angka antara 1-6, atau 'lainnya'" required>
+                            <div class="invalid-feedback">Semester harus berupa angka antara 1-6, atau 'lainnya'.</div>
+                        </div>
+                        <button type="submit" class="btn btn-cyan w-100">
+                            Simpan
+                        </button>
                     </form>
                     </div>
                 </div>
@@ -136,6 +146,19 @@
             // Jika validasi lolos, lanjutkan submit
             success('Validasi berhasil, data disimpan!');
         });
+        // Success/Error message handler
+@if(session('sweetAlert'))
+            document.addEventListener('DOMContentLoaded', function() {
+                const alert = @json(session('sweetAlert'));
+                Swal.fire({
+                    title: alert.title,
+                    text: alert.text,
+                    icon: alert.icon,
+                    confirmButtonColor: '#028391',
+                    confirmButtonText: 'OK'
+                });
+            });
+        @endif
     </script>
 
 </body>

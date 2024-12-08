@@ -131,35 +131,110 @@ class KaprodiControler extends Controller
     public function setMatkul()
     {
         $kaprodi = DB::table('dosen')
-                        ->join('users', 'dosen.id_user', '=', 'users.id')
-                        ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                        ->crossJoin('periode_akademik')
-                        ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
-                        ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-                        ->where('dosen.id_user', '=', Auth::id())
-                        ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
-                        ->select(
-                            'dosen.nip',
-                            'dosen.nama as dosen_nama',
-                            'program_studi.nama as prodi_nama',
-                            'dosen.prodi_id',
-                            'users.username',
-                            'periode_akademik.nama_periode'
-                        )
-                        ->first();
-        
+                            ->join('users', 'dosen.id_user', '=', 'users.id')
+                            ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+                            ->crossJoin('periode_akademik')
+                            ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
+                            ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
+                            ->where('dosen.id_user', '=', Auth::id())
+                            ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
+                            ->select(
+                                'dosen.nip',
+                                'dosen.nama as dosen_nama',
+                                'program_studi.nama as prodi_nama',
+                                'dosen.prodi_id',
+                                'users.username',
+                                'periode_akademik.nama_periode'
+                            )
+                            ->first();
+    
+        // Fetch mataKuliah data
         $mataKuliah = DB::table('matakuliah')
-                        -> select(
-                            'kode_matkul',
-                            'nama_matkul',
-                            'sks',
-                            'semester'
-                        )
-                        -> get();
+                        ->select('id_matkul', 'kode_matkul', 'nama_matkul', 'sks', 'semester')
+                        ->get();
+    
+        // Add the 'hasConstraint' to each mataKuliah record
+        foreach ($mataKuliah as $data) {
+            // Check if there are any constraints on this mataKuliah
+            $data->hasConstraint = $this->checkConstraints($data); // Add the constraint logic here
+        }
+        
         return view('kaprodi_SetMatkul', compact('kaprodi', 'mataKuliah'));
     }
 
-    public function UpdateDeleteMatkul()
+    // Define the checkConstraints function at the class level
+    private function checkConstraints($data)
+    {
+        // Example: Check if there are any constraints related to the 'matakuliah'
+        // You might need to adjust this query to check the correct table or condition
+        $hasConstraint = DB::table('matakuliah') 
+                            ->where('id_matkul', $data->id_matkul) // Adjust field names as per your database
+                            ->exists(); // Check if any records exist
+    
+        return $hasConstraint; // Return true if there are constraints, false otherwise
+    }
+
+    public function updateMatakuliah(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $request->validate([
+                'id_matkul' => 'required|exists:matakuliah,id_matkul',  // Validasi ID
+                'kode_matkul' => 'required|string|max:255',  // Validasi kode mata kuliah
+                'nama_matkul' => 'required|string|max:255',  // Validasi nama mata kuliah
+                'sks' => 'required|integer|min:1',  // Validasi SKS
+                'semester' => 'required|integer|min:1',  // Validasi semester
+            ]);
+
+            // $matakuliah = Matakuliah::find($request->id_matkul);
+            // dd($matakuliah);
+
+            // Update data di tabel 'matakuliah' menggunakan model
+            DB::table('matakuliah')->where('id_matkul', $request->id_matkul)
+                ->update([
+                    'kode_matkul' => $request->kode_matkul,
+                    'nama_matkul' => $request->nama_matkul,
+                    'sks' => $request->sks,
+                    'semester' => $request->semester,
+                    'created_at' => now(),  // Update timestamp
+                ]);
+            
+            // Redirect ke halaman sebelumnya dengan pesan sukses
+            return redirect()->back()->with('sweetAlert', [
+                'title' => 'Berhasil!',
+                'text' => 'Matkul berhasil diperbarui.',
+                'icon' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            // Jika terjadi error, redirect dengan pesan error
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui mata kuliah.');
+        }
+    }
+
+    public function deleteMatakuliah(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $request->validate([
+                'id_matkul' => 'required|exists:matakuliah,id_matkul',  // Validasi ID
+            ]);
+
+            // Hapus data di tabel 'matakuliah' menggunakan model
+            DB::table('matakuliah')->where('id_matkul', $request->id_matkul)->delete();
+            
+            // Redirect ke halaman sebelumnya dengan pesan sukses
+            return redirect()->back()->with('sweetAlert', [
+                'title' => 'Berhasil!',
+                'text' => 'Matkul berhasil dihapus.',
+                'icon' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            // Jika terjadi error, redirect dengan pesan error
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus mata kuliah.');
+        }
+    }
+
+        public function UpdateDeleteMatkul()
     {
         $kaprodi = DB::table('dosen')
                         ->join('users', 'dosen.id_user', '=', 'users.id')
@@ -181,12 +256,24 @@ class KaprodiControler extends Controller
         
         $mataKuliah = DB::table('matakuliah')
                         -> select(
+                            'id_matkul',
                             'kode_matkul',
                             'nama_matkul',
                             'sks',
                             'semester'
                         )
-                        -> get();
+                        -> get()
+                        ->map(function($mk) {
+                            // Cek constraint untuk setiap ruangan
+                            $hasConstraint = DB::table('jadwal_kuliah')
+                                ->where('id_ruang', $mk->id_matkul)
+                                ->exists();
+                            
+                            $mk->hasConstraint = $hasConstraint;
+                            return $mk;
+                        });
+
+        // dd($mataKuliah);
         return view('kaprodi_UpdateDeleteMatkul', compact('kaprodi', 'mataKuliah'));
     }
 
@@ -214,26 +301,40 @@ class KaprodiControler extends Controller
 
     public function createMatkul(Request $request)
     {
-        $validated = $request->validate([
+        // dd($request->all());
+        $request->validate([
             'kode_matkul' => 'required|string|max:50',
             'nama_matkul' => 'required|string|max:50',
             'sks' => 'required|integer|min:1|max:8',
+            'semester' => 'required|integer|min:1|max:7',
         ]);
     
-        $cekMatkul = DB::table('matakuliah')->where('kode_matkul', $validated['kode_matkul'])->first();
+        $cekMatkul = DB::table('matakuliah')->where('kode_matkul', $request->kode_matkul)->first();
     
         if ($cekMatkul) {
             return redirect()->back()->with('error', 'Kode mata kuliah sudah ada.');
         }
+
+        $lastMatkul = DB::table('matakuliah')
+                ->orderBy('id_matkul', 'desc')
+                ->first();
+    
+            $id_ruang = $lastMatkul ? $lastMatkul->id_matkul + 1 : 1;
     
         DB::table('matakuliah')->insert([
-            'kode_matkul' => $validated['kode_matkul'],
-            'nama_matkul' => $validated['nama_matkul'],
-            'sks' => $validated['sks'],
+            'kode_matkul' => $request->kode_matkul,
+            'nama_matkul' => $request->nama_matkul,
+            'sks' => $request->sks,
+            'semester' => $request->semester,
             'created_at' => now(),
         ]);
     
-        return redirect()->back()->with('success', 'Mata kuliah baru berhasil ditambahkan.');
+        // dd($request->all());
+        return redirect()->back()->with('sweetAlert', [
+            'title' => 'Berhasil!',
+            'text' => 'Matkul berhasil dibuat.',
+            'icon' => 'success'
+        ]);
     }    
 
     public function batalkanJadwal(Request $request)
