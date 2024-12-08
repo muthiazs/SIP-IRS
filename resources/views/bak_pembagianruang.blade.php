@@ -132,19 +132,13 @@
                         </select>
                     </div>
 
-                    <!-- Dropdown Gedung -->
-                    <div class="mb-3">
-                        <label class="fw-bold">Gedung</label>
-                        <select name="gedung" class="form-select" id="selectGedung" required>
-                            <option value="">Pilih Gedung</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                            <option value="D">D</option>
-                            <option value="E">E</option>
-                            <option value="F">F</option>
-                        </select>
+                    <div class="mb-3 d-flex align-items-center">
+                        <input type="text" id="searchNamaRuang" class="form-control" placeholder="Cari Nama Ruang..." style="max-width: 250px; max-height: 40px;">
+                        <button class="btn ms-2" style="background-color: #6878B1; color: #fff; max-width: 250px; max-height: 40px;" type="button" id="button-addon2">
+                            <span class="material-icons">search</span>
+                        </button>
                     </div>
+                    
 
                     <!-- Tabel -->
                     <div class="table-responsive">
@@ -212,46 +206,39 @@
                     { orderable: false, targets: -1 }
                 ],
                 dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
-                     "<'row'<'col-sm-12'tr>>" +
-                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
             });
 
             // Handle dropdown changes
-            $('#selectProdi, #selectGedung').change(function() {
-                const prodi = $('#selectProdi').val();
-                const gedung = $('#selectGedung').val();
+            $('#selectProdi').change(function() {
+                const prodi = $(this).val();
                 
-                // Update all hidden inputs with current selections
+                // Update all hidden inputs with the selected "prodi"
                 $('.prodi-input').val(prodi);
-                $('.gedung-input').val(gedung);
-                
-                // Filter table if gedung is selected
-                if (gedung) {
-                    table.column(1).search(gedung).draw();
-                }
+
             });
 
             // Handle form submission
             $('.room-form').submit(function(e) {
                 e.preventDefault();
-                
+
                 const prodi = $('#selectProdi').val();
-                const gedung = $('#selectGedung').val();
                 const namaRuang = $(this).find('input[name="nama_ruang"]').val();
-                
-                if (!prodi || !gedung) {
+
+                if (!prodi) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Oops...',
-                        text: 'Silahkan pilih Program Studi dan Gedung terlebih dahulu!',
+                        text: 'Silahkan pilih Program Studi terlebih dahulu!',
                         confirmButtonColor: '#028391'
                     });
                     return false;
                 }
-                
+
                 Swal.fire({
                     title: 'Konfirmasi',
-                    text: `Anda akan menambahkan ruang ${namaRuang} untuk Prodi ${prodi} di Gedung ${gedung}`,
+                    text: `Anda akan menambahkan ruang ${namaRuang} untuk Prodi ${prodi}.`,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonColor: '#028391',
@@ -263,6 +250,19 @@
                         this.submit();
                     }
                 });
+            });
+
+            // Handle search functionality
+            $('#button-addon2').on('click', function() {
+                const searchValue = $('#searchNamaRuang').val();
+                table.search(searchValue).draw();
+            });
+
+            $('#searchNamaRuang').on('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    const searchValue = $(this).val();
+                    table.search(searchValue).draw();
+                }
             });
         });
 
