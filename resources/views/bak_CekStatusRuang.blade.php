@@ -135,13 +135,14 @@
                             <option value="Informatika">Informatika</option>
                             <option value="Statistika">Statistika</option>
                         </select>
-                    </div>
+                    </div>              
 
                     <!-- Tabel Data -->
                     <div class="table-responsive mt-4">
                         <table class="table table-bordered" id="cekTable">
                             <thead>
                                 <tr>
+                                    <th><input type="checkbox" id="select-all"></th> <!-- Checkbox untuk pilih semua -->
                                     <th>No</th>
                                     <th>Nama Ruang</th>
                                     <th>Kapasitas</th>
@@ -152,6 +153,7 @@
                             <tbody id="statusRuang">
                                 @foreach($statusRuang as $index => $data)
                                 <tr>
+                                    <td><input type="checkbox" class="ruang-checkbox" data-nama="{{ $data->nama }}"></td>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $data->nama }}</td>
                                     <td>{{ $data->kapasitas }}</td>
@@ -167,6 +169,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <button id="cancel-selected" class="btn btn-primary btn-sm" style="padding: 5px 15px; font-size: 14px; border-radius: 8px;">
+                            Batalkan
+                        </button>
                     </div>
                 </div>
             </div>
@@ -218,29 +223,8 @@
             $('form').submit(function(e) {
                 e.preventDefault();
                 
-                const selectedProdi = $('#selectProdi').val();
                 const rowProdi = $(this).closest('tr').find('td:eq(3)').text().trim();
                 const ruangName = $(this).closest('tr').find('td:eq(1)').text().trim();
-                
-                if (!selectedProdi) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Oops...',
-                        text: 'Silahkan pilih Program Studi terlebih dahulu!',
-                        confirmButtonColor: '#028391'
-                    });
-                    return false;
-                }
-
-                if (selectedProdi !== rowProdi) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Program Studi yang dipilih tidak sesuai dengan ruangan yang akan dibatalkan!',
-                        confirmButtonColor: '#028391'
-                    });
-                    return false;
-                }
 
                 Swal.fire({
                     title: 'Konfirmasi Pembatalan',
@@ -272,6 +256,83 @@
                 });
             });
         @endif
+    </script>
+    <script>
+         $(document).ready(function () {
+            const table = $('#cekTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json',
+                },
+            });
+
+            // Pilih/Deselect Semua Checkbox
+            $('#select-all').on('click', function () {
+                const isChecked = this.checked;
+                $('.ruang-checkbox').each(function () {
+                    this.checked = isChecked;
+                });
+            });
+
+            // Tombol Batalkan yang Dipilih
+            $('#cancel-selected').on('click', function () {
+                const selectedRuang = [];
+                $('.ruang-checkbox:checked').each(function () {
+                    selectedRuang.push($(this).data('nama'));
+                });
+
+                if (selectedRuang.length > 0) {
+                    Swal.fire({
+                        title: 'Konfirmasi Pembatalan',
+                        text: `Anda yakin ingin membatalkan alokasi ${selectedRuang.length} ruangan?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Ya, batalkan!',
+                        cancelButtonText: 'Tidak',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Kirim data ke server via AJAX
+                            $.ajax({
+                                url: '{{ route("cancel.selected.ruang") }}',
+                                method: 'POST',
+                                data: {
+                                    _token: '{{ csrf_token() }}',
+                                    nama_ruang: selectedRuang,
+                                },
+                                success: function (response) {
+                                    Swal.fire({
+                                        title: response.title,
+                                        text: response.text,
+                                        icon: response.icon,
+                                        confirmButtonText: 'OK',
+                                    }).then(() => {
+                                        location.reload(); // Reload halaman untuk memperbarui tabel
+                                    });
+                                },
+                                error: function () {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: 'Terjadi kesalahan saat membatalkan ruangan. Coba lagi.',
+                                        confirmButtonText: 'OK',
+                                    });
+                                },
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Tidak ada ruangan yang dipilih',
+                        text: 'Silakan pilih satu atau lebih ruangan untuk dibatalkan.',
+                        confirmButtonText: 'OK',
+                    });
+                }
+            });
+        });
     </script>
 </body>
 </html>

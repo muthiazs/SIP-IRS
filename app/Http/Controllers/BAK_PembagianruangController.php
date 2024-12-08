@@ -181,6 +181,46 @@ public function cancelAlokasiRuang(Request $request)
     }
 }
 
+public function cancelSelectedRuang(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'nama_ruang' => 'required|array|min:1',  // Nama ruangan harus berbentuk array
+        'nama_ruang.*' => 'exists:ruangan,nama', // Pastikan nama ruangan valid
+    ]);
+
+    $namaRuangList = $request->nama_ruang;
+
+    try {
+        // Ambil ID ruang berdasarkan nama
+        $ruangIds = DB::table('ruangan')
+            ->whereIn('nama', $namaRuangList)
+            ->pluck('id_ruang')
+            ->toArray();
+
+        // Hapus alokasi ruangan berdasarkan ID
+        DB::table('alokasi_ruangan')->whereIn('id_ruang', $ruangIds)->delete();
+
+        // Ubah status ruangan menjadi 'tersedia'
+        DB::table('ruangan')->whereIn('id_ruang', $ruangIds)->update([
+            'status' => 'tersedia',
+        ]);
+
+        return response()->json([
+            'title' => 'Berhasil!',
+            'text' => count($namaRuangList) . ' ruangan berhasil dibatalkan.',
+            'icon' => 'success',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'title' => 'Error!',
+            'text' => 'Terjadi kesalahan saat membatalkan ruangan.',
+            'icon' => 'error',
+        ]);
+    }
+}
+
+
     
     
 
