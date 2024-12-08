@@ -581,7 +581,7 @@ public function cekStatusPengambilan($id_jadwal)
 //         // ]);
 // }
 
-//FIKS BUAT PPL, G ADA PRIORITAS
+// FIKS BUAT PPL, G ADA PRIORITAS
 // public function ambilJadwal(Request $request)
 // {
 //     try {
@@ -656,65 +656,6 @@ public function cekStatusPengambilan($id_jadwal)
 
 
 
-
-
-//VERSI SEMENTARA BUAT MUTHIA NGERJAIN FITUR LAIN
-// public function ambilJadwal(Request $request)
-// {
-//     try {
-//         // 1. Dapatkan periode akademik terbaru
-//         $periodeAkademik = PeriodeAkademik::latest('id_periode')->first();
-//         if (!$periodeAkademik) {
-//             return response()->json(['success' => false, 'message' => 'Periode akademik tidak ditemukan.'], 404);
-//         }
-
-//         // 2. Cari data mahasiswa berdasarkan ID pengguna yang login
-//         $mahasiswa = Mahasiswa::where('id_user', auth()->id())->first();
-//         if (!$mahasiswa) {
-//             return response()->json(['success' => false, 'message' => 'Data mahasiswa tidak ditemukan.'], 404);
-//         }
-
-//         // 3. Validasi input request
-//         $request->validate([
-//             'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
-//             'status' => 'required|string|max:255',
-//         ]);
-
-//         // Check for scheduling conflicts
-//         $isConflict = $this->cekJadwalBertabrakan($mahasiswa->nim, $request->id_jadwal);
-//         if ($isConflict) {
-//             return response()->json([
-//                 'success' => false,
-//                 'message' => 'Jadwal yang Anda pilih bertabrakan dengan jadwal yang sudah diambil.',
-//             ], 409); // Conflict status code
-//         }
-
-//         // Insert the schedule into IRS
-//         IRS::create([
-//             'nim' => $mahasiswa->nim,
-//             'semester' => $mahasiswa->semester,
-//             'id_jadwal' => $request->id_jadwal,
-//             'status' => $request->status,
-//         ]);
-
-//         return response()->json([
-//             'success' => true,
-//             'message' => 'Jadwal berhasil diambil',
-//         ]);
-//     } catch (\Exception $e) {
-//         // Log the exception for debugging purposes
-//         Log::error("Error in ambilJadwal: " . $e->getMessage());
-
-//         return response()->json([
-//             'success' => false,
-//             'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
-//         ], 500);
-//     }
-// }
-
-
-
-
 public function ambilJadwal(Request $request)
 {
     try {
@@ -733,10 +674,36 @@ public function ambilJadwal(Request $request)
             'status' => 'required|string|max:255',
         ]);
 
-        $jadwal = JadwalKuliah::with('matakuliah')->find($request->id_jadwal);
-        if (!$jadwal) {
-            return response()->json(['success' => false, 'message' => 'Jadwal tidak ditemukan.'], 404);
-        }
+        $isConflict = $this->cekJadwalBertabrakan($mahasiswa->nim, $request->id_jadwal);
+                if ($isConflict) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Jadwal yang Anda pilih bertabrakan dengan jadwal yang sudah diambil.',
+                    ], 409);
+                }
+        
+                $totalSKS = IRS::with('jadwalKuliah.matakuliah')
+                    ->where('nim', $mahasiswa->nim)
+                    ->where('semester', $mahasiswa->semester)
+                    ->get()
+                    ->sum(function ($irs) {
+                        return $irs->jadwalKuliah->matakuliah->sks ?? 0;
+                });
+        
+                Log::info('Total SKS yang sudah diambil:', ['total_sks' => $totalSKS]);
+        
+                $jadwal = JadwalKuliah::with('matakuliah')->find($request->id_jadwal);
+                $sksBaru = $jadwal->matakuliah->sks ?? 0;
+        
+                // Tangkap hasil dari hitungMaksimalSKS
+                $maksimalSKS = $this->hitungMaksimalSKS($mahasiswa->id_mahasiswa);
+        
+                if (($totalSKS + $sksBaru) > $maksimalSKS) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Total SKS yang diambil melebihi batas maksimal SKS (' . $maksimalSKS . ').',
+                    ], 400);
+                }
 
         $kuota = $jadwal->kuota; // Pastikan kolom 'kuota' ada di tabel jadwal_kuliah
         $totalTerisi = IRS::where('id_jadwal', $request->id_jadwal)->count();
@@ -784,6 +751,7 @@ public function ambilJadwal(Request $request)
         return response()->json([
             'success' => true,
             'message' => 'Jadwal berhasil diambil.',
+            'total_sks' => $totalSKS + $sksBaru,
         ]);
     } catch (\Exception $e) {
         Log::error("Error in ambilJadwal: " . $e->getMessage());

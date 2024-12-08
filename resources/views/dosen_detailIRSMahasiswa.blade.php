@@ -121,8 +121,10 @@
                     @endforelse
                 </tbody>
             </table>
-
             <div class="btn-group" role="group" aria-label="IRS Approval Actions">
+                <!-- Tombol Kembali -->
+                <a href="/dosen_irsMahasiswa" class="btn btn-warning">Kembali</a>
+                
                 <!-- Tombol Setujui dengan konfirmasi -->
                 <button type="button" class="btn btn-success" onclick="confirmApproval('approve')">Setujui</button>
                 
