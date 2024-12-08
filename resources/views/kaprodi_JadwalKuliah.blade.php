@@ -4,8 +4,8 @@
     @php
     use Illuminate\Support\Facades\Session;
 @endphp
-
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SIP-IRS Buat Jadwal Kuliah</title>
 <!-- jQuery HARUS PERTAMA -->
@@ -70,6 +70,13 @@
         <!-- Progress Cards -->
         <div class="card shadow-sm">
             <h5 class="card-header bg-teal text-white text-center">Pembagian Jadwal Kuliah</h5>
+            <!-- Search bar -->
+            {{-- <div class="input-group" style="max-width: 250px;">
+                <input type="text" class="form-control" id="searchInput" placeholder="Cari Mata Kuliah" aria-label="Search" aria-describedby="button-addon2" style="max-height: 40px;">
+                <button class="btn" style="background-color: #6878B1; color:#fff; max-height: 40px;" type="button" id="button-addon2">
+                    <span class="material-icons">search</span>
+                </button>
+            </div> --}}
             <div class="card-body d-flex flex-column">
                 <form action="{{ route('ruang.store') }}" method="POST">
                     @csrf                        
@@ -95,15 +102,15 @@
                                     <td>{{ $item->kode_matkul }}</td>
                                     <td>{{ $item->nama_matkul }}</td>
                                     <td>{{ $item->kelas }}</td>
-                                    <td>{{ $item->namaruang }}</td>
+                                    <td>{{ $item->nama_ruang }}</td>
                                     <td>{{ $item->hari }}</td>
                                     <td>{{ $item->jam_mulai }}</td>
                                     <td>{{ $item->jam_selesai }}</td>
                                     <td>
-                                        {{-- <form action="{{ route('jadwal.delete', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
+                                        {{-- <form action="{{ route('batalkanJadwal') }}" method="POST" class="deleteScheduleForm">
                                             @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                            <input type="hidden" name="id" value="{{ $item->id }}">
+                                            <button type="submit" class="btn btn-danger">Batalkan Jadwal</button>
                                         </form> --}}
                                     </td>
                                 </tr>
@@ -121,7 +128,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('jadwal.store') }}" method="POST">
+                                    <form id="jadwalForm" action="{{ route('jadwal.store') }}" method="POST">
                                         @csrf
                                         <div class="mb-3">
                                             <label for="kode_matkul" class="form-label">Mata Kuliah</label>
@@ -130,6 +137,17 @@
                                                 @foreach($namaMK as $matkul)
                                                     <option value="{{ $matkul->kode_matkul }}">{{ $matkul->nama_matkul }}</option>
                                                 @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="hari" class="form-label">Kelas</label>
+                                            <select name="hari" id="hari" class="form-select" required>
+                                                <option value="">Pilih Kelas</option>
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                                <option value="E">E</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
@@ -144,15 +162,26 @@
                                             </select>
                                         </div>
                                         <div class="mb-3">
+                                            <label for="dosen" class="form-label">Dosen</label>
+                                            <select name="dosen" id="dosen" class="form-select" required>
+                                                <option value="" disabled selected>Pilih Dosen</option>
+                                                @foreach($dosen as $d)
+                                                    <option value="{{ $d->id_dosen }}">
+                                                        {{ $d->nama }} 
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <input type="hidden" name="id_dosen" id="selectedDosen">
+                                        <div class="mb-3">
                                             <label for="ruang" class="form-label">Ruang</label>
                                             <select name="ruang" id="ruang" class="form-select" required>
-                                                <option value="">Pilih Ruang</option>
-                                                <!-- Ruang akan diisi berdasarkan prodi -->
-                                                <option value="E101">E101</option>
-                                                <option value="E102">E102</option>
-                                                <option value="E103">E103</option>
-                                                <option value="E201">E201</option>
-                                                <option value="E202">E202</option>
+                                                <option value="" disabled selected>Pilih Ruangan</option>
+                                                @foreach($ruangan as $r)
+                                                    <option value="{{ $r->id_ruang }}">
+                                                        {{ $r->nama_ruang }} 
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="mb-3">
@@ -163,14 +192,13 @@
                                             <label for="jam_selesai" class="form-label">Jam Selesai</label>
                                             <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" required>
                                         </div>
-                                        <button type="submit" class="btn btn-teal">Buat</button>
-                                    </form>
+                                        <button type="submit" class="btn btn-blue">Buat</button>
+                                    </form>                                    
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-secondary" id="saveDraft">Simpan Draf</button>
-                    <button class="btn btn-primary" id="confirmSchedule">Konfirmasi</button>
+                    <button class="btn btn-primary" id="confirmSchedule">Kembali</button>
                 </form>
             </div>
         </div>
@@ -180,51 +208,95 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Dropdown Logic
-<script>
-$(document).ready(function() {
-    $('#selectGedung').change(function() {
-        const gedung = $(this).val();
-        filterTabelByGedung(gedung);
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const jadwalForm = document.getElementById('jadwalForm');
+
+    jadwalForm.addEventListener('submit', async function (e) {
+        e.preventDefault(); // Mencegah reload halaman
+
+        const formData = new FormData(jadwalForm);
+        const submitButton = jadwalForm.querySelector('button[type="submit"]');
+        
+        // Tampilkan loading pada tombol submit
+        submitButton.disabled = true;
+        submitButton.textContent = 'Menyimpan...';
+
+        try {
+            const response = await fetch('/jadwal-kuliah/store', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+                body: formData,
+            });
+
+            // Validasi response
+            const result = await response.json();
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || 'Gagal menyimpan jadwal kuliah');
+            }
+
+            // Tampilkan notifikasi sukses
+            alert(result.message || 'Jadwal berhasil disimpan!');
+
+            // Tutup modal
+            const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('addScheduleModal'));
+            modal.hide();
+
+            // Reset form
+            jadwalForm.reset();
+
+            // Optional: Perbarui UI, misalnya reload data jadwal
+            console.log(result);
+        } catch (error) {
+            // Tampilkan pesan error
+            console.error(error);
+            alert('Terjadi kesalahan: ' + error.message);
+        } finally {
+            // Kembalikan tombol submit ke keadaan semula
+            submitButton.disabled = false;
+            submitButton.textContent = 'Buat';
+        }
     });
 });
 
-function filterTabelByGedung(gedung) {
-    $('#tabelRuang tr').each(function() {
-        if ($(this).find('td').length) {
-            const namaRuang = $(this).find('td:eq(1)').text().trim();
-            if (namaRuang.toLowerCase().startsWith(gedung.toLowerCase())) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        }
-    });
-}
-</script>
+jadwalForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = new FormData(jadwalForm);
 
-Toastr -->
-    <!-- <script>
-    $(document).ready(function() {
-        toastr.options = {
-            "closeButton": true,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "timeOut": "3000",
-            "escapeHtml": true
-        }
+    try {
+        const response = await fetch(jadwalForm.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: formData,
+        });
 
-        @if(Session::has('toast_success'))
-            toastr.success('Ruangan berhasil dialokasikan');
-        @endif
+        const result = await response.json();
+        if (!result.success) throw new Error(result.message);
 
-        @if(Session::has('toast_error'))
-            toastr.error("{!! Session::get('toast_error') !!}"); 
-        @endif
-    });
-    </script> --> 
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: result.message,
+        });
 
-    <script>
+        jadwalForm.reset();
+        bootstrap.Modal.getInstance(document.getElementById('addScheduleModal')).hide();
+        location.reload();
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: error.message,
+        });
+    }
+});
+
+
+
         // Cek konflik jadwal
         // public/js/schedule.js
         $(document).ready(function() {
@@ -274,20 +346,6 @@ Toastr -->
                 }
             });
 
-            // Event handler untuk tombol 'Simpan Draft'
-            $('#saveDraftButton').click(function() {
-                const newSchedule = {
-                    matkul: $('#matkul').val(),
-                    hari: $('#hari').val(),
-                    ruang: $('#ruang').val(),
-                    jam_mulai: $('#jam_mulai').val(),
-                    jam_selesai: $('#jam_selesai').val(),
-                };
-                
-                saveDraft(newSchedule);
-                $('#addScheduleModal').modal('hide');
-            });
-
             // Fungsi untuk menambah jadwal ke tabel
             function addScheduleToTable(schedule) {
                 const table = $('#scheduleTable tbody');
@@ -310,27 +368,115 @@ Toastr -->
                 });
             }
 
-            // Fungsi untuk menyimpan draft
-            function saveDraft(schedule) {
-                $.ajax({
-                    url: '/save-draft',
-                    method: 'POST',
-                    data: {
-                        matkul: schedule.matkul,
-                        hari: schedule.hari,
-                        ruang: schedule.ruang,
-                        jam_mulai: schedule.jam_mulai,
-                        jam_selesai: schedule.jam_selesai,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        console.log('Draft berhasil disimpan');
-                    }
-                });
-            }
         });
 
     </script>
+
+    <!-- Add DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Initialize DataTable
+        var table = $('#jadwalTable').DataTable({
+            responsive: true,
+            pageLength: 10,
+            lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json',
+                lengthMenu: "Tampilkan _MENU_ data per halaman",
+                zeroRecords: "Data tidak ditemukan",
+                info: "Menampilkan halaman _PAGE_ dari _PAGES_",
+                infoEmpty: "Tidak ada data yang tersedia",
+                infoFiltered: "(difilter dari _MAX_ total data)",
+                paginate: {
+                    first: "Pertama",
+                    last: "Terakhir",
+                    next: "Selanjutnya",
+                    previous: "Sebelumnya"
+                }
+            },
+            columnDefs: [
+                { orderable: false, targets: -1 }  // Disable sorting for action column
+            ],
+            // Customizing dom to hide default search box
+            dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            initComplete: function() {
+                // Connect custom search box with DataTables
+                $('#customSearchInput').on('keyup', function() {
+                    table.search(this.value).draw();
+                });
+
+                // Reset search on button click
+                $('#resetSearchButton').on('click', function() {
+                    table.search('').draw();
+                });
+            }
+        });
+    });
+
+    $(document).ready(function() {
+    $('#jadwalForm').submit(function(e) {
+        e.preventDefault(); // Mencegah form melakukan reload
+
+        var formData = $(this).serialize(); // Mengambil data form
+
+        $.ajax({
+            url: '{{ route('jadwal.store') }}',
+            method: 'POST',
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    // Jika berhasil, tambahkan row baru ke dalam tabel
+                    var newRow = `
+                        <tr>
+                            <td>${$('#jadwalTable tbody tr').length + 1}</td>
+                            <td>${response.kode_matkul}</td>
+                            <td>${response.nama_matkul}</td>
+                            <td>${response.kelas}</td>
+                            <td>${response.nama_ruang}</td>
+                            <td>${response.hari}</td>
+                            <td>${response.jam_mulai}</td>
+                            <td>${response.jam_selesai}</td>
+                            <td>
+                                <form action="{{ route('batalkanJadwal') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger">Batalkan Jadwal</button>
+                                </form>
+                            </td>
+                        </tr>
+                    `;
+                    $('#jadwalTable tbody').append(newRow); // Tambahkan row baru ke tabel
+
+                    // Menutup modal
+                    $('#addScheduleModal').modal('hide');
+
+                    // Tampilkan notifikasi sukses
+                    toastr.success('Jadwal berhasil ditambahkan!');
+                } else {
+                    toastr.error('Terjadi kesalahan saat menambahkan jadwal!');
+                }
+            },
+            error: function() {
+                toastr.error('Terjadi kesalahan saat mengirim data!');
+            }
+        });
+    });
+});
+
+</script>
+
+<!-- Add Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    
 
 </body>
 </html>

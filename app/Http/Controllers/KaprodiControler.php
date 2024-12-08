@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Matakuliah;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\JadwalKuliah;
+use App\Models\Dosen;
 use Illuminate\Http\Request;
 
 class KaprodiControler extends Controller
@@ -53,14 +54,39 @@ class KaprodiControler extends Controller
         // Ambil semua mata kuliah
         $namaMK = Matakuliah::all();
     
-        // Ambil ruangan dengan status "telah digunakan"
-        $ruangan = DB::table('ruangan')->where('status', 'telah digunakan')->get();
+        // Ambil data ruangan yang sesuai dengan prodi kaprodi
+        $ruangan = DB::table('alokasi_ruangan')
+        ->join('ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
+        ->where('alokasi_ruangan.id_prodi', $kaprodi->prodi_id)
+        ->select(
+            'alokasi_ruangan.id_ruang',
+            'ruangan.nama as nama_ruang',
+        )
+        ->get();
     
-        // Kirimkan data ke view
-        return view('kaprodi_JadwalKuliah', compact('kaprodi', 'namaMK', 'ruangan'));
-    }
-    
+        // Ambil jadwal kuliah
+        $jadwal = DB::table('jadwal_kuliah')
+        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+        ->join('ruangan', 'jadwal_kuliah.id_ruang', '=', 'ruangan.id_ruang')
+        ->select(
+            'jadwal_kuliah.id_jadwal',
+            'jadwal_kuliah.kode_matkul',
+            'matakuliah.nama_matkul',
+            'jadwal_kuliah.kelas',
+            'matakuliah.semester',
+            'jadwal_kuliah.hari',
+            'ruangan.nama as nama_ruang',
+            'jadwal_kuliah.jam_mulai',
+            'jadwal_kuliah.jam_selesai'
+        )
+        ->get();
 
+        // Ambil nama dosen
+        $dosen = Dosen::where('prodi_id', $kaprodi->prodi_id)->get(); // Ambil dosen berdasarkan prodi_id kaprodi
+
+        // Kirimkan data ke view
+        return view('kaprodi_JadwalKuliah', compact('kaprodi', 'namaMK', 'ruangan', 'jadwal', 'dosen'));
+    }
 
     public function StatusMahasiswa()
     {
@@ -84,31 +110,52 @@ class KaprodiControler extends Controller
         return view('kaprodi_StatusMahasiswa', compact('kaprodi'));
     }
 
+    // Fungsi untuk menambah jadwal kuliah
     public function storeJadwalKuliah(Request $request)
-{
-    // Validasi data
-    $validated = $request->validate([
-        'kode_matkul' => 'required|string',
-        'hari' => 'required|string',
-        'ruang' => 'required|string',
-        'jam_mulai' => 'required|date_format:H:i',
-        'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-    ]);
+    {
+        $validated = $request->validate([
+            'kode_matkul' => 'required|exists:matakuliah,kode_matkul', // Validasi kode_matkul
+            'id_dosen' => 'required|exists:dosen,id', // Validasi dosen pengampu
+            'id_ruang' => 'required|exists:ruangan,id_ruang', // Validasi ruangan
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat', // Validasi hari
+            'jam_mulai' => 'required|date_format:H:i', // Validasi jam mulai
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai', // Jam selesai harus setelah jam mulai
+            'kelas' => 'required|in:A,B,C,D,E', // Validasi kelas
+        ]);
 
-    // Simpan ke database (misalnya ke tabel 'jadwal_kuliah')
-    DB::table('jadwal_kuliah')->insert([
-        'kode_matkul' => $validated['kode_matkul'],
-        'hari' => $validated['hari'],
-        'ruang' => $validated['ruang'],
-        'jam_mulai' => $validated['jam_mulai'],
-        'jam_selesai' => $validated['jam_selesai'],
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
+        
+    try {
+        // Ambil data mata kuliah
+        $matakuliah = Matakuliah::where('kode_matkul', $validated['kode_matkul'])->firstOrFail();
+        $semester = $matakuliah->semester;
 
-    // Redirect dengan pesan sukses
-    return redirect()->back()->with('toast_success', 'Jadwal berhasil ditambahkan.');
-}
+        // Tentukan id_periode
+        $id_periode = $semester % 2 === 1 ? 24251 : 24252;
+
+        // Ambil data ruangan
+        $ruangan = DB::table('ruangan')->where('id_ruang', $validated['id_ruang'])->firstOrFail();
+
+        // Insert ke tabel jadwal_kuliah
+        DB::table('jadwal_kuliah')->insert([
+            'kode_matkul' => $validated['kode_matkul'],
+            'kuota' => $ruangan->kuota,
+            'id_dosen' => $validated['id_dosen'],
+            'id_ruang' => $validated['id_ruang'],
+            'hari' => $validated['hari'],
+            'jam_mulai' => $validated['jam_mulai'],
+            'jam_selesai' => $validated['jam_selesai'],
+            'kelas' => $validated['kelas'],
+            'semester' => $semester,
+            'id_periode' => $id_periode,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+            return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()]);
+        }
+    }
 
 
     public function setMatkul()
@@ -219,5 +266,18 @@ class KaprodiControler extends Controller
         return redirect()->back()->with('success', 'Mata kuliah baru berhasil ditambahkan.');
     }    
 
+    public function batalkanJadwal(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'id_jadwal' => 'required|integer|exists:kaprodi_JadwalKuliah,id_jadwal', // Validasi id_jadwal pada tabel kaprodi_JadwalKuliah
+        ]);
+    
+        // Hapus jadwal berdasarkan id_jadwal
+        JadwalKuliah::where('id_jadwal', $request->id_jadwal)->delete();
+    
+        // Redirect atau respon sukses
+        return redirect()->back()->with('success', 'Jadwal kuliah berhasil dibatalkan.');
+    }   
 
 } 
