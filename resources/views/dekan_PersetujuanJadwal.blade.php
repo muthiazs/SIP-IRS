@@ -91,14 +91,14 @@
             <!-- Cards Section -->
             {{-- Rencana Studi untuk setiap semester --}}
             <div class="accordion accordion-flush" id="accordionFlushExample">
-                @foreach ($prodi)
+                @foreach ($prodi as $item)
                     <div class="accordion-item">
                         <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-{{ $prodi->id_prodi }}" aria-expanded="false" aria-controls="flush-collapse-{{ $prodi->id_prodi }}">
-                                {{ $prodi->nama }}
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-{{ $item->id_prodi }}" aria-expanded="false" aria-controls="flush-collapse-{{ $item->id_prodi }}">
+                                {{ $item->nama }}
                             </button>
                         </h2>
-                        <div id="flush-collapse-{{ $prodi->id_prodi }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                        <div id="flush-collapse-{{ $item->id_prodi }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                             <div class="accordion-body">
                                 <table class="table table-bordered">
                                     <thead>
@@ -120,6 +120,7 @@
                         </div>
                     </div>
                 @endforeach
+
             </div>
         </div>
     </div>

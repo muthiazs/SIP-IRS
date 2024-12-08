@@ -19,13 +19,13 @@
             </a>
             <div class="nav-item">
                 <a href="/kaprodi_JadwalKuliah" 
-                class="nav-link {{ Route::is('kaprodi_JadwalKuliah') || Route::is('kaprodi_UpdateDeleteMatkul') ? 'active' : '' }} rounded d-flex align-items-center toggle-submenu">
+                class="nav-link {{ Route::is('kaprodi_JadwalKuliah') || Route::is('kaprodi_UpdateDeleteMatkul') || Route::is('kaprodi_CreateJadwal') ? 'active' : '' }} rounded d-flex align-items-center toggle-submenu">
                     <span class="material-icons me-3">description</span>
                     Jadwal Kuliah
                 </a>
 
                 <ul class="submenu">
-                    <li><a href="/kaprodi_JadwalKuliah" class="nav-link {{ Route::is('kaprodi_JadwalKuliah') ? 'active' : '' }}">Set Jadwal Kuliah</a></li>
+                    <li><a href="/kaprodi_JadwalKuliah" class="nav-link {{ Route::is('kaprodi_JadwalKuliah') || Route::is('kaprodi_CreateJadwal') ? 'active' : '' }}">Set Jadwal Kuliah</a></li>
                     <li><a href="/kaprodi_UpdateDeleteMatkul" class="nav-link {{ Route::is('kaprodi_UpdateDeleteMatkul') ? 'active' : '' }}">Atur Mata Kuliah</a></li>
                 </ul>
             </div>

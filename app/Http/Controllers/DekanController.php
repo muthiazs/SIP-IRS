@@ -137,10 +137,54 @@ class DekanController extends Controller
                     )
                     ->first();
         
-        $programStudi = DB::table('program_studi')
+        $prodi = DB::table('program_studi')
                     ->select('id_prodi', 'nama')
                     ->get();
 
-        return view('dekan_PersetujuanJadwal', compact('dekan', 'programStudi'));
+        $jadwal = DB::table('jadwal_kuliah as jk')
+                    ->join('matakuliah', 'jk.kode_matkul', '=', 'matakuliah.kode_matkul')
+                    ->join('ruangan', 'jk.id_ruang', '=', 'ruangan.id_ruang')
+                    ->join('dosen', 'jk.id_dosen', '=', 'dosen.id_dosen')
+                    ->where('jk.status', '=', 'belum_disetujui')
+                    ->select(
+                    'jk.kode_matkul',
+                    'matakuliah.nama_matkul as nama_matkul',
+                    'jk.kelas',
+                    'matakuliah.sks',
+                    'ruangan.nama as nama_ruang',
+                    'dosen.nama as nama_dosen'
+                    )
+                    ->get();
+
+        return view('dekan_PersetujuanJadwal', compact('dekan', 'prodi', 'jadwal'));
     }
+
+    public function setujuiJadwal(Request $request)
+{
+    $jadwal = DB::table('jadwal_kuliah')
+        ->where('id_jadwal', $request->id_jadwal)
+        ->first();
+
+    if (!$jadwal || $jadwal->status !== 'belum_disetujui') {
+        return redirect()->back()->with('error', 'Jadwal tidak ditemukan atau sudah disetujui.');
+    }
+
+    DB::table('jadwal_kuliah')
+        ->where('id_jadwal', $jadwal->id_jadwal)
+        ->update([
+            'status' => 'disetujui'
+        ]);
+
+    return redirect()->back()->with('success', 'Jadwal berhasil disetujui.');
+}
+
+public function setujuiSemuaJadwal()
+{
+    DB::table('jadwal_kuliah')
+        ->where('status', 'belum_disetujui')
+        ->update(['status' => 'disetujui']);
+
+    return redirect()->back()->with('success', 'Semua jadwal berhasil disetujui.');
+}
+
 }
