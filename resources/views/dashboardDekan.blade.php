@@ -18,13 +18,6 @@
 <body class="bg-light">
     <div class="d-flex">
     <x-sidebar-dekan :dekan="$dekan"></x-sidebar-dekan>
-        <!-- Wave decoration -->
-        <div class="wave-decoration"> 
-            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
-                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-            </svg>
-        </div>
-
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
             <!-- Header -->
@@ -32,14 +25,6 @@
                 <div>
                     <h1 class="fs-3 fw-bold">Selamat datang, {{ $dekan->dosen_nama }} 👋</h1>
                     <p class="text-muted"> Semester Akademik </p>
-                </div>
-                <div class="position-relative">
-                    <button class="btn btn-primary rounded-circle p-2">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                    <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                        <span class="visually-hidden">Notifikasi baru</span>
-                    </span>
                 </div>
             </div>
 

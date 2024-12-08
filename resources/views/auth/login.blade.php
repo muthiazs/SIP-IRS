@@ -13,55 +13,84 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
 
-    <!-- Menambahkan background secara langsung di file HTML -->
     <style>
         body {
-            background-image: url("{{ asset('images/background_login.png') }}");
-            background-size: cover;
-            background-repeat: no-repeat;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: row; /* Arrange items in a row */
+            align-items: stretch;
+            width: 100%;
+            height: 100vh; /* Make container fill the viewport height */
+        }
+
+        /* Sidebar */
+        .login-sidebar {
+            background-image: url("{{ asset('images/login_sidebar.png') }}");
+            background-size: cover;
+            background-position: center;
+            width: 685px; /* Adjust width for sidebar */
+            height: 100vh; /* Sidebar should take full height */
+        }
+
+        /* Content area */
+        .login-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 60%;
         }
 
         .card {
             padding: 20px;
             width: 100%;
-            max-width: 400px; /* Memberikan batas maksimal lebar agar tetap proporsional */
+            max-width: 400px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             background-color: #FFF4EA;
-            font-family: 'Poppins', sans-serif; /* Terapkan font Poppins ke seluruh body */
         }
 
         .btn-primary {
             margin-top: 20px;
-            width: 100%; /* Tombol responsif */
+            width: 100%;
             background-color: #16325B;
             border-color: #16325B;
         }
 
-        /* Media Queries untuk responsivitas */
+        /* Responsiveness */
         @media (max-width: 768px) {
             .card {
-                max-width: 90%; /* Pada layar lebih kecil, lebar akan menyesuaikan hingga 90% */
+                max-width: 90%;
             }
         }
 
         @media (max-width: 480px) {
             .card {
-                max-width: 100%; /* Pada layar kecil, lebar akan menyesuaikan 100% */
-                padding: 15px;  /* Mengurangi padding agar lebih pas di layar kecil */
+                max-width: 100%;
+                padding: 15px;
             }
         }
     </style>
 </head>
 <body>
-<div class="container mt-5">
-    <div class="row justify-content-end">
-        <div class="col-md-6">
+    <div class="login-container">
+        <!-- Sidebar -->
+        <div class="login-sidebar"></div>
+
+        <!-- Content Area -->
+        <div class="login-content">
+            <!-- Logo -->
+            <img src="{{ asset('images/sip-irs_logo.png') }}" alt="Logo" class="img-fluid" style="max-height: 100px;">
+
+            <!-- Card Login -->
             <div class="card">
                 <div class="card-header text-center">Login</div>
                 <div class="card-body">
@@ -81,7 +110,7 @@
                         <div class="form-group mb-3">
                             <label for="password" class="form-label">Password:</label>
                             <input type="password" class="form-control" id="password" placeholder="****" 
-                                name="password" required autocomplete="current-password">
+                                   name="password" required autocomplete="current-password">
                             @if ($errors->has('password'))
                                 <span class="text-danger">
                                     {{$errors->first('password')}}
@@ -94,6 +123,5 @@
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>

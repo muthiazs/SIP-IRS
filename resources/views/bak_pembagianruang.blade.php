@@ -33,7 +33,7 @@
           color: #ffffff;
       }
       .text-blue {
-          color: #456DDB;
+          color: #6878B1;
       }
       .card-body {
           background-color: #FFF2E5;

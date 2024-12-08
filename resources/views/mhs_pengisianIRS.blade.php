@@ -3,9 +3,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIP-IRS Pengisian IRS</title>
+    <title>Pengisian Rencana Studi - SIP-IRS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -90,7 +89,7 @@
         }
 
         .card-body {
-            overflow-x: auto; /* Agar tabel tidak keluar dari card */
+            /* overflow-x: auto; Agar tabel tidak keluar dari card */
             padding: 15px; /* Tambahkan padding agar terlihat rapi */
             width: auto; /* Sesuaikan lebar dengan konten */
             max-width: 100%; /* Pastikan tidak melebihi layar */
@@ -101,7 +100,7 @@
         .card {
             margin: 5px; /* Berikan margin 10px di sekeliling card */
             width: auto; /* Pastikan mengikuti ukuran konten */
-            max-width: 100%; /* Agar tidak melampaui lebar layar */
+            max-width: 90%; /* Agar tidak melampaui lebar layar */
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan sedikit bayangan untuk estetika */
         }
         /* Styling untuk DataTables */
@@ -154,6 +153,9 @@
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
+                {{-- <div>
+                    <h1>{{$Periode_sekarang->jenis}}</h1>
+                </div> --}}
             </div>
 
             <!-- Pengisian IRS Cards -->
@@ -165,15 +167,11 @@
                         <div class="d-flex">
                             <div class="margincard">
                                 <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                                <span class="badge irs-badge" style="background-color: #67C3CC;">
-                                    {{ $maksimalSKS }} SKS
-                                </span>
+                                <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
                             </div>
                             <div class="margincard" style="margin-left: 10px;">
                                 <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                                <span class="badge irs-badge" style="background-color: #67C3CC;">
-                                    {{ $totalSKSTerpilih }} SKS
-                                </span>
+                                <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
                             </div>
                         </div>
                     </div>
@@ -432,6 +430,25 @@ $(document).ready(function() {
     });
 </script>
 
+    // Menangani klik tombol Batalkan
+    document.getElementById('batalkanBtn').addEventListener('click', function() {
+        Swal.fire({
+            title: 'Konfirmasi Batalkan Mata Kuliah',
+            text: 'Apakah Anda yakin ingin membatalkan pengambilan mata kuliah ini?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, batalkan!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Aksi yang terjadi setelah konfirmasi, bisa diarahkan ke route
+                window.location.href = '#'; // Ganti dengan route yang sesuai
+            }
+        });
+    });
+</script>
 
 {{-- Menangani searching
 <script>

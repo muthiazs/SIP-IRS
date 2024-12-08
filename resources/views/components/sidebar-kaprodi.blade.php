@@ -13,21 +13,23 @@
         </div>
     
         <nav class="nav flex-column gap-2 mb-4">
-            <a href="/dashboardKaprodi" class="nav-link active rounded d-flex align-items-center">
+            <a href="/dashboardKaprodi" class="nav-link {{ Route::is('dashboardKaprodi') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">home</span>
                 Beranda
             </a>
             <div class="nav-item">
-                <a href="/kaprodi_JadwalKuliah" class="nav-link rounded d-flex align-items-center toggle-submenu">
+                <a href="/kaprodi_JadwalKuliah" 
+                class="nav-link {{ Route::is('kaprodi_JadwalKuliah') || Route::is('kaprodi_SetMatkul') ? 'active' : '' }} rounded d-flex align-items-center toggle-submenu">
                     <span class="material-icons me-3">description</span>
                     Jadwal Kuliah
                 </a>
+
                 <ul class="submenu">
-                    <li><a href="/kaprodi_JadwalKuliah" class="nav-link">Set Jadwal Kuliah</a></li>
-                    <li><a href="/kaprodi_SetMatkul" class="nav-link">Set Mata Kuliah</a></li>
+                    <li><a href="/kaprodi_JadwalKuliah" class="nav-link {{ Route::is('kaprodi_JadwalKuliah') ? 'active' : '' }}">Set Jadwal Kuliah</a></li>
+                    <li><a href="/kaprodi_SetMatkul" class="nav-link {{ Route::is('kaprodi_SetMatkul') ? 'active' : '' }}">Set Mata Kuliah</a></li>
                 </ul>
             </div>
-            <a href="/kaprodi_StatusMahasiswa" class="nav-link rounded d-flex align-items-center">
+            <a href="/kaprodi_StatusMahasiswa" class="nav-link {{ Route::is('kaprodi_StatusMahasiswa') ? 'active' : '' }} rounded d-flex align-items-center">
                 <span class="material-icons me-3">assessment</span>
                 Status Mahasiswa
             </a>
