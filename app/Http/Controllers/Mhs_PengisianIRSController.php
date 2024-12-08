@@ -145,6 +145,17 @@ class Mhs_PengisianIRSController extends Controller
         return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
     }
 
+     // Mengambil data periode akademik yang sedang berlangsung
+    $Periode_sekarang_id = DB::table('periode_akademik')
+        ->orderByDesc('id_periode')
+        ->select('id_periode')
+        ->first();
+
+        // Cek apakah periode akademik ditemukan
+     if (!$Periode_sekarang_id) {
+        return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
+        }
+
     // Fetch jadwal kuliah berdasarkan periode
     $jadwalKuliah = DB::table('jadwal_kuliah')
         ->join('matakuliah', 'matakuliah.kode_matkul', '=', 'jadwal_kuliah.kode_matkul')
@@ -156,6 +167,7 @@ class Mhs_PengisianIRSController extends Controller
         ->when($Periode_sekarang->jenis == 'genap', function($query) {
             return $query->whereRaw('matakuliah.semester % 2 = 0');
         })
+        ->where('periode_akademik.id_periode', $Periode_sekarang_id->id_periode)
         ->orderBy('matakuliah.semester')
         ->orderBy('matakuliah.nama_matkul')
         ->select(

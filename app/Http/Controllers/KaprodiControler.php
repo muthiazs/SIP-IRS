@@ -65,23 +65,36 @@ class KaprodiControler extends Controller
             'ruangan.nama as nama_ruang',
         )
         ->get();
+
+        // Mengambil data periode akademik yang sedang berlangsung
+        $Periode_sekarang = DB::table('periode_akademik')
+        ->orderByDesc('id_periode')
+        ->select('id_periode')
+        ->first();
+
+        // Cek apakah periode akademik ditemukan
+        if (!$Periode_sekarang) {
+        return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
+        }
     
         // Ambil jadwal kuliah
         $jadwal = DB::table('jadwal_kuliah')
-        ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
-        ->join('ruangan', 'jadwal_kuliah.id_ruang', '=', 'ruangan.id_ruang')
-        ->select(
-            'jadwal_kuliah.id_jadwal',
-            'jadwal_kuliah.kode_matkul',
-            'matakuliah.nama_matkul',
-            'jadwal_kuliah.kelas',
-            'matakuliah.semester',
-            'jadwal_kuliah.hari',
-            'ruangan.nama as nama_ruang',
-            'jadwal_kuliah.jam_mulai',
-            'jadwal_kuliah.jam_selesai'
-        )
-        ->get();
+            ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
+            ->join('ruangan', 'jadwal_kuliah.id_ruang', '=', 'ruangan.id_ruang')
+            ->join('periode_akademik', 'jadwal_kuliah.id_periode', '=', 'periode_akademik.id_periode')
+            ->where('periode_akademik.id_periode', $Periode_sekarang->id_periode) // Menentukan bahwa 'jenis' ada di tabel periode_akademik
+            ->select(
+                'jadwal_kuliah.id_jadwal',
+                'jadwal_kuliah.kode_matkul',
+                'matakuliah.nama_matkul',
+                'jadwal_kuliah.kelas',
+                'matakuliah.semester',
+                'jadwal_kuliah.hari',
+                'ruangan.nama as nama_ruang',
+                'jadwal_kuliah.jam_mulai',
+                'jadwal_kuliah.jam_selesai'
+            )
+            ->get();
 
         // Ambil nama dosen
         $dosen = Dosen::where('prodi_id', $kaprodi->prodi_id)->get(); // Ambil dosen berdasarkan prodi_id kaprodi
@@ -269,11 +282,14 @@ class KaprodiControler extends Controller
             'ruangan.nama as nama_ruang',
         )
         ->get();
+
+        
     
         // Ambil jadwal kuliah
         $jadwal = DB::table('jadwal_kuliah')
         ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
         ->join('ruangan', 'jadwal_kuliah.id_ruang', '=', 'ruangan.id_ruang')
+        ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'jadwal_kuliah.id_periode')
         ->select(
             'jadwal_kuliah.id_jadwal',
             'jadwal_kuliah.kode_matkul',
@@ -363,17 +379,40 @@ class KaprodiControler extends Controller
                 'kuota' => 'required|int'
             ]);
 
+            // Mengambil data periode akademik yang sedang berlangsung
+            $Periode_sekarang = DB::table('periode_akademik')
+            ->orderByDesc('id_periode')
+            ->select('jenis')
+            ->first();
+
+            // Cek apakah periode akademik ditemukan
+            if (!$Periode_sekarang) {
+                return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
+}
+
             // Cari data terkait berdasarkan input
-            $matakuliah = Matakuliah::where('nama_matkul', $request->namaMatakuliah)->first();
+            $matakuliah = Matakuliah::where('nama_matkul', $request->namaMatakuliah)
+                ->when($Periode_sekarang->jenis == 'ganjil', function($query) {
+                    return $query->whereRaw('matakuliah.semester % 2 != 0');
+                })
+                ->when($Periode_sekarang->jenis == 'genap', function($query) {
+                    return $query->whereRaw('matakuliah.semester % 2 = 0');
+                })
+                ->first();
             $dosen = Dosen::where('nama', $request->namaDosen)->first();
             $ruangan = DB::table('alokasi_ruangan')
                 ->join('ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
                 ->where('ruangan.nama', $request->namaRuang)
-                ->select('ruangan.id_ruang', 'ruangan.nama as nama_ruang')
+                ->select('ruangan.id_ruang', 'ruangan.nama as nama_ruang' , 'ruangan.kapasitas')
                 ->first();
 
             if (!$ruangan) {
                 return response()->json(['success' => false, 'message' => 'Ruangan tidak ditemukan untuk prodi yang sesuai.'], 404);
+            }
+
+            // Cek kuota tidak melebihi kapasitas ruangan
+            if ($request->kuota > $ruangan->kapasitas) {
+                return response()->json(['success' => false, 'message' => 'Kuota tidak boleh melebihi kapasitas ruangan.'], 400);
             }
 
             // Cek jika jadwal bertabrakan
