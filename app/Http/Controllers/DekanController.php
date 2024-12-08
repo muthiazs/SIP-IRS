@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class DekanController extends Controller
                     ->crossJoin('periode_akademik')
                     ->where('users.roles1', '=', 'dosen')
                     ->where('users.roles2', '=', 'dekan')
-                    ->where('dosen.id_user', '=', auth()->id())
+                    ->where('dosen.id_user', '=', Auth::id())
                     ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                     ->select(
                         'dosen.nip',
@@ -39,7 +40,7 @@ class DekanController extends Controller
                     ->crossJoin('periode_akademik')
                     ->where('users.roles1', '=', 'dosen')
                     ->where('users.roles2', '=', 'dekan')
-                    ->where('dosen.id_user', '=', auth()->id())
+                    ->where('dosen.id_user', '=', Auth::id())
                     ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                     ->select(
                         'dosen.nip',
@@ -113,7 +114,7 @@ class DekanController extends Controller
                     ->crossJoin('periode_akademik')
                     ->where('users.roles1', '=', 'dosen')
                     ->where('users.roles2', '=', 'dekan')
-                    ->where('dosen.id_user', '=', auth()->id())
+                    ->where('dosen.id_user', '=', Auth::id())
                     ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                     ->select(
                         'dosen.nip',

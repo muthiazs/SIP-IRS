@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class BAK_PembagianruangController extends Controller
 {
@@ -16,11 +17,10 @@ class BAK_PembagianruangController extends Controller
             ->select('r.nama', 'r.kapasitas')
             ->get();
     
-
         $akademik = DB::table('pegawai')
             ->join('users', 'pegawai.id_user', '=', 'users.id')
             ->crossJoin('periode_akademik')
-            ->where('pegawai.id_user', auth()->id())
+            ->where('pegawai.id_user', Auth::id())
             ->orderBy('periode_akademik.created_at', 'desc')
             ->select(
                 'pegawai.nama',
@@ -50,7 +50,7 @@ class BAK_PembagianruangController extends Controller
         $akademik = DB::table('pegawai')
             ->join('users', 'pegawai.id_user', '=', 'users.id')
             ->crossJoin('periode_akademik')
-            ->where('pegawai.id_user', auth()->id())
+            ->where('pegawai.id_user', Auth::id())
             ->orderBy('periode_akademik.created_at', 'desc')
             ->select(
                 'pegawai.nama',
@@ -65,11 +65,7 @@ class BAK_PembagianruangController extends Controller
     // Controller untuk Alokasi Pembagian Ruang
     public function storeRuang(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'nama_ruang' => 'required|string|exists:ruangan,nama',
-            'prodi' => 'required|string|exists:program_studi,nama',
-        ]);
+        // dd($request->all());
     
         // Ambil data ruangan berdasarkan nama
         $ruang = DB::table('ruangan')->where('nama', $request->nama_ruang)->first();
@@ -90,7 +86,7 @@ class BAK_PembagianruangController extends Controller
             'id_ruang' => $ruang->id_ruang,
             'id_prodi' => $prodi->id_prodi,
             'semester' => $periode->jenis,
-            'tahun_ajaran' => $periode->tahun_mulai . '/' . $periode->tahun_selesai,
+            'tahun_ajaran' => date('Y', strtotime($periode->tahun_mulai)) . '/' . date('Y', strtotime($periode->tahun_selesai)),
             'created_at' => now(),
         ]);
     
@@ -108,6 +104,7 @@ class BAK_PembagianruangController extends Controller
     
     public function cancelAlokasiRuang(Request $request)
     {
+        // dd($request->all());
         // Validasi input
         $request->validate([
             'nama_ruang' => 'required|string|exists:ruangan,nama',
@@ -152,7 +149,7 @@ class BAK_PembagianruangController extends Controller
         $akademik = DB::table('pegawai')
                         ->join('users', 'pegawai.id_user', '=', 'users.id')
                         ->crossJoin('periode_akademik')
-                        ->where('pegawai.id_user', auth()->id())
+                        ->where('pegawai.id_user', Auth::id())
                         ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                         ->select(
                             'pegawai.nama',
@@ -200,7 +197,8 @@ class BAK_PembagianruangController extends Controller
         $tabelRuang = DB::table('ruangan')
             ->select(
                 'ruangan.nama',
-                'ruangan.kapasitas'
+                'ruangan.kapasitas',
+                'ruangan.id_ruang'
             )
             ->get();
 
@@ -209,7 +207,7 @@ class BAK_PembagianruangController extends Controller
         $akademik = DB::table('pegawai')
                         ->join('users', 'pegawai.id_user', '=', 'users.id')
                         ->crossJoin('periode_akademik')
-                        ->where('pegawai.id_user', auth()->id())
+                        ->where('pegawai.id_user', Auth::id())
                         ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                         ->select(
                             'pegawai.nama',
@@ -236,7 +234,7 @@ class BAK_PembagianruangController extends Controller
         $akademik = DB::table('pegawai')
                         ->join('users', 'pegawai.id_user', '=', 'users.id')
                         ->crossJoin('periode_akademik')
-                        ->where('pegawai.id_user', auth()->id())
+                        ->where('pegawai.id_user', Auth::id())
                         ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                         ->select(
                             'pegawai.nama',
@@ -250,28 +248,27 @@ class BAK_PembagianruangController extends Controller
 
     public function updateRuang(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'id_ruang' => 'required|exists:ruangan,id_ruang',
             'nama' => 'required|string|max:255',
             'kapasitas' => 'required|integer|min:1',
         ]);
-    
+
         DB::table('ruangan')->where('id_ruang', $request->id_ruang)->update([
             'nama' => $request->nama,
             'kapasitas' => $request->kapasitas,
-            'updated_at' => now(),
+            'created_at' => now(),
         ]);
     
         return redirect()->route('bak_UpdateDeleteRuang')->with('success', 'Ruangan berhasil diperbarui.');
     }
        
-      
-
     public function deleteRuang(Request $request)
     {
         DB::table('ruangan')->where('id_ruang', $request->id_ruang)->delete();
-        return response()->json(['message' => 'Ruangan berhasil dihapus'], 200);
+        return redirect()->route('bak_UpdateDeleteRuang')->with('success', 'Ruangan berhasil dihapus.');
     }
-
-
 }
+
+//asyik

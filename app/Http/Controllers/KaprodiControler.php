@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Matakuliah;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class KaprodiControler extends Controller
                         ->crossJoin('periode_akademik')
                         ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
                         ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-                        ->where('dosen.id_user', '=', auth()->id())
+                        ->where('dosen.id_user', '=', Auth::id())
                         ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                         ->select(
                             'dosen.nip',
@@ -38,7 +39,7 @@ class KaprodiControler extends Controller
             ->crossJoin('periode_akademik')
             ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
             ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-            ->where('dosen.id_user', '=', auth()->id())
+            ->where('dosen.id_user', '=', Auth::id())
             ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
             ->select(
                 'dosen.nip',
@@ -69,7 +70,7 @@ class KaprodiControler extends Controller
                         ->crossJoin('periode_akademik')
                         ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
                         ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-                        ->where('dosen.id_user', '=', auth()->id())
+                        ->where('dosen.id_user', '=', Auth::id())
                         ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                         ->select(
                             'dosen.nip',
@@ -91,7 +92,7 @@ class KaprodiControler extends Controller
                         ->crossJoin('periode_akademik')
                         ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
                         ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-                        ->where('dosen.id_user', '=', auth()->id())
+                        ->where('dosen.id_user', '=', Auth::id())
                         ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                         ->select(
                             'dosen.nip',
@@ -122,7 +123,7 @@ class KaprodiControler extends Controller
                         ->crossJoin('periode_akademik')
                         ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
                         ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-                        ->where('dosen.id_user', '=', auth()->id())
+                        ->where('dosen.id_user', '=', Auth::id())
                         ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                         ->select(
                             'dosen.nip',
@@ -153,7 +154,7 @@ class KaprodiControler extends Controller
                         ->crossJoin('periode_akademik')
                         ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
                         ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-                        ->where('dosen.id_user', '=', auth()->id())
+                        ->where('dosen.id_user', '=', Auth::id())
                         ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
                         ->select(
                             'dosen.nip',

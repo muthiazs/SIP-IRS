@@ -135,8 +135,6 @@
           <div class="card shadow-sm">
               <h5 class="card-header bg-teal text-white text-center">Pembagian Ruang Kelas</h5>
               <div class="card-body d-flex flex-column">
-                  <form action="{{ route('ruang.store') }}" method="POST">
-                      @csrf
                       <!-- Dropdown Prodi -->
                       <div class="mb-3">
                           <label class="fw-bold">Program Studi</label>
@@ -183,14 +181,18 @@
                                 <td>{{ $data->nama }}</td>
                                 <td>{{ $data->kapasitas }}</td>
                                 <td>
-                                    <input type="hidden" name="nama_ruang" value="{{ $data->nama }}">
-                                    <button type="submit" class="btn btn-primary mb-2">Tambah Ruang</button>
+                                    <form action="{{ route('ruang.store') }}" method="POST" class="room-form">
+                                        @csrf
+                                        <input type="hidden" name="prodi" class="prodi-input">
+                                        <input type="hidden" name="gedung" class="gedung-input">
+                                        <input type="hidden" name="nama_ruang" value="{{ $data->nama }}">
+                                        <button type="submit" class="btn btn-primary">Tambah Ruang</button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-                  </form>
               </div>
           </div>
       </div>
@@ -201,25 +203,36 @@
 
   <!-- Dropdown Logic -->
   <script>
-  $(document).ready(function() {
-      $('#selectGedung').change(function() {
-          const gedung = $(this).val();
-          filterTabelByGedung(gedung);
-      });
-  });
+    $(document).ready(function() {
+        // Handle dropdown changes
+        $('#selectProdi, #selectGedung').change(function() {
+            const prodi = $('#selectProdi').val();
+            const gedung = $('#selectGedung').val();
+            
+            // Update all hidden inputs with current selections
+            $('.prodi-input').val(prodi);
+            $('.gedung-input').val(gedung);
+            
+            // Filter table if gedung is selected
+            if (gedung) {
+                filterTabelByGedung(gedung);
+            }
+        });
+    });
 
-  function filterTabelByGedung(gedung) {
-      $('#tabelRuang tr').each(function() {
-          if ($(this).find('td').length) {
-              const namaRuang = $(this).find('td:eq(1)').text().trim();
-              if (namaRuang.toLowerCase().startsWith(gedung.toLowerCase())) {
-                  $(this).show();
-              } else {
-                  $(this).hide();
-              }
-          }
-      });
-  }
+    function filterTabelByGedung(gedung) {
+        $('#tabelRuang tr').each(function() {
+            if ($(this).find('td').length) {
+                const namaRuang = $(this).find('td:eq(1)').text().trim();
+                
+                if (namaRuang.toLowerCase().startsWith(gedung.toLowerCase())) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            }
+        });
+    }
   </script>
 <!-- DataTables JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

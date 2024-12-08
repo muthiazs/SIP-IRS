@@ -420,6 +420,7 @@ class Mhs_PengisianIRSController extends Controller
             ->join('mahasiswa', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
             ->select('dosen.nama as nama_pembimbing', 'dosen.nip as nip')
             ->first();
+
     
         // Membuat nama file PDF
         $fileName = 'irs-' . $mahasiswa->nim . '-semester-' . $semester . '.pdf';
@@ -430,7 +431,7 @@ class Mhs_PengisianIRSController extends Controller
             'irs' => $irsCetak,
             'mahasiswa' => $mahasiswa,
             'pembimbing' => $pembimbing,
-            'semester' => $semester
+            'semester' => $semester,
         ]);
     
         // Simpan file PDF

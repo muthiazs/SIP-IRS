@@ -140,6 +140,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
     Route::post('/ruang/acc', [DekanController::class, 'setujuiRuang'])->name('ruang.acc');
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
+    Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
     Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'indexPembagianRuang'])->name('bak_PembagianRuang');
     Route::post('/ruang/cancel', [BAK_PembagianruangController::class, 'cancelAlokasiRuang'])->name('cancel.ruang');
     Route::get('/bak_CekStatusRuang', [BAK_PembagianruangController::class, 'indexCekStatusRuang'])->name('bak_CekStatusRuang');
@@ -179,10 +180,3 @@ Route::middleware('auth')->group(function () {
 
 });
 
-//Pembagian Ruang
-// Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
-
-// // Pengisian IRS
-// Route::get('/pengisianIRS', [Mhs_PengisianIRSController::class, 'index'])->name('pengisianIRS');
-
-// Route::get('/dashboardAkademik', [DashboardController::class, 'indexAkademik'])->name('dashboardAkademik');
