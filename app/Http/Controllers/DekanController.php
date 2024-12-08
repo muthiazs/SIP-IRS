@@ -96,37 +96,37 @@ class DekanController extends Controller
         return view('dekan_PersetujuanRuang', compact('dekan', 'accRuang'));
     }
 
-    public function setujuiRuang(Request $request)
-    {
-        $ruang = DB::table('ruangan')
-        ->where('nama', $request->nama_ruang)
-        ->first();
-        // dd($ruang);
+    // public function setujuiRuang(Request $request)
+    // {
+    //     $ruang = DB::table('ruangan')
+    //     ->where('nama', $request->nama_ruang)
+    //     ->first();
+    //     // dd($ruang);
         
-        DB::table('ruangan')
-        ->where('id_ruang', $ruang->id_ruang)
-        ->update([
-            'status' => 'telah digunakan'
-        ]);
+    //     DB::table('ruangan')
+    //     ->where('id_ruang', $ruang->id_ruang)
+    //     ->update([
+    //         'status' => 'telah digunakan'
+    //     ]);
 
-        // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Ruangan berhasil disetujui.');
-    }
+    //     // Redirect kembali dengan pesan sukses
+    //     return redirect()->back()->with('success', 'Ruangan berhasil disetujui.');
+    // }
 
-    public function setujuiSemuaRuang()
-    {
-        // Update semua ruangan yang diajukan menjadi 'telah digunakan'
-        DB::table('ruangan')
-            ->where('status', 'diajukan')
-            ->update(['status' => 'telah digunakan']);
+    // public function setujuiSemuaRuang()
+    // {
+    //     // Update semua ruangan yang diajukan menjadi 'telah digunakan'
+    //     DB::table('ruangan')
+    //         ->where('status', 'diajukan')
+    //         ->update(['status' => 'telah digunakan']);
 
-        // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Semua ruangan berhasil disetujui.');
-    }
+    //     // Redirect kembali dengan pesan sukses
+    //     return redirect()->back()->with('success', 'Semua ruangan berhasil disetujui.');
+    // }
 
     public function setujuiSemuaRuang(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $prodi = $request->prodi;
 
         if (!$prodi) {
@@ -152,8 +152,7 @@ class DekanController extends Controller
                 'text' => 'Terjadi kesalahan saat akan menyetujui semua matkul.',
                 'icon' => 'error'
             ]);
-        }
-    }
+        }}
 
     public function tolakRuang(Request $request)
     {

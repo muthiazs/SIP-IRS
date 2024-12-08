@@ -16,55 +16,54 @@
     <style>
     /* Mengubah warna header tabel */
     .table thead th {
-            background-color: #FED488; /* Sesuaikan warna header */
-            color: black; /* Teks putih */
-            font-family: 'Poppins';
-            text-align: center; /* Menengahkan teks */
-            font-size: 12px;
-        }
+        background-color: #FED488; /* Sesuaikan warna header */
+        color: black; /* Teks putih */
+        font-family: 'Poppins';
+        text-align: center; /* Menengahkan teks */
+        font-size: 12px;
+    }
 
-        .table tbody td {
-            color: black; /* Teks putih */
-            font-family: 'Poppins';
-            text-align: center; /* Menengahkan teks */
-            font-size: 12px;
-        }
+    .table tbody td {
+        color: black; /* Teks putih */
+        font-family: 'Poppins';
+        text-align: center; /* Menengahkan teks */
+        font-size: 12px;
+    }
 
-        /* Menambahkan roundness pada tabel */
-        .table {
-            border-radius: 10px; /* Sesuaikan besar roundness */
-            overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
-        }
+    /* Menambahkan roundness pada tabel */
+    .table {
+        border-radius: 10px; /* Sesuaikan besar roundness */
+        overflow: hidden; /* Menghindari isi tabel keluar dari roundness */
+    }
         
-        /* Roundness untuk header */
-        .table thead th:first-child {
-            border-top-left-radius: 10px;
-        }
-        .table thead th:last-child {
-            border-top-right-radius: 10px;
-        }
+    /* Roundness untuk header */
+    .table thead th:first-child {
+        border-top-left-radius: 10px;
+    }
+    .table thead th:last-child {
+        border-top-right-radius: 10px;
+    }
         
-        /* Roundness untuk footer jika dibutuhkan */
-        .table tfoot td:first-child {
-            border-bottom-left-radius: 10px;
-        }
-        .table tfoot td:last-child {
-            border-bottom-right-radius: 10px;
-        }
-
+    /* Roundness untuk footer jika dibutuhkan */
+    .table tfoot td:first-child {
+        border-bottom-left-radius: 10px;
+    }
+    .table tfoot td:last-child {
+        border-bottom-right-radius: 10px;
+    }
     </style> 
 
 </head>
 
 <body class="bg-light">
     <div class="d-flex">
-    <x-sidebar-dekan :dekan="$dekan"></x-sidebar-dekan>
-            <!-- Wave decoration -->
-            <div class="wave-decoration"> 
-                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
-                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
-                </svg>
-            </div>
+        <x-sidebar-dekan :dekan="$dekan"></x-sidebar-dekan>
+        <!-- Wave decoration -->
+        <div class="wave-decoration"> 
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+            </svg>
+        </div>
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
@@ -110,17 +109,36 @@
                                             <th>SKS</th>
                                             <th>Ruang</th>
                                             <th>Nama Dosen</th>
+                                            <th>Aksi</th> <!-- Kolom Aksi ditambahkan -->
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- Tambahkan isi tabel sesuai kebutuhan --}}
+                                        <!-- Isi Tabel -->
+                                        <tr>
+                                            <td>1</td>
+                                            <td>PAIK6101</td>
+                                            <td>Matematika I</td>
+                                            <td>A</td>
+                                            <td>2</td>
+                                            <td>Ruang 101</td> <!-- Sesuaikan dengan data ruang yang benar -->
+                                            <td>Prof. Dr. Kusworo Adi, S.Si., M.T.</td>
+                                            <td>
+                                                <!-- Tombol Setujui -->
+                                                <button class="btn btn-success btn-sm">
+                                                    Setujui
+                                                </button>
+                                                <!-- Tombol Setujui -->
+                                                <button class="btn btn-danger btn-sm">
+                                                    Tolak
+                                                </button>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 @endforeach
-
             </div>
         </div>
     </div>
