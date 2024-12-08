@@ -92,52 +92,57 @@ class SidebarController extends Controller
     public function indexMahasiswa()
     {
         // Ambil data mahasiswa
-        $Mahasiswa = DB::table('mahasiswa')
+        // dd(auth()->id(), auth()->user());
+
+        // Fetch mahasiswa data
+        $mahasiswa = DB::table('mahasiswa')
             ->join('users', 'mahasiswa.id_user', '=', 'users.id')
             ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
             ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
             ->where('mahasiswa.id_user', auth()->id())
             ->select(
                 'mahasiswa.nim',
-                'mahasiswa.nama as nama_mhs',
+                'mahasiswa.nama as nama',
                 'program_studi.nama as prodi_nama',
                 'dosen.nama as nama_doswal',
                 'dosen.nip',
                 'users.username'
             )
             ->first();
+
+        // dd($Mahasiswa); // Dump the fetched data
+        return view('sidebar', ['Mahasiswa' => $mahasiswa]);
     
         // Ambil tanggal saat ini
-        $currentDate = Carbon::now()->toDateString();
+        // $currentDate = Carbon::now()->toDateString();
         
-        // Ambil periode akademik terbaru berdasarkan id_periode
-        $periodeTerbaru = DB::table('periode_akademik')
-        ->orderBy('id_periode', 'DESC') // Urutkan berdasarkan id_periode terbaru
-        ->first();
-        dd($periodeTerbaru);
+        // // Ambil periode akademik terbaru berdasarkan id_periode
+        // $periodeTerbaru = DB::table('periode_akademik')
+        // ->orderBy('id_periode', 'DESC') // Urutkan berdasarkan id_periode terbaru
+        // ->first();
+        // dd($periodeTerbaru);
         
-        // Pastikan periode akademik terbaru ditemukan
-        if (!$periodeTerbaru) {
-            return view('dashboardMahasiswa', compact('Mahasiswa', 'masaIRS'));
-        }
+        // // Pastikan periode akademik terbaru ditemukan
+        // if (!$periodeTerbaru) {
+        //     return view('sidebar', ['mahasiswa' => $mahasiswa]);
+        // }
     
         // // Cek masa IRS berdasarkan periode akademik terbaru dan tanggal saat ini
-        $periodeIRS = DB::table('kalender_akademik')
-            ->join('periode_akademik','periode_akademik.id_periode','=','kalender_akademik.id_periode')
-            ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) // Menggunakan periode akademik terbaru
-            ->where(function ($query) use ($currentDate) {
-                $query->whereIn('kode_kegiatan', ['isiIRS', 'gantiIRS', 'batalIRS'])
-                    ->whereDate('tanggal_mulai', '<=', $currentDate)
-                    ->whereDate('tanggal_selesai', '>=', $currentDate);
-            })
-            ->pluck('kalender_akademik.nama_kegiatan')
-            ->first();
+        // $periodeIRS = DB::table('kalender_akademik')
+        //     ->join('periode_akademik','periode_akademik.id_periode','=','kalender_akademik.id_periode')
+        //     ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) // Menggunakan periode akademik terbaru
+        //     ->where(function ($query) use ($currentDate) {
+        //         $query->whereIn('kode_kegiatan', ['isiIRS', 'gantiIRS', 'batalIRS'])
+        //             ->whereDate('tanggal_mulai', '<=', $currentDate)
+        //             ->whereDate('tanggal_selesai', '>=', $currentDate);
+        //     })
+        //     ->pluck('kalender_akademik.nama_kegiatan')
+        //     ->first();
         
         // // Tetapkan nilai masa IRS berdasarkan hasil query
-        $masaIRS = $periodeIRS ?? null;
+        // $masaIRS = $periodeIRS ?? null;
         
         // Kirim data ke view
-        return view('dashboardMahasiswa', compact('mahasiswa', 'masaIRS'));
     }
     
     //Method untuk Dasboard Dekan

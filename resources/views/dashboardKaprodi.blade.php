@@ -53,7 +53,9 @@
                         <div class="card-body text-center">
                             <h5 class="fw-bold">Buat Jadwal Kuliah</h5>
                             <p class="text-muted mb-3">Anda belum mengajukan jadwal</p>
-                            <button class="btn btn-danger">Buat Jadwal</button>
+                            <a href="/kaprodi_JadwalKuliah">
+                                <button class="btn btn-danger">Buat Jadwal</button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -99,7 +101,9 @@
                                     <p class="small text-muted">Telah Mengisi IRS</p>
                                 </div>
                             </div> -->
-                            <button class="btn btn-primary mt-3">Lihat Detail</button>
+                            <a href="/kaprodi_StatusMahasiswa">
+                                <button class="btn btn-primary mt-3">Lihat Detail</button>
+                            </a>
                         </div>
                     </div>
                 </div>

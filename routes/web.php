@@ -172,10 +172,17 @@ Route::middleware('auth')->group(function () {
     // Route untuk mengunduh IRS dalam format PDF
     Route::get('dosen/print-irs-pdf/{nim}', [DosenController::class, 'printIRSPDF'])->name('dosen.print_irs_pdf');
 
+    Route::post('/kaprodi/jadwal/store', [KaprodiControler::class, 'storeJadwalKuliah'])->name('jadwal.store');
+
+
     Route::post('/approve-irs', [DosenController::class, 'approveSelectedIRS'])->name('approve.selected.irs');
     
     //controller kalender akademik
     Route::get('/kalender_akademik', [KalenderAkademikController::class, 'index'])->name('kalender_akademik');
+
+    Route::delete('/jadwal/{id}', [KaprodiControler::class, 'destroy'])->name('jadwal.delete');
+
+    Route::post('/jadwal-kuliah/store', [KaprodiControler::class, 'storeJadwalKuliah'])->name('jadwal.store');
 
 
 });

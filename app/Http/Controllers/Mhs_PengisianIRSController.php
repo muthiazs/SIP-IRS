@@ -865,7 +865,15 @@ private function cekJadwalBertabrakan($nim, $id_jadwal)
     return false; // Tidak ada konflik jadwal
 }
 
-
+private function cekKodeMatkulSama($nim, $kodeMatkul)
+{
+    // Cek apakah mahasiswa sudah mengambil mata kuliah dengan kode matkul yang sama
+    return DB::table('irs')
+        ->join('jadwal_kuliah', 'irs.id_jadwal', '=', 'jadwal_kuliah.id_jadwal')
+        ->where('irs.nim', $nim)
+        ->where('jadwal_kuliah.kode_matkul', $kodeMatkul)
+        ->exists();
+}
 
 // public function hitungMaksimalSKS($semester_studi, $IPs_lalu)
 // {

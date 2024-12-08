@@ -7,6 +7,12 @@
             <div class="profile-img rounded-circle mx-auto mb-3">
                 <span class="material-icons" style="font-size: 48px; color: var(--primary-color)">person</span>
             </div>
+            <div class="wave-decoration"> 
+                <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 35%; width: 35%;">
+                    <path d="M0.00,49.98 C150.00,150.00 349.20,-49.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #fff;"></path>
+                </svg>
+            </div>
+            {{-- @dd($dekan) --}}
             <h2 class="fs-4 fw-bold">{{ $dekan->dosen_nama }}</h2>
             <p class="small opacity-75">NIP. {{ $dekan->nip }}</p>
             <p class="small opacity-75">Dekan<br>Program Studi S1 {{ $dekan->prodi_nama }}<br> Fakultas Sains dan Matematika</p>
