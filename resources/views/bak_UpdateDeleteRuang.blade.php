@@ -130,25 +130,17 @@
             <div class="card shadow-sm">
                 <h5 class="card-header bg-teal text-white text-center">Tinjau dan Hapus Ruang Kelas</h5>
                 <div class="card-body d-flex flex-column">
-                    <!-- Dropdown Gedung -->
-                    <div class="d-flex gap-3 text-center">
-                        <div>
-                            <div class="fw-bold">Gedung</div>
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle mb-4" type="button" id="dropdownMenuGedung" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Pilih Gedung
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuGedung">
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">A</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">B</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">C</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">D</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">E</a></li>
-                                    <li><a class="dropdown-item dropdown-item-gedung" href="#">F</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                
+
+                    <!-- Search Input with Icon -->
+                    <div class="mb-3 d-flex align-items-center">
+                        <input type="text" id="searchNamaRuang" class="form-control" placeholder="Cari Nama Ruang..." style="max-width: 250px; max-height: 40px;">
+                        <button class="btn ms-2" style="background-color: #6878B1; color: #fff; max-width: 250px; max-height: 40px;" type="button" id="button-addon2">
+                            <span class="material-icons">search</span>
+                        </button>
                     </div>
+
+
 
                     <!-- Table -->
                     <div class="table-responsive">
@@ -273,35 +265,31 @@
                     { orderable: false, targets: -1 }
                 ],
                 dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
-                     "<'row'<'col-sm-12'tr>>" +
-                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
             });
 
             // Initialize tooltips
             $('[data-bs-tooltip="tooltip"]').tooltip();
 
-            // Gedung dropdown handler
-            $('.dropdown-item-gedung').on('click', function() {
-                const gedung = $(this).text();
-                $('#dropdownMenuGedung').text('Gedung ' + gedung);
-                table.search(gedung).draw();
+            // Search functionality for the entire table using the button
+            $('#button-addon2').on('click', function() {
+                const searchTerm = $('#searchNamaRuang').val();
+                table.search(searchTerm).draw();
+            });
+
+            // Search functionality for the entire table when pressing Enter
+            $('#searchNamaRuang').on('keyup', function(e) {
+                if (e.key === 'Enter' || e.keyCode === 13) {
+                    const searchTerm = $(this).val();
+                    table.search(searchTerm).draw();
+                }
             });
 
             // Update form handler
             $('form[action="{{ route('update.ruang') }}"]').submit(function(e) {
                 e.preventDefault();
                 const form = this;
-                const gedungSelected = $('#dropdownMenuGedung').text().trim();
-                
-                if (gedungSelected === 'Pilih Gedung') {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Oops...',
-                        text: 'Silahkan pilih Gedung terlebih dahulu!',
-                        confirmButtonColor: '#028391'
-                    });
-                    return false;
-                }
 
                 Swal.fire({
                     title: 'Konfirmasi Update',
@@ -318,24 +306,13 @@
                     }
                 });
             });
-    
+
             // Delete form handler
             $('form[action="{{ route('delete.ruang') }}"]').submit(function(e) {
                 e.preventDefault();
                 const form = this;
                 const namaRuang = $(this).closest('.modal').find('.modal-title').text().replace('Hapus Ruang ', '');
-                const gedungSelected = $('#dropdownMenuGedung').text().trim();
-                
-                if (gedungSelected === 'Pilih Gedung') {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Oops...',
-                        text: 'Silahkan pilih Gedung terlebih dahulu!',
-                        confirmButtonColor: '#028391'
-                    });
-                    return false;
-                }
-    
+
                 Swal.fire({
                     title: 'Konfirmasi Hapus',
                     text: `Apakah Anda yakin ingin menghapus ruang ${namaRuang}?`,
@@ -352,17 +329,6 @@
                 });
             });
         });
-    
-        function filterTabelByGedung(gedung) {
-            $('tbody tr').each(function() {
-                const namaRuang = $(this).find('td:first').text().trim();
-                if (namaRuang.toLowerCase().startsWith(gedung.toLowerCase())) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        }
     
         // Success/Error message handler
         @if(session('sweetAlert'))
