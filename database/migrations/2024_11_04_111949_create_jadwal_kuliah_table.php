@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -22,6 +23,8 @@ return new class extends Migration
             $table->time('jam_selesai');
             $table->string('kelas');
             $table->integer('semester');
+            $table->string('status')->default('belum_terkonfirmasi');
+; // Allow NULL values
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();
         });

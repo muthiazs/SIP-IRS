@@ -109,6 +109,150 @@
         <div class="card shadow-sm">
             <h5 class="card-header bg-teal text-white text-center">Pembagian Jadwal Kuliah</h5>
             <div class="card-body d-flex flex-column">
+                {{-- <form action="{{ route('jad') }}" method="POST">
+                    @csrf                         --}}
+                    
+                    <div class="card-body">
+                        <table class="table table-bordered mt-4" id="jadwalTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kode Matkul</th>
+                                    <th>Nama Matkul</th>
+                                    <th>Kelas</th>
+                                    <th>Ruang</th>
+                                    <th>Hari</th>
+                                    <th>Jam Mulai</th>
+                                    <th>Jam Selesai</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($jadwal as $key => $item)
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $item->kode_matkul }}</td>
+                                    <td>{{ $item->nama_matkul }}</td>
+                                    <td>{{ $item->kelas }}</td>
+                                    <td>{{ $item->nama_ruang }}</td>
+                                    <td>{{ $item->hari }}</td>
+                                    <td>{{ $item->jam_mulai }}</td>
+                                    <td>{{ $item->jam_selesai }}</td>
+                                    <td>
+                                        <!-- Update Button -->
+                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ $item->id_jadwal }}">
+                                            <i class="material-icons">edit</i> Update
+                                        </button>
+                            
+                                        <!-- Delete Button -->
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $item->id_jadwal }}">
+                                            <i class="material-icons">delete</i> Hapus
+                                        </button>
+                                    </td>
+                                </tr>
+                            
+                                <!-- Update Modal -->
+                                <div class="modal fade" id="updateModal{{ $item->id_jadwal }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-teal text-white">
+                                                <h5 class="modal-title">Update Jadwal {{ $item->id_jadwal }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('update.jadwal') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $item->id_jadwal }}">
+                                                    <!-- Mata Kuliah -->
+                                                    <div class="mb-3">
+                                                        <label for="namaMatakuliah" class="form-label">Mata Kuliah</label>
+                                                        <select name="namaMatakuliah" id="namaMatakuliah" class="form-select" required>
+                                                            @foreach($namaMK as $matkul)
+                                                                <option value="{{ $matkul->nama_matkul }}" {{ $item->nama_matkul == $matkul->nama_matkul ? 'selected' : '' }}>
+                                                                    {{ $matkul->nama_matkul }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <!-- Kelas -->
+                                                    <div class="mb-3">
+                                                        <label for="kelas" class="form-label">Kelas</label>
+                                                        <select name="kelas" id="kelas" class="form-select" required>
+                                                            <option value="A" {{ $item->kelas == 'A' ? 'selected' : '' }}>A</option>
+                                                            <option value="B" {{ $item->kelas == 'B' ? 'selected' : '' }}>B</option>
+                                                            <option value="C" {{ $item->kelas == 'C' ? 'selected' : '' }}>C</option>
+                                                            <option value="D" {{ $item->kelas == 'D' ? 'selected' : '' }}>D</option>
+                                                            <option value="E" {{ $item->kelas == 'E' ? 'selected' : '' }}>E</option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- Hari -->
+                                                    <div class="mb-3">
+                                                        <label for="hari" class="form-label">Hari</label>
+                                                        <select name="hari" id="hari" class="form-select" required>
+                                                            <option value="Senin" {{ $item->hari == 'Senin' ? 'selected' : '' }}>Senin</option>
+                                                            <option value="Selasa" {{ $item->hari == 'Selasa' ? 'selected' : '' }}>Selasa</option>
+                                                            <option value="Rabu" {{ $item->hari == 'Rabu' ? 'selected' : '' }}>Rabu</option>
+                                                            <option value="Kamis" {{ $item->hari == 'Kamis' ? 'selected' : '' }}>Kamis</option>
+                                                            <option value="Jumat" {{ $item->hari == 'Jumat' ? 'selected' : '' }}>Jumat</option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- Ruangan -->
+                                                    <div class="mb-3">
+                                                        <label for="namaRuang" class="form-label">Ruang</label>
+                                                        <select name="namaRuang" id="namaRuang" class="form-select" required>
+                                                            @foreach($ruangan as $r)
+                                                                <option value="{{ $r->nama_ruang }}" {{ $item->nama_ruang == $r->nama_ruang ? 'selected' : '' }}>
+                                                                    {{ $r->nama_ruang }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <!-- Jam Mulai -->
+                                                    <div class="mb-3">
+                                                        <label for="jam_mulai" class="form-label">Jam Mulai</label>
+                                                        <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" value="{{ $item->jam_mulai }}" required>
+                                                    </div>
+                                                    <!-- Jam Selesai -->
+                                                    <div class="mb-3">
+                                                        <label for="jam_selesai" class="form-label">Jam Selesai</label>
+                                                        <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" value="{{ $item->jam_selesai }}" required>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteModal{{ $item->id_jadwal }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header bg-danger text-white">
+                                                <h5 class="modal-title">Hapus Jadwal</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('delete.jadwal') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $item->id_jadwal }}">
+                                                    <p>Apakah Anda yakin ingin menghapus jadwal mata kuliah ini?</p>
+                                                    <div class="text-end">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-danger">Hapus</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </tbody>
+                                                        
+                        </table>
                 <div class="card-body">
                     <!-- Button on the right top -->
                     <div class="d-flex justify-content-between mb-3">

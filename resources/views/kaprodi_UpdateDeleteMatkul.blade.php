@@ -130,6 +130,11 @@
             <div class="card shadow-sm">
                 <h5 class="card-header bg-teal text-white text-center">Tinjau dan Hapus Matakuliah</h5>
                 <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-end mb-3">
+                    <a href="{{ route('kaprodi_CreateMatkul') }}" class="btn btn-success btn-sm">
+                        <i class="material-icons">add</i> Tambah Matkul Baru
+                    </a>
+                </div>
                     <!-- Table -->
                     <div class="table-responsive">
                         <table class="table table-bordered" id="cekTable">

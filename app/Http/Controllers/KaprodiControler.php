@@ -603,5 +603,52 @@ class KaprodiControler extends Controller
             return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
         }
     }
+    public function updateJadwal(Request $request)
+{
+    try {
+        $request->validate([
+            'id_jadwal' => 'required|exists:jadwal,id', // Validasi ID jadwal
+            'kode_matkul' => 'required|string|max:255', // Validasi kode matkul
+            'nama_matkul' => 'required|string|max:255', // Validasi nama matkul
+            'kelas' => 'required|string|max:10',
+            'nama_ruang' => 'required|string|max:255',
+            'hari' => 'required|string|max:50',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+        ]);
+
+        DB::table('jadwal')
+            ->where('id', $request->id_jadwal)
+            ->update([
+                'kode_matkul' => $request->kode_matkul,
+                'nama_matkul' => $request->nama_matkul,
+                'kelas' => $request->kelas,
+                'nama_ruang' => $request->nama_ruang,
+                'hari' => $request->hari,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+            ]);
+
+        return redirect()->back()->with('success', 'Jadwal berhasil diperbarui.');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui jadwal.');
+    }
+}
+
+public function deleteJadwal(Request $request)
+{
+    try {
+        $request->validate([
+            'id_jadwal' => 'required|exists:jadwal,id', // Validasi ID jadwal
+        ]);
+
+        DB::table('jadwal')->where('id', $request->id_jadwal)->delete();
+
+        return redirect()->back()->with('success', 'Jadwal berhasil dihapus.');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus jadwal.');
+    }
+}
+
 
 } 
