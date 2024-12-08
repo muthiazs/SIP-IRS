@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class BAK_PembagianruangController extends Controller
 {
@@ -63,72 +64,162 @@ class BAK_PembagianruangController extends Controller
     }
 
     // Controller untuk Alokasi Pembagian Ruang
+    // In BAK_PembagianruangController.php
     public function storeRuang(Request $request)
     {
-        // dd($request->all());
+        $request->validate([
+            'prodi' => 'required|string|exists:program_studi,nama',
+            'nama_ruang' => 'required|string|exists:ruangan,nama',
+        ]);
     
         // Ambil data ruangan berdasarkan nama
         $ruang = DB::table('ruangan')->where('nama', $request->nama_ruang)->first();
-    
+        
         // Ambil data program studi berdasarkan nama
         $prodi = DB::table('program_studi')->where('nama', $request->prodi)->first();
-    
+        
         // Ambil data periode akademik terbaru
-        $periode = DB::table('periode_akademik')->orderBy('created_at', 'desc')->first();
+        $periode = DB::table('periode_akademik')->orderBy('id_periode', 'desc')->first();
     
         // Validasi data terkait
         if (!$ruang || !$prodi || !$periode) {
-            return redirect()->back()->with('error', 'Data tidak valid. Pastikan semua input benar.');
+            $response = [
+                'title' => 'Error!',
+                'text' => 'Data tidak valid. Pastikan semua input benar.',
+                'icon' => 'error'
+            ];
+    
+            if ($request->ajax()) {
+                return response()->json(['sweetAlert' => $response]);
+            }
+            return redirect()->back()->with('sweetAlert', $response);
         }
     
-        // Simpan data ke tabel alokasi_ruangan
-        DB::table('alokasi_ruangan')->insert([
-            'id_ruang' => $ruang->id_ruang,
-            'id_prodi' => $prodi->id_prodi,
-            'semester' => $periode->jenis,
-            'tahun_ajaran' => date('Y', strtotime($periode->tahun_mulai)) . '/' . date('Y', strtotime($periode->tahun_selesai)),
-            'created_at' => now(),
-        ]);
-    
-        // Update status ruangan menjadi 'diajukan'
-        DB::table('ruangan')
-            ->where('id_ruang', $ruang->id_ruang)
-            ->update([
-                'status' => 'diajukan',
+        try {
+            // Simpan data ke tabel alokasi_ruangan
+            DB::table('alokasi_ruangan')->insert([
+                'id_ruang' => $ruang->id_ruang,
+                'id_prodi' => $prodi->id_prodi,
+                'semester' => $periode->jenis,
+                'tahun_ajaran' => date('Y', strtotime($periode->tahun_mulai)) . '/' . date('Y', strtotime($periode->tahun_selesai)),
+                'created_at' => now(),
             ]);
     
-        // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Ruangan berhasil dialokasikan dan status diperbarui.');
+            // Update status ruangan menjadi 'diajukan'
+            DB::table('ruangan')
+                ->where('id_ruang', $ruang->id_ruang)
+                ->update([
+                    'status' => 'diajukan',
+                ]);
+    
+            $response = [
+                'title' => 'Berhasil!',
+                'text' => 'Ruangan berhasil dialokasikan ke ' . $request->prodi,
+                'icon' => 'success'
+            ];
+    
+            if ($request->ajax()) {
+                return response()->json(['sweetAlert' => $response]);
+            }
+            return redirect()->back()->with('sweetAlert', $response);
+    
+        } catch (\Exception $e) {
+            $response = [
+                'title' => 'Error!',
+                'text' => 'Terjadi kesalahan saat mengalokasikan ruangan.',
+                'icon' => 'error'
+            ];
+    
+            if ($request->ajax()) {
+                return response()->json(['sweetAlert' => $response]);
+            }
+            return redirect()->back()->with('sweetAlert', $response);
+        }
     }
     
     
-    public function cancelAlokasiRuang(Request $request)
-    {
-        // dd($request->all());
-        // Validasi input
-        $request->validate([
-            'nama_ruang' => 'required|string|exists:ruangan,nama',
-        ]);
+public function cancelAlokasiRuang(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'nama_ruang' => 'required|string|exists:ruangan,nama',
+    ]);
 
+    try {
         // Cari data ruangan berdasarkan nama
         $ruangan = DB::table('ruangan')->where('nama', $request->input('nama_ruang'))->first();
 
-        if ($ruangan) {
-            // Hapus data alokasi ruangan berdasarkan ID ruangan
-            DB::table('alokasi_ruangan')->where('id_ruang', $ruangan->id_ruang)->delete();
-
-            // Ubah status ruangan menjadi 'tersedia'
-            DB::table('ruangan')->where('id_ruang', $ruangan->id_ruang)->update([
-                'status' => 'tersedia',
+        if (!$ruangan) {
+            return redirect()->back()->with('sweetAlert', [
+                'title' => 'Error!',
+                'text' => 'Ruangan tidak ditemukan.',
+                'icon' => 'error'
             ]);
-
-            // Redirect dengan pesan sukses
-            return redirect()->back()->with('success', 'Alokasi ruangan berhasil dibatalkan dan status diperbarui.');
         }
 
-        // Jika tidak menemukan ruangan, berikan pesan error
-        return redirect()->back()->with('error', 'Ruangan tidak ditemukan.');
+        // Hapus data alokasi ruangan berdasarkan ID ruangan
+        DB::table('alokasi_ruangan')->where('id_ruang', $ruangan->id_ruang)->delete();
+
+        // Ubah status ruangan menjadi 'tersedia'
+        DB::table('ruangan')->where('id_ruang', $ruangan->id_ruang)->update([
+            'status' => 'tersedia',
+        ]);
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('sweetAlert', [
+            'title' => 'Berhasil!',
+            'text' => 'Alokasi ruangan berhasil dibatalkan.',
+            'icon' => 'success'
+        ]);
+
+    } catch (\Exception $e) {
+        return redirect()->back()->with('sweetAlert', [
+            'title' => 'Error!',
+            'text' => 'Terjadi kesalahan saat membatalkan alokasi ruangan.',
+            'icon' => 'error'
+        ]);
     }
+}
+
+public function cancelSelectedRuang(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'nama_ruang' => 'required|array|min:1',  // Nama ruangan harus berbentuk array
+        'nama_ruang.*' => 'exists:ruangan,nama', // Pastikan nama ruangan valid
+    ]);
+
+    $namaRuangList = $request->nama_ruang;
+
+    try {
+        // Ambil ID ruang berdasarkan nama
+        $ruangIds = DB::table('ruangan')
+            ->whereIn('nama', $namaRuangList)
+            ->pluck('id_ruang')
+            ->toArray();
+
+        // Hapus alokasi ruangan berdasarkan ID
+        DB::table('alokasi_ruangan')->whereIn('id_ruang', $ruangIds)->delete();
+
+        // Ubah status ruangan menjadi 'tersedia'
+        DB::table('ruangan')->whereIn('id_ruang', $ruangIds)->update([
+            'status' => 'tersedia',
+        ]);
+
+        return response()->json([
+            'title' => 'Berhasil!',
+            'text' => count($namaRuangList) . ' ruangan berhasil dibatalkan.',
+            'icon' => 'success',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'title' => 'Error!',
+            'text' => 'Terjadi kesalahan saat membatalkan ruangan.',
+            'icon' => 'error',
+        ]);
+    }
+}
+
 
     
     
@@ -163,33 +254,48 @@ class BAK_PembagianruangController extends Controller
 
     public function createRuang(Request $request)
     {
-        // dd($request->all());
-        // Validasi data
-        $cekRuangan = DB::table('ruangan')
-            ->where('nama', $request->nama)
-            ->first();
-
-        if ($cekRuangan) {
-            return redirect()->back()->with('error', 'Ruangan dengan nama tersebut sudah ada.');
+        try {
+            // Validasi data
+            $cekRuangan = DB::table('ruangan')
+                ->where('nama', $request->nama)
+                ->first();
+    
+            if ($cekRuangan) {
+                return redirect()->back()->with('sweetAlert', [
+                    'title' => 'Error!',
+                    'text' => 'Ruangan dengan nama tersebut sudah ada.',
+                    'icon' => 'error'
+                ]);
+            }
+    
+            $lastRuangan = DB::table('ruangan')
+                ->orderBy('id_ruang', 'desc')
+                ->first();
+    
+            $id_ruang = $lastRuangan ? $lastRuangan->id_ruang + 1 : 1;
+    
+            // Simpan ke database
+            DB::table('ruangan')->insert([
+                'id_ruang' => $id_ruang,
+                'nama' => $request->nama,
+                'kapasitas' => $request->kapasitas,
+                'status' => 'tersedia', 
+                'created_at' => now(),
+            ]);
+    
+            // Redirect dengan pesan sukses
+            return redirect()->back()->with('sweetAlert', [
+                'title' => 'Berhasil!',
+                'text' => 'Ruangan baru berhasil ditambahkan.',
+                'icon' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('sweetAlert', [
+                'title' => 'Error!',
+                'text' => 'Terjadi kesalahan saat menambahkan ruangan.',
+                'icon' => 'error'
+            ]);
         }
-
-        $lastRuangan = DB::table('ruangan')
-            ->orderBy('id_ruang', 'desc')
-            ->first();
-
-        $id_ruang = $lastRuangan ? $lastRuangan->id_ruang + 1 : 1;
-
-        // Simpan ke database
-        DB::table('ruangan')->insert([
-            'id_ruang' => $id_ruang,
-            'nama' => $request->nama,
-            'kapasitas' => $request->kapasitas,
-            'status' => 'tersedia', 
-            'created_at' => now(),
-        ]);
-
-        // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Ruangan baru berhasil ditambahkan.');
     }
 
     public function indexUpdateDeleteRuang()
@@ -201,21 +307,31 @@ class BAK_PembagianruangController extends Controller
                 'ruangan.id_ruang'
             )
             ->get();
-
-        // dd($tabelRuang);
-
+            // ->map(function($ruang) {
+            //     // Cek constraint untuk setiap ruangan
+            //     $hasConstraint = DB::table('jadwal_kuliah')
+            //         ->where('id_ruang', $ruang->id_ruang)
+            //         ->exists() || 
+            //         DB::table('alokasi_ruangan')
+            //         ->where('id_ruang', $ruang->id_ruang)
+            //         ->exists();
+                
+            //     $ruang->hasConstraint = $hasConstraint;
+            //     return $ruang;
+            // });
+    
         $akademik = DB::table('pegawai')
-                        ->join('users', 'pegawai.id_user', '=', 'users.id')
-                        ->crossJoin('periode_akademik')
-                        ->where('pegawai.id_user', Auth::id())
-                        ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
-                        ->select(
-                            'pegawai.nama',
-                            'pegawai.nip',
-                            'periode_akademik.nama_periode'
-                        )
-                        ->first();
-        ;
+            ->join('users', 'pegawai.id_user', '=', 'users.id')
+            ->crossJoin('periode_akademik')
+            ->where('pegawai.id_user', Auth::id())
+            ->orderBy('periode_akademik.created_at', 'desc')
+            ->select(
+                'pegawai.nama',
+                'pegawai.nip',
+                'periode_akademik.nama_periode'
+            )
+            ->first();
+    
         return view('bak_UpdateDeleteRuang', compact('tabelRuang', 'akademik'));
     }
 
@@ -248,27 +364,91 @@ class BAK_PembagianruangController extends Controller
 
     public function updateRuang(Request $request)
     {
-        // dd($request->all());
-        $request->validate([
-            'id_ruang' => 'required|exists:ruangan,id_ruang',
-            'nama' => 'required|string|max:255',
-            'kapasitas' => 'required|integer|min:1',
+        try {
+            $request->validate([
+                'id_ruang' => 'required|exists:ruangan,id_ruang',
+                'nama' => 'required|string|max:255',
+                'kapasitas' => 'required|integer|min:1',
+            ]);
+    
+            DB::table('ruangan')
+                ->where('id_ruang', $request->id_ruang)
+                ->update([
+                    'nama' => $request->nama,
+                    'kapasitas' => $request->kapasitas,
+                    'created_at' => now(),
+                ]);
+            
+            return redirect()->back()->with('sweetAlert', [
+                'title' => 'Berhasil!',
+                'text' => 'Ruangan berhasil diperbarui.',
+                'icon' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('sweetAlert', [
+                'title' => 'Error!',
+                'text' => 'Terjadi kesalahan saat memperbarui ruangan.',
+                'icon' => 'error'
+            ]);
+        }
+    }
+    
+    public function deleteRuang(Request $request)
+{
+    try {
+        // Log ID ruang yang akan dihapus
+        Log::info('Attempting to delete room:', ['id_ruang' => $request->id_ruang]);
+
+        // Cek di tabel alokasi_ruangan
+        $alokasiCount = DB::table('alokasi_ruangan')
+            ->where('id_ruang', $request->id_ruang)
+            ->count();
+        Log::info('Related records in alokasi_ruangan:', ['count' => $alokasiCount]);
+
+        // Tampilkan detail ruangan yang akan dihapus
+        $ruangan = DB::table('ruangan')
+            ->where('id_ruang', $request->id_ruang)
+            ->first();
+        Log::info('Room details:', ['ruangan' => $ruangan]);
+
+        // Coba hapus dengan transaction dan log setiap step
+        DB::transaction(function() use ($request) {
+            Log::info('Starting delete transaction');
+
+            // Hapus dari alokasi_ruangan
+            $deletedAlokasi = DB::table('alokasi_ruangan')
+                ->where('id_ruang', $request->id_ruang)
+                ->delete();
+            Log::info('Deleted from alokasi_ruangan:', ['count' => $deletedAlokasi]);
+
+            // Hapus ruangan
+            $deletedRuang = DB::table('ruangan')
+                ->where('id_ruang', $request->id_ruang)
+                ->delete();
+            Log::info('Deleted from ruangan:', ['count' => $deletedRuang]);
+        });
+
+        return redirect()->back()->with('sweetAlert', [
+            'title' => 'Berhasil!',
+            'text' => 'Ruangan berhasil dihapus.',
+            'icon' => 'success'
+        ]);
+    } catch (\Exception $e) {
+        // Log detail error
+        Log::error('Error deleting room:', [
+            'id_ruang' => $request->id_ruang,
+            'error_message' => $e->getMessage(),
+            'error_code' => $e->getCode(),
+            'error_file' => $e->getFile(),
+            'error_line' => $e->getLine(),
+            'stack_trace' => $e->getTraceAsString()
         ]);
 
-        DB::table('ruangan')->where('id_ruang', $request->id_ruang)->update([
-            'nama' => $request->nama,
-            'kapasitas' => $request->kapasitas,
-            'created_at' => now(),
+        return redirect()->back()->with('sweetAlert', [
+            'title' => 'Error!',
+            'text' => 'Terjadi kesalahan saat menghapus ruangan: ' . $e->getMessage(),
+            'icon' => 'error'
         ]);
-    
-        return redirect()->route('bak_UpdateDeleteRuang')->with('success', 'Ruangan berhasil diperbarui.');
-    }
-       
-    public function deleteRuang(Request $request)
-    {
-        DB::table('ruangan')->where('id_ruang', $request->id_ruang)->delete();
-        return redirect()->route('bak_UpdateDeleteRuang')->with('success', 'Ruangan berhasil dihapus.');
     }
 }
-
-//asyik
+}

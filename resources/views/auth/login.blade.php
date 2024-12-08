@@ -117,7 +117,7 @@ body {
                         @csrf
                         <div class="form-group mb-3">
                             <label class="form-label">Email:</label>
-                            <input type="text" placeholder="email@gmail.com" 
+                            <input type="text" placeholder="email@university.ac.id" 
                                    id="email" class="form-control" name="email"
                                    required autofocus>
                             @if ($errors->has('email'))

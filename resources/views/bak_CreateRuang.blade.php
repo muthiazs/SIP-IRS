@@ -18,6 +18,8 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+    <!-- Add SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .btn-teal {
             width: 45px;
@@ -98,7 +100,6 @@
                         </div>
                         <div class="btn-group-vertical w-100" role="group" aria-label="Button group">
                             <button type="submit" class="btn btn-teal w-100 mb-2">Simpan</button>
-                            <button type="submit" class="btn btn-danger w-100">Hapus</button>
                         </div>                        
                     </form>
                     </div>
@@ -110,9 +111,67 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Validation Logic -->
     <script>
+        $(document).ready(function() {
+            $('#formInputRuang').submit(function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const namaRuang = $('#inputNamaRuang').val().trim();
+                const kapasitas = $('#inputKapasitasRuang').val();
+                
+                // Validation
+                if (!namaRuang) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Nama ruang tidak boleh kosong!',
+                        confirmButtonColor: '#028391'
+                    });
+                    return false;
+                }
         
+                if (!kapasitas || kapasitas <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Kapasitas ruang harus lebih besar dari 0!',
+                        confirmButtonColor: '#028391'
+                    });
+                    return false;
+                }
+        
+                // Show confirmation dialog
+                Swal.fire({
+                    title: 'Konfirmasi Penambahan',
+                    text: `Apakah Anda yakin ingin menambahkan ruang ${namaRuang} dengan kapasitas ${kapasitas}?`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#028391',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, tambahkan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.submit();
+                    }
+                });
+            });
+        });
+        
+        // Success/Error message handler
+        @if(session('sweetAlert'))
+            document.addEventListener('DOMContentLoaded', function() {
+                const alert = @json(session('sweetAlert'));
+                Swal.fire({
+                    title: alert.title,
+                    text: alert.text,
+                    icon: alert.icon,
+                    confirmButtonColor: '#028391',
+                    confirmButtonText: 'OK'
+                });
+            });
+        @endif
     </script>
 
 </body>

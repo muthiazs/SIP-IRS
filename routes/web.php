@@ -148,6 +148,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
     Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'indexPembagianRuang'])->name('bak_PembagianRuang');
     Route::post('/ruang/cancel', [BAK_PembagianruangController::class, 'cancelAlokasiRuang'])->name('cancel.ruang');
+    // Route untuk menangani pembatalan alokasi ruang yang dipilih
+    Route::post('/cancel-selected-ruang', [BAK_PembagianruangController::class, 'cancelSelectedRuang'])->name('cancel.selected.ruang');
     Route::get('/bak_CekStatusRuang', [BAK_PembagianruangController::class, 'indexCekStatusRuang'])->name('bak_CekStatusRuang');
     Route::post('/ruang/store', [BAK_PembagianruangController::class, 'storeRuang'])->name('ruang.store');
     Route::get('/bak_CreateRuang', [BAK_PembagianruangController::class, 'indexCreateRuang'])->name('bak_CreateRuang');
