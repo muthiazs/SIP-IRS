@@ -228,41 +228,61 @@
     });
 </script>
 
+{{-- Buat Ambil Jadwal --}}
 <script>
-    @if(session('success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: '{{ session('success') }}',
-        confirmButtonText: 'OK'
-    });
-    @endif
-
-    @if(session('warning'))
-    Swal.fire({
-        icon: 'warning',
-        title: 'Peringatan',
-        text: '{{ session('warning') }}',
-        confirmButtonText: 'OK'
-    });
-    @endif
-
-    document.getElementById('konfirmasiForm')?.addEventListener('submit', function(e) {
-        e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('.ambil-jadwal-form');
         
-        Swal.fire({
-            title: 'Konfirmasi Rencana Studi',
-            text: 'Apakah Anda yakin ingin mengajukan Rencana Studi?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Ajukan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
-            }
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const submitButton = this.querySelector('.ambil-btn');
+                const jadwalId = submitButton.getAttribute('data-jadwal-id');
+                
+                submitButton.disabled = true;
+                
+                fetch('{{ route('ambilJadwal') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Tampilkan notifikasi sukses
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            // Reload halaman setelah sukses
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.message
+                        });
+                        submitButton.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Terjadi kesalahan pada server'
+                    });
+                    submitButton.disabled = false;
+                });
+            });
         });
     });
 </script>

@@ -169,11 +169,15 @@
                         <div class="d-flex">
                             <div class="margincard">
                                 <div class="fw-bold" style="font-size: 12px;">MAX BEBAN SKS</div>
-                                <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
+                                <span class="badge irs-badge" style="background-color: #67C3CC;">
+                                    {{ $maksimalSKS }} SKS
+                                </span>
                             </div>
                             <div class="margincard" style="margin-left: 10px;">
                                 <div class="fw-bold" style="font-size: 12px;">TOTAL SKS</div>
-                                <span class="badge irs-badge" style="background-color: #67C3CC;">0 SKS</span>
+                                <span class="badge irs-badge" style="background-color: #67C3CC;">
+                                    {{ $totalSKSTerpilih }} SKS
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -372,6 +376,64 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+{{-- Buat Ambil Jadwal --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('.ambil-jadwal-form');
+        
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const submitButton = this.querySelector('.ambil-btn');
+                const jadwalId = submitButton.getAttribute('data-jadwal-id');
+                
+                submitButton.disabled = true;
+                
+                fetch('{{ route('ambilJadwal') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Tampilkan notifikasi sukses
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            // Reload halaman setelah sukses
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.message
+                        });
+                        submitButton.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Terjadi kesalahan pada server'
+                    });
+                    submitButton.disabled = false;
+                });
+            });
+        });
+    });
 </script>
 
 {{-- Menangani searching
