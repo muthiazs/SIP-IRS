@@ -144,6 +144,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/jadwal/store', [KaprodiControler::class, 'createJadwal'])->name('jadwal.store');
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
     Route::post('/ruang/acc', [DekanController::class, 'setujuiRuang'])->name('ruang.acc');
+    Route::get('/ruang/acc/all', [DekanController::class, 'setujuiSemuaRuang'])->name('ruang.acc.all');
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
     Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
     Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'indexPembagianRuang'])->name('bak_PembagianRuang');
