@@ -28,23 +28,21 @@
                 </div>
             </div>
 
-            <!-- Period Banner -->
-            <div class="period-banner p-3 rounded-3 mb-4">
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex flex-column">
-                        <span class="text-teal">Periode Penyetujuan Jadwal Kuliah</span>
-                        <span class="text-teal">Periode Penyetujuan Ruang Kelas</span>
-                    </div>
-                    <div class="d-flex flex-column align-items-end">
-                        {{-- @if($periode)
-                            <span>{{ $periode->tanggal_mulai ?? 'Tanggal tidak tersedia' }} sampai {{ $periode->tanggal_selesai ?? 'Tanggal tidak tersedia' }}</span>
-                        @endif --}}
-
-                        {{-- <span class="text-teal fw-bold">{{ $dekan->tanggal_mulai}} sampai {{ $dekan->tanggal_selesai}}</span> <!-- Tanggal periode jadwal kuliah -->
-                        <span class="text-teal fw-bold">{{ $dekan->tanggal_mulai}} sampai {{ $dekan->tanggal_selesai}}</span> <!-- Tanggal periode ruang kelas --> --}}
-                    </div>
+            <!-- Period Banner Setuju Ruangan Jadwal -->
+            <div class="alert alert-success" role="alert">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-medium">
+                        Masa Setuju Ruangan Jadwal: 
+                        @if($masaSetujuRuanganJadwal)
+                            {{ $masaSetujuRuanganJadwal->nama_kegiatan }} 
+                            ({{ $masaSetujuRuanganJadwal->tanggal_mulai }} - {{ $masaSetujuRuanganJadwal->tanggal_selesai }})
+                        @else
+                            Tidak ada periode setuju ruangan jadwal yang aktif
+                        @endif
+                    </span>
                 </div>
             </div>
+
 
             <!-- Progress Cards Jadwal Kuliah-->
             <div class="row g-4 mb-4">

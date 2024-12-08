@@ -81,28 +81,65 @@ class DashboardController extends Controller
 
 
 
-    // Method untuk Dashboard Kaprodi
-    public function indexKaprodi()
-    {
-        $kaprodi = DB::table('dosen')
-                        ->join('users', 'dosen.id_user', '=', 'users.id')
-                        ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                        ->crossJoin('periode_akademik')
-                        ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
-                        ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-                        ->where('dosen.id_user', '=', auth()->id())
-                        ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
-                        ->select(
-                            'dosen.nip',
-                            'dosen.nama as dosen_nama',
-                            'program_studi.nama as prodi_nama',
-                            'dosen.prodi_id',
-                            'users.username',
-                            'periode_akademik.nama_periode'
-                        )
-                        ->first();
-        return view('dashboardKaprodi', compact('kaprodi'));
+public function indexKaprodi()
+{
+    // Ambil data Kaprodi
+    $kaprodi = DB::table('dosen')
+                    ->join('users', 'dosen.id_user', '=', 'users.id')
+                    ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+                    ->crossJoin('periode_akademik')
+                    ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
+                    ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
+                    ->where('dosen.id_user', '=', auth()->id())
+                    ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
+                    ->select(
+                        'dosen.nip',
+                        'dosen.nama as dosen_nama',
+                        'program_studi.nama as prodi_nama',
+                        'dosen.prodi_id',
+                        'users.username',
+                        'periode_akademik.nama_periode'
+                    )
+                    ->first();       
+                    
+    // Format tanggal menggunakan Carbon
+    if ($kaprodi) {
+        $akademik->tanggal_mulai = \Carbon\Carbon::parse($akademik->tanggal_mulai)->format('Y-m-d');
+        $akademik->tanggal_selesai = \Carbon\Carbon::parse($akademik->tanggal_selesai)->format('Y-m-d');
     }
+
+     // Ambil periode akademik terbaru berdasarkan id_periode
+     $periodeTerbaru = DB::table('periode_akademik')
+     ->orderBy('id_periode', 'DESC')
+     ->first();
+
+    // Pastikan periode akademik terbaru ditemukan
+    if (!$periodeTerbaru) {
+    return view('dashboardKaprodi', compact('kaprodi'));
+    }
+
+    // Mendapatkan tanggal saat ini
+    $currentDate = now();
+
+    // Ambil masa atur jadwal berdasarkan periode akademik terbaru dan rentang waktu
+    $fetchPeriodeAturJadwal = DB::table('kalender_akademik')
+        ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+        ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) 
+        ->where('kalender_akademik.kode_kegiatan', 'aturJadwal') 
+        ->whereDate('kalender_akademik.tanggal_mulai', '<=', $currentDate->toDateString()) // Memastikan tanggal mulai tidak melebihi tanggal sekarang
+            ->whereDate('kalender_akademik.tanggal_selesai', '>=', $currentDate->toDateString()) // Memastikan tanggal selesai lebih besar dari atau sama dengan tanggal sekarang
+            ->select(
+                'kalender_akademik.tanggal_mulai', // Mengambil tanggal mulai
+                'kalender_akademik.tanggal_selesai', // Mengambil tanggal selesai
+                'kalender_akademik.nama_kegiatan' // Mengambil nama kegiatan
+            )
+            ->first(); // Mengambil hanya satu hasil yang sesuai dengan periode saat ini
+
+    $masaAturJadwal = $fetchPeriodeAturJadwal ?? null;
+        // Tetapkan nilai masa atur ruang berdasarkan hasil query
+    return view('dashboardKaprodi', compact('kaprodi', 'masaAturJadwal', 'periodeTerbaru'));    
+}
+
 
 
 

@@ -8,6 +8,7 @@ use App\Models\Dosen;
 use App\Models\PeriodeAkademik;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class KaprodiControler extends Controller
 {
@@ -30,7 +31,41 @@ class KaprodiControler extends Controller
                             'periode_akademik.nama_periode'
                         )
                         ->first();
-        return view('dashboardKaprodi', compact('kaprodi'));
+            //     // Format tanggal menggunakan Carbon
+            // if ($kaprodi) {
+            //     $kaprodi->tanggal_mulai = \Carbon\Carbon::parse($kaprodi->tanggal_mulai)->format('Y-m-d');
+            //     $kaprodi->tanggal_selesai = \Carbon\Carbon::parse($kaprodi->tanggal_selesai)->format('Y-m-d');
+            // }
+
+            // Ambil periode akademik terbaru berdasarkan id_periode
+            $periodeTerbaru = DB::table('periode_akademik')
+            ->orderBy('id_periode', 'DESC')
+            ->first();
+
+            // Pastikan periode akademik terbaru ditemukan
+            if (!$periodeTerbaru) {
+            return view('dashboardKaprodi', compact('kaprodi'));
+            }
+
+            // Mendapatkan tanggal saat ini
+            $currentDate = now();
+
+            // Ambil masa atur jadwal berdasarkan periode akademik terbaru dan rentang waktu
+            $fetchPeriodeAturJadwal = DB::table('kalender_akademik')
+                ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+                ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) 
+                ->where('kalender_akademik.kode_kegiatan', 'aturJadwal') 
+                ->whereDate('kalender_akademik.tanggal_mulai', '<=', $currentDate->toDateString()) // Memastikan tanggal mulai tidak melebihi tanggal sekarang
+                    ->whereDate('kalender_akademik.tanggal_selesai', '>=', $currentDate->toDateString()) // Memastikan tanggal selesai lebih besar dari atau sama dengan tanggal sekarang
+                    ->select(
+                        'kalender_akademik.tanggal_mulai', // Mengambil tanggal mulai
+                        'kalender_akademik.tanggal_selesai', // Mengambil tanggal selesai
+                        'kalender_akademik.nama_kegiatan' // Mengambil nama kegiatan
+                    )
+                    ->first(); // Mengambil hanya satu hasil yang sesuai dengan periode saat ini
+
+            $masaAturJadwal = $fetchPeriodeAturJadwal ?? null;
+                return view('dashboardKaprodi', compact('kaprodi','masaAturJadwal'));
     }
 
     public function JadwalKuliah()
