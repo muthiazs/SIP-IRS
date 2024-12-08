@@ -14,70 +14,89 @@
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
 
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-        }
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
 
-        .login-container {
-            display: flex;
-            flex-direction: row; /* Arrange items in a row */
-            align-items: stretch;
-            width: 100%;
-            height: 100vh; /* Make container fill the viewport height */
-        }
+.login-container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
 
-        /* Sidebar */
-        .login-sidebar {
-            background-image: url("{{ asset('images/login_sidebar.png') }}");
-            background-size: cover;
-            background-position: center;
-            width: 685px; /* Adjust width for sidebar */
-            height: 100vh; /* Sidebar should take full height */
-        }
+/* Sidebar */
+.login-sidebar {
+    background-image: url("{{ asset('images/login_sidebar.png') }}");
+    background-size: cover;
+    background-position: center;
+    width: 50%; /* Set sidebar width to 50% */
+    height: 100vh;
+}
 
-        /* Content area */
-        .login-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 60%;
-        }
+/* Content area */
+.login-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50%; /* Set content area width to 50% */
+    padding: 0 20px; /* Add some padding */
+}
 
-        .card {
-            padding: 20px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            background-color: #FFF4EA;
-        }
+/* Card Styling */
+.card {
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #FFF4EA;
+}
 
-        .btn-primary {
-            margin-top: 20px;
-            width: 100%;
-            background-color: #16325B;
-            border-color: #16325B;
-        }
+/* Button Styling */
+.btn-primary {
+    margin-top: 20px;
+    width: 100%;
+    background-color: #16325B;
+    border-color: #16325B;
+}
 
-        /* Responsiveness */
-        @media (max-width: 768px) {
-            .card {
-                max-width: 90%;
-            }
-        }
+/* Responsiveness */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
 
-        @media (max-width: 480px) {
-            .card {
-                max-width: 100%;
-                padding: 15px;
-            }
-        }
+    .login-sidebar {
+        width: 100%;
+        height: auto;
+    }
+
+    .login-content {
+        width: 100%;
+    }
+
+    .card {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-content {
+        width: 100%;
+    }
+
+    .card {
+        max-width: 100%;
+        padding: 15px;
+    }
+}
+
     </style>
 </head>
 <body>
