@@ -12,9 +12,13 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Custom Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+    
     <style>
         .btn-teal {
             width: 45px;
@@ -45,6 +49,67 @@
         .d-flex.gap-3 {
             gap: 20px;
         }
+        /* Mengubah warna header tabel */
+        .table thead th {
+            background-color: #FED488; /* Sesuaikan warna header */
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
+
+        .table tbody td {
+            color: black; /* Teks putih */
+            font-family: 'Poppins';
+            text-align: center; /* Menengahkan teks */
+            font-size: 12px;
+        }
+
+        /* Menambahkan roundness pada tabel */
+        .table {
+            border-radius: 10px; /*Sesuaikan besar roundness*/
+            overflow: hidden; /*Menghindari isi tabel keluar dari roundness */
+            table-layout: fixed; /* Ukuran kolom tetap */
+            width: 100%; /* Pastikan tabel mengambil seluruh lebar kontainer */
+            padding: 10px;
+        }
+
+        .table th, .table td {
+            word-wrap: break-word; /* Agar teks yang panjang tidak melar keluar kolom */
+            text-align: center; /* Pusatkan teks */
+        }
+        /* Styling untuk DataTables */
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background: #027683 !important;
+            color: white !important;
+            border: 1px solid #027683 !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #67C3CC !important;
+            color: white !important;
+            border: 1px solid #67C3CC !important;
+        }
+
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_info {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .dataTables_wrapper .dataTables_paginate {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        /* Table responsive tanpa geser */
+        .table-responsive {
+            overflow-x: auto;
+            max-width: 100%; /* Agar tabel tetap berada dalam kontainer */
+        }   
     </style>
 </head>
 <body class="bg-light">
@@ -70,7 +135,7 @@
                         <div>
                             <div class="fw-bold">Gedung</div>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuGedung" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn btn-secondary dropdown-toggle mb-4" type="button" id="dropdownMenuGedung" data-bs-toggle="dropdown" aria-expanded="false">
                                     Pilih Gedung
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuGedung">
@@ -84,7 +149,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table">
+                    <table class="table table-bordered mt-4" id="cekTable">
                         <thead>
                             <tr>
                                 <th>Nama Ruang</th>
@@ -97,11 +162,66 @@
                                 <td>{{ $ruang->nama }}</td>
                                 <td>{{ $ruang->kapasitas }}</td>
                                 <td>
-                                    <a href="{{ route('update.ruang', ['nama' => $ruang->nama]) }}" class="btn btn-primary">
-                                        Aksi
-                                    </a>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#updateModal{{ $ruang->id_ruang }}">
+                                        Update
+                                    </button>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $ruang->id_ruang }}">
+                                        Hapus
+                                    </button>
                                 </td>
                             </tr>
+                             <!-- Update Modal -->
+                             <div class="modal fade" id="updateModal{{ $ruang->id_ruang }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Update Ruang {{ $ruang->nama }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('update.ruang') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id_ruang" value="{{ $ruang->id_ruang }}">
+                                                <div class="mb-3">
+                                                    <label for="nama" class="form-label">Nama Ruang</label>
+                                                    <input type="text" class="form-control" id="nama" name="nama" value="{{ $ruang->nama }}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="kapasitas" class="form-label">Kapasitas</label>
+                                                    <input type="number" class="form-control" id="kapasitas" name="kapasitas" value="{{ $ruang->kapasitas }}" required>
+                                                </div>
+                                                <div class="text-end">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="deleteModal{{ $ruang->id_ruang }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Hapus Ruang {{ $ruang->nama }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('delete.ruang') }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="id_ruang" value="{{ $ruang->id_ruang }}">
+                                                <p class="mb-3">Apakah Anda yakin ingin menghapus ruang {{ $ruang->nama }}?</p>
+                                                <div class="text-end">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-danger">Hapus</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             @endforeach
                         </tbody>
                     </table>
@@ -109,47 +229,79 @@
             </div>
         </div>
     </div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Dropdown Logic -->
-    <script>
-        $(document).ready(function() {
-            // Get initial selected gedung
-            const initialGedung = $('#dropdownMenuGedung').text().trim().replace('Gedung ', '');
-            if (initialGedung !== 'Pilih Gedung') {
-                filterTabelByGedung(initialGedung);
-            }
-    
-            // Untuk Dropdown Prodi
-            $('.dropdown-item-prodi').on('click', function() {
-                $('#dropdownMenuProdi').text($(this).text());
-            });
-    
-            // Untuk Dropdown Gedung
-            $('.dropdown-item-gedung').on('click', function() {
-                const gedung = $(this).text();
-                $('#dropdownMenuGedung').text('Gedung ' + gedung);
-                
-                // Filter tabel berdasarkan gedung yang dipilih
-                filterTabelByGedung(gedung);
-            });
-        });
-    
-        function filterTabelByGedung(gedung) {
-            $('#tabelRuang tr').each(function() {
-                if ($(this).find('td').length) { // Skip header row
-                    const namaRuang = $(this).find('td:eq(1)').text().trim();
-                    
-                    if (namaRuang.toLowerCase().startsWith(gedung.toLowerCase())) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                }
-            });
+<!-- Dropdown Logic -->
+<script>
+    $(document).ready(function() {
+        // Get initial selected gedung
+        const initialGedung = $('#dropdownMenuGedung').text().trim().replace('Gedung ', '');
+        if (initialGedung !== 'Pilih Gedung') {
+            filterTabelByGedung(initialGedung);
         }
+
+        // Untuk Dropdown Prodi
+        $('.dropdown-item-prodi').on('click', function() {
+            $('#dropdownMenuProdi').text($(this).text());
+        });
+
+        // Untuk Dropdown Gedung
+        $('.dropdown-item-gedung').on('click', function() {
+            const gedung = $(this).text();
+            $('#dropdownMenuGedung').text('Gedung ' + gedung);
+            
+            // Filter tabel berdasarkan gedung yang dipilih
+            filterTabelByGedung(gedung);
+        });
+    });
+
+    function filterTabelByGedung(gedung) {
+        $('#tabelRuang tr').each(function() {
+            if ($(this).find('td').length) { // Skip header row
+                const namaRuang = $(this).find('td:eq(1)').text().trim();
+                
+                if (namaRuang.toLowerCase().startsWith(gedung.toLowerCase())) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            }
+        });
+    }
     </script>
+     <!-- Bootstrap JS -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+     <!-- DataTables Initialization Script -->
+     <script>
+         $(document).ready(function() {
+             $('#cekTable').DataTable({
+                 responsive: true,
+                 pageLength: 10,
+                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Semua"]],
+                 language: {
+                     url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json',
+                     lengthMenu: "Tampilkan _MENU_ data per halaman",
+                     zeroRecords: "Data tidak ditemukan",
+                     info: "Menampilkan halaman _PAGE_ dari _PAGES_",
+                     infoEmpty: "Tidak ada data yang tersedia",
+                     infoFiltered: "(difilter dari _MAX_ total data)",
+                     paginate: {
+                         first: "Pertama",
+                         last: "Terakhir",
+                         next: "Selanjutnya",
+                         previous: "Sebelumnya"
+                     }
+                 },
+                 columnDefs: [
+                     { orderable: false, targets: -1 }  // Nonaktifkan sorting untuk kolom aksi
+                 ],
+                 dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
+                     "<'row'<'col-sm-12'tr>>" +
+                     "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+             });
+         });
+     </script>
 </body>
 </html>

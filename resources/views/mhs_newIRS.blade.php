@@ -52,7 +52,11 @@
                         </div>
                         <p class="fs-6 fw-semibold mb-2">Periode pengisian irs dibuka dari {{ $fetchPeriodeISIIRS->tanggal_mulai }} - {{ $fetchPeriodeISIIRS->tanggal_selesai }} </p>
                         <div class="button-group-right">
-                            <button type="button" class="btn btn-primary" onclick="window.location.href='{{ route('mhs_pengisianIRS') }}'">Buat IRS</button>
+                            <button type="button" class="btn {{ $existingIRS ? 'btn-secondary' : 'btn-primary' }}" 
+                                    onclick="window.location.href='{{ route('mhs_pengisianIRS') }}'"
+                                    {{ $existingIRS ? 'disabled' : '' }}>
+                                Buat IRS
+                            </button>
                         </div>
                     </div>
                 </div>

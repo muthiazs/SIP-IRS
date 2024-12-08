@@ -105,9 +105,9 @@
             <p><strong>Nama Pembimbing:</strong> {{ $pembimbing->nama_pembimbing }}</p>
             <p><strong>NIP:</strong> {{ $pembimbing->nip }}</p>
         </div>
-        <div class="info-section">
+        {{-- <div class="info-section">
             <p><strong>Total SKS:</strong> {{ $totalSKS }}</p>
-        </div>
+        </div> --}}
 
         <!-- Table -->
         <div class="table-container">

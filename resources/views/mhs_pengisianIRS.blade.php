@@ -181,19 +181,12 @@
                         <button class="btn" style="background-color: #6878B1; color:#fff;max-width: 250px;max-height:40px" type="button" id="button-addon2">
                             <span class="material-icons">search</span>
                         </button>
-                        <!-- Filter buttons -->
-                        {{-- <div>
-                            <button class="btn custom-btn-primary" id="resetFilter">Semua</button>
-                            <button class="btn custom-btn-outline" id="filterGenap">Semester Genap</button>
-                            <button class="btn custom-btn-outline" id="filterGanjil">Semester Ganjil</button>
-                        </div> --}}
-
-                        <!-- Dropdown Filter for Semester -->
-                        <div class="dropdown d-inline-block me-3">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="semesterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                Pilih Semester
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="semesterFilter" data-bs-toggle="dropdown" aria-expanded="false">
+                                Filter Semester
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="semesterDropdown">
+                            <ul class="dropdown-menu" aria-labelledby="semesterFilter">
+                                <li><button class="dropdown-item" id="semua">Semua Semester</button></li>
                                 <li><button class="dropdown-item" id="1">Semester 1</button></li>
                                 <li><button class="dropdown-item" id="2">Semester 2</button></li>
                                 <li><button class="dropdown-item" id="3">Semester 3</button></li>
@@ -203,11 +196,9 @@
                                 <li><button class="dropdown-item" id="7">Semester 7</button></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><button class="dropdown-item" id="pilihan">Pilihan</button></li>
-                            </ul>                            
+                            </ul>                         
                         </div>
                     </div>
-
-
                     <div class="banner text-center mt-2 rounded-top" 
                         style="background-color: #027683; 
                                 color: white; 
@@ -218,7 +209,6 @@
                                 font-size: 18px;">
                         <span class="fw-medium">Daftar Jadwal Kuliah</span>
                     </div>
-
                    
                     <div class="table-responsive">
                         <table class="table table-bordered" id="jadwalTable">
@@ -240,43 +230,47 @@
                             </thead>                
                             <tbody>
                                 @foreach($jadwalKuliah as $index => $jadwal)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $jadwal->kode_matkul }}</td>
-                                    <td>{{ $jadwal->nama_matkul }}</td>
-                                    <td>{{ $jadwal->semester }}</td>
-                                    <td>{{ $jadwal->kelas }}</td>
-                                    <td>{{ $jadwal->sks }}</td>
-                                    <td>{{ $jadwal->namaruang }}</td>
-                                    <td>{{ $jadwal->hari }}</td>
-                                    <td>{{ $jadwal->jam_mulai }}</td>
-                                    <td>{{ $jadwal->jam_selesai }}</td>
-                                    <td>{{ $jadwal->kuota_terisi }} / {{ $jadwal->kuota}}</td>
-                                    <td>
-                                        <div class="button-group-tabel">
-                                            @if (!$jadwalStatus[$jadwal->id_jadwal])
-                                                <form class="ambil-jadwal-form">
-                                                    @csrf
-                                                    <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
-                                                    <input type="hidden" name="status" value="draft">
-                                                    <button type="submit" 
-                                                            class="btn btn-primary mb-2 rounded-3 ambil-btn" 
-                                                            style="color:white; background-color: #028391; border-color :#028391;font-size: 15px; padding: 5px 10px;"
-                                                            data-jadwal-id="{{ $jadwal->id_jadwal }}">
-                                                        Ambil
+                                    <tr data-semester="{{ $jadwal->semester }}">
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $jadwal->kode_matkul }}</td>
+                                        <td>{{ $jadwal->nama_matkul }}</td>
+                                        <td>{{ $jadwal->semester }}</td>
+                                        <td>{{ $jadwal->kelas }}</td>
+                                        <td>{{ $jadwal->sks }}</td>
+                                        <td>{{ $jadwal->namaruang }}</td>
+                                        <td>{{ $jadwal->hari }}</td>
+                                        <td>{{ $jadwal->jam_mulai }}</td>
+                                        <td>{{ $jadwal->jam_selesai }}</td>
+                                        <td>{{ $jadwal->kuota_terisi }} / {{ $jadwal->kuota }}</td>
+                                        <td>
+                                            <div class="button-group-tabel">
+                                                @if (!$jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_jadwal'] && !$jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_matkul'])
+                                                    <form class="ambil-jadwal-form">
+                                                        @csrf
+                                                        <input type="hidden" name="id_jadwal" value="{{ $jadwal->id_jadwal }}">
+                                                        <input type="hidden" name="status" value="draft">
+                                                        <button type="submit" 
+                                                                class="btn btn-primary mb-2 rounded-3 ambil-btn"
+                                                                style="color:white; background-color: #028391; border-color: #028391; font-size: 15px; padding: 5px 10px;">
+                                                            Ambil
+                                                        </button>
+                                                    </form>
+                                                @elseif ($jadwalStatus[$jadwal->id_jadwal]['sudah_diambil_matkul'])
+                                                    <button class="btn btn-secondary mb-2 rounded-3"
+                                                            onclick="swal('Mata Kuliah Sudah Diambil', 'Anda tidak dapat mengambil mata kuliah yang sama lebih dari satu kali.', 'warning')"
+                                                            style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
+                                                        Terambil 
                                                     </button>
-                                                </form>
-                                            @else
-                                                <button class="btn btn-secondary mb-2 rounded-3" 
-                                                        disabled 
-                                                        style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
-                                                    Terambil
-                                                </button>
-                                            @endif
-                                        </div>
-                                    </td>                    
-                                </tr>
-                                @endforeach
+                                                @else
+                                                    <button class="btn btn-secondary mb-2 rounded-3"
+                                                            style="background-color: #ccc; font-size: 15px; padding: 5px 10px;">
+                                                        Terambil 
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach                                
                             </tbody>
                         </table>
                     </div>
@@ -293,135 +287,148 @@
   </div>
         </div>
     </div>
-    <!-- Add DataTables JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Inisialisasi DataTable
-            var table = $('#jadwalTable').DataTable({
-                responsive: true,
-                pageLength: 10,
-                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Semua"]],
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json',
-                    lengthMenu: "Tampilkan _MENU_ data per halaman",
-                    zeroRecords: "Data tidak ditemukan",
-                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
-                    infoEmpty: "Tidak ada data yang tersedia",
-                    infoFiltered: "(difilter dari _MAX_ total data)",
-                    paginate: {
-                        first: "Pertama",
-                        last: "Terakhir",
-                        next: "Selanjutnya",
-                        previous: "Sebelumnya"
-                    }
-                },
-                columnDefs: [
-                    { orderable: false, targets: -1 }  // Nonaktifkan sorting untuk kolom aksi
-                ],
-                // Mengubah dom untuk menghilangkan search box default
-                dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                initComplete: function() {
-                    // Menghubungkan search box custom dengan DataTables
-                    $('#searchInput').on('keyup', function() {
-                        table.search(this.value).draw();
-                    });
-
-                    // Handler untuk tombol reset
-                    $('#resetFilter').on('click', function() {
-                        table.search('').draw();
-                    });
-                }
-            });
-        });
-    </script>
-    <!-- Add JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const forms = document.querySelectorAll('.ambil-jadwal-form');
-            
-            forms.forEach(form => {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    const formData = new FormData(this);
-                    const submitButton = this.querySelector('.ambil-btn');
-                    const jadwalId = submitButton.getAttribute('data-jadwal-id');
-                    
-                    submitButton.disabled = true;
-                    
-                    fetch('{{ route('ambilJadwal') }}', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Tampilkan notifikasi sukses
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil!',
-                                text: data.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(() => {
-                                // Reload halaman setelah sukses
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: data.message
-                            });
-                            submitButton.disabled = false;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Terjadi kesalahan pada server'
-                        });
-                        submitButton.disabled = false;
-                    });
-                });
-            });
-        });
-        </script>
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Menangani klik tombol Ambil
-    document.getElementById('ambilBtn').addEventListener('click', function() {
-        Swal.fire({
-            title: 'Konfirmasi Ambil Mata Kuliah',
-            text: 'Apakah Anda yakin ingin mengambil mata kuliah ini?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, ambil!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Aksi yang terjadi setelah konfirmasi, bisa diarahkan ke route
-                window.location.href = '#'; // Ganti dengan route yang sesuai
+$(document).ready(function() {
+    var table = $('#jadwalTable').DataTable({
+        responsive: true,
+        pageLength: 10,
+        lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Semua"]],
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json',
+            lengthMenu: "Tampilkan _MENU_ data per halaman",
+            zeroRecords: "Data tidak ditemukan",
+            info: "Menampilkan halaman _PAGE_ dari _PAGES_",
+            infoEmpty: "Tidak ada data yang tersedia",
+            infoFiltered: "(difilter dari _MAX_ total data)",
+            paginate: {
+                first: "Pertama",
+                last: "Terakhir",
+                next: "Selanjutnya",
+                previous: "Sebelumnya"
             }
+        },
+        columnDefs: [
+            { orderable: false, targets: -1 }
+        ],
+        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+    });
+
+    // Search functionality
+    $('#button-addon2').on('click', function() {
+        table.search($('#searchInput').val()).draw();
+    });
+
+    $('#searchInput').on('keyup', function(e) {
+        if (e.key === 'Enter') {
+            table.search($(this).val()).draw();
+        }
+    });
+
+    // Semester Filter
+    $('.dropdown-item').on('click', function() {
+        var selectedSemester = $(this).attr('id');
+        
+        // Update dropdown button text
+        $('#semesterFilter').html($(this).text() + ' <span class="caret"></span>');
+        
+        if (selectedSemester === 'semua' || selectedSemester === 'pilihan') {
+            // Jika pilih "Semua Semester" atau "Pilihan", tampilkan semua
+            table.column(3).search('').draw();
+        } else {
+            // Filter berdasarkan semester
+            table.column(3).search('^' + selectedSemester + '$', true, false).draw();
+        }
+    });
+
+    // Optional: Kombinasi search dan filter semester
+    $('#searchInput').on('keyup', function() {
+        var searchValue = $(this).val();
+        var currentSemester = $('#semesterFilter').text().trim().replace(' ', '');
+        
+        // Jika semester sudah dipilih
+        if (currentSemester !== 'FilterSemester' && currentSemester !== 'SemuaSemester') {
+            table
+                .column(3)
+                .search('^' + currentSemester.replace('Semester', '') + '$', true, false)
+                .column(2)
+                .search(searchValue)
+                .draw();
+        } else {
+            // Jika belum pilih semester, hanya search
+            table.search(searchValue).draw();
+        }
+    });
+});
+</script>
+{{-- Buat Ambil Jadwal --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('.ambil-jadwal-form');
+        
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const submitButton = this.querySelector('.ambil-btn');
+                const jadwalId = submitButton.getAttribute('data-jadwal-id');
+                
+                submitButton.disabled = true;
+                
+                fetch('{{ route('ambilJadwal') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Tampilkan notifikasi sukses
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: data.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            // Reload halaman setelah sukses
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: data.message
+                        });
+                        submitButton.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Terjadi kesalahan pada server'
+                    });
+                    submitButton.disabled = false;
+                });
+            });
         });
     });
+</script>
 
     // Menangani klik tombol Batalkan
     document.getElementById('batalkanBtn').addEventListener('click', function() {
@@ -443,7 +450,7 @@
     });
 </script>
 
-{{-- Menangani searching --}}
+{{-- Menangani searching
 <script>
     document.getElementById('searchInput').addEventListener('keyup', function () {
         // Ambil nilai input dan ubah ke huruf kecil untuk pencarian tidak case-sensitive
@@ -466,42 +473,28 @@
         });
     });
 </script>
+{{-- Filter Semester--}}
+{{-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+    const semesterDropdownItems = document.querySelectorAll('.dropdown-item');
+    const jadwalTableRows = document.querySelectorAll('#jadwalTable tbody tr');
 
-<script>
-    // Tombol untuk filter semester genap
-    document.getElementById('filterGenap').addEventListener('click', function () {
-        const rows = document.querySelectorAll('#irsTable tr');
-        rows.forEach(row => {
-            const semester = parseInt(row.cells[3].textContent.trim()); // Ambil nilai semester dari kolom ke-4
-            if (semester % 2 === 0) { // Jika semester genap
-                row.style.display = ''; // Tampilkan baris
-            } else {
-                row.style.display = 'none'; // Sembunyikan baris
-            }
+    semesterDropdownItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const selectedSemester = item.getAttribute('data-semester'); // Assuming this is the selected semester
+
+            jadwalTableRows.forEach(row => {
+                const rowSemester = row.getAttribute('data-semester'); 
+                if (selectedSemester === 'pilihan' || rowSemester === selectedSemester) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
         });
     });
-
-    // Tombol untuk filter semester ganjil
-    document.getElementById('filterGanjil').addEventListener('click', function () {
-        const rows = document.querySelectorAll('#irsTable tr');
-        rows.forEach(row => {
-            const semester = parseInt(row.cells[3].textContent.trim()); // Ambil nilai semester dari kolom ke-4
-            if (semester % 2 !== 0) { // Jika semester ganjil
-                row.style.display = ''; // Tampilkan baris
-            } else {
-                row.style.display = 'none'; // Sembunyikan baris
-            }
-        });
-    });
-
-    // Tombol untuk reset filter
-    document.getElementById('resetFilter').addEventListener('click', function () {
-        const rows = document.querySelectorAll('#irsTable tr');
-        rows.forEach(row => {
-            row.style.display = ''; // Tampilkan semua baris
-        });
-    });
-</script>
+}); --}} 
+{{-- </script> --}}
 
 <div class="d-flex justify-content-center mt-3">
     <nav aria-label="Page navigation">

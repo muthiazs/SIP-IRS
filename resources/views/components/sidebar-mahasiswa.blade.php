@@ -25,12 +25,17 @@
             </a>
             @if ($masaIRS == 'isiIRS')
                 <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }} rounded d-flex align-items-center">
-                    <span class="material-icons me-3">create</span> <!-- "create" untuk ikon edit -->
+                    <span class="material-icons me-3">create</span> <!-- "create" untuk ikon buat -->
                     Buat Rencana Studi
                 </a>
-            @elseif ($masaIRS == 'gantiIRS' || $masaIRS == 'batalIRS')
+            @elseif ($masaIRS == 'gantiIRS')
                 <a href="{{ route('mhs_draftIRS') }}" class="nav-link {{ Route::is('mhs_draftIRS') ? 'active' : '' }} rounded d-flex align-items-center">
-                    <span class="material-icons me-3">edit</span>
+                    <span class="material-icons me-3">swap_horiz</span> <!-- "swap_horiz" untuk ikon ganti -->
+                    Edit Rencana Studi
+                </a>
+            @elseif ($masaIRS == 'batalIRS')
+                <a href="{{ route('mhs_draftIRS') }}" class="nav-link {{ Route::is('mhs_draftIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+                    <span class="material-icons me-3">close</span> <!-- "close" untuk ikon batal -->
                     Edit Rencana Studi
                 </a>
             @else
@@ -40,6 +45,7 @@
                 </a>
             @endif
         </nav>
+        
         
 
         <!-- Logout Button -->

@@ -48,6 +48,23 @@
         .d-flex.gap-3 {
             gap: 20px;
         }
+        .btn-teal {
+        background-color: #028391; /* Teal */
+        color: white;
+    }
+
+        .btn-teal:hover {
+            background-color: #026b72; /* Darker teal for hover effect */
+        }
+
+        .btn-danger {
+            background-color: #dc3545; /* Merah */
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333; /* Darker red for hover effect */
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -79,7 +96,10 @@
                             <label for="inputKapasitasRuang" class="form-label">Kapasitas Ruang</label>
                             <input type="number" class="form-control" name="kapasitas" id="inputKapasitasRuang" placeholder="Masukkan Kapasitas Ruang">
                         </div>
-                        <button type="submit" class="btn btn-cyan w-100">Simpan</button>
+                        <div class="btn-group-vertical w-100" role="group" aria-label="Button group">
+                            <button type="submit" class="btn btn-teal w-100 mb-2">Simpan</button>
+                            <button type="submit" class="btn btn-danger w-100">Hapus</button>
+                        </div>                        
                     </form>
                     </div>
                 </div>

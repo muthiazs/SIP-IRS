@@ -138,12 +138,13 @@
                          @if(isset($irsPerSemester[$semester]))
                          <!-- Existing table code -->
                          
-                         <!-- Tambahkan tombol cetak PDF -->
                          <div class="text-left mt-3">
-                             <a href="{{ route('cetak.pdf', ['semester' => $semester]) }}" class="btn btn-primary">
+                            <a href="{{ route('cetak.pdf', ['semester' => $semester]) }}" 
+                                class="btn btn-primary" 
+                                download>
                                  Cetak PDF Semester {{ $semester }}
                              </a>
-                         </div>
+                        </div>
                      @else
                          <p>Tidak ada data IRS untuk semester ini.</p>
                      @endif
