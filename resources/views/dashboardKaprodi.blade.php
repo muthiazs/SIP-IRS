@@ -31,17 +31,11 @@
                     <h1 class="fs-3 fw-bold">Selamat datang, {{ $kaprodi->username }} 👋</h1>
                     <p class="text-muted">Semester Akademik sekarang</p>
                 </div>
-                <div class="position-relative">
-                    <button class="btn btn-teal rounded-circle p-2">
-                        <span class="material-icons text-white">notifications</span>
-                    </button>
-                    <span class="notification-badge"></span>
-                </div>
             </div>
 
             <!-- Period Banner -->
             <div class="period-banner p-3 rounded-3 mb-4 d-flex justify-content-between">
-                <span>Periode Persetujuan Ruang Kelas</span>
+                <span>Periode Pembuatan Jadwal Kuliah</span>
                 <span> $data['semester']['period'] </span>
             </div>
 

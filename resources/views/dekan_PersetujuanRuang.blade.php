@@ -253,5 +253,26 @@
             });
         });
     </script>
+
+<script>
+    function approveAllRooms() {
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah Anda yakin ingin menyetujui semua ruangan?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Setujui Semua',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect ke route untuk menyetujui semua ruangan
+                window.location.href = "{{ route('ruang.acc.all') }}";
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

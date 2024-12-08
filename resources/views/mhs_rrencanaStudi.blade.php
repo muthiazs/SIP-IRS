@@ -66,6 +66,11 @@
         <!-- Main Content -->
         
         <div class="main-content flex-grow-1 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+                <div>
+                    <h1 class="fs-3 fw-bold">Riwayat Rencana Studi Mahasiswa 👩🏻‍💻 </h1>
+                </div>
+            </div>
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     {{-- <h1>{{$Periode_sekarang->jenis}}</h1> --}}
