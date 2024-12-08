@@ -170,8 +170,7 @@ class Mhs_PengisianIRSController extends Controller
             'jadwal_kuliah.jam_mulai',
             'jadwal_kuliah.jam_selesai',
             'jadwal_kuliah.kuota',
-            DB::raw('(SELECT COUNT(*) FROM irs WHERE irs.id_jadwal = jadwal_kuliah.id_jadwal) as kuota_terisi')
-        )
+            DB::raw('(SELECT COUNT(*) FROM irs WHERE irs.id_jadwal = jadwal_kuliah.id_jadwal AND irs.status != "BARU") as kuota_terisi'))
         ->get();
 
     // Ambil SKS mata kuliah yang akan dipilih
@@ -1119,6 +1118,7 @@ public function batalkanJadwal(Request $request)
             ->select(
                 'mahasiswa.nim',
                 'mahasiswa.nama as nama_mhs',
+                'mahasiswa.semester as semester',
                 'program_studi.nama as prodi_nama',
                 'dosen.nama as nama_doswal',
                 'dosen.nip',
@@ -1138,8 +1138,15 @@ public function batalkanJadwal(Request $request)
             )
             ->first();
 
+             // Check if mahasiswa already has an IRS for the current semester with status not 'draft'
+            $existingIRS = DB::table('irs')
+            ->where('nim', $mahasiswa->nim)
+            ->where('semester', $mahasiswa->semester) // Assuming you have semester in mahasiswa
+            ->where('status', '!=', 'draft')
+            ->exists();
+
             // Pass both daftarMk and mahasiswa data to the view
-            return view('mhs_newIRS', compact('mahasiswa','fetchPeriodeISIIRS'));
+            return view('mhs_newIRS', compact('mahasiswa','fetchPeriodeISIIRS','existingIRS'));
         }
 
         public function rrencanaStudi()
