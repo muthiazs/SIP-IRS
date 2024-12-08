@@ -15,6 +15,7 @@ class IRS extends Model
         'semester',
         'id_jadwal',
         'status',
+        'prioritas',
     ];
 
 
