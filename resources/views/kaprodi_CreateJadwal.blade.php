@@ -78,131 +78,77 @@
                 </button>
             </div> --}}
             <div class="card-body d-flex flex-column">
-                {{-- <form action="{{ route('jad') }}" method="POST">
-                    @csrf                         --}}
-                    
-                    <div class="card-body">
-                        <table class="table table-bordered mt-4" id="jadwalTable">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kode Matkul</th>
-                                    <th>Nama Matkul</th>
-                                    <th>Kelas</th>
-                                    <th>Ruang</th>
-                                    <th>Hari</th>
-                                    <th>Jam Mulai</th>
-                                    <th>Jam Selesai</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($jadwal as $key => $item)
-                                <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ $item->kode_matkul }}</td>
-                                    <td>{{ $item->nama_matkul }}</td>
-                                    <td>{{ $item->kelas }}</td>
-                                    <td>{{ $item->nama_ruang }}</td>
-                                    <td>{{ $item->hari }}</td>
-                                    <td>{{ $item->jam_mulai }}</td>
-                                    <td>{{ $item->jam_selesai }}</td>
-                                    <td>
-                                        {{-- <form action="{{ route('batalkanJadwal') }}" method="POST" class="deleteScheduleForm">
-                                            @csrf
-                                            <input type="hidden" name="id" value="{{ $item->id }}">
-                                            <button type="submit" class="btn btn-danger">Batalkan Jadwal</button>
-                                        </form> --}}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>                            
-                        </table>
-                        <a href="/kaprodi_CreateJadwal">
-                            <button class="btn btn-blue">Tambah Jadwal</button>
-                        </a>   
-                        {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addScheduleModal">Tambah Jadwal</button> --}}
-                    {{-- </div> --}}
-                    <!-- Modal -->
-                    {{-- <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-teal text-white">
-                                    <h5 class="modal-title" id="addScheduleModalLabel">Tambah Jadwal Kuliah</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="jadwalForm" action="{{ route('jadwal.store') }}" method="POST">
-                                        @csrf
-                                        <div class="mb-3">
-                                            <label for="kode_matkul" class="form-label">Mata Kuliah</label>
-                                            <select name="kode_matkul" id="kode_matkul" class="form-select" required>
-                                                <option value="" disabled selected>Pilih Mata Kuliah</option>
-                                                @foreach($namaMK as $matkul)
-                                                    <option value="{{ $matkul->kode_matkul }}">{{ $matkul->nama_matkul }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="kelas" class="form-label">Kelas</label>
-                                            <select name="kelas" id="kelas" class="form-select" required>
-                                                <option value="" disabled selected>Pilih Kelas</option>
-                                                <option value="A">A</option>
-                                                <option value="B">B</option>
-                                                <option value="C">C</option>
-                                                <option value="D">D</option>
-                                                <option value="E">E</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="hari" class="form-label">Hari</label>
-                                            <select name="hari" id="hari" class="form-select" required>
-                                                <option value="" disabled selected>Pilih Hari</option>
-                                                <option value="Senin">Senin</option>
-                                                <option value="Selasa">Selasa</option>
-                                                <option value="Rabu">Rabu</option>
-                                                <option value="Kamis">Kamis</option>
-                                                <option value="Jumat">Jumat</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="dosen" class="form-label">Dosen</label>
-                                            <select name="dosen" id="dosen" class="form-select" required>
-                                                <option value="" disabled selected>Pilih Dosen</option>
-                                                @foreach($dosen as $d)
-                                                    <option value="{{ $d->id_dosen }}">
-                                                        {{ $d->nama }} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="ruang" class="form-label">Ruang</label>
-                                            <select name="ruang" id="ruang" class="form-select" required>
-                                                <option value="" disabled selected>Pilih Ruangan</option>
-                                                @foreach($ruangan as $r)
-                                                    <option value="{{ $r->id_ruang }}">
-                                                        {{ $r->nama_ruang }} 
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                                            <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="jam_selesai" class="form-label">Jam Selesai</label>
-                                            <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-blue">Buat</button>
-                                    </form>                                    
-                                </div>
-                            </div>
-                        </div> --}}
+                <form id="jadwalForm" action="{{ route('jadwal.store') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="kode_matkul" class="form-label">Mata Kuliah</label>
+                        <select name="kode_matkul" id="kode_matkul" class="form-select" required>
+                            <option value="" disabled selected>Pilih Mata Kuliah</option>
+                            @foreach($namaMK as $matkul)
+                                <option value="{{ $matkul->kode_matkul }}">{{ $matkul->nama_matkul }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <button class="btn btn-primary" id="confirmSchedule">Kembali</button>
-                {{-- </form> --}}
+                    <div class="mb-3">
+                        <label for="kelas" class="form-label">Kelas</label>
+                        <select name="kelas" id="kelas" class="form-select" required>
+                            <option value="" disabled selected>Pilih Kelas</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hari" class="form-label">Hari</label>
+                        <select name="hari" id="hari" class="form-select" required>
+                            <option value="" disabled selected>Pilih Hari</option>
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dosen" class="form-label">Dosen</label>
+                        <select name="dosen" id="dosen" class="form-select" required>
+                            <option value="" disabled selected>Pilih Dosen</option>
+                            @foreach($dosen as $d)
+                                <option value="{{ $d->id_dosen }}">
+                                    {{ $d->nama }} 
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ruang" class="form-label">Ruang</label>
+                        <select name="ruang" id="ruang" class="form-select" required>
+                            <option value="" disabled selected>Pilih Ruangan</option>
+                            @foreach($ruangan as $r)
+                                <option value="{{ $r->id_ruang }}">
+                                    {{ $r->nama_ruang }} 
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jam_mulai" class="form-label">Jam Mulai</label>
+                        <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="jam_selesai" class="form-label">Jam Selesai</label>
+                        <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" required>
+                    </div>
+                    <button type="submit" class="btn btn-blue">Buat</button>
+                </form>                                    
+            </div>
+        </div>
+    </div>
+</div>
+<button class="btn btn-primary" id="confirmSchedule">Kembali</button>
+</form>
             </div>
         </div>
     </div>
@@ -211,8 +157,28 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+<script>
+    $(document).ready(function () {
+        $('#jadwalForm').on('submit', function (e) {
+            e.preventDefault();
+            const formData = $(this).serialize();
+            $.ajax({
+                url: "{{ route('jadwal.store') }}",
+                method: "POST",
+                data: formData,
+                success: function (response) {
+                    alert(response.message);
+                    location.reload(); // Refresh halaman setelah sukses
+                },
+                error: function (xhr) {
+                    alert(xhr.responseJSON.message);
+                },
+            });
+        });
+    });
+</script>
 
-    <script>
+    {{-- <script>
         // Pastikan modal terbuka dan fokus pada elemen pertama saat modal ditampilkan
         $('#addScheduleModal').on('shown.bs.modal', function () {
             $('#kode_matkul').trigger('focus');  // Fokus pada elemen pertama
@@ -486,7 +452,7 @@ $(document).ready(function () {
             }
         });
     });
-});
+}); --}}
 
 </script>
 
