@@ -33,11 +33,25 @@
                 </div>
             </div>
 
-            <!-- Period Banner -->
-            <div class="period-banner p-3 rounded-3 mb-4 d-flex justify-content-between">
-                <span>Periode Pembuatan Jadwal Kuliah</span>
-                <span> $data['semester']['period'] </span>
-            </div>
+                    <!-- Period Banner -->
+                <div class="alert alert-success" role="alert">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-medium">
+                            Masa Pengaturan Jadwal: 
+                            @if($masaAturJadwal)
+                                {{ $masaAturJadwal->nama_kegiatan }} 
+                                ({{ $masaAturJadwal->tanggal_mulai }} - {{ $masaAturJadwal->tanggal_selesai }})
+                            @else
+                                Tidak ada periode pengaturan jadwal yang aktif
+                            @endif
+                        </span>
+                    </div>
+                </div>
+
+
+
+
+
 
             <!-- Cards Section -->
             <div class="row g-4 mb-4">

@@ -174,6 +174,11 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.11/dist/sweetalert2.min.css" rel="stylesheet">
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.11/dist/sweetalert2.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -185,17 +190,32 @@
                 method: "POST",
                 data: formData,
                 success: function (response) {
-                    alert(response.message);
-                    location.reload(); // Refresh halaman setelah sukses
+                    // Menampilkan SweetAlert jika sukses
+                    Swal.fire({
+                        title: 'Sukses!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload(); // Refresh halaman setelah sukses
+                    });
                 },
                 error: function (xhr) {
-                    alert(xhr.responseJSON.message);
+                    // Menampilkan SweetAlert jika gagal
+                    Swal.fire({
+                        title: 'Gagal!',
+                        text: xhr.responseJSON.message,
+                        icon: 'error',
+                        confirmButtonText: 'Coba Lagi'
+                    });
                 },
             });
         });
     });
 </script>
 
+
+</script>
     {{-- <script>
         // Pastikan modal terbuka dan fokus pada elemen pertama saat modal ditampilkan
         $('#addScheduleModal').on('shown.bs.modal', function () {

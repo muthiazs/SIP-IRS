@@ -28,7 +28,36 @@ class DekanController extends Controller
                         'periode_akademik.nama_periode'
                     )
                     ->first();        
-        return view('dashboardDekan', compact('dekan'));
+
+             // Ambil periode akademik terbaru berdasarkan id_periode
+            $periodeTerbaru = DB::table('periode_akademik')
+            ->orderBy('id_periode', 'DESC')
+            ->first();
+            // Pastikan periode akademik terbaru ditemukan
+            if (!$periodeTerbaru) {
+                return view('dashboardKaprodi', compact('kaprodi'));
+            }
+
+            // Mendapatkan tanggal saat ini
+            $currentDate = now();
+
+            // Ambil masa setuju ruangan jadwal berdasarkan periode akademik terbaru dan rentang waktu
+            $fetchPeriodeSetujuRuanganJadwal = DB::table('kalender_akademik')
+                ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'kalender_akademik.id_periode')
+                ->where('kalender_akademik.id_periode', $periodeTerbaru->id_periode) 
+                ->where('kalender_akademik.kode_kegiatan', 'setujuRuanganJadwal') // Menggunakan kode kegiatan 'setujuRuanganJadwal'
+                ->whereDate('kalender_akademik.tanggal_mulai', '<=', $currentDate->toDateString()) // Memastikan tanggal mulai tidak melebihi tanggal sekarang
+                ->whereDate('kalender_akademik.tanggal_selesai', '>=', $currentDate->toDateString()) // Memastikan tanggal selesai lebih besar dari atau sama dengan tanggal sekarang
+                ->select(
+                    'kalender_akademik.tanggal_mulai', // Mengambil tanggal mulai
+                    'kalender_akademik.tanggal_selesai', // Mengambil tanggal selesai
+                    'kalender_akademik.nama_kegiatan' // Mengambil nama kegiatan
+                )
+                ->first(); // Mengambil hanya satu hasil yang sesuai dengan periode saat ini
+
+            // Tetapkan nilai masa setuju ruangan jadwal berdasarkan hasil query
+            $masaSetujuRuanganJadwal = $fetchPeriodeSetujuRuanganJadwal ?? null;
+        return view('dashboardDekan', compact('dekan' ,'masaSetujuRuanganJadwal'));
     }
 
     public function PersetujuanRuang()
