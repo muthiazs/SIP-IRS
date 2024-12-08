@@ -17,6 +17,8 @@
     <style>
         /* Tabel IRS */
         /* Mengubah warna header tabel */
+        
+
         .table thead th {
             background-color: #FED488; /* Sesuaikan warna header */
             color: black; /* Teks putih */
@@ -92,7 +94,7 @@
             /* overflow-x: auto; Agar tabel tidak keluar dari card */
             padding: 15px; /* Tambahkan padding agar terlihat rapi */
             width: auto; /* Sesuaikan lebar dengan konten */
-            max-width: 100%; /* Pastikan tidak melebihi layar */
+            max-width: auto; /* Pastikan tidak melebihi layar */
             box-sizing: border-box; /* Hitung padding dalam ukuran elemen */
         }
 
@@ -370,84 +372,6 @@ $(document).ready(function() {
         }
     });
 });
-</script>
-{{-- Buat Ambil Jadwal --}}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const forms = document.querySelectorAll('.ambil-jadwal-form');
-        
-        forms.forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const formData = new FormData(this);
-                const submitButton = this.querySelector('.ambil-btn');
-                const jadwalId = submitButton.getAttribute('data-jadwal-id');
-                
-                submitButton.disabled = true;
-                
-                fetch('{{ route('ambilJadwal') }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Tampilkan notifikasi sukses
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: data.message,
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            // Reload halaman setelah sukses
-                            window.location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: data.message
-                        });
-                        submitButton.disabled = false;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Terjadi kesalahan pada server'
-                    });
-                    submitButton.disabled = false;
-                });
-            });
-        });
-    });
-</script>
-
-    // Menangani klik tombol Batalkan
-    document.getElementById('batalkanBtn').addEventListener('click', function() {
-        Swal.fire({
-            title: 'Konfirmasi Batalkan Mata Kuliah',
-            text: 'Apakah Anda yakin ingin membatalkan pengambilan mata kuliah ini?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, batalkan!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Aksi yang terjadi setelah konfirmasi, bisa diarahkan ke route
-                window.location.href = '#'; // Ganti dengan route yang sesuai
-            }
-        });
-    });
 </script>
 
 {{-- Menangani searching

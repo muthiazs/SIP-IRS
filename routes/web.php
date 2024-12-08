@@ -137,6 +137,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/kaprodi_StatusMahasiswa', [KaprodiControler::class, 'StatusMahasiswa'])->name('kaprodi_StatusMahasiswa');
     Route::get('/kaprodi_SetMatkul', [KaprodiControler::class, 'setMatkul'])->name('kaprodi_SetMatkul');
     Route::get('/kaprodi_UpdateDeleteMatkul', [KaprodiControler::class, 'UpdateDeleteMatkul'])->name('kaprodi_UpdateDeleteMatkul');
+    Route::get('/kaprodi_CreateJadwal', [KaprodiControler::class, 'indexCreateJadwal'])->name('kaprodi_CreateJadwal');
+    Route::post('/jadwal/store', [KaprodiControler::class, 'createJadwal'])->name('jadwal.store');
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
     Route::post('/ruang/acc', [DekanController::class, 'setujuiRuang'])->name('ruang.acc');
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
@@ -172,7 +174,7 @@ Route::middleware('auth')->group(function () {
     // Route untuk mengunduh IRS dalam format PDF
     Route::get('dosen/print-irs-pdf/{nim}', [DosenController::class, 'printIRSPDF'])->name('dosen.print_irs_pdf');
 
-    Route::post('/kaprodi/jadwal/store', [KaprodiControler::class, 'storeJadwalKuliah'])->name('jadwal.store');
+    Route::post('/kaprodi/jadwal/store', [KaprodiControler::class, 'createJadwal'])->name('jadwal.store');
 
 
     Route::post('/approve-irs', [DosenController::class, 'approveSelectedIRS'])->name('approve.selected.irs');
@@ -181,9 +183,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/kalender_akademik', [KalenderAkademikController::class, 'index'])->name('kalender_akademik');
 
     Route::delete('/jadwal/{id}', [KaprodiControler::class, 'destroy'])->name('jadwal.delete');
-
-    Route::post('/jadwal-kuliah/store', [KaprodiControler::class, 'storeJadwalKuliah'])->name('jadwal.store');
-
 
 });
 
