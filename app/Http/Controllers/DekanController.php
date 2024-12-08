@@ -124,6 +124,37 @@ class DekanController extends Controller
         return redirect()->back()->with('success', 'Semua ruangan berhasil disetujui.');
     }
 
+    public function setujuiSemuaRuang(Request $request)
+    {
+        dd($request->all());
+        $prodi = $request->prodi;
+
+        if (!$prodi) {
+            return redirect()->back()->with('error', 'Program studi tidak boleh kosong.');
+        }
+
+        try {
+            DB::table('ruangan')
+                ->join('alokasi_ruangan', 'ruangan.id_ruang', '=', 'alokasi_ruangan.id_ruang')
+                ->join('program_studi', 'alokasi_ruangan.id_prodi', '=', 'program_studi.id_prodi')
+                ->where('program_studi.nama', $prodi)
+                ->where('ruangan.status', 'diajukan')
+                ->update(['ruangan.status' => 'telah digunakan']);
+
+                return redirect()->back()->with('sweetAlert', [
+                    'title' => 'Berhasil!',
+                    'text' => 'Semua ruangan pada prodi'. $prodi .' berhasil disetujui.',
+                    'icon' => 'success'
+                ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('sweetAlert', [
+                'title' => 'Error!',
+                'text' => 'Terjadi kesalahan saat akan menyetujui semua matkul.',
+                'icon' => 'error'
+            ]);
+        }
+    }
+
     public function tolakRuang(Request $request)
     {
         $ruang = DB::table('ruangan')

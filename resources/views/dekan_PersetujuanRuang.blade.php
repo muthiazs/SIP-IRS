@@ -19,6 +19,7 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+    
 
     <style>
         /* Mengubah warna header tabel */
@@ -161,7 +162,7 @@
                           </select>
                       </div>
 
-                      <button type="button" class="btn btn-success mb-4" onclick="approveAllRooms()">Setujui Semua Ruang</button>
+                      <button type="submit" class="btn btn-success mb-4" >Setujui Semua Ruang</button>
                       
                 <!-- Cards Section -->
                 <table class="table table-bordered">
@@ -185,7 +186,7 @@
                             <input type="hidden" name="nama_ruang" value="{{ $data->ruang_nama }}">
                             <button type="submit" class="btn btn-primary mb-2">Setujui</button>
                             <button type="submit" class="btn btn-danger mb-2">Tolak</button>
-                        </td>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -257,10 +258,23 @@
     </script>
 
     <script>
-        function approveAllRooms() {
+        $('form[action="{{ route('ruang.acc') }}"]').submit(function(e)) {
+            e.preventDefault();
+            const form = this;
+            const prodi = $('#selectProdi').val().trim();
+            if (!prodi) {
+                Swal.fire({
+                    title: 'Pilih Program Studi',
+                    text: 'Silakan pilih program studi terlebih dahulu.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
             Swal.fire({
                 title: 'Konfirmasi',
-                text: 'Apakah Anda yakin ingin menyetujui semua ruangan?',
+                text: `Apakah Anda yakin ingin menyetujui semua ruangan untuk program studi ${prodi}?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -269,11 +283,24 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Redirect ke route untuk menyetujui semua ruangan
-                    window.location.href = "{{ route('ruang.acc.all') }}";
+                    form.submit();
                 }
             });
         }
+
+        // Success/Error message handler
+@if(session('sweetAlert'))
+            document.addEventListener('DOMContentLoaded', function() {
+                const alert = @json(session('sweetAlert'));
+                Swal.fire({
+                    title: alert.title,
+                    text: alert.text,
+                    icon: alert.icon,
+                    confirmButtonColor: '#028391',
+                    confirmButtonText: 'OK'
+                });
+            });
+        @endif
     </script>
 
 </body>
