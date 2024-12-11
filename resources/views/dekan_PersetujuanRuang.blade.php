@@ -137,10 +137,12 @@
 
         <!-- Main Content -->
         <div class="main-content flex-grow-1 p-4">
-            <form action="{{ route('ruang.acc') }}" method="POST">
+            <!-- Form untuk Setujui Semua Ruang -->
+            <form action="{{ route('setujui.semua.ruang') }}" method="POST">
                 @csrf
                 <!-- Header -->
                 <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Persetujuan Ruang Kelas</h4>
                 </div>
 
                 <!-- Period Banner -->
@@ -148,24 +150,27 @@
                     <span>Periode Persetujuan Ruang Kelas</span>
                 </div>
 
+                <!-- Dropdown Program Studi -->
                 <div class="mb-3">
-                          <label class="fw-bold">Program Studi</label>
-                          <select name="prodi" class="form-select" id="selectProdi" required>
-                              <option value="">Pilih Program Studi</option>
-                              <option value="Biologi">Biologi</option>
-                              <option value="Bioteknologi">Bioteknologi</option>
-                              <option value="Fisika">Fisika</option>
-                              <option value="Kimia">Kimia</option>
-                              <option value="Matematika">Matematika</option>
-                              <option value="Informatika">Informatika</option>
-                              <option value="Statistika">Statistika</option>
-                          </select>
-                      </div>
+                    <label class="fw-bold">Program Studi</label>
+                    <select name="prodi" class="form-select" id="selectProdi" required>
+                        <option value="">Pilih Program Studi</option>
+                        <option value="Biologi">Biologi</option>
+                        <option value="Bioteknologi">Bioteknologi</option>
+                        <option value="Fisika">Fisika</option>
+                        <option value="Kimia">Kimia</option>
+                        <option value="Matematika">Matematika</option>
+                        <option value="Informatika">Informatika</option>
+                        <option value="Statistika">Statistika</option>
+                    </select>
+                </div>
 
-                      <button type="submit" class="btn btn-success mb-4" >Setujui Semua Ruang</button>
-                      
-                <!-- Cards Section -->
-                <table class="table table-bordered">
+                <!-- Button Setujui Semua -->
+                <button type="submit" class="btn btn-success mb-4">Setujui Semua Ruang</button>
+            </form>
+
+            <!-- Tabel Persetujuan Ruang -->
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th style="width: 3rem;">No</th>
@@ -177,23 +182,30 @@
                 </thead>
                 <tbody id="tabelRuang">
                     @foreach($accRuang as $index => $data)
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $data->ruang_nama }}</td>
-                        <td>{{ $data->kapasitas }}</td>
-                        <td>{{ $data->prodi_nama }}</td>
-                        <td>
-                            <input type="hidden" name="nama_ruang" value="{{ $data->ruang_nama }}">
-                            <button type="submit" class="btn btn-primary mb-2">Setujui</button>
-                            <button type="submit" class="btn btn-danger mb-2">Tolak</button>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $data->ruang_nama }}</td>
+                            <td>{{ $data->kapasitas }}</td>
+                            <td>{{ $data->prodi_nama }}</td>
+                            <td>
+                                <!-- Form untuk Setujui Ruang -->
+                                <form action="{{ route('setujui.ruang', ['id_ruang' => $data->id_ruang]) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success btn-sm">Setujui</button>
+                                </form>
+
+                                <!-- Tombol Tolak
+                                <form action="{{ route('tolak.ruang', ['id_ruang' => $data->id_ruang]) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm">Tolak</button>
+                                </form> -->
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
-                </table>
-            </form>
+            </table>
         </div>
-    </div>
+
 
     <!-- Konfirmasi Button -->
     <button class="btn btn-blue position-absolute bottom-0 mb-4 rounded-3" onclick="confirmButton()">Konfirmasi</button>
@@ -258,39 +270,44 @@
     </script>
 
     <script>
-        $('form[action="{{ route('ruang.acc') }}"]').submit(function(e)) {
-            e.preventDefault();
-            const form = this;
-            const prodi = $('#selectProdi').val().trim();
-            if (!prodi) {
-                Swal.fire({
-                    title: 'Pilih Program Studi',
-                    text: 'Silakan pilih program studi terlebih dahulu.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event handler untuk form
+            const form = document.querySelector('form[action="{{ route('setujui.semua.ruang') }}"]');
+
+            if (form) {
+                // form.addEventListener('submit', function(e) {
+                //     e.preventDefault(); // Mencegah submit default
+
+                    // const prodi = document.getElementById('selectProdi').value.trim();
+                    // if (!prodi) {
+                    //     Swal.fire({
+                    //         title: 'Pilih Program Studi',
+                    //         text: 'Silakan pilih program studi terlebih dahulu.',
+                    //         icon: 'warning',
+                    //         confirmButtonText: 'OK'
+                    //     });
+                    //     return; // Stop jika program studi tidak dipilih
+                    // }
+
+                    Swal.fire({
+                        title: 'Konfirmasi',
+                        text: `Apakah Anda yakin ingin menyetujui semua ruangan untuk program studi ${prodi}?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Setujui Semua',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit(); // Lakukan submit jika dikonfirmasi
+                        }
+                    });
                 });
-                return;
             }
 
-            Swal.fire({
-                title: 'Konfirmasi',
-                text: `Apakah Anda yakin ingin menyetujui semua ruangan untuk program studi ${prodi}?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Setujui Semua',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        }
-
-        // Success/Error message handler
-@if(session('sweetAlert'))
-            document.addEventListener('DOMContentLoaded', function() {
+            // SweetAlert untuk pesan sukses/error dari session
+            @if(session('sweetAlert'))
                 const alert = @json(session('sweetAlert'));
                 Swal.fire({
                     title: alert.title,
@@ -299,8 +316,8 @@
                     confirmButtonColor: '#028391',
                     confirmButtonText: 'OK'
                 });
-            });
-        @endif
+            @endif
+        });
     </script>
 
 </body>
