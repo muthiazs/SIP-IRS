@@ -108,18 +108,6 @@
         <!-- Progress Cards -->
         <div class="card shadow-sm">
             <h5 class="card-header bg-teal text-white text-center">Pembagian Jadwal Kuliah</h5>
-                                <!-- Button on the right top -->
-                                <div class="d-flex justify-content-between mb-3">
-                        <a href="/kaprodi_CreateJadwal">
-                            <button class="btn btn-blue">Tambah Jadwal</button>
-                        </a>
-                        <!-- Search Box -->
-                        <input type="text" id="customSearchInput" class="form-control" placeholder="Cari Nama Matkul..." style="width: 200px;">
-                    </div>
-            <div class="card-body d-flex flex-column">
-                {{-- <form action="{{ route('jad') }}" method="POST">
-                    @csrf                         --}}
-                    
                     <div class="card-body">
                          <!-- Button on the right top -->
                         <div class="d-flex justify-content-between mb-3">
