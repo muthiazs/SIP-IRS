@@ -216,7 +216,13 @@
             // Dropdown filter logic
             $('#selectProdi').on('change', function() {
                 const selectedProdi = $(this).val().trim();
-                table.column(3).search(selectedProdi).draw();
+                if (selectedProdi) {
+                    // Jika ada prodi yang dipilih, filter berdasarkan kolom program studi
+                    table.column(4).search(selectedProdi).draw(); // Kolom program studi ada di indeks 4
+                } else {
+                    // Jika tidak ada prodi yang dipilih, tampilkan semua data
+                    table.column(4).search('').draw();
+                }
             });
 
             // Form submission handler
