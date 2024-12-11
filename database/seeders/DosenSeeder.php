@@ -147,6 +147,14 @@ class DosenSeeder extends Seeder
                 'prodi_id' => '1',
                 'created_at' => now(),
             ],
+            [
+                'id_dosen'=> 25,
+                'id_user'=> 23,
+                'nip' => '200405242406012209',
+                'nama' => 'kaprodi Kimia Well',
+                'prodi_id' =>2,
+                'created_at'=>now(),
+            ],
         ];
     
         DB::table('dosen')->insert($dosens);
