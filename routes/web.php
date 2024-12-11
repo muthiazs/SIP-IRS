@@ -157,6 +157,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/cancel-selected-ruang', [BAK_PembagianruangController::class, 'cancelSelectedRuang'])->name('cancel.selected.ruang');
     Route::get('/bak_CekStatusRuang', [BAK_PembagianruangController::class, 'indexCekStatusRuang'])->name('bak_CekStatusRuang');
     Route::post('/ruang/store', [BAK_PembagianruangController::class, 'storeRuang'])->name('ruang.store');
+    Route::post('/ruang/storeBatch', [BAK_PembagianruangController::class, 'storeBatchRuang'])->name('ruang.storeBatch');
     Route::get('/bak_CreateRuang', [BAK_PembagianruangController::class, 'indexCreateRuang'])->name('bak_CreateRuang');
     Route::post('/ruang/create', [BAK_PembagianruangController::class, 'createRuang'])->name('create.store');
     Route::get('/bak_UpdateDeleteRuang', [BAK_PembagianruangController::class, 'indexUpdateDeleteRuang'])->name('bak_UpdateDeleteRuang');

@@ -22,7 +22,6 @@
     <!-- CSS dan JS dari public -->
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
     <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
-    
     <style>
         .btn-teal {
             width: 45px;
@@ -98,6 +97,34 @@
             overflow-x: auto;
             max-width: 100%;
         }
+    /* Menyesuaikan lebar kolom checkbox dan nomor */
+    #ruangTable th:first-child, 
+    #ruangTable td:first-child {
+        width: 50px;  /* Atur lebar kolom checkbox */
+    }
+
+    #ruangTable th:nth-child(2), 
+    #ruangTable td:nth-child(2) {
+        width: 50px;  /* Atur lebar kolom nomor */
+    }
+
+    /* Menyusun header teks di tengah */
+    #ruangTable th {
+        text-align: center;  /* Teks header di tengah */
+        font-size: 14px;  /* Ukuran font header */
+    }
+
+    /* Menyesuaikan ukuran font di body tabel */
+    #ruangTable td {
+        font-size: 14px;  /* Ukuran font untuk data tabel */
+        text-align: center;  /* Teks di tengah untuk data tabel */
+    }
+
+    /* Menyusun checkbox agar pas di tengah */
+    .room-checkbox {
+        margin: 0 auto;
+        display: block;
+    }
     </style>
 </head>
 <body class="bg-light">
@@ -142,35 +169,32 @@
 
                     <!-- Tabel -->
                     <div class="table-responsive">
-                        <table class="table table-bordered mt-4" id="ruangTable">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Ruang</th>
-                                    <th>Kapasitas</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabelRuang">
-                                @foreach($tabelRuang as $index => $data)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $data->nama }}</td>
-                                    <td>{{ $data->kapasitas }}</td>
-                                    <td>
-                                        <form action="{{ route('ruang.store') }}" method="POST" class="room-form">
-                                            @csrf
-                                            <input type="hidden" name="prodi" class="prodi-input">
-                                            <input type="hidden" name="gedung" class="gedung-input">
-                                            <input type="hidden" name="nama_ruang" value="{{ $data->nama }}">
-                                            <button type="submit" class="btn btn-primary">Tambah Ruang</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                        <form action="{{ route('ruang.storeBatch') }}" method="POST" id="batchRoomForm">
+                            @csrf
+                            <input type="hidden" name="prodi" id="selectedProdi">
+                            <button type="submit" class="btn btn-primary mt-3">Alokasikan Ruang</button>
+                            <table class="table table-bordered mt-4" id="ruangTable">
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
+                                        <th>No</th>
+                                        <th>Nama Ruang</th>
+                                        <th>Kapasitas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelRuang">
+                                    @foreach($tabelRuang as $index => $data)
+                                    <tr>
+                                        <td><input type="checkbox" name="nama_ruang[]" value="{{ $data->nama }}" class="room-checkbox"></td>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $data->nama }}</td>
+                                        <td>{{ $data->kapasitas }}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -218,6 +242,36 @@
                 $('.prodi-input').val(prodi);
 
             });
+
+            $('#selectAll').on('click', function() {
+                $('.room-checkbox').prop('checked', this.checked);
+            });
+
+            $('#batchRoomForm').submit(function(e) {
+                const selectedRooms = $('input[name="nama_ruang[]"]:checked').length;
+                const prodi = $('#selectProdi').val();
+
+                if (!prodi) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Silahkan pilih Program Studi terlebih dahulu!',
+                        confirmButtonColor: '#028391'
+                    });
+                } else if (selectedRooms === 0) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Pilih minimal satu ruangan untuk dialokasikan!',
+                        confirmButtonColor: '#028391'
+                    });
+                } else {
+                    $('#selectedProdi').val(prodi);
+                }
+            });
+
 
             // Handle form submission
             $('.room-form').submit(function(e) {

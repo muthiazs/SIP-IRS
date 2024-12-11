@@ -102,6 +102,44 @@
             max-width: 100%;
             margin: 0;
         }
+    /* Menyusun kolom checkbox dan nomor lebih kecil */
+    #cekTable th:first-child, 
+    #cekTable td:first-child {
+        width: 50px;  /* Atur lebar kolom checkbox */
+    }
+
+    #cekTable th:nth-child(2), 
+    #cekTable td:nth-child(2) {
+        width: 50px;  /* Atur lebar kolom nomor */
+    }
+
+    /* Menyusun teks header di tengah */
+    #cekTable th {
+        text-align: center;  /* Teks header di tengah */
+        font-size: 14px;  /* Ukuran font header */
+    }
+
+    /* Menyesuaikan ukuran font di body tabel */
+    #cekTable td {
+        font-size: 14px;  /* Ukuran font untuk data tabel */
+        text-align: center;  /* Teks di tengah untuk data tabel */
+    }
+
+    /* Menyusun checkbox agar pas di tengah */
+    .ruang-checkbox {
+        margin: 0 auto;
+        display: block;
+    }
+
+    /* Mengatur posisi tombol Batalkan */
+    .d-flex {
+        justify-content: flex-end;
+    }
+
+    /* Menambahkan style agar header tabel lebih rapi */
+    #cekTable th {
+        vertical-align: middle;  /* Menyelaraskan teks secara vertikal ke tengah */
+    }
     </style>
 </head>
 <body class="bg-light">
@@ -135,11 +173,13 @@
                             <option value="Informatika">Informatika</option>
                             <option value="Statistika">Statistika</option>
                         </select>
-                    </div>              
-
+                    </div>
                     <!-- Tabel Data -->
                     <div class="table-responsive mt-4">
                         <table class="table table-bordered" id="cekTable">
+                            <button id="cancel-selected" class="btn btn-primary btn-sm" style="padding: 5px 15px; font-size: 14px; border-radius: 8px;">
+                                Batalkan
+                            </button>
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="select-all"></th> <!-- Checkbox untuk pilih semua -->
@@ -169,9 +209,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <button id="cancel-selected" class="btn btn-primary btn-sm" style="padding: 5px 15px; font-size: 14px; border-radius: 8px;">
-                            Batalkan
-                        </button>
                     </div>
                 </div>
             </div>
