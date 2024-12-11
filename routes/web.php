@@ -146,8 +146,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/jadwal/delete', [KaprodiControler::class, 'deleteJadwal'])->name('delete.jadwal');
 
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
-    Route::post('/ruang/acc', [DekanController::class, 'setujuiRuang'])->name('ruang.acc');
-    Route::get('/ruang/acc/all', [DekanController::class, 'setujuiSemuaRuang'])->name('ruang.acc.all');
+    Route::post('/setujui-ruang/{id_ruang}', [DekanController::class, 'setujuiRuang'])->name('setujui.ruang');
+    Route::post('/setujui-semua-ruang', [DekanController::class, 'setujuiSemuaRuang'])->name('setujui.semua.ruang');
+    Route::post('/tolak-ruang/{id_ruang}', [DekanController::class, 'tolakRuang'])->name('tolak.ruang');    
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
     Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
     Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'indexPembagianRuang'])->name('bak_PembagianRuang');

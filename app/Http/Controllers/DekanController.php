@@ -60,6 +60,7 @@ class DekanController extends Controller
         return view('dashboardDekan', compact('dekan' ,'masaSetujuRuanganJadwal'));
     }
 
+    //Buat nampilin data di persetujuan ruang
     public function PersetujuanRuang()
     {
         // Debugging query langsung
@@ -81,13 +82,14 @@ class DekanController extends Controller
                     )
                     ->first();
 
-        $accRuang = DB::table('ruangan')
-                    -> join('alokasi_ruangan', 'ruangan.id_ruang', '=', 'alokasi_ruangan.id_ruang')
+        $accRuang = DB::table('alokasi_ruangan')
+                    -> join('ruangan', 'ruangan.id_ruang', '=', 'alokasi_ruangan.id_ruang')
                     -> join('program_studi', 'alokasi_ruangan.id_prodi', '=', 'program_studi.id_prodi')
                     -> where(
-                        'ruangan.status', '=', 'diajukan'
+                        'alokasi_ruangan.status', '=', 'belum_disetujui'
                     )
                     -> select(
+                        'alokasi_ruangan.id_ruang',
                         'ruangan.nama as ruang_nama',
                         'ruangan.kapasitas',
                         'program_studi.nama as prodi_nama'
@@ -96,84 +98,52 @@ class DekanController extends Controller
         return view('dekan_PersetujuanRuang', compact('dekan', 'accRuang'));
     }
 
-    // public function setujuiRuang(Request $request)
+    public function setujuiRuang($id_ruang)
+    {
+        if (!$id_ruang) {
+            abort(400, 'Parameter id_ruang tidak ditemukan.');
+        }
+    
+        // Update status di tabel alokasi_ruangan berdasarkan id_ruang
+        DB::table('alokasi_ruangan')
+            ->where('alokasi_ruangan.id_ruang', $id_ruang)
+            ->update(['status' => 'disetujui']);
+    
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Ruangan berhasil disetujui.');
+    }
+    
+    public function setujuiSemuaRuang()
+    {
+        // Update semua ruangan dengan status 'belum_disetujui' menjadi 'telah digunakan'
+        DB::table('alokasi_ruangan')
+            ->where('status', 'belum_disetujui')
+            ->update(['status' => 'disetujui']);
+    
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Semua ruangan berhasil disetujui.');
+    }
+
+    // public function tolakRuang(Request $request)
     // {
     //     $ruang = DB::table('ruangan')
     //     ->where('nama', $request->nama_ruang)
     //     ->first();
     //     // dd($ruang);
-        
+
     //     DB::table('ruangan')
     //     ->where('id_ruang', $ruang->id_ruang)
     //     ->update([
-    //         'status' => 'telah digunakan'
+    //         'status' => 'tersedia'
     //     ]);
 
-    //     // Redirect kembali dengan pesan sukses
-    //     return redirect()->back()->with('success', 'Ruangan berhasil disetujui.');
-    // }
-
-    // public function setujuiSemuaRuang()
-    // {
-    //     // Update semua ruangan yang diajukan menjadi 'telah digunakan'
-    //     DB::table('ruangan')
-    //         ->where('status', 'diajukan')
-    //         ->update(['status' => 'telah digunakan']);
+    //     DB::table('alokasi_ruangan')
+    //     ->where('id_ruang', $ruang->id_ruang)  
+    //     ->delete();
 
     //     // Redirect kembali dengan pesan sukses
-    //     return redirect()->back()->with('success', 'Semua ruangan berhasil disetujui.');
+    //     return redirect()->back()->with('success', 'Persetujuan ditolak.');
     // }
-
-    public function setujuiSemuaRuang(Request $request)
-    {
-        // dd($request->all());
-        $prodi = $request->prodi;
-
-        if (!$prodi) {
-            return redirect()->back()->with('error', 'Program studi tidak boleh kosong.');
-        }
-
-        try {
-            DB::table('ruangan')
-                ->join('alokasi_ruangan', 'ruangan.id_ruang', '=', 'alokasi_ruangan.id_ruang')
-                ->join('program_studi', 'alokasi_ruangan.id_prodi', '=', 'program_studi.id_prodi')
-                ->where('program_studi.nama', $prodi)
-                ->where('ruangan.status', 'diajukan')
-                ->update(['ruangan.status' => 'telah digunakan']);
-
-                return redirect()->back()->with('sweetAlert', [
-                    'title' => 'Berhasil!',
-                    'text' => 'Semua ruangan pada prodi'. $prodi .' berhasil disetujui.',
-                    'icon' => 'success'
-                ]);
-        } catch (\Exception $e) {
-            return redirect()->back()->with('sweetAlert', [
-                'title' => 'Error!',
-                'text' => 'Terjadi kesalahan saat akan menyetujui semua matkul.',
-                'icon' => 'error'
-            ]);
-        }}
-
-    public function tolakRuang(Request $request)
-    {
-        $ruang = DB::table('ruangan')
-        ->where('nama', $request->nama_ruang)
-        ->first();
-        // dd($ruang);
-
-        DB::table('ruangan')
-        ->where('id_ruang', $ruang->id_ruang)
-        ->update([
-            'status' => 'tersedia'
-        ]);
-
-        DB::table('alokasi_ruangan')
-        ->where('id_ruang', $ruang->id_ruang)  
-        ->delete();
-
-        // Redirect kembali dengan pesan sukses
-        return redirect()->back()->with('success', 'Persetujuan ditolak.');
-    }
 
     public function PersetujuanJadwal()
     {
