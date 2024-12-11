@@ -113,6 +113,15 @@
                     @csrf                         --}}
                     
                     <div class="card-body">
+                         <!-- Button on the right top -->
+                        <div class="d-flex justify-content-between mb-3">
+                            <a href="/kaprodi_CreateJadwal">
+                                <button class="btn btn-blue">Tambah Jadwal</button>
+                            </a>
+                            <!-- Search Box -->
+                            <input type="text" id="customSearchInput" class="form-control" placeholder="Cari Nama Matkul..." style="width: 200px;">
+                        </div>
+
                         <table class="table table-bordered mt-4" id="jadwalTable">
                             <thead>
                                 <tr>
@@ -250,64 +259,14 @@
                                     </div>
                                 </div>
                                 @endforeach
-                            </tbody>
-                                                        
+                            </tbody>                             
                         </table>
-                <div class="card-body">
-                    <!-- Button on the right top -->
-                    <div class="d-flex justify-content-between mb-3">
-                        <a href="/kaprodi_CreateJadwal">
-                            <button class="btn btn-blue">Tambah Jadwal</button>
-                        </a>
-                        <!-- Search Box -->
-                        <input type="text" id="customSearchInput" class="form-control" placeholder="Cari Nama Matkul..." style="width: 200px;">
                     </div>
-
-                    <table class="table table-bordered mt-3" id="jadwalTable">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Kode Matkul</th>
-                                <th>Nama Matkul</th>
-                                <th>Kelas</th>
-                                <th>Ruang</th>
-                                <th>Hari</th>
-                                <th>Jam Mulai</th>
-                                <th>Jam Selesai</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($jadwal as $key => $item)
-                            <tr>
-                                <td>{{ $key + 1 }}</td>
-                                <td>{{ $item->kode_matkul }}</td>
-                                <td>{{ $item->nama_matkul }}</td>
-                                <td>{{ $item->kelas }}</td>
-                                <td>{{ $item->nama_ruang }}</td>
-                                <td>{{ $item->hari }}</td>
-                                <td>{{ $item->jam_mulai }}</td>
-                                <td>{{ $item->jam_selesai }}</td>
-                                <td>
-                                    <form action="#" method="POST" class="deleteScheduleForm">
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger">Batalkan Jadwal</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>                            
-                    </table>  
                 </div>
-                {{-- <a href="{{ route('dashboardKaprodi') }}">
-                    <button class="btn btn-primary me-auto" id="confirmSchedule" style="width: auto; padding: 8px 20px;">Kembali</button>
-                </a> --}}
             </div>
-        </div>
-    </div>
+       </div>
     </div>
 </div>
-
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
