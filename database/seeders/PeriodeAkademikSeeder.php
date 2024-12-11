@@ -14,15 +14,15 @@ class PeriodeAkademikSeeder extends Seeder
             [
                 'id_periode' => '23242',
                 'nama_periode' => 'Semester Akademik 2023/2024 Genap',
-                'tahun_mulai' => '2023-08-03 00:00:00',
-                'tahun_selesai' => '2023-12-03 23:59:59',
+                'tahun_mulai' => '2024-01-03 00:00:00',
+                'tahun_selesai' => '2024-07-05 23:59:59',
                 'jenis' => 'genap',
             ],
             [
-                'id_periode' => '24251',
+                'id_periode' => 24251, // ID untuk "Semester Akademik 2024/2025 Ganjil"
                 'nama_periode' => 'Semester Akademik 2024/2025 Ganjil',
-                'tahun_mulai' => '2024-12-07 00:00:00', // Manual tanggal mulai
-                'tahun_selesai' => '2025-08-01 23:59:59', // Manual tanggal selesai
+                'tahun_mulai' => '2024-07-10 00:00:00',
+                'tahun_selesai' => '2025-01-10 23:59:59',
                 'jenis' => 'ganjil',
             ]
         ];

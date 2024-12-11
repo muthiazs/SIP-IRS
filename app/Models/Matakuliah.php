@@ -16,11 +16,17 @@ class Matakuliah extends Model
         'nama_matkul',
         'sks',
         'semester',
+        'id_prodi',
     ];
 
     // Relasi ke JadwalKuliah
     public function jadwalKuliah()
     {
         return $this->hasMany(JadwalKuliah::class, 'kode_matkul', 'kode_matkul');
+    }
+    // Relasi ke ProgramStudi
+    public function programStudi()
+    {
+        return $this->belongsTo(ProgramStudi::class, 'id_prodi', 'id_prodi');
     }
 }

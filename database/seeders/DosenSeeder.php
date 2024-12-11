@@ -150,8 +150,8 @@ class DosenSeeder extends Seeder
             [
                 'id_dosen'=> 25,
                 'id_user'=> 23,
-                'nip' => '200405242406012209',
-                'nama' => 'kaprodi Kimia Well',
+                'nip' => '197311211997021001',
+                'nama' => 'Prof. Adi Darmawan, S.Si, M.Si, Ph.D',
                 'prodi_id' =>2,
                 'created_at'=>now(),
             ],

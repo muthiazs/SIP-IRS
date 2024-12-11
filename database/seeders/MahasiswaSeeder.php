@@ -49,6 +49,16 @@ class MahasiswaSeeder extends Seeder
                 'id_dosen' => 3,  // Bu Dinar
                 'angkatan' => '2022',
                 'created_at' => now(),
+            ],
+            [
+                'id_user' => 24,
+                'nim' => '24030123140120',
+                'nama' => 'Raynor Raazan Zaidan',
+                'semester' => 3,
+                'id_prodi' => 2,  // Kimia
+                'id_dosen' => 25,  // Pak Adi
+                'angkatan' => '2023',
+                'created_at' => now(),
             ]
         ];
 

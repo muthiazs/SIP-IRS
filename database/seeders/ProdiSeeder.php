@@ -20,7 +20,7 @@ class ProdiSeeder extends Seeder
             [
                 'id_prodi' => 2,
                 'nama' => 'Kimia',
-                'kaprodi_id' => 14, // Randomly chosen: Prof. Dr. Dra. Meiny Suzery
+                'kaprodi_id' => 25, // Randomly chosen: Prof. Dr. Dra. Meiny Suzery
                 'id_fak' => 1,
                 'created_at' => now(),
             ],

@@ -276,16 +276,27 @@ class UserSeeder extends Seeder
             'remember_token' => Str::random(100)
         ]);
 
-        //Kaprodi untuk prodi lain
+        //Kaprodi untuk prodi Kimia
         User::create([
             'id'=>'23',
-            'username'=>'dosenKimia',
-            'email' => 'kimia@lectures.university.ac.id',
+            'username'=>'Prof. Adi Darmawan, S.Si, M.Si, Ph.D',
+            'email' => 'adidarmawan@lectures.university.ac.id',
             'password'=> Hash::make('password'),
             'roles1' => 'dosen',
             'roles2' => 'kaprodi',
             'created_at' => now(),
             'remember_token' => Str::random(100)
+        ]);
+        // Mahasiswa Kimia
+        User::create([
+            'id'=>'24',
+            'username' => 'Raynor Raazan Zaidan',
+            'email' => 'Raynor@students.university.ac.id',
+            'password' => Hash::make('password'),
+            'roles1' => 'mahasiswa',
+            'roles2' => '',
+            'created_at' => now(), // Set created_at to current timestamp
+            'remember_token' => Str::random(100) // Generate a random remember token
         ]);
         
     }

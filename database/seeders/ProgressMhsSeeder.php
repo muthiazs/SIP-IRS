@@ -52,6 +52,16 @@ class ProgressMhsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'id_mahasiswa' => 5,
+                'semester_studi' => 3,
+                'IPk' => 4.0,
+                'IPs_lalu' => 2.99, // Pastikan dua digit desimal
+                'SKSk' => 45,
+                'status' => 'aktif',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         DB::table('progress_mahasiswa')->insert($data);

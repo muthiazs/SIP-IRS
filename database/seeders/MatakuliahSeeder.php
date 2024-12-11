@@ -66,6 +66,7 @@ class MatakuliahSeeder extends Seeder
                 'nama_matkul' => $data['nama_matkul'],
                 'sks' => $data['sks'],
                 'semester' => $data['semester'] ?? null,
+                'id_prodi' => 1, // Default id_prodi value
                 'created_at' => DB::raw('CURRENT_TIMESTAMP'),
             ]);
         }
