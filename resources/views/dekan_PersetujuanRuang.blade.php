@@ -207,8 +207,6 @@
         </div>
 
 
-    <!-- Konfirmasi Button -->
-    <button class="btn btn-blue position-absolute bottom-0 mb-4 rounded-3" onclick="confirmButton()">Konfirmasi</button>
     <!-- Tombol Setujui Semua -->
     
 
@@ -216,7 +214,7 @@
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
 
-    <script>
+    <!-- <script>
         // Button click event
         function confirmButton() {
             Swal.fire({
@@ -235,7 +233,7 @@
                 }
             });
         }
-    </script>
+    </script> -->
 
     <!-- Toastr -->
     <script>
