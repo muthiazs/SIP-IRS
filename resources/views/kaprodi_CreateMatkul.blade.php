@@ -74,7 +74,7 @@
                         <div class="mb-3">
                             <label for="kodeMatkul" class="form-label">Kode Mata Kuliah</label>
                             <input type="text" class="form-control" name="kode_matkul" id="kodeMatkul" placeholder="Kode mata kuliah harus diawali PAIK atau UUW dan diikuti 4 angka." required>
-                            <div class="invalid-feedback">Kode harus diawali PAIK atau UUW diikuti 4 angka.</div>
+                            <div class="invalid-feedback">Kode harus diawali 3-4 huruf kapital diikuti 4 angka.</div>
                         </div>
                         <div class="mb-3">
                             <label for="namaMatkul" class="form-label">Nama Mata Kuliah</label>
@@ -113,14 +113,6 @@
             const sks = parseInt(document.getElementById('sks').value);
             const semester = document.getElementById('semester').value;
 
-            const kodePattern = /^(PAIK|UUW)\d{4}$/;
-
-            // Validasi Kode Mata Kuliah
-            if (!kodePattern.test(kodeMatkul)) {
-                e.preventDefault();
-                toastr.error('Kode mata kuliah harus diawali "PAIK" atau "UUW" dan diikuti 4 angka.');
-                return;
-            }
 
             // Validasi Nama Mata Kuliah
             if (namaMatkul.length > 50) {
