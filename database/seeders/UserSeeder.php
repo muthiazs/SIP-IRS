@@ -275,6 +275,18 @@ class UserSeeder extends Seeder
             'created_at' => now(),
             'remember_token' => Str::random(100)
         ]);
+
+        //Kaprodi untuk prodi lain
+        User::create([
+            'id'=>'23',
+            'username'=>'dosenKimia',
+            'email' => 'kimia@lectures.university.ac.id',
+            'password'=> Hash::make('password'),
+            'roles1' => 'dosen',
+            'roles2' => 'kaprodi',
+            'created_at' => now(),
+            'remember_token' => Str::random(100)
+        ]);
         
     }
 }
