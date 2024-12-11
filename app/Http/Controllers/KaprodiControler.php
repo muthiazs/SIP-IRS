@@ -70,14 +70,15 @@ class KaprodiControler extends Controller
 
     public function JadwalKuliah()
     {
+        // Ambil data kaprodi
         $kaprodi = DB::table('dosen')
             ->join('users', 'dosen.id_user', '=', 'users.id')
             ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
             ->crossJoin('periode_akademik')
-            ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
-            ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
+            ->where('users.roles1', '=', 'dosen')
+            ->where('users.roles2', '=', 'kaprodi')
             ->where('dosen.id_user', '=', Auth::id())
-            ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
+            ->orderBy('periode_akademik.created_at', 'desc')
             ->select(
                 'dosen.nip',
                 'dosen.nama as dosen_nama',
@@ -87,29 +88,26 @@ class KaprodiControler extends Controller
                 'periode_akademik.nama_periode'
             )
             ->first();
-    
-        // Ambil semua mata kuliah
-        $namaMK = Matakuliah::all();
-    
+        
+        // Ambil mata kuliah berdasarkan prodi_id
+        $namaMK = Matakuliah::where('id_prodi', $kaprodi->prodi_id)->get();
+        
         // Ambil data ruangan yang sesuai dengan prodi kaprodi
         $ruangan = DB::table('alokasi_ruangan')
-        ->join('ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
-        ->where('alokasi_ruangan.id_prodi', $kaprodi->prodi_id)
-        ->select(
-            'alokasi_ruangan.id_ruang',
-            'ruangan.nama as nama_ruang',
-        )
-        ->get();
-
+            ->join('ruangan', 'alokasi_ruangan.id_ruang', '=', 'ruangan.id_ruang')
+            ->where('alokasi_ruangan.id_prodi', $kaprodi->prodi_id)
+            ->select('alokasi_ruangan.id_ruang', 'ruangan.nama as nama_ruang')
+            ->get();
+        
         // Mengambil data periode akademik yang sedang berlangsung
         $Periode_sekarang = DB::table('periode_akademik')
-        ->orderByDesc('id_periode')
-        ->select('id_periode')
-        ->first();
-
+            ->orderByDesc('id_periode')
+            ->select('id_periode')
+            ->first();
+    
         // Cek apakah periode akademik ditemukan
         if (!$Periode_sekarang) {
-        return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
+            return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
         }
     
         // Ambil jadwal kuliah
@@ -117,7 +115,8 @@ class KaprodiControler extends Controller
             ->join('matakuliah', 'jadwal_kuliah.kode_matkul', '=', 'matakuliah.kode_matkul')
             ->join('ruangan', 'jadwal_kuliah.id_ruang', '=', 'ruangan.id_ruang')
             ->join('periode_akademik', 'jadwal_kuliah.id_periode', '=', 'periode_akademik.id_periode')
-            ->where('periode_akademik.id_periode', $Periode_sekarang->id_periode) // Menentukan bahwa 'jenis' ada di tabel periode_akademik
+            ->where('periode_akademik.id_periode', $Periode_sekarang->id_periode) // Menggunakan periode akademik yang sedang berlaku
+            ->where('matakuliah.id_prodi', $kaprodi->prodi_id) // Filter berdasarkan prodi yang sedang login
             ->select(
                 'jadwal_kuliah.id_jadwal',
                 'jadwal_kuliah.kode_matkul',
@@ -130,13 +129,14 @@ class KaprodiControler extends Controller
                 'jadwal_kuliah.jam_selesai'
             )
             ->get();
-
-        // Ambil nama dosen
-        $dosen = Dosen::where('prodi_id', $kaprodi->prodi_id)->get(); // Ambil dosen berdasarkan prodi_id kaprodi
-
+    
+        // Ambil nama dosen berdasarkan prodi_id
+        $dosen = Dosen::where('prodi_id', $kaprodi->prodi_id)->get();
+    
         // Kirimkan data ke view
         return view('kaprodi_JadwalKuliah', compact('kaprodi', 'namaMK', 'ruangan', 'jadwal', 'dosen'));
     }
+    
 
     public function StatusMahasiswa()
     {
@@ -295,18 +295,20 @@ class KaprodiControler extends Controller
                             'kode_matkul',
                             'nama_matkul',
                             'sks',
-                            'semester'
+                            'semester',
+                            'id_prodi'
                         )
-                        -> get()
-                        ->map(function($mk) {
-                            // Cek constraint untuk setiap ruangan
-                            $hasConstraint = DB::table('jadwal_kuliah')
-                                ->where('id_ruang', $mk->id_matkul)
-                                ->exists();
+                        ->where('mataKuliah.id_prodi','=',$kaprodi->prodi_id)
+                        -> get();
+                        // ->map(function($mk) {
+                        //     // Cek constraint untuk setiap ruangan
+                        //     $hasConstraint = DB::table('jadwal_kuliah')
+                        //         ->where('id_ruang', $mk->id_matkul)
+                        //         ->exists();
                             
-                            $mk->hasConstraint = $hasConstraint;
-                            return $mk;
-                        });
+                        //     $mk->hasConstraint = $hasConstraint;
+                        //     return $mk;
+                        // });
 
         // dd($mataKuliah);
         return view('kaprodi_UpdateDeleteMatkul', compact('kaprodi', 'mataKuliah'));
@@ -314,63 +316,114 @@ class KaprodiControler extends Controller
 
     public function indexCreateMatkul()
     {
-        $kaprodi = DB::table('matakuliah')
-                        ->join('users', 'dosen.id_user', '=', 'users.id')
-                        ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                        ->crossJoin('periode_akademik')
-                        ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
-                        ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-                        ->where('dosen.id_user', '=', Auth::id())
-                        ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
-                        ->select(
-                            'dosen.nip',
-                            'dosen.nama as dosen_nama',
-                            'program_studi.nama as prodi_nama',
-                            'dosen.prodi_id',
-                            'users.username',
-                            'periode_akademik.nama_periode'
-                        )
-                        ->first();
+        $kaprodi = DB::table('dosen')
+            ->join('users', 'dosen.id_user', '=', 'users.id')
+            ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+            ->crossJoin('periode_akademik')
+            ->where('users.roles1', '=', 'dosen') // Sesuaikan jika peran berbeda
+            ->where('users.roles2', '=', 'kaprodi') // Sesuaikan jika peran berbeda
+            ->where('dosen.id_user', '=', Auth::id())
+            ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
+            ->select(
+                'dosen.nip',
+                'dosen.nama as dosen_nama',
+                'program_studi.nama as prodi_nama',
+                'dosen.prodi_id',
+                'users.username',
+                'periode_akademik.nama_periode'
+            )
+            ->first();
+    
         return view('kaprodi_CreateMatkul', compact('kaprodi'));
     }
+    
+
+    // public function createMatkul(Request $request)
+    // {
+    //     // Ambil id_prodi dari dosen yang sedang login
+    //     $id_prodi = DB::table('dosen')
+    //         ->where('id_user', Auth::id())
+    //         ->value('prodi_id');
+    
+    //     // Jika id_prodi tidak ditemukan
+    //     if (!$id_prodi) {
+    //         return redirect()->back()->with('error', 'Prodi tidak ditemukan untuk dosen yang login.');
+    //     }
+    //     // Validasi input
+    //     $request->validate([
+    //         'kode_matkul' => 'required|string|max:50',
+    //         'nama_matkul' => 'required|string|max:50',
+    //         'sks' => 'required|integer|min:1|max:8',
+    //         'semester' => 'required|integer|min:1|max:7',
+    //     ]);
+    
+    //     // Cek jika kode mata kuliah sudah ada
+    //     $cekMatkul = DB::table('matakuliah')
+    //                 // ->where('id_prodi','=', $id_prodi)
+    //                 ->where('kode_matkul', $request->kode_matkul)->first();
+    
+    //     if ($cekMatkul) {
+    //         return redirect()->back()->with('error', 'Kode mata kuliah sudah ada.');
+    //     }
+    
+    //     // Buat data mata kuliah
+    //     Matakuliah::create([
+    //         'kode_matkul' => $request->kode_matkul,
+    //         'nama_matkul' => $request->nama_matkul,
+    //         'sks' => $request->sks,
+    //         'semester' => $request->semester,
+    //         'id_prodi' => $id_prodi,
+    //         'created_at' => now(),
+    //     ]);
+    
+    //     // Redirect dengan SweetAlert
+    //     return redirect()->back()->with('sweetAlert', [
+    //         'title' => 'Berhasil!',
+    //         'text' => 'Mata kuliah berhasil dibuat.',
+    //         'icon' => 'success',
+    //     ]);
+    // }
+     
 
     public function createMatkul(Request $request)
-    {
-        // dd($request->all());
-        $request->validate([
-            'kode_matkul' => 'required|string|max:50',
-            'nama_matkul' => 'required|string|max:50',
-            'sks' => 'required|integer|min:1|max:8',
-            'semester' => 'required|integer|min:1|max:7',
-        ]);
-    
-        $cekMatkul = DB::table('matakuliah')->where('kode_matkul', $request->kode_matkul)->first();
-    
-        if ($cekMatkul) {
-            return redirect()->back()->with('error', 'Kode mata kuliah sudah ada.');
-        }
+{
+    // Ambil id_prodi dari dosen yang sedang login
+    $id_prodi = DB::table('dosen')
+        ->where('id_user', Auth::id())  // Mengambil id_user dari session login
+        ->value('prodi_id');  // Mengambil prodi_id dari tabel dosen
 
-        $lastMatkul = DB::table('matakuliah')
-                ->orderBy('id_matkul', 'desc')
-                ->first();
-    
-            $id_ruang = $lastMatkul ? $lastMatkul->id_matkul + 1 : 1;
-    
-        DB::table('matakuliah')->insert([
-            'kode_matkul' => $request->kode_matkul,
-            'nama_matkul' => $request->nama_matkul,
-            'sks' => $request->sks,
-            'semester' => $request->semester,
-            'created_at' => now(),
-        ]);
-    
-        // dd($request->all());
-        return redirect()->back()->with('sweetAlert', [
-            'title' => 'Berhasil!',
-            'text' => 'Matkul berhasil dibuat.',
-            'icon' => 'success'
-        ]);
-    }    
+    // Jika id_prodi tidak ditemukan, return error
+    if (!$id_prodi) {
+        return redirect()->back()->with('error', 'Prodi tidak ditemukan untuk dosen yang login.');
+    }
+
+    // Validasi input
+    $request->validate([
+        'kode_matkul' => 'required|string|max:50|unique:matakuliah,kode_matkul',  // Validasi agar kode_matkul unik
+        'nama_matkul' => 'required|string|max:255',
+        'sks' => 'required|integer|min:1|max:8',
+        'semester' => 'nullable|integer|min:1|max:7',  // Semester bisa kosong
+    ]);
+
+    // Buat data mata kuliah dan simpan ke dalam tabel matakuliah
+    Matakuliah::create([
+        'kode_matkul' => $request->kode_matkul,
+        'nama_matkul' => $request->nama_matkul,
+        'sks' => $request->sks,
+        'semester' => $request->semester,
+        'id_prodi' => $id_prodi,
+        'created_at' => now(),
+        'updated_at' => now(), // Manually set updated_at
+    ]);
+
+    // Redirect dengan SweetAlert
+    return redirect()->back()->with('sweetAlert', [
+        'title' => 'Berhasil!',
+        'text' => 'Mata kuliah berhasil dibuat.',
+        'icon' => 'success',
+    ]);
+}
+
 
     public function batalkanJadwal(Request $request)
     {

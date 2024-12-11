@@ -11,6 +11,9 @@ class Matakuliah extends Model
     protected $keyType = 'int';
     public $incrementing = true;
 
+    // Aktifkan timestamp untuk menggunakan created_at dan updated_at
+    public $timestamps = true;
+
     protected $fillable = [
         'kode_matkul',
         'nama_matkul',
@@ -24,6 +27,7 @@ class Matakuliah extends Model
     {
         return $this->hasMany(JadwalKuliah::class, 'kode_matkul', 'kode_matkul');
     }
+
     // Relasi ke ProgramStudi
     public function programStudi()
     {

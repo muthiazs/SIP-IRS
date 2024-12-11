@@ -158,14 +158,6 @@
                                         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ $matakuliah->id_matkul }}">
                                             <i class="material-icons">edit</i> Update
                                         </button>
-                                        <button class="btn {{ $matakuliah->hasConstraint ? 'btn-secondary' : 'btn-danger' }} btn-sm" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#deleteModal{{ $matakuliah->id_matkul }}"
-                                                {{ $matakuliah->hasConstraint ? 'disabled' : '' }}
-                                                data-bs-tooltip="tooltip"
-                                                title="{{ $matakuliah->hasConstraint ? 'Matakuliah tidak dapat dihapus karena sedang digunakan' : 'Hapus matakuliah' }}">
-                                            <i class="material-icons">delete</i> Hapus
-                                        </button>
                                     </td>
                                 </tr>
 
@@ -208,7 +200,6 @@
                                 </div>
 
                                 <!-- Delete Modal -->
-                                @if(!$matakuliah->hasConstraint)
                                 <div class="modal fade" id="deleteModal{{ $matakuliah->id_matkul }}" tabindex="-1">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -230,7 +221,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endif
                                 @endforeach
                             </tbody>
                         </table>
