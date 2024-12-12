@@ -210,18 +210,23 @@
                                                         </select>
                                                     </div>
 
-                                                    <!-- Ruangan -->
-                                                    <div class="mb-3">
-                                                        <label for="nama_ruang_{{ $item->id_jadwal }}" class="form-label">Ruang</label>
-                                                        <select name="nama_ruang" id="nama_ruang_{{ $item->id_jadwal }}" class="form-select" required>
-                                                            @foreach($ruangan as $r)
-                                                                <option value="{{ $r->nama_ruang }}" 
-                                                                    {{ $item->nama_ruang == $r->nama_ruang ? 'selected' : '' }}>
-                                                                    {{ $r->nama_ruang }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+<!-- Ruangan -->
+<div class="mb-3">
+    <label for="id_ruang_{{ $item->id_jadwal }}" class="form-label">Ruang</label>
+    <select name="nama_ruang" id="id_ruang_{{ $item->id_jadwal }}" class="form-select" required>
+        @foreach($ruangan as $r)
+            <option value="{{ $r->nama_ruang }}" 
+                {{ $item->nama_ruang == $r->nama_ruang ? 'selected' : '' }}>
+                {{ $r->nama_ruang }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+
+
+
+
 
                                                     <!-- Jam Mulai -->
                                                     <div class="mb-3">

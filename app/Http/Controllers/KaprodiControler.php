@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
+use App\Models\Ruangan;
+
+
 
 class KaprodiControler extends Controller
 {
@@ -695,54 +697,132 @@ class KaprodiControler extends Controller
         return date('H:i', strtotime($time));
     }
 
-    public function updateJadwal(Request $request)
-    {
-        try {
-            // Normalize the time format to ensure it's in H:i format
-            $request->merge([
-                'jam_mulai' => $this->normalizeTime($request->jam_mulai),
-                'jam_selesai' => $this->normalizeTime($request->jam_selesai),
-            ]);
-            // Validasi input
-            $validated = $request->validate([
-                'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
-                'kelas' => 'required|string|max:10',
-                'nama_ruang' => 'required|string|max:255',
-                'hari' => 'required|string|max:50',
-                'jam_mulai' => 'required|date_format:H:i',
-                'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-            ]);
+//     public function updateJadwal(Request $request)
+//     {
+//         try {
+//             // Normalize the time format to ensure it's in H:i format
+//             $request->merge([
+//                 'jam_mulai' => $this->normalizeTime($request->jam_mulai),
+//                 'jam_selesai' => $this->normalizeTime($request->jam_selesai),
+//             ]);
+//             // Validasi input
+//             $validated = $request->validate([
+//                 'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
+//                 'kelas' => 'required|string|max:10',
+//                 'nama_ruang' => 'required|string|max:255',
+//                 'hari' => 'required|string|max:50',
+//                 'jam_mulai' => 'required|date_format:H:i',
+//                 'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+//             ]);
     
-            // Temukan jadwal berdasarkan id_jadwal
-            $jadwal = JadwalKuliah::findOrFail($request->id_jadwal);
+//             // Temukan jadwal berdasarkan id_jadwal
+//             $jadwal = JadwalKuliah::findOrFail($request->id_jadwal);
     
-            // Format jam_mulai dan jam_selesai menggunakan Carbon
-            $jam_mulai = Carbon::createFromFormat('H:i', $request->jam_mulai)->format('H:i');
-            $jam_selesai = Carbon::createFromFormat('H:i', $request->jam_selesai)->format('H:i');
+//             // Format jam_mulai dan jam_selesai menggunakan Carbon
+//             $jam_mulai = Carbon::createFromFormat('H:i', $request->jam_mulai)->format('H:i');
+//             $jam_selesai = Carbon::createFromFormat('H:i', $request->jam_selesai)->format('H:i');
     
-            // Perbarui data jadwal
-            $jadwal->update([
+//             // Perbarui data jadwal
+//             $jadwal->update([
+//                 'kelas' => $request->kelas,
+//                 'hari' => $request->hari,
+//                 'jam_mulai' => $jam_mulai,
+//                 'jam_selesai' => $jam_selesai,
+//                 'nama_ruang' => $request->nama_ruang,
+//                 'jam_mulai' => $request->jam_mulai,
+//                 'jam_selesai' => $request->jam_selesai,
+//                 'updated_at' => now(),  // Update timestamp
+//             ]);
+
+//         // Redirect with success message
+//         return redirect()->back()->with('sweetAlert', [
+//             'title' => 'Berhasil!',
+//             'text' => 'Jadwal berhasil diperbarui.',
+//             'icon' => 'success'
+//         ]);
+//     } catch (\Exception $e) {
+//         // Handle any errors
+//         return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui jadwal.');
+//     }
+// }
+
+
+public function updateJadwal(Request $request)
+{
+    try {
+        // Log data yang diterima dari request
+        Log::info('Data request untuk update jadwal:', $request->all());
+
+        // Validasi input
+        $validated = $request->validate([
+            'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
+            'kelas' => 'required|string|max:10',
+            'nama_ruang' => 'required|string|max:255', // Validasi nama ruang
+            'hari' => 'required|string|max:50',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+        ]);
+
+        // Log nama ruang yang dicari
+        Log::info('Mencari id_ruang berdasarkan nama_ruang:', ['nama_ruang' => $request->nama_ruang]);
+
+        // Temukan id_ruang berdasarkan nama_ruang
+        $ruang = DB::table('ruangan')
+            ->join('alokasi_ruangan', 'ruangan.id_ruang', '=', 'alokasi_ruangan.id_ruang')
+            ->where('ruangan.nama', $request->nama_ruang)
+            ->select('ruangan.id_ruang')
+            ->first();
+
+        if (!$ruang) {
+            Log::warning('Ruang tidak ditemukan:', ['nama_ruang' => $request->nama_ruang]);
+            return redirect()->back()->with('error', 'Ruang tidak ditemukan.');
+        }
+
+        // Log id_ruang yang ditemukan
+        Log::info('Hasil pencarian ruangan:', ['id_ruang' => $ruang->id_ruang]);
+
+        // Temukan jadwal berdasarkan id_jadwal
+        $jadwal = DB::table('jadwal_kuliah')->where('id_jadwal', $request->id_jadwal)->first();
+
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Jadwal tidak ditemukan.');
+        }
+
+        // Perbarui data jadwal
+        DB::table('jadwal_kuliah')
+            ->where('id_jadwal', $request->id_jadwal)
+            ->update([
                 'kelas' => $request->kelas,
                 'hari' => $request->hari,
-                'jam_mulai' => $jam_mulai,
-                'jam_selesai' => $jam_selesai,
-                'nama_ruang' => $request->nama_ruang,
                 'jam_mulai' => $request->jam_mulai,
                 'jam_selesai' => $request->jam_selesai,
-                'updated_at' => now(),  // Update timestamp
+                'id_ruang' => $ruang->id_ruang, // Update id_ruang berdasarkan nama_ruang
+                'updated_at' => now(),
             ]);
 
-        // Redirect with success message
+        // Log sukses pembaruan jadwal
+        Log::info('Jadwal berhasil diperbarui:', ['id_jadwal' => $request->id_jadwal]);
+
+        // Redirect dengan pesan sukses
         return redirect()->back()->with('sweetAlert', [
             'title' => 'Berhasil!',
             'text' => 'Jadwal berhasil diperbarui.',
             'icon' => 'success'
         ]);
     } catch (\Exception $e) {
-        // Handle any errors
+        // Log error
+        Log::error('Terjadi kesalahan saat memperbarui jadwal:', ['error' => $e->getMessage()]);
+
+        // Handle error
         return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui jadwal.');
     }
 }
+
+
+
+
+
+
 
 
 
