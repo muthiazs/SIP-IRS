@@ -8,6 +8,7 @@ use App\Models\Dosen;
 use App\Models\PeriodeAkademik;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -722,64 +723,54 @@ class KaprodiControler extends Controller
             // Perbarui data jadwal
             $jadwal->update([
                 'kelas' => $request->kelas,
-                'nama_ruang' => $request->nama_ruang,
                 'hari' => $request->hari,
                 'jam_mulai' => $jam_mulai,
                 'jam_selesai' => $jam_selesai,
+                'nama_ruang' => $request->nama_ruang,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+                'updated_at' => now(),  // Update timestamp
             ]);
-    
-            return response()->json([
-                'success' => true,
-                'message' => 'Jadwal berhasil diperbarui.',
-                'data' => $jadwal,
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Error updating jadwal: " . $e->getMessage());
-    
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan saat memperbarui jadwal.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+
+        // Redirect with success message
+        return redirect()->back()->with('sweetAlert', [
+            'title' => 'Berhasil!',
+            'text' => 'Jadwal berhasil diperbarui.',
+            'icon' => 'success'
+        ]);
+    } catch (\Exception $e) {
+        // Handle any errors
+        return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui jadwal.');
     }
+}
 
 
-
-    // public function deleteJadwal(Request $request)
-    // {
-    //     try {
-    //         // Validate the incoming request data
-    //         $validated = $request->validate([
-    //             'id_jadwal' => 'required|exists:jadwal,id_jadwal', // Validate that id_jadwal exists
-    //         ]);
-
-    //         // Delete the jadwal record by id_jadwal
-    //         $jadwal = Jadwal::findOrFail($request->id_jadwal);
-    //         $jadwal->delete();
-
-    //         // Return back with a success message
-    //         return redirect()->back()->with('success', 'Jadwal berhasil dihapus.');
-    //     } catch (\Exception $e) {
-    //         // Return back with an error message
-    //         return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus jadwal.');
-    //     }
-    // }
 
     public function batalkanJadwal(Request $request)
     {
-        // Validasi input
-        $request->validate([
-            'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal', // Validasi id_jadwal pada tabel jadwal_kuliah
-        ]);
-
-        // Hapus jadwal berdasarkan id_jadwal
-        JadwalKuliah::where('id_jadwal', $request->id_jadwal)->delete();
-
-        // Redirect atau respon sukses
-        return redirect()->back()->with('success', 'Jadwal kuliah berhasil dibatalkan.');
+        try {
+            // Validate the incoming request
+            $validated = $request->validate([
+                'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal', // Validate ID exists in the jadwal_kuliah table
+            ]);
+    
+            // Cancel the jadwal by deleting it
+            JadwalKuliah::where('id_jadwal', $request->id_jadwal)->delete();
+    
+            // Return back with a success message
+            return redirect()->back()->with('sweetAlert', [
+                'title' => 'Berhasil!',
+                'text' => 'Jadwal kuliah berhasil dibatalkan.',
+                'icon' => 'success',
+            ]);
+        } catch (\Exception $e) {
+          
+    
+            // Return back with an error message
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat membatalkan jadwal.');
+        }
     }
-
+    
 
 
 
