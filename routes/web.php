@@ -136,10 +136,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/matkul/create', [KaprodiControler::class, 'createMatkul'])->name('matkul.create');
     Route::post('/matkul/store', [KaprodiControler::class, 'store'])->name('matkul.store');
     Route::get('/kaprodi_StatusMahasiswa', [KaprodiControler::class, 'StatusMahasiswa'])->name('kaprodi_StatusMahasiswa');
-    Route::get('/kaprodi_SetMatkul', [KaprodiControler::class, 'setMatkul'])->name('kaprodi_SetMatkul');
     Route::get('/kaprodi_UpdateDeleteMatkul', [KaprodiControler::class, 'UpdateDeleteMatkul'])->name('kaprodi_UpdateDeleteMatkul');
     Route::post('/matkul/update', [KaprodiControler::class, 'updateMatakuliah'])->name('update.matkul');
-    Route::post('/matkul/delete', [KaprodiControler::class, 'deleteMatakuliah'])->name('delete.matkul');
+    Route::post('/matkul/delete', [KaprodiControler::class, 'hapusMatkul'])->name('delete.matkul');
     Route::get('/kaprodi_CreateJadwal', [KaprodiControler::class, 'indexCreateJadwal'])->name('kaprodi_CreateJadwal');
     Route::post('/jadwal/store', [KaprodiControler::class, 'createJadwal'])->name('jadwal.store');
     Route::post('/jadwal/update', [KaprodiControler::class, 'updateJadwal'])->name('update.jadwal');

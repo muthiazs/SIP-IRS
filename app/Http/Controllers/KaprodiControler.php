@@ -160,54 +160,7 @@ class KaprodiControler extends Controller
         return view('kaprodi_StatusMahasiswa', compact('kaprodi'));
     }
 
-    // Fungsi untuk menambah jadwal kuliah
-    
-
-    public function setMatkul()
-    {
-        $kaprodi = DB::table('dosen')
-                            ->join('users', 'dosen.id_user', '=', 'users.id')
-                            ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                            ->crossJoin('periode_akademik')
-                            ->where('users.roles1', '=', 'dosen') // Pastikan ini sesuai dengan peran yang tepat
-                            ->where('users.roles2', '=', 'kaprodi') // Pastikan ini juga sesuai
-                            ->where('dosen.id_user', '=', Auth::id())
-                            ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
-                            ->select(
-                                'dosen.nip',
-                                'dosen.nama as dosen_nama',
-                                'program_studi.nama as prodi_nama',
-                                'dosen.prodi_id',
-                                'users.username',
-                                'periode_akademik.nama_periode'
-                            )
-                            ->first();
-    
-        // Fetch mataKuliah data
-        $mataKuliah = DB::table('matakuliah')
-                        ->select('id_matkul', 'kode_matkul', 'nama_matkul', 'sks', 'semester')
-                        ->get();
-    
-        // Add the 'hasConstraint' to each mataKuliah record
-        foreach ($mataKuliah as $data) {
-            // Check if there are any constraints on this mataKuliah
-            $data->hasConstraint = $this->checkConstraints($data); // Add the constraint logic here
-        }
-        
-        return view('kaprodi_SetMatkul', compact('kaprodi', 'mataKuliah'));
-    }
-
-    // Define the checkConstraints function at the class level
-    private function checkConstraints($data)
-    {
-        // Example: Check if there are any constraints related to the 'matakuliah'
-        // You might need to adjust this query to check the correct table or condition
-        $hasConstraint = DB::table('matakuliah') 
-                            ->where('id_matkul', $data->id_matkul) // Adjust field names as per your database
-                            ->exists(); // Check if any records exist
-    
-        return $hasConstraint; // Return true if there are constraints, false otherwise
-    }
+    // Fungsi untuk mengupdate jadwal kuliah
 
     public function updateMatakuliah(Request $request)
     {
@@ -246,25 +199,21 @@ class KaprodiControler extends Controller
         }
     }
 
-    public function deleteMatakuliah(Request $request)
+    public function hapusMatkul(Request $request)
     {
-        // dd($request->all());
         try {
             $request->validate([
-                'id_matkul' => 'required|exists:matakuliah,id_matkul',  // Validasi ID
+                'id_matkul' => 'required|exists:matakuliah,id_matkul', // Validasi ID
             ]);
 
-            // Hapus data di tabel 'matakuliah' menggunakan model
             DB::table('matakuliah')->where('id_matkul', $request->id_matkul)->delete();
-            
-            // Redirect ke halaman sebelumnya dengan pesan sukses
+
             return redirect()->back()->with('sweetAlert', [
                 'title' => 'Berhasil!',
                 'text' => 'Matkul berhasil dihapus.',
-                'icon' => 'success'
+                'icon' => 'success',
             ]);
         } catch (\Exception $e) {
-            // Jika terjadi error, redirect dengan pesan error
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus mata kuliah.');
         }
     }
@@ -460,7 +409,7 @@ class KaprodiControler extends Controller
             ->first();
     
         // Ambil semua mata kuliah
-        $namaMK = Matakuliah::all();
+        $namaMK = Matakuliah::where('id_prodi', $kaprodi->prodi_id)->get();
     
         // Ambil data ruangan yang sesuai dengan prodi kaprodi
         $ruangan = DB::table('alokasi_ruangan')

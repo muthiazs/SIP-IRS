@@ -158,6 +158,9 @@
                                         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ $matakuliah->id_matkul }}">
                                             <i class="material-icons">edit</i> Update
                                         </button>
+                                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $matakuliah->id_matkul }}">
+                                            <i class="material-icons">delete</i> Delete
+                                        </button>
                                     </td>
                                 </tr>
 
@@ -211,7 +214,7 @@
                                                 <form action="{{ route('delete.matkul') }}" method="POST">
                                                     @csrf
                                                     <input type="hidden" name="id_matkul" value="{{ $matakuliah->id_matkul }}">
-                                                    <p class="mb-3">Apakah Anda yakin ingin menghapus matakuliah {{ $matakuliah->nama_matkul }}?</p>
+                                                    <p class="mb-3">Apakah Anda yakin ingin menghapus matakuliah <strong>{{ $matakuliah->nama_matkul }}</strong>?</p>
                                                     <div class="text-end">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                                         <button type="submit" class="btn btn-danger">Hapus</button>
