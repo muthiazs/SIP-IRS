@@ -153,14 +153,14 @@
                                         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal{{ $item->id_jadwal }}">
                                             <i class="material-icons">edit</i> Update
                                         </button>
-                            
+
                                         <!-- Delete Button -->
                                         <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $item->id_jadwal }}">
                                             <i class="material-icons">delete</i> Hapus
                                         </button>
                                     </td>
                                 </tr>
-                            
+
                                 <!-- Update Modal -->
                                 <div class="modal fade" id="updateModal{{ $item->id_jadwal }}" tabindex="-1">
                                     <div class="modal-dialog">
@@ -172,7 +172,7 @@
                                             <div class="modal-body">
                                                 <form action="{{ route('update.jadwal') }}" method="POST">
                                                     @csrf
-                                                    <input type="hidden" name="id" value="{{ $item->id_jadwal }}">
+                                                    <input type="hidden" name="id_jadwal" value="{{ $item->id_jadwal }}">
                                                     <!-- Mata Kuliah -->
                                                     <div class="mb-3">
                                                         <label for="namaMatakuliah" class="form-label">Mata Kuliah</label>
@@ -236,7 +236,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            
                                 <!-- Delete Modal -->
                                 <div class="modal fade" id="deleteModal{{ $item->id_jadwal }}" tabindex="-1">
                                     <div class="modal-dialog">
@@ -246,9 +245,9 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="{{ route('delete.jadwal') }}" method="POST">
+                                                <form action="{{ route('batalkan.jadwal') }}" method="POST">
                                                     @csrf
-                                                    <input type="hidden" name="id" value="{{ $item->id_jadwal }}">
+                                                    <input type="hidden" name="id_jadwal" value="{{ $item->id_jadwal }}">
                                                     <p>Apakah Anda yakin ingin menghapus jadwal mata kuliah ini?</p>
                                                     <div class="text-end">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -259,8 +258,11 @@
                                         </div>
                                     </div>
                                 </div>
+
+
                                 @endforeach
-                            </tbody>                             
+                            </tbody>
+                            
                         </table>
                     </div>
                 </div>
