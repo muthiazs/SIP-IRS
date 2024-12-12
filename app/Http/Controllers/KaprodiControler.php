@@ -713,9 +713,6 @@ class KaprodiControler extends Controller
                 'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             ]);
     
-            // Debug: Log input data
-            // Log::info($request->all());
-    
             // Temukan jadwal berdasarkan id_jadwal
             $jadwal = JadwalKuliah::findOrFail($request->id_jadwal);
     
