@@ -142,7 +142,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/kaprodi_CreateJadwal', [KaprodiControler::class, 'indexCreateJadwal'])->name('kaprodi_CreateJadwal');
     Route::post('/jadwal/store', [KaprodiControler::class, 'createJadwal'])->name('jadwal.store');
     Route::post('/jadwal/update', [KaprodiControler::class, 'updateJadwal'])->name('update.jadwal');
-    Route::post('/jadwal/delete', [KaprodiControler::class, 'deleteJadwal'])->name('delete.jadwal');
+    Route::post('/batalkan-jadwal', [KaprodiControler::class, 'batalkanJadwal'])->name('batalkan.jadwal');
+    
 
     Route::get('/dekan_PersetujuanRuang', [DekanController::class, 'PersetujuanRuang'])->name('dekan_PersetujuanRuang');
     Route::post('/setujui-ruang/{id_ruang}', [DekanController::class, 'setujuiRuang'])->name('setujui.ruang');
