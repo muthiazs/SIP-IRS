@@ -147,54 +147,59 @@ class DekanController extends Controller
 
     public function PersetujuanJadwal()
     {
-        // Debugging query langsung
         $dekan = DB::table('dosen')
-                    ->join('users', 'dosen.id_user', '=', 'users.id')
-                    ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
-                    ->crossJoin('periode_akademik')
-                    ->where('users.roles1', '=', 'dosen')
-                    ->where('users.roles2', '=', 'dekan')
-                    ->where('dosen.id_user', '=', Auth::id())
-                    ->orderBy('periode_akademik.created_at', 'desc') // Mengurutkan berdasarkan timestamp terbaru
-                    ->select(
-                        'dosen.nip',
-                        'dosen.nama as dosen_nama',
-                        'program_studi.nama as prodi_nama',
-                        'dosen.prodi_id',
-                        'users.username',
-                        'periode_akademik.nama_periode'
-                    )
-                    ->first();
-        
-        $prodi = DB::table('program_studi')
-                    ->select('id_prodi', 'nama')
-                    ->get();
-
+            ->join('users', 'dosen.id_user', '=', 'users.id')
+            ->join('program_studi', 'dosen.prodi_id', '=', 'program_studi.id_prodi')
+            ->crossJoin('periode_akademik')
+            ->where('users.roles1', '=', 'dosen')
+            ->where('users.roles2', '=', 'dekan')
+            ->where('dosen.id_user', '=', Auth::id())
+            ->orderBy('periode_akademik.created_at', 'desc')
+            ->select(
+                'dosen.nip',
+                'dosen.nama as dosen_nama',
+                'program_studi.nama as prodi_nama',
+                'dosen.prodi_id',
+                'users.username',
+                'periode_akademik.nama_periode'
+            )
+            ->first();
+    
+        // Mengambil semua jadwal
         $jadwal = DB::table('jadwal_kuliah as jk')
-                    ->join('matakuliah', 'jk.kode_matkul', '=', 'matakuliah.kode_matkul')
-                    ->join('ruangan', 'jk.id_ruang', '=', 'ruangan.id_ruang')
-                    ->join('dosen', 'jk.id_dosen', '=', 'dosen.id_dosen')
-                    ->where('jk.status', '=', 'belum_disetujui')
-                    ->select(
-                    'jk.kode_matkul',
-                    'matakuliah.nama_matkul as nama_matkul',
-                    'jk.kelas',
-                    'matakuliah.sks',
-                    'ruangan.nama as nama_ruang',
-                    'dosen.nama as nama_dosen'
-                    )
-                    ->get();
-
+            ->join('matakuliah', 'jk.kode_matkul', '=', 'matakuliah.kode_matkul')
+            ->join('ruangan', 'jk.id_ruang', '=', 'ruangan.id_ruang')
+            ->join('dosen', 'jk.id_dosen', '=', 'dosen.id_dosen')
+            ->where('jk.status', '=', 'belum_terkonfirmasi')
+            ->select(
+                'jk.kode_matkul',
+                'matakuliah.nama_matkul as nama_matkul',
+                'jk.kelas',
+                'matakuliah.sks',
+                'ruangan.nama as nama_ruang',
+                'dosen.nama as nama_dosen',
+                'matakuliah.id_prodi' // Kolom untuk filter
+            )
+            ->get();
+    
+        // Semua program studi untuk header accordion
+        $prodi = DB::table('program_studi')
+            ->select('id_prodi', 'nama')
+            ->get();
+    
         return view('dekan_PersetujuanJadwal', compact('dekan', 'prodi', 'jadwal'));
     }
+    
 
     public function setujuiJadwal(Request $request)
 {
     $jadwal = DB::table('jadwal_kuliah')
         ->where('id_jadwal', $request->id_jadwal)
         ->first();
+    Log::info('ID Jadwal: ' . $request->id_jadwal);
 
-    if (!$jadwal || $jadwal->status !== 'belum_disetujui') {
+
+    if (!$jadwal || $jadwal->status !== 'belum_terkonfirmasi') {
         return redirect()->back()->with('error', 'Jadwal tidak ditemukan atau sudah disetujui.');
     }
 

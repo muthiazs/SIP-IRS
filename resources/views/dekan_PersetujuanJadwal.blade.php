@@ -88,8 +88,8 @@
             </div>
 
             <!-- Cards Section -->
-            {{-- Rencana Studi untuk setiap semester --}}
-            <div class="accordion accordion-flush" id="accordionFlushExample">
+             <!-- Jadwal Accordion -->
+             <div class="accordion accordion-flush" id="accordionFlushExample">
                 @foreach ($prodi as $item)
                     <div class="accordion-item">
                         <h2 class="accordion-header">
@@ -109,30 +109,36 @@
                                             <th>SKS</th>
                                             <th>Ruang</th>
                                             <th>Nama Dosen</th>
-                                            <th>Aksi</th> <!-- Kolom Aksi ditambahkan -->
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Isi Tabel -->
-                                        <tr>
-                                            <td>1</td>
-                                            <td>PAIK6101</td>
-                                            <td>Matematika I</td>
-                                            <td>A</td>
-                                            <td>2</td>
-                                            <td>Ruang 101</td> <!-- Sesuaikan dengan data ruang yang benar -->
-                                            <td>Prof. Dr. Kusworo Adi, S.Si., M.T.</td>
-                                            <td>
-                                                <!-- Tombol Setujui -->
-                                                <button class="btn btn-success btn-sm">
-                                                    Setujui
-                                                </button>
-                                                <!-- Tombol Setujui -->
-                                                <button class="btn btn-danger btn-sm">
-                                                    Tolak
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        @php $filtered = $jadwal->filter(fn($data) => $data->id_prodi == $item->id_prodi); @endphp
+                                        @if ($filtered->isEmpty())
+                                            <tr>
+                                                <td colspan="8" class="text-center">Tidak ada jadwal untuk program studi ini.</td>
+                                            </tr>
+                                        @else
+                                            @foreach ($filtered as $index => $data)
+                                                <tr>
+                                                    <td>{{ $index + 1 }}</td>
+                                                    <td>{{ $data->kode_matkul }}</td>
+                                                    <td>{{ $data->nama_matkul }}</td>
+                                                    <td>{{ $data->kelas }}</td>
+                                                    <td>{{ $data->sks }}</td>
+                                                    <td>{{ $data->nama_ruang }}</td>
+                                                    <td>{{ $data->nama_dosen }}</td>
+                                                    <td>
+                                                        <form action="{{ route('jadwal.setujui') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="id_jadwal" value="{{ $data->id_jadwal }}">
+                                                            <button type="submit" class="btn btn-success btn-sm">Setujui</button>
+                                                        </form>
+                                                        <!-- <button class="btn btn-danger btn-sm">Tolak</button> -->
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                     </tbody>
                                 </table>
                             </div>
