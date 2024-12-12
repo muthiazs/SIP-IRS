@@ -135,6 +135,10 @@
                         <i class="material-icons">add</i> Tambah Matkul Baru
                     </a>
                 </div>
+                <!-- Search Box -->
+                <div class="mb-3">
+                    <input type="text" id="customSearchInput" class="form-control" placeholder="Cari Nama Matkul..." style="width: 200px; margin-bottom: 15px;">
+                </div>
                     <!-- Table -->
                     <div class="table-responsive">
                         <table class="table table-bordered" id="cekTable">
@@ -240,118 +244,111 @@
 
     <script>
         $(document).ready(function() {
-    // Initialize DataTables
-    const table = $('#cekTable').DataTable({
-        responsive: true,
-        pageLength: 10,
-        lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Semua"]],
-        language: {
-            url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json',
-            lengthMenu: "Tampilkan _MENU_ data per halaman",
-            zeroRecords: "Data matakuliah tidak ditemukan",
-            info: "Menampilkan halaman _PAGE_ dari _PAGES_",
-            infoEmpty: "Tidak ada data matakuliah yang tersedia",
-            infoFiltered: "(difilter dari _MAX_ total data)",
-            paginate: {
-                first: "Pertama",
-                last: "Terakhir",
-                next: "Selanjutnya",
-                previous: "Sebelumnya"
-            }
-        },
-        columnDefs: [
-            { orderable: false, targets: -1 }
-        ],
-        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
-             "<'row'<'col-sm-12'tr>>" +
-             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
-    });
-
-    // Kode Matkul dropdown handler
-    $('.dropdown-item-kode-matkul').on('click', function() {
-        const kodeMatkul = $(this).text();
-        $('#dropdownMenuKodeMatkul').text('Kode Matkul: ' + kodeMatkul);
-        table.search(kodeMatkul).draw();
-    });
-
-    // Update form handler
-    $('form[action="{{ route('update.matkul') }}"]').submit(function(e) {
-        e.preventDefault();
-        const form = this;
-
-        Swal.fire({
-            title: 'Konfirmasi Update',
-            text: 'Apakah Anda yakin ingin mengupdate data matakuliah?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#028391',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, update!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-        });
-    });
-
-    // Delete form handler
-    $('form[action="{{ route('delete.matkul') }}"]').submit(function(e) {
-        e.preventDefault();
-        const form = this;
-        const kodeMatakuliah = $('#dropdownMenuKodeMatkul').text().trim().replace('Kode Matkul: ', '');
-
-        if (kodeMatakuliah === 'Pilih Kode Matkul') {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Oops...',
-                text: 'Silahkan pilih Kode Matakuliah terlebih dahulu!',
-                confirmButtonColor: '#028391'
+            // Initialize DataTables
+            const table = $('#cekTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Semua"]],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json',
+                    lengthMenu: "Tampilkan _MENU_ data per halaman",
+                    zeroRecords: "Data matakuliah tidak ditemukan",
+                    info: "Menampilkan halaman _PAGE_ dari _PAGES_",
+                    infoEmpty: "Tidak ada data matakuliah yang tersedia",
+                    infoFiltered: "(difilter dari _MAX_ total data)",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Selanjutnya",
+                        previous: "Sebelumnya"
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ],
+                dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
             });
-            return false;
-        }
 
-        Swal.fire({
-            title: 'Konfirmasi Hapus',
-            text: `Apakah Anda yakin ingin menghapus matakuliah dengan kode ${kodeMatakuliah}?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#028391',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-        });
-    });
-});
+            // Connect custom search box with DataTables
+            $('#customSearchInput').on('keyup', function() {
+                    table.search(this.value).draw();
+            });
 
-function filterTabelByKodeMatkul(kodeMatkul) {
-    $('tbody tr').each(function() {
-        const kode = $(this).find('td:first').text().trim();
-        if (kode.toLowerCase().startsWith(kodeMatkul.toLowerCase())) {
-            $(this).show();
-        } else {
-            $(this).hide();
-        }
-    });
-}
+            // Kode Matkul dropdown handler
+            $('.dropdown-item-kode-matkul').on('click', function() {
+                const kodeMatkul = $(this).text();
+                $('#dropdownMenuKodeMatkul').text('Kode Matkul: ' + kodeMatkul);
+                table.search(kodeMatkul).draw();
+            });
 
-// Success/Error message handler
-@if(session('sweetAlert'))
-            document.addEventListener('DOMContentLoaded', function() {
-                const alert = @json(session('sweetAlert'));
+            // Update form handler
+            $('form[action="{{ route('update.matkul') }}"]').submit(function(e) {
+                e.preventDefault();
+                const form = this;
+
                 Swal.fire({
-                    title: alert.title,
-                    text: alert.text,
-                    icon: alert.icon,
+                    title: 'Konfirmasi Update',
+                    text: 'Apakah Anda yakin ingin mengupdate data matakuliah?',
+                    icon: 'question',
+                    showCancelButton: true,
                     confirmButtonColor: '#028391',
-                    confirmButtonText: 'OK'
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, update!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
                 });
             });
-        @endif
+
+            // Delete form handler
+            $('form[action="{{ route('delete.matkul') }}"]').submit(function(e) {
+                e.preventDefault();
+                const form = this;
+                const kodeMatakuliah = $('#dropdownMenuKodeMatkul').text().trim().replace('Kode Matkul: ', '');
+
+                if (kodeMatakuliah === 'Pilih Kode Matkul') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops...',
+                        text: 'Silahkan pilih Kode Matakuliah terlebih dahulu!',
+                        confirmButtonColor: '#028391'
+                    });
+                    return false;
+                }
+
+                Swal.fire({
+                    title: 'Konfirmasi Hapus',
+                    text: `Apakah Anda yakin ingin menghapus matakuliah dengan kode ${kodeMatakuliah}?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#028391',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+        // Success/Error message handler
+        @if(session('sweetAlert'))
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const alert = @json(session('sweetAlert'));
+                        Swal.fire({
+                            title: alert.title,
+                            text: alert.text,
+                            icon: alert.icon,
+                            confirmButtonColor: '#028391',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                @endif
     </script>
 </body>
 </html>

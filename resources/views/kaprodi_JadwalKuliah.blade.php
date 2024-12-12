@@ -91,6 +91,10 @@
             overflow-x: auto;
             max-width: 100%;
         }
+        .btn-sm .material-icons {
+            vertical-align: middle;
+            margin-top: -2px;
+        }
 </style>
 </head>
 <body class="bg-light">
@@ -110,15 +114,16 @@
             <h5 class="card-header bg-teal text-white text-center">Pembagian Jadwal Kuliah</h5>
                     <div class="card-body">
                          <!-- Button on the right top -->
-                        <div class="d-flex justify-content-between mb-3">
-                            <a href="/kaprodi_CreateJadwal">
-                                <button class="btn btn-blue">Tambah Jadwal</button>
+                        <div class="d-flex justify-content-end mb-3">
+                            <a href="/kaprodi_CreateJadwal" class="btn btn-success btn-sm">
+                                <i class="material-icons">add</i> Tambah Jadwal Kuliah Baru
                             </a>
-                            <!-- Search Box -->
+                        </div>
+                        <!-- Search Box -->
+                        <div class="mb-3">
                             <input type="text" id="customSearchInput" class="form-control" placeholder="Cari Nama Matkul..." style="width: 200px;">
                         </div>
-
-                        <table class="table table-bordered mt-4" id="jadwalTable">
+                        <table class="table table-bordered" id="jadwalTable">
                             <thead>
                                 <tr>
                                     <th>No</th>
