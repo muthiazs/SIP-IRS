@@ -220,7 +220,7 @@
                                                                     {{ $r->nama_ruang }}
                                                                 </option>
                                                             @endforeach
-                                                        </select>
+                                                        </select>                                                        
                                                     </div>
 
                                                     <!-- Jam Mulai -->

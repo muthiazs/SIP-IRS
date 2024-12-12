@@ -77,100 +77,97 @@
                     <span class="material-icons">search</span>
                 </button>
             </div> --}}
-            <div class="card-body d-flex flex-column">
-                <form id="jadwalForm" action="{{ route('jadwal.store') }}" method="POST">
-                        @csrf
-                        <!-- Mata Kuliah -->
-                        <div class="mb-3">
-                            <label for="namaMatakuliah" class="form-label">Mata Kuliah</label>
-                            <select name="namaMatakuliah" id="namaMatakuliah" class="form-select" required>
-                                <option value="" disabled selected>Pilih Mata Kuliah</option>
-                                @foreach($namaMK as $matkul)
-                                    <option value="{{ $matkul->nama_matkul }}">{{ $matkul->nama_matkul }}</option>
-                                @endforeach
-                            </select>
-                            @error('namaMatakuliah')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <!-- Kelas -->
-                        <div class="mb-3">
-                            <label for="kelas" class="form-label">Kelas</label>
-                            <select name="kelas" id="kelas" class="form-select" required>
-                                <option value="" disabled selected>Pilih Kelas</option>
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
-                                <option value="E">E</option>
-                            </select>
-                        </div>
+                <div class="card-body d-flex flex-column">
+                    <form id="jadwalForm" action="{{ route('jadwal.store') }}" method="POST">
+                            @csrf
+                            <!-- Mata Kuliah -->
+                            <div class="mb-3">
+                                <label for="namaMatakuliah" class="form-label">Mata Kuliah</label>
+                                <select name="namaMatakuliah" id="namaMatakuliah" class="form-select" required>
+                                    <option value="" disabled selected>Pilih Mata Kuliah</option>
+                                    @foreach($namaMK as $matkul)
+                                        <option value="{{ $matkul->nama_matkul }}">{{ $matkul->nama_matkul }}</option>
+                                    @endforeach
+                                </select>
+                                @error('namaMatakuliah')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <!-- Kelas -->
+                            <div class="mb-3">
+                                <label for="kelas" class="form-label">Kelas</label>
+                                <select name="kelas" id="kelas" class="form-select" required>
+                                    <option value="" disabled selected>Pilih Kelas</option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                </select>
+                            </div>
 
-                        <!-- Hari -->
-                        <div class="mb-3">
-                            <label for="hari" class="form-label">Hari</label>
-                            <select name="hari" id="hari" class="form-select" required>
-                                <option value="" disabled selected>Pilih Hari</option>
-                                <option value="Senin">Senin</option>
-                                <option value="Selasa">Selasa</option>
-                                <option value="Rabu">Rabu</option>
-                                <option value="Kamis">Kamis</option>
-                                <option value="Jumat">Jumat</option>
-                            </select>
-                        </div>
+                            <!-- Hari -->
+                            <div class="mb-3">
+                                <label for="hari" class="form-label">Hari</label>
+                                <select name="hari" id="hari" class="form-select" required>
+                                    <option value="" disabled selected>Pilih Hari</option>
+                                    <option value="Senin">Senin</option>
+                                    <option value="Selasa">Selasa</option>
+                                    <option value="Rabu">Rabu</option>
+                                    <option value="Kamis">Kamis</option>
+                                    <option value="Jumat">Jumat</option>
+                                </select>
+                            </div>
 
-                        <!-- Dosen -->
-                        <div class="mb-3">
-                            <label for="namaDosen" class="form-label">Dosen</label>
-                            <select name="namaDosen" id="namaDosen" class="form-select" required>
-                                <option value="" disabled selected>Pilih Dosen</option>
-                                @foreach($dosen as $d)
-                                    <option value="{{ $d->nama }}">{{ $d->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                            <!-- Dosen -->
+                            <div class="mb-3">
+                                <label for="namaDosen" class="form-label">Dosen</label>
+                                <select name="namaDosen" id="namaDosen" class="form-select" required>
+                                    <option value="" disabled selected>Pilih Dosen</option>
+                                    @foreach($dosen as $d)
+                                        <option value="{{ $d->nama }}">{{ $d->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                        <!-- Ruangan -->
-                        <div class="mb-3">
-                            <label for="namaRuang" class="form-label">Ruang</label>
-                            <select name="namaRuang" id="namaRuang" class="form-select" required>
-                                <option value="" disabled selected>Pilih Ruangan</option>
-                                @foreach($ruangan as $r)
-                                    <option value="{{ $r->nama_ruang }}">{{ $r->nama_ruang }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                            <!-- Ruangan -->
+                            <div class="mb-3">
+                                <label for="namaRuang" class="form-label">Ruang</label>
+                                <select name="namaRuang" id="namaRuang" class="form-select" required>
+                                    <option value="" disabled selected>Pilih Ruangan</option>
+                                    @foreach($ruangan as $r)
+                                        <option value="{{ $r->nama_ruang }}">{{ $r->nama_ruang }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                        <!-- Jam Mulai -->
-                        <div class="mb-3">
-                            <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                            <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" required>
-                        </div>
+                            <!-- Jam Mulai -->
+                            <div class="mb-3">
+                                <label for="jam_mulai" class="form-label">Jam Mulai</label>
+                                <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" required>
+                            </div>
 
-                        <!-- Jam Selesai -->
-                        <div class="mb-3">
-                            <label for="jam_selesai" class="form-label">Jam Selesai</label>
-                            <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" required>
-                        </div>
+                            <!-- Jam Selesai -->
+                            <div class="mb-3">
+                                <label for="jam_selesai" class="form-label">Jam Selesai</label>
+                                <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" required>
+                            </div>
 
-                        <!-- Kuota -->
-                        <div class="mb-3">
-                            <label for="kuota" class="form-label">Kuota</label>
-                            <input type="number" class="form-control" id="kuota" name="kuota" required>
-                        </div>
-
-                        <button type="submit" class="btn btn-blue">Buat</button>
-                    </form>
+                            <!-- Kuota -->
+                            <div class="mb-3">
+                                <label for="kuota" class="form-label">Kuota</label>
+                                <input type="number" class="form-control" id="kuota" name="kuota" required>
+                            </div>
+                            <div class="button-group-tabel">
+                                <a href="{{ route('kaprodi_JadwalKuliah') }}" class="btn btn-warning">Kembali</a>
+                                <button type="submit" class="btn btn-blue">Buat</button>
+                            </div>
+                        </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<button class="btn btn-primary" id="confirmSchedule">Kembali</button>
 </form>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -137,7 +137,7 @@
                                 @csrf
                                 <input type="hidden" name="id_jadwal" value="{{ $rancanganSementara->id_jadwal }}">
                                 <input type="hidden" name="id_irs" value="{{ $rancanganSementara->id_irs }}"> <!-- Menambahkan id_irs -->
-                                <button type="submit" class="btn btn-danger">Batalkan Jadwal</button>
+                                <button type="submit" class="btn btn-danger batalBtn">Batalkan Jadwal</button>
                             </form>
 
                         </td>
@@ -173,12 +173,14 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
 <script>
-    $(document).on('click', '.batalBtn', function() {
-        var id_jadwal = $(this).data('id');  // Ambil id_jadwal dari atribut data-id
+   $(document).on('click', '.batalBtn', function() {
+        var id_jadwal = $(this).data('id');
+        var id_irs = $(this).data('irs');  // Ambil id_irs dari data-attribute
 
         Swal.fire({
             title: 'Batal Jadwal',
@@ -196,9 +198,11 @@
                     type: 'POST',
                     data: {
                         id_jadwal: id_jadwal,
+                        id_irs: id_irs,  // Kirim id_irs
                         _token: '{{ csrf_token() }}'  // Kirim csrf token
                     },
                     success: function(response) {
+                        console.log(response);  // Log response to check if it's received
                         if (response.success) {
                             Swal.fire(
                                 'Dibatalkan!',
@@ -216,6 +220,7 @@
                         }
                     },
                     error: function(xhr, status, error) {
+                        console.log("AJAX error: ", error);  // Log any error that happens
                         Swal.fire(
                             'Terjadi kesalahan!',
                             'Silakan coba lagi.',

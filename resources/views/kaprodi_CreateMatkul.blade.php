@@ -91,9 +91,11 @@
                             <input type="number" class="form-control" name="semester" id="semester" placeholder="Semester harus berupa angka antara 1-6, atau 'lainnya'" required>
                             <div class="invalid-feedback">Semester harus berupa angka antara 1-6, atau 'lainnya'.</div>
                         </div>
-                        <button type="submit" class="btn btn-cyan w-100">
-                            Simpan
-                        </button>
+                        <div class="button-group-tabel">
+                            <button type="submit" class="btn btn-cyan w-100 mb-5">
+                                Simpan
+                            </button>
+                            <a href="{{ route('kaprodi_UpdateDeleteMatkul') }}" class="btn btn-warning">Kembali</a>
                     </form>
                     </div>
                 </div>
