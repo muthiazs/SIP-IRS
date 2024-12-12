@@ -156,11 +156,41 @@ class Mhs_PengisianIRSController extends Controller
         return redirect()->back()->with('error', 'Periode akademik tidak ditemukan.');
         }
 
+    // Mengambil data mahasiswa yang sedang login
+    $mahasiswa = DB::table('mahasiswa')
+        ->join('users', 'mahasiswa.id_user', '=', 'users.id')
+        ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
+        ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
+        ->join('progress_mahasiswa', 'mahasiswa.id_mahasiswa', '=', 'progress_mahasiswa.id_mahasiswa')
+        ->crossJoin('periode_akademik')
+        ->where('mahasiswa.id_user', auth()->id())
+        ->select(
+            'mahasiswa.id_mahasiswa', // Return the id_mahasiswa
+            'mahasiswa.nim',
+            'mahasiswa.nama as nama_mhs',
+            'program_studi.nama as prodi_nama',
+            'dosen.nama as nama_doswal',
+            'dosen.nip',
+            'users.username',
+            'periode_akademik.nama_periode',
+            'progress_mahasiswa.semester_studi',
+            'progress_mahasiswa.IPs_lalu',
+            'mahasiswa.id_prodi as kode_prodi'
+        )
+        ->first();
+
+    // Cek apakah data mahasiswa ditemukan
+    if (!$mahasiswa) {
+        return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+    }
+
     // Fetch jadwal kuliah berdasarkan periode
     $jadwalKuliah = DB::table('jadwal_kuliah')
         ->join('matakuliah', 'matakuliah.kode_matkul', '=', 'jadwal_kuliah.kode_matkul')
         ->join('ruangan', 'ruangan.id_ruang', '=', 'jadwal_kuliah.id_ruang')
         ->join('periode_akademik', 'periode_akademik.id_periode', '=', 'jadwal_kuliah.id_periode')
+        ->where('jadwal_kuliah.status','=','disetujui')
+        ->where('matakuliah.id_prodi', $mahasiswa->kode_prodi)
         ->when($Periode_sekarang->jenis == 'ganjil', function($query) {
             return $query->whereRaw('matakuliah.semester % 2 != 0');
         })
@@ -190,32 +220,7 @@ class Mhs_PengisianIRSController extends Controller
         ->where('jadwal_kuliah.id_jadwal', $request->id_jadwal)
         ->value('matakuliah.sks');
 
-    // Mengambil data mahasiswa yang sedang login
-    $mahasiswa = DB::table('mahasiswa')
-        ->join('users', 'mahasiswa.id_user', '=', 'users.id')
-        ->join('program_studi', 'mahasiswa.id_prodi', '=', 'program_studi.id_prodi')
-        ->join('dosen', 'mahasiswa.id_dosen', '=', 'dosen.id_dosen')
-        ->join('progress_mahasiswa', 'mahasiswa.id_mahasiswa', '=', 'progress_mahasiswa.id_mahasiswa')
-        ->crossJoin('periode_akademik')
-        ->where('mahasiswa.id_user', auth()->id())
-        ->select(
-            'mahasiswa.id_mahasiswa', // Return the id_mahasiswa
-            'mahasiswa.nim',
-            'mahasiswa.nama as nama_mhs',
-            'program_studi.nama as prodi_nama',
-            'dosen.nama as nama_doswal',
-            'dosen.nip',
-            'users.username',
-            'periode_akademik.nama_periode',
-            'progress_mahasiswa.semester_studi',
-            'progress_mahasiswa.IPs_lalu'
-        )
-        ->first();
 
-    // Cek apakah data mahasiswa ditemukan
-    if (!$mahasiswa) {
-        return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
-    }
 
     // Hitung maksimal SKS berdasarkan id_mahasiswa
     $maksimalSKS = $this->hitungMaksimalSKS($mahasiswa->id_mahasiswa); // Pass the id_mahasiswa
@@ -1045,6 +1050,7 @@ public function batalkanJadwal(Request $request)
                 ->crossJoin('periode_akademik')
                 ->where('mahasiswa.id_user', auth()->id())
                 ->select(
+                    'mahasiswa.id_mahasiswa', // Return the id_mahasiswa
                     'mahasiswa.nim',
                     'mahasiswa.nama as nama_mhs',
                     'program_studi.nama as prodi_nama',
@@ -1062,7 +1068,7 @@ public function batalkanJadwal(Request $request)
             }
         
             // Hitung maksimal SKS berdasarkan IPS
-            $maksimalSKS = $this->hitungMaksimalSKS($mahasiswa->semester_studi, $mahasiswa->IPs_lalu);
+            $maksimalSKS = $this->hitungMaksimalSKS($mahasiswa->id_mahasiswa);
         
             // Hitung total SKS yang sudah dipilih
             $totalSKSTerpilih = DB::table('irs')
