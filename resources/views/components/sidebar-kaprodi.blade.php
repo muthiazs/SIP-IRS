@@ -29,10 +29,6 @@
                     <li><a href="/kaprodi_UpdateDeleteMatkul" class="nav-link {{ Route::is('kaprodi_UpdateDeleteMatkul') ? 'active' : '' }}">Atur Mata Kuliah</a></li>
                 </ul>
             </div>
-            <a href="/kaprodi_StatusMahasiswa" class="nav-link {{ Route::is('kaprodi_StatusMahasiswa') ? 'active' : '' }} rounded d-flex align-items-center">
-                <span class="material-icons me-3">assessment</span>
-                Status Mahasiswa
-            </a>
         </nav>
 
         <!-- Logout Button -->

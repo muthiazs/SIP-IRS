@@ -104,9 +104,12 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+     <!-- SweetAlert JS -->
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Validation Logic -->
     <script>
-        document.getElementById('formInputRuang').addEventListener('submit', function (e) {
+        document.getElementById('formInputMatkul').addEventListener('submit', function (e) {
             
             const kodeMatkul = document.getElementById('kodeMatkul').value;
             const namaMatkul = document.getElementById('namaMatkul').value;
@@ -117,29 +120,41 @@
             // Validasi Nama Mata Kuliah
             if (namaMatkul.length > 50) {
                 e.preventDefault();
-                toastr.error('Nama mata kuliah tidak boleh lebih dari 50 karakter.');
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Nama mata kuliah tidak boleh lebih dari 50 karakter.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
 
             // Validasi SKS
             if (isNaN(sks) || sks < 1 || sks > 8) {
                 e.preventDefault();
-                toastr.error('SKS harus berupa angka antara 1-8.');
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'SKS harus berupa angka antara 1-8.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
 
-            // Validasi Semester
-            if (!['1', '2', '3', '4', '5', '6', 'lainnya'].includes(semester)) {
+             // Validasi Semester
+             if (isNaN(semester) || semester < 1 || semester > 6) {
                 e.preventDefault();
-                error('Semester tidak valid.');
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Semester harus berupa angka antara 1-6.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
-
-            // Jika validasi lolos, lanjutkan submit
-            success('Validasi berhasil, data disimpan!');
         });
         // Success/Error message handler
-@if(session('sweetAlert'))
+        @if(session('sweetAlert'))
             document.addEventListener('DOMContentLoaded', function() {
                 const alert = @json(session('sweetAlert'));
                 Swal.fire({
@@ -152,6 +167,5 @@
             });
         @endif
     </script>
-
 </body>
 </html>
