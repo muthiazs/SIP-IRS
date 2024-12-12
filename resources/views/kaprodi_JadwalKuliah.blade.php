@@ -21,7 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <!-- CSS dan JS dari public -->
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}" type="text/css">
-<script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script>
+{{-- <script type="text/javascript" src="{{ asset('js/javascript.js') }}"></script> --}}
 <style>
     .btn-teal {
         width: 45px;
@@ -160,7 +160,6 @@
                                         </button>
                                     </td>
                                 </tr>
-
                                 <!-- Update Modal -->
                                 <div class="modal fade" id="updateModal{{ $item->id_jadwal }}" tabindex="-1">
                                     <div class="modal-dialog">
@@ -172,22 +171,26 @@
                                             <div class="modal-body">
                                                 <form action="{{ route('update.jadwal') }}" method="POST">
                                                     @csrf
+                                                    <!-- Hidden input for jadwal ID -->
                                                     <input type="hidden" name="id_jadwal" value="{{ $item->id_jadwal }}">
+
                                                     <!-- Mata Kuliah -->
                                                     <div class="mb-3">
-                                                        <label for="namaMatakuliah" class="form-label">Mata Kuliah</label>
-                                                        <select name="namaMatakuliah" id="namaMatakuliah" class="form-select" required>
+                                                        <label for="nama_matkul_{{ $item->id_jadwal }}" class="form-label">Mata Kuliah</label>
+                                                        <select name="nama_matkul" id="nama_matkul_{{ $item->id_jadwal }}" class="form-select" required>
                                                             @foreach($namaMK as $matkul)
-                                                                <option value="{{ $matkul->nama_matkul }}" {{ $item->nama_matkul == $matkul->nama_matkul ? 'selected' : '' }}>
+                                                                <option value="{{ $matkul->nama_matkul }}" 
+                                                                    {{ $item->nama_matkul == $matkul->nama_matkul ? 'selected' : '' }}>
                                                                     {{ $matkul->nama_matkul }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
+
                                                     <!-- Kelas -->
                                                     <div class="mb-3">
-                                                        <label for="kelas" class="form-label">Kelas</label>
-                                                        <select name="kelas" id="kelas" class="form-select" required>
+                                                        <label for="kelas_{{ $item->id_jadwal }}" class="form-label">Kelas</label>
+                                                        <select name="kelas" id="kelas_{{ $item->id_jadwal }}" class="form-select" required>
                                                             <option value="A" {{ $item->kelas == 'A' ? 'selected' : '' }}>A</option>
                                                             <option value="B" {{ $item->kelas == 'B' ? 'selected' : '' }}>B</option>
                                                             <option value="C" {{ $item->kelas == 'C' ? 'selected' : '' }}>C</option>
@@ -195,10 +198,11 @@
                                                             <option value="E" {{ $item->kelas == 'E' ? 'selected' : '' }}>E</option>
                                                         </select>
                                                     </div>
+
                                                     <!-- Hari -->
                                                     <div class="mb-3">
-                                                        <label for="hari" class="form-label">Hari</label>
-                                                        <select name="hari" id="hari" class="form-select" required>
+                                                        <label for="hari_{{ $item->id_jadwal }}" class="form-label">Hari</label>
+                                                        <select name="hari" id="hari_{{ $item->id_jadwal }}" class="form-select" required>
                                                             <option value="Senin" {{ $item->hari == 'Senin' ? 'selected' : '' }}>Senin</option>
                                                             <option value="Selasa" {{ $item->hari == 'Selasa' ? 'selected' : '' }}>Selasa</option>
                                                             <option value="Rabu" {{ $item->hari == 'Rabu' ? 'selected' : '' }}>Rabu</option>
@@ -206,36 +210,42 @@
                                                             <option value="Jumat" {{ $item->hari == 'Jumat' ? 'selected' : '' }}>Jumat</option>
                                                         </select>
                                                     </div>
+
                                                     <!-- Ruangan -->
                                                     <div class="mb-3">
-                                                        <label for="namaRuang" class="form-label">Ruang</label>
-                                                        <select name="namaRuang" id="namaRuang" class="form-select" required>
+                                                        <label for="nama_ruang_{{ $item->id_jadwal }}" class="form-label">Ruang</label>
+                                                        <select name="nama_ruang" id="nama_ruang_{{ $item->id_jadwal }}" class="form-select" required>
                                                             @foreach($ruangan as $r)
-                                                                <option value="{{ $r->nama_ruang }}" {{ $item->nama_ruang == $r->nama_ruang ? 'selected' : '' }}>
+                                                                <option value="{{ $r->nama_ruang }}" 
+                                                                    {{ $item->nama_ruang == $r->nama_ruang ? 'selected' : '' }}>
                                                                     {{ $r->nama_ruang }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
+
                                                     <!-- Jam Mulai -->
                                                     <div class="mb-3">
-                                                        <label for="jam_mulai" class="form-label">Jam Mulai</label>
-                                                        <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" value="{{ $item->jam_mulai }}" required>
+                                                        <label for="jam_mulai_{{ $item->id_jadwal }}" class="form-label">Jam Mulai</label>
+                                                        <input type="time" class="form-control" id="jam_mulai_{{ $item->id_jadwal }}" name="jam_mulai" value="{{ $item->jam_mulai }}" required>
                                                     </div>
+
                                                     <!-- Jam Selesai -->
                                                     <div class="mb-3">
-                                                        <label for="jam_selesai" class="form-label">Jam Selesai</label>
-                                                        <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" value="{{ $item->jam_selesai }}" required>
+                                                        <label for="jam_selesai_{{ $item->id_jadwal }}" class="form-label">Jam Selesai</label>
+                                                        <input type="time" class="form-control" id="jam_selesai_{{ $item->id_jadwal }}" name="jam_selesai" value="{{ $item->jam_selesai }}" required>
                                                     </div>
+
                                                     <div class="text-end">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                                         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                                                     </div>
                                                 </form>
-                                            </div>
+                                            </div> 
                                         </div>
                                     </div>
                                 </div>
+
                                 <!-- Delete Modal -->
                                 <div class="modal fade" id="deleteModal{{ $item->id_jadwal }}" tabindex="-1">
                                     <div class="modal-dialog">
@@ -258,8 +268,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
                                 @endforeach
                             </tbody>
                             
@@ -272,187 +280,7 @@
 </div>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-
-    <script>
-        // Pastikan modal terbuka dan fokus pada elemen pertama saat modal ditampilkan
-        $('#addScheduleModal').on('shown.bs.modal', function () {
-            $('#kode_matkul').trigger('focus');  // Fokus pada elemen pertama
-        });
-
-   document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('addScheduleModal');
-    
-    // Pastikan modal ada
-    if (modal) {
-        // Event listener untuk modal ketika sudah muncul
-        modal.addEventListener('shown.bs.modal', () => {
-            // Tunggu sedikit sebelum mencari form
-            setTimeout(() => {
-                const jadwalForm = document.getElementById('jadwalForm');
-                if (jadwalForm) {
-                    jadwalForm.addEventListener('submit', async function (e) {
-                        e.preventDefault(); // Mencegah reload halaman
-
-                        const formData = new FormData(jadwalForm);
-                        const submitButton = jadwalForm.querySelector('button[type="submit"]');
-
-                        // Tampilkan loading pada tombol submit
-                        submitButton.disabled = true;
-                        submitButton.textContent = 'Menyimpan...';
-
-                        try {
-                            const response = await fetch('/jadwal-kuliah/store', {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                },
-                                body: formData,
-                            });
-
-                            // Validasi response
-                            const result = await response.json();
-                            if (!response.ok || !result.success) {
-                                throw new Error(result.message || 'Gagal menyimpan jadwal kuliah');
-                            }
-
-                            // Tampilkan notifikasi sukses
-                            alert(result.message || 'Jadwal berhasil disimpan!');
-
-                            // Tutup modal
-                            const modalInstance = bootstrap.Modal.getOrCreateInstance(modal);
-                            modalInstance.hide();
-
-                            // Reset form
-                            jadwalForm.reset();
-
-                            // Optional: Perbarui UI, misalnya reload data jadwal
-                            console.log(result);
-                        } catch (error) {
-                            // Tampilkan pesan error
-                            console.error(error);
-                            alert('Terjadi kesalahan: ' + error.message);
-                        } finally {
-                            // Kembalikan tombol submit ke keadaan semula
-                            submitButton.disabled = false;
-                            submitButton.textContent = 'Buat';
-                        }
-                    });
-                } else {
-                    console.error('Form tidak ditemukan setelah modal dibuka!');
-                }
-            }, 500);  // Waktu tunggu 500ms (sesuaikan jika perlu)
-        });
-    }
-});
-
-
-$(document).ready(function () {
-    // Ketika form disubmit
-    $('#jadwalForm').on('submit', function (e) {
-        e.preventDefault(); // Mencegah form agar tidak disubmit secara default
-
-        // Mengambil data form
-        var formData = $(this).serialize();  // Mengambil semua data form dalam format URL-encoded
-
-        // Kirimkan data form ke server menggunakan AJAX
-        $.ajax({
-            url: $(this).attr('action'),  // URL action form (misalnya route('jadwal.store'))
-            type: 'POST',  // Metode HTTP yang digunakan untuk mengirim data
-            data: formData,  // Data form yang dikirimkan
-            success: function (response) {
-                // Tindakan jika permintaan berhasil
-                // Misalnya, menutup modal dan menampilkan notifikasi sukses
-                $('#addScheduleModal').modal('hide'); // Menutup modal setelah berhasil
-                alert('Jadwal kuliah berhasil dibuat!');
-                // Anda bisa menambahkan update data pada halaman tanpa reload
-            },
-            error: function (xhr, status, error) {
-                // Menangani error jika request gagal
-                alert('Terjadi kesalahan! Silakan coba lagi.');
-            }
-        });
-    });
-});
-
-
-
-        // Cek konflik jadwal
-        // public/js/schedule.js
-        $(document).ready(function() {
-            // Fungsi untuk memeriksa jadwal bentrok
-            function isConflict(newSchedule) {
-                const existingSchedules = getExistingSchedules(); // Ambil jadwal yang ada
-                for (const schedule of existingSchedules) {
-                    if (schedule.hari === newSchedule.hari && schedule.ruang === newSchedule.ruang) {
-                        if ((newSchedule.jam_mulai < schedule.jam_selesai) && (newSchedule.jam_selesai > schedule.jam_mulai)) {
-                            return true; // Jadwal bentrok
-                        }
-                    }
-                }
-                return false;
-            }
-
-            // Fungsi untuk mendapatkan jadwal yang sudah ada (ambil dari tabel)
-            function getExistingSchedules() {
-                const schedules = [];
-                $('#scheduleTable tbody tr').each(function() {
-                    const row = $(this);
-                    schedules.push({
-                        hari: row.find('.hari').text(),
-                        ruang: row.find('.ruang').text(),
-                        jam_mulai: row.find('.jam_mulai').text(),
-                        jam_selesai: row.find('.jam_selesai').text(),
-                    });
-                });
-                return schedules;
-            }
-
-            // Event handler untuk tombol 'Konfirmasi Jadwal'
-            $('#confirmScheduleButton').click(function() {
-                const newSchedule = {
-                    matkul: $('#matkul').val(),
-                    hari: $('#hari').val(),
-                    ruang: $('#ruang').val(),
-                    jam_mulai: $('#jam_mulai').val(),
-                    jam_selesai: $('#jam_selesai').val(),
-                };
-
-                if (isConflict(newSchedule)) {
-                    $('#errorMessage').show();
-                } else {
-                    addScheduleToTable(newSchedule);
-                    $('#addScheduleModal').modal('hide');
-                }
-            });
-
-            // Fungsi untuk menambah jadwal ke tabel
-            function addScheduleToTable(schedule) {
-                const table = $('#scheduleTable tbody');
-                const newRow = `<tr>
-                    <td>${table.find('tr').length + 1}</td>
-                    <td>${schedule.matkul}</td>
-                    <td>${schedule.hari}</td>
-                    <td>${schedule.ruang}</td>
-                    <td>${schedule.jam_mulai}</td>
-                    <td>${schedule.jam_selesai}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm deleteScheduleButton">Hapus</button>
-                    </td>
-                </tr>`;
-                table.append(newRow);
-
-                // Tambahkan event listener untuk tombol hapus
-                $('.deleteScheduleButton').click(function() {
-                    $(this).closest('tr').remove();
-                });
-            }
-
-        });
-
-    </script>
-
-    <!-- Add DataTables JS -->
+<!-- Add DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
@@ -501,55 +329,60 @@ $(document).ready(function () {
         });
     });
 
-    $(document).ready(function() {
-    $('#jadwalForm').submit(function(e) {
-        e.preventDefault(); // Mencegah form melakukan reload
+    //update
+    $('form[action="{{ route('update.jadwal') }}"]').submit(function(e) {
+        e.preventDefault();
+        const form = this;
 
-        var formData = $(this).serialize(); // Mengambil data form
-
-        $.ajax({
-            url: '{{ route('jadwal.store') }}',
-            method: 'POST',
-            data: formData,
-            success: function(response) {
-                if (response.success) {
-                    // Jika berhasil, tambahkan row baru ke dalam tabel
-                    var newRow = `
-                        <tr>
-                            <td>${$('#jadwalTable tbody tr').length + 1}</td>
-                            <td>${response.kode_matkul}</td>
-                            <td>${response.nama_matkul}</td>
-                            <td>${response.kelas}</td>
-                            <td>${response.nama_ruang}</td>
-                            <td>${response.hari}</td>
-                            <td>${response.jam_mulai}</td>
-                            <td>${response.jam_selesai}</td>
-                            <td>
-                                <form action="{{ route('batalkanJadwal') }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger">Batalkan Jadwal</button>
-                                </form>
-                            </td>
-                        </tr>
-                    `;
-                    $('#jadwalTable tbody').append(newRow); // Tambahkan row baru ke tabel
-
-                    // Menutup modal
-                    $('#addScheduleModal').modal('hide');
-
-                    // Tampilkan notifikasi sukses
-                    toastr.success('Jadwal berhasil ditambahkan!');
-                } else {
-                    toastr.error('Terjadi kesalahan saat menambahkan jadwal!');
-                }
-            },
-            error: function() {
-                toastr.error('Terjadi kesalahan saat mengirim data!');
+        Swal.fire({
+            title: 'Konfirmasi Update',
+            text: 'Apakah Anda yakin ingin mengupdate jadwal ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#028391',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, update!',
+            cancelButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log("Form submitted with updated values."); // Debug
+                form.submit();
+            } else {
+                console.log("Form not submitted."); // Debug
             }
         });
     });
-});
 
+
+    // Delete form handler for Jadwal
+    $('form[action="{{ route('batalkan.jadwal') }}"]').submit(function(e) {
+        e.preventDefault();
+        const form = this;
+        const idJadwal = $('input[name="id_jadwal"]', form).val(); // Get id_jadwal value from the hidden input field
+
+        Swal.fire({
+            title: 'Konfirmasi Hapus',
+            text: `Apakah Anda yakin ingin menghapus jadwal dengan ID ${idJadwal}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#028391',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+    @if (session('sweetAlert'))
+        Swal.fire({
+            title: "{{ session('sweetAlert')['title'] }}",
+            text: "{{ session('sweetAlert')['text'] }}",
+            icon: "{{ session('sweetAlert')['icon'] }}",
+            confirmButtonColor: '#028391',
+        });
+    @endif
 </script>
 
 <!-- Add Bootstrap JS -->
