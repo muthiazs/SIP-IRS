@@ -24,7 +24,7 @@
                 Rencana Studi
             </a>
             @if ($masaIRS == 'isiIRS')
-                <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+                <a href="{{ route('mhs_newIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') || Route::is('mhs_draftIRS') ? 'active' : '' }} rounded d-flex align-items-center">
                     <span class="material-icons me-3">create</span> <!-- "create" untuk ikon buat -->
                     Buat Rencana Studi
                 </a>
@@ -39,7 +39,7 @@
                     Edit Rencana Studi
                 </a>
             @else
-                <a href="{{ route('mhs_habisPeriodeIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') ? 'active' : '' }} rounded d-flex align-items-center">
+                <a href="{{ route('mhs_habisPeriodeIRS') }}" class="nav-link {{ Route::is('mhs_newIRS') || Route::is('mhs_draftIRS') ? 'active' : '' }} rounded d-flex align-items-center">
                     <span class="material-icons me-3">access_time</span> <!-- "access_time" untuk ikon periode habis -->
                     Buat Rencana Studi
                 </a>
