@@ -149,7 +149,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/setujui-semua-ruang', [DekanController::class, 'setujuiSemuaRuang'])->name('setujui.semua.ruang');
     Route::post('/tolak-ruang/{id_ruang}', [DekanController::class, 'tolakRuang'])->name('tolak.ruang');    
     Route::get('/dekan_PersetujuanJadwal', [DekanController::class, 'PersetujuanJadwal'])->name('dekan_PersetujuanJadwal');
-    Route::post('/jadwal/setujui', [JadwalController::class, 'setujuiJadwal'])->name('jadwal.setujui');
+    // Route to approve individual schedule
+    Route::post('/jadwal/setujui', [DekanController::class, 'setujuiJadwal'])->name('jadwal.setujui');
+    // Route to approve multiple schedules
+    Route::post('/jadwal/setujui-semua', [DekanController::class, 'setujuiSemuaJadwal'])->name('jadwal.setujuiSemua');
     Route::get('/pembagianruang', [BAK_PembagianruangController::class, 'index'])->name('pembagianruang');
     Route::get('/bak_PembagianRuang', [BAK_PembagianruangController::class, 'indexPembagianRuang'])->name('bak_PembagianRuang');
     Route::post('/ruang/cancel', [BAK_PembagianruangController::class, 'cancelAlokasiRuang'])->name('cancel.ruang');
