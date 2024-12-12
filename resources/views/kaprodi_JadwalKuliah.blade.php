@@ -167,13 +167,12 @@
                                             <div class="modal-header bg-teal text-white">
                                                 <h5 class="modal-title">Update Jadwal {{ $item->id_jadwal }}</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
+                                            </div> 
                                             <div class="modal-body">
                                                 <form action="{{ route('update.jadwal') }}" method="POST">
                                                     @csrf
                                                     <!-- Hidden input for jadwal ID -->
                                                     <input type="hidden" name="id_jadwal" value="{{ $item->id_jadwal }}">
-
                                                     <!-- Mata Kuliah -->
                                                     <div class="mb-3">
                                                         <label for="nama_matkul_{{ $item->id_jadwal }}" class="form-label">Mata Kuliah</label>
@@ -235,7 +234,6 @@
                                                         <label for="jam_selesai_{{ $item->id_jadwal }}" class="form-label">Jam Selesai</label>
                                                         <input type="time" class="form-control" id="jam_selesai_{{ $item->id_jadwal }}" name="jam_selesai" value="{{ $item->jam_selesai }}" required>
                                                     </div>
-
                                                     <div class="text-end">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                                         <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
@@ -269,8 +267,7 @@
                                     </div>
                                 </div>
                                 @endforeach
-                            </tbody>
-                            
+                            </tbody> 
                         </table>
                     </div>
                 </div>

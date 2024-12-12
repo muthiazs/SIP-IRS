@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class KaprodiControler extends Controller
 {
@@ -596,25 +597,138 @@ class KaprodiControler extends Controller
 
 
     
-    public function updateJadwal(Request $request)
-{
-    try {
-        $validated = $request->validate([
-            'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
-            'nama_matkul' => 'required|string|max:255',
-            'kelas' => 'required|string|max:5',
-            'hari' => 'required|string|max:10',
-            'nama_ruang' => 'required|string|max:50',
-            'jam_mulai' => 'required|date_format:H:i',
-            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-        ]);
+    // public function updateJadwal(Request $request)
+    // {
+    //     try {
+    //         // Validate the incoming request data
+    //         $validated = $request->validate([
+    //             'id_jadwal' => 'required|exists:jadwal,id_jadwal', 
+    //             'kode_matkul' => 'required|string|max:255', 
+    //             'nama_matkul' => 'required|string|max:255', 
+    //             'kelas' => 'required|string|max:10',
+    //             'nama_ruang' => 'required|string|max:255',
+    //             'hari' => 'required|string|max:50',
+    //             'jam_mulai' => 'required|date_format:H:i',
+    //             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+    //         ]);
+            
+    
+    //         // Find the jadwal by id_jadwal
+    //         $jadwal = Jadwal::findOrFail($request->id_jadwal); 
+    
+    //         // Update the jadwal record using Eloquent
+    //         $jadwal->update([
+    //             'kode_matkul' => $request->kode_matkul,
+    //             'nama_matkul' => $request->nama_matkul,
+    //             'kelas' => $request->kelas,
+    //             'nama_ruang' => $request->nama_ruang,
+    //             'hari' => $request->hari,
+    //             'jam_mulai' => $request->jam_mulai,
+    //             'jam_selesai' => $request->jam_selesai,
+    //         ]);
+    
+    //         // Return back with a success message
+    //         return redirect()->back()->with('success', 'Jadwal berhasil diperbarui.');
+    //     } catch (\Exception $e) {
+    //         // Log the error for debugging purposes
+    //         Log::error("Error updating jadwal: " . $e->getMessage());
+    
+    //         // Return back with an error message
+    //         return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui jadwal.');
+    //     }
+    // }
 
-        // Update data in the 'jadwal_kuliah' table using DB
-        DB::table('jadwal_kuliah')->where('id_jadwal', $request->id_jadwal)
-            ->update([
-                'nama_matkul' => $request->nama_matkul,
+
+    // public function updateJadwal(Request $request)
+    // {
+    //     try {
+    //         // Validate the incoming request data
+    //         $validated = $request->validate([
+    //             'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal', 
+    //             'kode_matkul' => 'required|string|max:255', 
+    //             'nama_matkul' => 'required|string|max:255', 
+    //             'kelas' => 'required|string|max:10',
+    //             'nama_ruang' => 'required|string|max:255',
+    //             'hari' => 'required|string|max:50',
+    //             'jam_mulai' => 'required|date_format:H:i',
+    //             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+    //         ]);
+    
+    //         // Debug: log input data
+    //         Log::info($request->all());
+    
+    //         // Find the jadwal by id_jadwal
+    //         $jadwal = JadwalKuliah::findOrFail($request->id_jadwal);
+    
+    //         // Update the jadwal record using Eloquent
+    //         $jadwal->update([
+    //             'kode_matkul' => $request->kode_matkul,
+    //             'nama_matkul' => $request->nama_matkul,
+    //             'kelas' => $request->kelas,
+    //             'nama_ruang' => $request->nama_ruang,
+    //             'hari' => $request->hari,
+    //             'jam_mulai' => $request->jam_mulai,
+    //             'jam_selesai' => $request->jam_selesai,
+    //         ]);
+    
+    //         // Return back with a success message
+    //         return response()->json([
+    //             'success'=>true,
+    //             'message'=> 'jadwal berhasil diperbarui',
+    //             'data'=>$jadwal
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         // Log error dan respons kesalahan
+    //         Log::error('Error updating jadwal: ' . $e->getMessage());
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Terjadi kesalahan saat memperbarui jadwal.',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+    
+
+    private function normalizeTime($time)
+    {
+        // Ensure time is in H:i format, adding a leading zero if necessary
+        return date('H:i', strtotime($time));
+    }
+
+    public function updateJadwal(Request $request)
+    {
+        try {
+            // Normalize the time format to ensure it's in H:i format
+            $request->merge([
+                'jam_mulai' => $this->normalizeTime($request->jam_mulai),
+                'jam_selesai' => $this->normalizeTime($request->jam_selesai),
+            ]);
+            // Validasi input
+            $validated = $request->validate([
+                'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
+                'kelas' => 'required|string|max:10',
+                'nama_ruang' => 'required|string|max:255',
+                'hari' => 'required|string|max:50',
+                'jam_mulai' => 'required|date_format:H:i',
+                'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+            ]);
+    
+            // Debug: Log input data
+            // Log::info($request->all());
+    
+            // Temukan jadwal berdasarkan id_jadwal
+            $jadwal = JadwalKuliah::findOrFail($request->id_jadwal);
+    
+            // Format jam_mulai dan jam_selesai menggunakan Carbon
+            $jam_mulai = Carbon::createFromFormat('H:i', $request->jam_mulai)->format('H:i');
+            $jam_selesai = Carbon::createFromFormat('H:i', $request->jam_selesai)->format('H:i');
+    
+            // Perbarui data jadwal
+            $jadwal->update([
                 'kelas' => $request->kelas,
                 'hari' => $request->hari,
+                'jam_mulai' => $jam_mulai,
+                'jam_selesai' => $jam_selesai,
                 'nama_ruang' => $request->nama_ruang,
                 'jam_mulai' => $request->jam_mulai,
                 'jam_selesai' => $request->jam_selesai,
@@ -634,31 +748,6 @@ class KaprodiControler extends Controller
 }
 
 
-// public function updateJadwal(Request $request)
-// {
-//     // Validate the input data
-//     $validated = $request->validate([
-//         'id_jadwal' => 'required|exists:jadwal_kuliah,id_jadwal',
-//         'nama_matkul' => 'required|string|max:255',
-//         'kelas' => 'required|string|max:5',
-//         'hari' => 'required|string|max:10',
-//         'nama_ruang' => 'required|string|max:50',
-//         'jam_mulai' => 'required|date_format:H:i',
-//         'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
-//     ]);
-
-//     // Update the jadwal data
-//     $jadwal = JadwalKuliah::findOrFail($request->id_jadwal);
-//     $jadwal->update($validated);
-
-//     // Redirect with success message
-//     return redirect()->route('jadwal.index')->with('status', 'Jadwal berhasil diperbarui!');
-// }
-    
-    
-    
-
-   
 
     public function batalkanJadwal(Request $request)
     {
