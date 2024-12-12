@@ -11,6 +11,9 @@ class JadwalKuliah extends Model
     protected $table = 'jadwal_kuliah';
 
     protected $primaryKey = 'id_jadwal';
+    protected $keyType = 'int';
+    public $incrementing = true;
+
 
     protected $fillable = [
         'kode_matkul',
