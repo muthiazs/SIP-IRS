@@ -75,12 +75,6 @@
                     <h1 class="fs-3 fw-bold">Selamat datang, {{ $dekan->username }} 👋</h1>
                     <p class="text-muted">Semester Akademik sekarang</p>
                 </div>
-                <div class="position-relative">
-                    <button class="btn btn-teal rounded-circle p-2">
-                        <span class="material-icons text-white">notifications</span>
-                    </button>
-                    <span class="notification-badge"></span>
-                </div>
             </div>
             <!-- Cards Section -->
             <!-- Jadwal Accordion -->

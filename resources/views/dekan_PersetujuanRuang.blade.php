@@ -184,7 +184,7 @@
                     <td>{{ $data->prodi_nama }}</td>
                     <td>
                         <!-- Form untuk Setujui Ruang -->
-                        <form action="{{ route('setujui.ruang', ['id_ruang' => $data->id_ruang]) }}" method="POST" class="d-inline">
+                        <form action="{{ route('setujui.ruang', ['id_ruang' => $data->id_ruang]) }}" method="POST" class="d-inline form-setujui-ruang">
                             @csrf
                             <button type="submit" class="btn btn-success btn-sm">Setujui</button>
                         </form>
@@ -267,6 +267,37 @@ $(document).ready(function() {
         });
     });
 
+    // SweetAlert2 confirmation for "Setujui Ruang"
+    $('form.form-setujui-ruang').on('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission
+
+        // const prodi = $('#selectProdi').val().trim();
+        // if (!prodi) {
+        //     Swal.fire({
+        //         title: 'Pilih Program Studi',
+        //         text: 'Silakan pilih program studi terlebih dahulu.',
+        //         icon: 'warning',
+        //         confirmButtonText: 'OK'
+        //     });
+        //     return;
+        // }
+
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: `Apakah Anda yakin ingin menyetujui ruangan ini?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Setujui',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit(); // Submit the form if confirmed
+            }
+        });
+    });
+
     // SweetAlert2 for success or error messages from session
     @if(session('sweetAlert'))
         const alert = @json(session('sweetAlert'));
@@ -279,6 +310,9 @@ $(document).ready(function() {
         });
     @endif
 });
+
+
+
 </script>
 
 <!-- Bootstrap JS -->

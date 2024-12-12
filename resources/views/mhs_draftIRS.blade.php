@@ -137,9 +137,13 @@
                                 @csrf
                                 <input type="hidden" name="id_jadwal" value="{{ $rancanganSementara->id_jadwal }}">
                                 <input type="hidden" name="id_irs" value="{{ $rancanganSementara->id_irs }}"> <!-- Menambahkan id_irs -->
-                                <button type="submit" class="btn btn-danger batalBtn">Batalkan Jadwal</button>
+                                <button type="submit" 
+                                        class="btn btn-danger batalBtn" 
+                                        data-id="{{ $rancanganSementara->id_jadwal }}" 
+                                        data-irs="{{ $rancanganSementara->id_irs }}">
+                                    Batalkan Jadwal
+                                </button>
                             </form>
-
                         </td>
                     </tr>
                 @endforeach
@@ -175,10 +179,11 @@
 </body>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-
-<script>
+{{-- <script>
    $(document).on('click', '.batalBtn', function() {
+        e.preventDefault();
         var id_jadwal = $(this).data('id');
         var id_irs = $(this).data('irs');  // Ambil id_irs dari data-attribute
 
@@ -229,6 +234,37 @@
                     }
                 });
             }
+        });
+    });
+</script> --}}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const forms = document.querySelectorAll('.batalBtn');
+
+        forms.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault(); // Mencegah submit default form
+                const form = this.closest('form'); // Ambil form terdekat
+                const id_jadwal = this.getAttribute('data-id');
+                const id_irs = this.getAttribute('data-irs');
+
+                Swal.fire({
+                    title: 'Batal Jadwal',
+                    text: 'Apakah Anda yakin ingin membatalkan jadwal ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Batalkan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit form setelah konfirmasi
+                        form.submit();
+                    }
+                });
+            });
         });
     });
 </script>
