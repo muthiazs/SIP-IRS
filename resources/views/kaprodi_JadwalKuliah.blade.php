@@ -176,7 +176,7 @@
                                                     <!-- Mata Kuliah -->
                                                     <div class="mb-3">
                                                         <label for="nama_matkul_{{ $item->id_jadwal }}" class="form-label">Mata Kuliah</label>
-                                                        <select name="nama_matkul" id="nama_matkul_{{ $item->id_jadwal }}" class="form-select" required>
+                                                        <select name="nama_matkul" id="nama_matkul_{{ $item->id_jadwal }}" class="form-select" disabled>
                                                             @foreach($namaMK as $matkul)
                                                                 <option value="{{ $matkul->nama_matkul }}" 
                                                                     {{ $item->nama_matkul == $matkul->nama_matkul ? 'selected' : '' }}>
@@ -210,17 +210,17 @@
                                                         </select>
                                                     </div>
 
-                                                    <!-- Ruangan -->
+                                                   <!-- Ruangan -->
                                                     <div class="mb-3">
-                                                        <label for="nama_ruang_{{ $item->id_jadwal }}" class="form-label">Ruang</label>
-                                                        <select name="nama_ruang" id="nama_ruang_{{ $item->id_jadwal }}" class="form-select" required>
+                                                        <label for="id_ruang_{{ $item->id_jadwal }}" class="form-label">Ruang</label>
+                                                        <select name="nama_ruang" id="id_ruang_{{ $item->id_jadwal }}" class="form-select" required>
                                                             @foreach($ruangan as $r)
                                                                 <option value="{{ $r->nama_ruang }}" 
                                                                     {{ $item->nama_ruang == $r->nama_ruang ? 'selected' : '' }}>
                                                                     {{ $r->nama_ruang }}
                                                                 </option>
                                                             @endforeach
-                                                        </select>                                                        
+                                                        </select>
                                                     </div>
 
                                                     <!-- Jam Mulai -->
