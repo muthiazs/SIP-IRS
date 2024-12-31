@@ -27,7 +27,8 @@ class DatabaseSeeder extends Seeder
             JadwalKuliahSeeder::class,
             IrsSeeder::class,
             ProgressMhsSeeder::class,
-            KalenderAkademikSeeder::class
+            KalenderAkademikSeeder::class,
+            TambahJadwalSeeder::class
         ]);
     }
 }
