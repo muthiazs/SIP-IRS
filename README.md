@@ -28,11 +28,7 @@ _Empowering academic administration with modern Laravel solutions._
 - [Tentang Proyek](#tentang-proyek)
 - [Fitur Utama](#fitur-utama)
 - [Teknologi yang Digunakan](#teknologi-yang-digunakan)
-- [Instalasi](#instalasi)
-- [Penggunaan](#penggunaan)
-- [Testing](#testing)
-- [Kontribusi](#kontribusi)
-- [Lisensi](#lisensi)
+
 
 ---
 
